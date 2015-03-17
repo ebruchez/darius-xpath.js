@@ -1,0 +1,106 @@
+package client.net.sf.saxon.ce.expr
+
+import client.net.sf.saxon.ce.functions.NumberFn
+import client.net.sf.saxon.ce.om.Item
+import client.net.sf.saxon.ce.om.Sequence
+import client.net.sf.saxon.ce.pattern.EmptySequenceTest
+import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.`type`.AtomicType
+import client.net.sf.saxon.ce.`type`.ItemType
+import client.net.sf.saxon.ce.value._
+//remove if not needed
+import scala.collection.JavaConversions._
+
+/**
+ * Arithmetic Expression: an expression using one of the operators
+ * plus, minus, multiply, div, idiv, mod, in backwards
+ * compatibility mode: see {@link ArithmeticExpression} for the non-backwards
+ * compatible case.
+ */
+class ArithmeticExpression10(p0: Expression, operator: Int, p1: Expression) extends BinaryExpression(p0, 
+  operator, p1) {
+
+  /**
+   * Type-check the expression statically. We try to work out which particular
+   * arithmetic function to use if the types of operands are known an compile time.
+   */
+  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+    val e2 = super.typeCheck(visitor, contextItemType)
+    if (e2 != this) {
+      return e2
+    }
+    val atomicType = SequenceType.OPTIONAL_ATOMIC
+    val role0 = new RoleLocator(RoleLocator.BINARY_EXPR, Token.tokens(operator), 0)
+    operand0 = TypeChecker.staticTypeCheck(operand0, atomicType, true, role0)
+    val role1 = new RoleLocator(RoleLocator.BINARY_EXPR, Token.tokens(operator), 1)
+    operand1 = TypeChecker.staticTypeCheck(operand1, atomicType, true, role1)
+    val itemType0 = operand0.getItemType
+    if (itemType0.isInstanceOf[EmptySequenceTest]) {
+      return Literal.makeLiteral(DoubleValue.NaN)
+    }
+    val itemType1 = operand1.getItemType
+    if (itemType1.isInstanceOf[EmptySequenceTest]) {
+      return Literal.makeLiteral(DoubleValue.NaN)
+    }
+    operand0 = createConversionCode(operand0)
+    operand1 = createConversionCode(operand1)
+    adoptChildExpression(operand0)
+    adoptChildExpression(operand1)
+    if (operator == Token.NEGATE) {
+      if (operand1.isInstanceOf[Literal]) {
+        val v = operand1.asInstanceOf[Literal].getValue
+        if (v.isInstanceOf[NumericValue]) {
+          return Literal.makeLiteral(v.asInstanceOf[NumericValue].negate())
+        }
+      }
+      val ne = new NegateExpression(operand1)
+      ne.setBackwardsCompatible(true)
+      return visitor.typeCheck(ne, contextItemType)
+    }
+    this
+  }
+
+  private def createConversionCode(operand: Expression): Expression = {
+    if (Cardinality.allowsMany(operand.getCardinality)) {
+      val fie = new FirstItemExpression(operand)
+      ExpressionTool.copyLocationInfo(this, fie)
+      operand = fie
+    }
+    operand
+  }
+
+  /**
+   * Determine the data type of the expression, if this is known statically
+   */
+  def getItemType(): ItemType = AtomicType.ANY_ATOMIC
+
+  /**
+   * Evaluate the expression.
+   */
+  def evaluateItem(context: XPathContext): Item = {
+    var v1 = operand0.evaluateItem(context).asInstanceOf[AtomicValue]
+    v1 = convertOperand(v1)
+    var v2 = operand1.evaluateItem(context).asInstanceOf[AtomicValue]
+    v2 = convertOperand(v2)
+    ArithmeticExpression.compute(v1, operator, v2, context)
+  }
+
+  private def convertOperand(value: AtomicValue): DoubleValue = {
+    if (value == null) {
+      return DoubleValue.NaN
+    }
+    if (value.isInstanceOf[DoubleValue]) {
+      return value.asInstanceOf[DoubleValue]
+    }
+    val `type` = value.getItemType
+    if (`type` == AtomicType.INTEGER || `type` == AtomicType.UNTYPED_ATOMIC || 
+      `type` == AtomicType.DECIMAL || 
+      `type` == AtomicType.FLOAT || 
+      `type` == AtomicType.BOOLEAN || 
+      `type` == AtomicType.STRING) {
+      NumberFn.convert(value)
+    } else {
+      throw new XPathException("Invalid operand type for arithmetic: " + `type`, "XPTY0004")
+    }
+  }
+}

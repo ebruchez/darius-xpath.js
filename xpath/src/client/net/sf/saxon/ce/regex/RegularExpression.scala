@@ -1,0 +1,55 @@
+package client.net.sf.saxon.ce.regex
+
+import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.trans.XPathException
+//remove if not needed
+import scala.collection.JavaConversions._
+
+/**
+ * This interface represents a compiled regular expression. There are different
+ * implementations for different regex engines
+ */
+trait RegularExpression {
+
+  /**
+   * Determine whether the regular expression matches a given string in its entirety
+   * @param input the string to match
+   * @return true if the string matches, false otherwise
+   */
+  def matches(input: CharSequence): Boolean
+
+  /**
+   * Determine whether the regular expression contains a match of a given string
+   * @param input the string to match
+   * @return true if the string matches, false otherwise
+   */
+  def containsMatch(input: CharSequence): Boolean
+
+  /**
+   * Use this regular expression to tokenize an input string.
+   *
+   * @param input the string to be tokenized
+   * @return a SequenceIterator containing the resulting tokens, as objects of type StringValue
+   */
+  def tokenize(input: CharSequence): SequenceIterator
+
+  /**
+   * Use this regular expression to analyze an input string, in support of the XSLT
+   * analyze-string instruction. The resulting RegexIterator provides both the matching and
+   * non-matching substrings, and allows them to be distinguished. It also provides access
+   * to matched subgroups.
+   * @param input the character string to be analyzed using the regular expression
+   * @return an iterator over matched and unmatched substrings
+   */
+  def analyze(input: CharSequence): ARegexIterator
+
+  /**
+   * Replace all substrings of a supplied input string that match the regular expression
+   * with a replacement string.
+   * @param input the input string on which replacements are to be performed
+   * @param replacement the replacement string in the format of the XPath replace() function
+   * @return the result of performing the replacement
+   * @throws client.net.sf.saxon.ce.trans.XPathException if the replacement string is invalid
+   */
+  def replace(input: CharSequence, replacement: CharSequence): CharSequence
+}

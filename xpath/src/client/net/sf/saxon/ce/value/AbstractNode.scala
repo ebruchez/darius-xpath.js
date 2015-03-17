@@ -1,0 +1,32 @@
+package client.net.sf.saxon.ce.value
+
+import client.net.sf.saxon.ce.om.Item
+import client.net.sf.saxon.ce.om.Sequence
+import client.net.sf.saxon.ce.tree.iter.SingletonIterator
+import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
+//remove if not needed
+import scala.collection.JavaConversions._
+
+/**
+ * A value that is a sequence containing zero or one items. Used only for items that are not atomic values
+ * (that is, nodes, and function items)
+ */
+abstract class AbstractNode extends Item with Sequence {
+
+  /**
+   * Get the length of the sequence
+   */
+  def getLength(): Int = 1
+
+  /**
+   * Get the n'th item in the sequence (starting from 0). This is defined for all
+   * SequenceValues, but its real benefits come for a SequenceValue stored extensionally
+   * (or for a MemoClosure, once all the values have been read)
+   */
+  def itemAt(n: Int): Item = (if (n == 0) this else null)
+
+  /**
+   * Return an enumeration of this nodeset value.
+   */
+  def iterate(): UnfailingIterator = SingletonIterator.makeIterator(this)
+}

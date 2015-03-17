@@ -1,0 +1,64 @@
+package client.net.sf.saxon.ce.expr
+
+import client.net.sf.saxon.ce.om.Item
+import client.net.sf.saxon.ce.om.NodeInfo
+import client.net.sf.saxon.ce.trans.XPathException
+//remove if not needed
+import scala.collection.JavaConversions._
+
+/**
+ * Class ParentNodeExpression represents the XPath expression ".." or "parent::node()"
+ */
+class ParentNodeExpression extends SingleNodeExpression {
+
+  /**
+   * Customize the error message on type checking
+   */
+  protected def noContextMessage(): String = {
+    "Cannot select the parent of the context node"
+  }
+
+  /**
+   * Return the node selected by this SingleNodeExpression
+   * @param context The context for the evaluation
+   * @return the parent of the current node defined by the context
+   */
+  def getNode(context: XPathContext): NodeInfo = {
+    val item = context.getContextItem
+    if (item == null) {
+      dynamicError("The context item is not set", "XPDY0002")
+    }
+    if (item.isInstanceOf[NodeInfo]) {
+      item.asInstanceOf[NodeInfo].getParent
+    } else {
+      dynamicError("The context item for the parent axis (..) is not a node", "XPTY0020")
+      null
+    }
+  }
+
+  /**
+   * Copy an expression. This makes a deep copy.
+   *
+   * @return the copy of the original expression
+   */
+  private def copy(): Expression = new ParentNodeExpression()
+
+  /**
+   * Is this expression the same as another expression?
+   */
+  override def equals(other: Any): Boolean = {
+    (other.isInstanceOf[ParentNodeExpression])
+  }
+
+  /**
+   * get HashCode for comparing two expressions
+   */
+  override def hashCode(): Int = "ParentNodeExpression".hashCode
+
+  /**
+   * The toString() method for an expression attempts to give a representation of the expression
+   * in an XPath-like form, but there is no guarantee that the syntax will actually be true XPath.
+   * In the case of XSLT instructions, the toString() method gives an abstracted view of the syntax
+   */
+  override def toString(): String = ".."
+}
