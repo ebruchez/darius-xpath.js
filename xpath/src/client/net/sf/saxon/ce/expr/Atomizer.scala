@@ -1,19 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.expr.instruct.Block
-import client.net.sf.saxon.ce.expr.instruct.ValueOf
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.pattern.EmptySequenceTest
-import client.net.sf.saxon.ce.pattern.NodeTest
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`._
+import client.net.sf.saxon.ce.expr.Atomizer._
+import client.net.sf.saxon.ce.expr.instruct.{Block, ValueOf}
+import client.net.sf.saxon.ce.om.{Item, NodeInfo, SequenceIterator}
+import client.net.sf.saxon.ce.pattern.{EmptySequenceTest, NodeTest}
 import client.net.sf.saxon.ce.value.AtomicValue
-import Atomizer._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object Atomizer {
 
@@ -95,7 +90,7 @@ class Atomizer(sequence: Expression) extends UnaryExpression(sequence) {
    * Simplify an expression
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     operand = visitor.simplify(operand)
     if (operand.isInstanceOf[Literal]) {
       val `val` = operand.asInstanceOf[Literal].getValue
@@ -121,7 +116,7 @@ class Atomizer(sequence: Expression) extends UnaryExpression(sequence) {
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand = visitor.typeCheck(operand, contextItemType)
     val th = TypeHierarchy.getInstance
     visitor.resetStaticProperties()
@@ -143,13 +138,13 @@ class Atomizer(sequence: Expression) extends UnaryExpression(sequence) {
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws client.net.sf.saxon.ce.trans.XPathException
    *          if an error is discovered during this phase
    *          (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val exp = super.optimize(visitor, contextItemType)
     if (exp == this) {
       val th = TypeHierarchy.getInstance
@@ -175,9 +170,9 @@ class Atomizer(sequence: Expression) extends UnaryExpression(sequence) {
 
   /**
    * Determine the special properties of this expression
-   * @return {@link StaticProperty#NON_CREATIVE}.
+   * @return [[StaticProperty.NON_CREATIVE]].
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     val p = super.computeSpecialProperties()
     p | StaticProperty.NON_CREATIVE
   }
@@ -185,7 +180,7 @@ class Atomizer(sequence: Expression) extends UnaryExpression(sequence) {
   /**
    * Iterate over the sequence of values
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val base = operand.iterate(context)
     getAtomizingIterator(base)
   }
@@ -194,7 +189,7 @@ class Atomizer(sequence: Expression) extends UnaryExpression(sequence) {
    * Evaluate as an Item. This should only be called if the Atomizer has cardinality zero-or-one,
    * which will only be the case if the underlying expression has cardinality zero-or-one.
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val i = operand.evaluateItem(context)
     (if (i == null) null else i.getTypedValue)
   }
@@ -204,10 +199,10 @@ class Atomizer(sequence: Expression) extends UnaryExpression(sequence) {
    * @return a value such as Type.STRING, Type.BOOLEAN, Type.NUMBER. For this class, the
    * result is always an atomic type, but it might be more specific.
    */
-  def getItemType(): ItemType = getAtomizedItemType(operand, true)
+  override def getItemType(): ItemType = getAtomizedItemType(operand, true)
 
   /**
    * Determine the static cardinality of the expression
    */
-  def computeCardinality(): Int = operand.getCardinality
+  override def computeCardinality(): Int = operand.getCardinality
 }

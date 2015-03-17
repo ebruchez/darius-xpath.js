@@ -1,96 +1,94 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.`type`
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.pattern.AnyNodeTest
-import client.net.sf.saxon.ce.pattern.EmptySequenceTest
-import client.net.sf.saxon.ce.pattern.NodeKindTest
+import client.net.sf.saxon.ce.om.{Item, NodeInfo}
+import client.net.sf.saxon.ce.pattern.{AnyNodeTest, EmptySequenceTest, NodeKindTest}
 import client.net.sf.saxon.ce.value.AtomicValue
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object Type {
 
   /**
    * Type representing an element node - element()
    */
-  val ELEMENT = 1
+  val ELEMENT: Short = 1
 
   /**
    * Item type representing an attribute node - attribute()
    */
-  val ATTRIBUTE = 2
+  val ATTRIBUTE: Short = 2
 
   /**
    * Item type representing a text node - text()
    */
-  val TEXT = 3
+  val TEXT: Short = 3
 
   /**
    * Item type representing a text node stored in the tiny tree as compressed whitespace
    */
-  val WHITESPACE_TEXT = 4
+  val WHITESPACE_TEXT: Short = 4
 
   /**
    * Item type representing a processing-instruction node
    */
-  val PROCESSING_INSTRUCTION = 7
+  val PROCESSING_INSTRUCTION: Short = 7
 
   /**
    * Item type representing a comment node
    */
-  val COMMENT = 8
+  val COMMENT: Short = 8
 
   /**
    * Item type representing a document node
    */
-  val DOCUMENT = 9
+  val DOCUMENT: Short = 9
 
   /**
    * Item type representing a doctype node
    */
-  val DOCUMENT_TYPE = 10
+  val DOCUMENT_TYPE: Short = 10
 
   /**
    * Item type representing a namespace node
    */
-  val NAMESPACE = 13
+  val NAMESPACE: Short = 13
 
   /**
    * Dummy node kind used in the tiny tree to mark the end of the tree
    */
-  val STOPPER = 11
+  val STOPPER: Short = 11
 
   /**
    * Dummy node kind used in the tiny tree to contain a parent pointer
    */
-  val PARENT_POINTER = 12
+  val PARENT_POINTER: Short = 12
 
   /**
    * An item type that matches any node
    */
-  val NODE = 0
+  val NODE: Short = 0
 
   val NODE_TYPE = AnyNodeTest.getInstance
 
   /**
    * An item type that matches any item
    */
-  val ITEM = 88
+  val ITEM: Short = 88
 
   val ITEM_TYPE = AnyItemType.getInstance
 
   /**
    * A type number for function()
    */
-  val FUNCTION = 99
+  val FUNCTION: Short = 99
 
-  val MAX_NODE_TYPE = 13
+  val MAX_NODE_TYPE: Short = 13
 
   /**
    * Item type that matches no items (corresponds to SequenceType empty())
    */
-  val EMPTY = 15
+  val EMPTY: Short = 15
 
   /**
    * Get the ItemType of an Item
@@ -175,44 +173,46 @@ object Type {
    * @return true if the types are comparable, as defined by the rules of the "eq" operator
    */
   def isComparable(t1: AtomicType, t2: AtomicType, ordered: Boolean): Boolean = {
-    if (t1 == t2) {
+    var _t1 = t1
+    var _t2 = t2
+    if (_t1 == _t2) {
       return true
     }
-    if (t1 == AtomicType.ANY_ATOMIC || t2 == AtomicType.ANY_ATOMIC) {
+    if (_t1 == AtomicType.ANY_ATOMIC || _t2 == AtomicType.ANY_ATOMIC) {
       return true
     }
-    if (t1 == AtomicType.UNTYPED_ATOMIC) {
-      t1 = AtomicType.STRING
+    if (_t1 == AtomicType.UNTYPED_ATOMIC) {
+      _t1 = AtomicType.STRING
     }
-    if (t2 == AtomicType.UNTYPED_ATOMIC) {
-      t2 = AtomicType.STRING
+    if (_t2 == AtomicType.UNTYPED_ATOMIC) {
+      _t2 = AtomicType.STRING
     }
-    if (t1 == AtomicType.ANY_URI) {
-      t1 = AtomicType.STRING
+    if (_t1 == AtomicType.ANY_URI) {
+      _t1 = AtomicType.STRING
     }
-    if (t2 == AtomicType.ANY_URI) {
-      t2 = AtomicType.STRING
+    if (_t2 == AtomicType.ANY_URI) {
+      _t2 = AtomicType.STRING
     }
-    if (t1.isPrimitiveNumeric) {
-      t1 = AtomicType.NUMERIC
+    if (_t1.isPrimitiveNumeric) {
+      _t1 = AtomicType.NUMERIC
     }
-    if (t2.isPrimitiveNumeric) {
-      t2 = AtomicType.NUMERIC
+    if (_t2.isPrimitiveNumeric) {
+      _t2 = AtomicType.NUMERIC
     }
     if (!ordered) {
-      if (t1 == AtomicType.DAY_TIME_DURATION) {
-        t1 = AtomicType.DURATION
+      if (_t1 == AtomicType.DAY_TIME_DURATION) {
+        _t1 = AtomicType.DURATION
       }
-      if (t2 == AtomicType.DAY_TIME_DURATION) {
-        t2 = AtomicType.DURATION
+      if (_t2 == AtomicType.DAY_TIME_DURATION) {
+        _t2 = AtomicType.DURATION
       }
-      if (t1 == AtomicType.YEAR_MONTH_DURATION) {
-        t1 = AtomicType.DURATION
+      if (_t1 == AtomicType.YEAR_MONTH_DURATION) {
+        _t1 = AtomicType.DURATION
       }
-      if (t2 == AtomicType.YEAR_MONTH_DURATION) {
-        t2 = AtomicType.DURATION
+      if (_t2 == AtomicType.YEAR_MONTH_DURATION) {
+        _t2 = AtomicType.DURATION
       }
     }
-    t1 == t2
+    _t1 == _t2
   }
 }

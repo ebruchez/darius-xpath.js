@@ -1,21 +1,19 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.ExpressionVisitor
-import client.net.sf.saxon.ce.expr.XPathContext
+import java.math.BigDecimal
+
 import client.net.sf.saxon.ce.expr.number.Numberer_en
+import client.net.sf.saxon.ce.expr.{ExpressionVisitor, XPathContext}
+import client.net.sf.saxon.ce.functions.FormatDate._
 import client.net.sf.saxon.ce.lib.Numberer
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.regex.RegExp
+import client.net.sf.saxon.ce.trans.{Err, XPathException}
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.value._
-import client.net.sf.saxon.ce.value.StringValue
-import com.google.gwt.regexp.shared.MatchResult
-import com.google.gwt.regexp.shared.RegExp
-import java.math.BigDecimal
-import FormatDate._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{StringValue, _}
 
 object FormatDate {
 
@@ -24,11 +22,12 @@ object FormatDate {
    * individual parts of the date.
    * @param value    the value to be formatted
    * @param format   the supplied format picture
-   * @param language the chosen language
+   * @param _language the chosen language
    * @return the formatted date/time
    * @throws XPathException if a dynamic error occurs
    */
-  def formatDate(value: CalendarValue, format: String, language: String): CharSequence = {
+  def formatDate(value: CalendarValue, format: String, _language: String): CharSequence = {
+    var language = _language
     val languageDefaulted = (language == null)
     if (language == null) {
       language = "en"
@@ -71,7 +70,7 @@ object FormatDate {
     sb
   }
 
-  private var componentPattern: RegExp = RegExp.compile("([YMDdWwFHhmsfZzPCE])\\s*(.*)")
+  private val componentPattern = RegExp.compile("([YMDdWwFHhmsfZzPCE])\\s*(.*)")
 
   private def formatComponent(value: CalendarValue, specifier: CharSequence, numberer: Numberer): CharSequence = {
     val dtvalue = value.toDateTime()
@@ -79,8 +78,8 @@ object FormatDate {
     if (matcher == null) {
       throw new XPathException("Unrecognized date/time component [" + specifier + ']', "XTDE1340")
     }
-    val component = matcher.getGroup(1).charAt(0)
-    var format = matcher.getGroup(2)
+    val component: Char = matcher.getGroup(1).charAt(0)
+    var format: String = matcher.getGroup(2)
     if (format == null) {
       format = ""
     }
@@ -98,15 +97,15 @@ object FormatDate {
       format = use + format
     }
     if (value.isInstanceOf[TimeValue] && "YMDdWwFE".indexOf(component) >= 0) {
-      throw new XPathException("In formatTime(): an xs:time value does not contain component " + 
+      throw new XPathException("In formatTime(): an xs:time value does not contain component " +
         component, "XTDE1350")
     } else if (value.isInstanceOf[DateValue] && "hmsfP".indexOf(component) >= 0) {
-      throw new XPathException("In formatTime(): an xs:date value does not contain component " + 
+      throw new XPathException("In formatTime(): an xs:date value does not contain component " +
         component, "XTDE1350")
     }
     var componentValue: Int = 0
     component match {
-      case 'Y' => 
+      case 'Y' =>
         componentValue = dtvalue.getYear
         if (componentValue < 0) {
           componentValue = 1 - componentValue
@@ -116,10 +115,10 @@ object FormatDate {
       case 'D' => componentValue = dtvalue.getDay
       case 'd' => componentValue = DateValue.getDayWithinYear(dtvalue.getYear, dtvalue.getMonth, dtvalue.getDay)
       case 'W' => componentValue = DateValue.getWeekNumber(dtvalue.getYear, dtvalue.getMonth, dtvalue.getDay)
-      case 'w' => componentValue = DateValue.getWeekNumberWithinMonth(dtvalue.getYear, dtvalue.getMonth, 
+      case 'w' => componentValue = DateValue.getWeekNumberWithinMonth(dtvalue.getYear, dtvalue.getMonth,
         dtvalue.getDay)
       case 'H' => componentValue = dtvalue.getHour
-      case 'h' => 
+      case 'h' =>
         componentValue = dtvalue.getHour
         if (componentValue > 12) {
           componentValue = componentValue - 12
@@ -131,7 +130,7 @@ object FormatDate {
       case 'm' => componentValue = dtvalue.getMinute
       case 's' => componentValue = dtvalue.getSecond
       case 'f' => componentValue = dtvalue.getMicrosecond
-      case 'Z' | 'z' => 
+      case 'Z' | 'z' =>
         var sbz = new FastStringBuffer(8)
         if (component == 'z') {
           sbz.append("GMT")
@@ -143,31 +142,28 @@ object FormatDate {
       case 'P' => componentValue = dtvalue.getHour * 60 + dtvalue.getMinute
       case 'C' => return numberer.getCalendarName("AD")
       case 'E' => return numberer.getEraName(dtvalue.getYear)
-      case _ => throw new XPathException("Unknown formatDate/time component specifier '" + format.charAt(0) + 
+      case _ => throw new XPathException("Unknown formatDate/time component specifier '" + format.charAt(0) +
         '\'', "XTDE1340")
     }
     formatNumber(component, componentValue, format, defaultFormat, numberer)
   }
 
-  private var formatPattern: RegExp = RegExp.compile("([^,]*)(,.*)?")
+  private val formatPattern = RegExp.compile("([^,]*)(,.*)?")
+  private val widthPattern = RegExp.compile(",(\\*|[0-9]+)(\\-(\\*|[0-9]+))?")
+  private val alphanumericPattern = RegExp.compile("([A-Za-z0-9])*")
+  private val digitsPattern = RegExp.compile("[0-9]+")
 
-  private var widthPattern: RegExp = RegExp.compile(",(\\*|[0-9]+)(\\-(\\*|[0-9]+))?")
-
-  private var alphanumericPattern: RegExp = RegExp.compile("([A-Za-z0-9])*")
-
-  private var digitsPattern: RegExp = RegExp.compile("[0-9]+")
-
-  private def formatNumber(component: Char, 
-      value: Int, 
-      format: String, 
-      defaultFormat: Boolean, 
+  private def formatNumber(component: Char,
+      value: Int,
+      format: String,
+      defaultFormat: Boolean,
       numberer: Numberer): CharSequence = {
     val matcher = formatPattern.exec(format)
     if (matcher == null) {
-      throw new XPathException("Unrecognized format picture [" + component + format + 
+      throw new XPathException("Unrecognized format picture [" + component + format +
         ']', "XTDE1340")
     }
-    var primary = matcher.getGroup(1)
+    var primary: String = matcher.getGroup(1)
     if (primary == null) {
       primary = ""
     }
@@ -181,12 +177,12 @@ object FormatDate {
     }
     val letterValue = (if ("t" == modifier) "traditional" else null)
     val ordinal = (if ("o" == modifier) numberer.getOrdinalSuffixForDateTime(component) else null)
-    var widths = matcher.getGroup(2)
+    var widths: String = matcher.getGroup(2)
     if (widths == null) {
       widths = ""
     }
-    if (!alphanumericPattern.test(primary)) {
-      throw new XPathException("In format picture at '" + primary + "', primary format must be alphanumeric", 
+    if (! alphanumericPattern.test(primary)) {
+      throw new XPathException("In format picture at '" + primary + "', primary format must be alphanumeric",
         "XTDE1340")
     }
     var min = 1
@@ -284,9 +280,9 @@ object FormatDate {
     if ("" != widths) {
       val widthMatcher = widthPattern.exec(widths)
       if (widthMatcher != null) {
-        val smin = widthMatcher.getGroup(1)
+        val smin: String = widthMatcher.getGroup(1)
         min = if (smin == null || "" == smin || "*" == smin) 1 else Integer.parseInt(smin)
-        val smax = widthMatcher.getGroup(3)
+        val smax: String = widthMatcher.getGroup(3)
         max = if (smax == null || "" == smax || "*" == smax) Integer.MAX_VALUE else Integer.parseInt(smax)
       } else {
         throw new XPathException("Unrecognized width specifier " + Err.wrap(widths, Err.VALUE), "XTDE1340")
@@ -310,10 +306,10 @@ class FormatDate extends SystemFunction {
 
   def newInstance(): FormatDate = new FormatDate()
 
-  def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor) {
     val numArgs = argument.length
     if (numArgs != 2 && numArgs != 5) {
-      throw new XPathException("Function " + getDisplayName + " must have either two or five arguments", 
+      throw new XPathException("Function " + getDisplayName + " must have either two or five arguments",
         getSourceLocator)
     }
     super.checkArguments(visitor)
@@ -322,7 +318,7 @@ class FormatDate extends SystemFunction {
   /**
    * Evaluate in a general context
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val value = argument(0).evaluateItem(context).asInstanceOf[CalendarValue]
     if (value == null) {
       return null

@@ -1,7 +1,8 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.lib
 
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object NamespaceConstant {
 
@@ -75,12 +76,14 @@ object NamespaceConstant {
   /**
    * Standard namespace for Saxon "Interactive XSLT" extensions
    */
-  val IXSL = "http://saxonica.com/ns/interactiveXSLT"
+//ORBEON XSLT
+//  val IXSL = "http://saxonica.com/ns/interactiveXSLT"
 
   /**
    * Standard namespace for global javascript methods (defined on the Window object)
    */
-  val JS = "http://saxonica.com/ns/globalJS"
+//ORBEON XSLT
+//  val JS = "http://saxonica.com/ns/globalJS"
 
   /**
    * Namespace for pseudo-attributes of HTML DOM elements that represent
@@ -89,7 +92,8 @@ object NamespaceConstant {
    * accessed as prop:checked. Note that these attributes can be accessed
    * by name, but they are not included in the result of @* or @prop:*
    */
-  val HTML_PROP = "http://saxonica.com/ns/html-property"
+//ORBEON XSLT
+//  val HTML_PROP = "http://saxonica.com/ns/html-property"
 
   /**
    * Namespace for pseudo-attributes of HTML DOM elements that represent
@@ -98,7 +102,8 @@ object NamespaceConstant {
    * accessed as prop:checked. Note that these attributes can be accessed
    * by name, but they are not included in the result of @* or @prop:*
    */
-  val HTML_STYLE_PROP = "http://saxonica.com/ns/html-style-property"
+//ORBEON XSLT
+//  val HTML_STYLE_PROP = "http://saxonica.com/ns/html-style-property"
 
   /**
    * The standard namespace for functions and operators

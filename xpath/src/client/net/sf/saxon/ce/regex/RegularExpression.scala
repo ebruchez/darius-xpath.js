@@ -1,9 +1,9 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.regex
 
 import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * This interface represents a compiled regular expression. There are different
@@ -33,15 +33,16 @@ trait RegularExpression {
    */
   def tokenize(input: CharSequence): SequenceIterator
 
-  /**
-   * Use this regular expression to analyze an input string, in support of the XSLT
-   * analyze-string instruction. The resulting RegexIterator provides both the matching and
-   * non-matching substrings, and allows them to be distinguished. It also provides access
-   * to matched subgroups.
-   * @param input the character string to be analyzed using the regular expression
-   * @return an iterator over matched and unmatched substrings
-   */
-  def analyze(input: CharSequence): ARegexIterator
+//ORBEON XSLT
+//  /**
+//   * Use this regular expression to analyze an input string, in support of the XSLT
+//   * analyze-string instruction. The resulting RegexIterator provides both the matching and
+//   * non-matching substrings, and allows them to be distinguished. It also provides access
+//   * to matched subgroups.
+//   * @param input the character string to be analyzed using the regular expression
+//   * @return an iterator over matched and unmatched substrings
+//   */
+//  def analyze(input: CharSequence): ARegexIterator
 
   /**
    * Replace all substrings of a supplied input string that match the regular expression

@@ -1,16 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.tree.util.UTF16CharacterSet
-import client.net.sf.saxon.ce.tree.util.UTF8CharacterSet
-import client.net.sf.saxon.ce.value.StringValue
 import java.util.Arrays
-import EscapeURI._
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import client.net.sf.saxon.ce.expr.XPathContext
+import client.net.sf.saxon.ce.functions.EscapeURI._
+import client.net.sf.saxon.ce.om.Item
+import client.net.sf.saxon.ce.tree.util.{FastStringBuffer, UTF16CharacterSet, UTF8CharacterSet}
+import client.net.sf.saxon.ce.value.StringValue
 
 object EscapeURI {
 
@@ -137,16 +136,16 @@ object EscapeURI {
 /**
  * This class supports the functions encode-for-uri() and iri-to-uri()
  */
-class EscapeURI(operation: Int) extends SystemFunction {
+class EscapeURI(_operation: Int) extends SystemFunction {
 
-  this.operation = operation
+  this.operation = _operation
 
   def newInstance(): EscapeURI = new EscapeURI(operation)
 
   /**
    * Evaluate the function
    */
-  def evaluateItem(c: XPathContext): Item = {
+  override def evaluateItem(c: XPathContext): Item = {
     val item = argument(0).evaluateItem(c)
     if (item == null) {
       return StringValue.EMPTY_STRING

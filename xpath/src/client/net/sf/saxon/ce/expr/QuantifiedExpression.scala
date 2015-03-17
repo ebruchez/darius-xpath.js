@@ -1,16 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.Configuration
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType}
 import client.net.sf.saxon.ce.functions.BooleanFn
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.value.BooleanValue
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 /**
  * A QuantifiedExpression tests whether some/all items in a sequence satisfy
@@ -29,7 +28,7 @@ class QuantifiedExpression extends Assignation {
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     sequence = visitor.typeCheck(sequence, contextItemType)
     if (Literal.isEmptySequence(sequence)) {
       return Literal.makeLiteral(BooleanValue.get(operator != Token.SOME))
@@ -58,12 +57,12 @@ class QuantifiedExpression extends Assignation {
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val config = visitor.getConfiguration
     sequence = visitor.optimize(sequence, contextItemType)
     action = visitor.optimize(action, contextItemType)
@@ -95,13 +94,13 @@ class QuantifiedExpression extends Assignation {
    * @param child the immediate subexpression
    * @return true if the child expression is evaluated repeatedly
    */
-  def hasLoopingSubexpression(child: Expression): Boolean = child == action
+  override def hasLoopingSubexpression(child: Expression): Boolean = child == action
 
   /**
    * Determine the special properties of this expression
-   * @return {@link StaticProperty#NON_CREATIVE}.
+   * @return [[StaticProperty.NON_CREATIVE]].
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     val p = super.computeSpecialProperties()
     p | StaticProperty.NON_CREATIVE
   }
@@ -109,28 +108,28 @@ class QuantifiedExpression extends Assignation {
   /**
    * Evaluate the expression to return a singleton value
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     BooleanValue.get(effectiveBooleanValue(context))
   }
 
   /**
    * Get the result as a boolean
    */
-  def effectiveBooleanValue(context: XPathContext): Boolean = {
+  override def effectiveBooleanValue(context: XPathContext): Boolean = {
     val base = sequence.iterate(context)
-    val some = (operator == Token.SOME)
+    val some = operator == Token.SOME
     val slot = getLocalSlotNumber
     while (true) {
       val it = base.next()
       if (it == null) {
-        //break
+        return ! some
       }
       context.setLocalVariable(slot, it)
       if (some == action.effectiveBooleanValue(context)) {
         return some
       }
     }
-    !some
+    throw new IllegalStateException
   }
 
   /**

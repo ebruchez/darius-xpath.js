@@ -1,12 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.om
 
 import client.net.sf.saxon.ce.expr.z.IntRangeSet
 import client.net.sf.saxon.ce.regex.GeneralUnicodeString
-import client.net.sf.saxon.ce.regex.UnicodeString
-import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.trans.{Err, XPathException}
 
 object NameChecker {
 
@@ -72,30 +71,29 @@ object NameChecker {
   def checkQNameParts(qname: CharSequence): Array[String] = {
     try {
       val parts = getQNameParts(qname)
-      if (parts(0).length > 0 && !isValidNCName(parts(0))) {
+      if (parts(0).length > 0 && ! isValidNCName(parts(0))) {
         throw new XPathException("Invalid QName prefix " + Err.wrap(parts(0)))
       }
       parts
     } catch {
-      case e: QNameException => {
+      case e: QNameException =>
         val err = new XPathException(e.getMessage)
         err.setErrorCode("FORG0001")
         throw err
-      }
     }
   }
 
-  private var nameStartRangeStartPoints: Array[Int] = Array('A', '_', 'a', 0xc0, 0xd8, 0xf8, 0x370, 0x37f, 0x200c, 0x2070, 0x2c00, 0x3001, 0xf900, 0xfdf0, 0x10000)
+  private val nameStartRangeStartPoints: Array[Int] = Array('A', '_', 'a', 0xc0, 0xd8, 0xf8, 0x370, 0x37f, 0x200c, 0x2070, 0x2c00, 0x3001, 0xf900, 0xfdf0, 0x10000)
 
-  private var nameStartRangeEndPoints: Array[Int] = Array('Z', '_', 'z', 0xd6, 0xf6, 0x2ff, 0x37d, 0x1fff, 0x200d, 0x218f, 0x2fef, 0xd7ff, 0xfdcf, 0xfffd, 0xeffff)
+  private val nameStartRangeEndPoints: Array[Int] = Array('Z', '_', 'z', 0xd6, 0xf6, 0x2ff, 0x37d, 0x1fff, 0x200d, 0x218f, 0x2fef, 0xd7ff, 0xfdcf, 0xfffd, 0xeffff)
 
-  private var ncNameStartChars: IntRangeSet = new IntRangeSet(nameStartRangeStartPoints, nameStartRangeEndPoints)
+  private val ncNameStartChars: IntRangeSet = new IntRangeSet(nameStartRangeStartPoints, nameStartRangeEndPoints)
 
-  private var nameRangeStartPoints: Array[Int] = Array('-', '.', '0', 0xb7, 0x300, 0x203f)
+  private val nameRangeStartPoints: Array[Int] = Array('-', '.', '0', 0xb7, 0x300, 0x203f)
 
-  private var nameRangeEndPoints: Array[Int] = Array('-', '.', '9', 0xb7, 0x36f, 0x2040)
+  private val nameRangeEndPoints: Array[Int] = Array('-', '.', '9', 0xb7, 0x36f, 0x2040)
 
-  private var ncNameChars: IntRangeSet = new IntRangeSet(nameRangeStartPoints, nameRangeEndPoints)
+  private val ncNameChars: IntRangeSet = new IntRangeSet(nameRangeStartPoints, nameRangeEndPoints)
 
   def isNCNameStartChar(c: Int): Boolean = ncNameStartChars.contains(c)
 

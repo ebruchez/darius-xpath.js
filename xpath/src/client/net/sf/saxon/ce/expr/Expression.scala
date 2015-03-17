@@ -1,33 +1,24 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.event.SequenceReceiver
-import client.net.sf.saxon.ce.expr.instruct.Executable
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.trans.update.PendingUpdateList
-import client.net.sf.saxon.ce.tree.iter.SingletonIterator
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.tree.util.SourceLocator
+import client.net.sf.saxon.ce.LogConfiguration
 import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value.Cardinality
-import client.net.sf.saxon.ce.value.SequenceType
-import client.net.sf.saxon.ce.value.StringValue
-import com.google.gwt.logging.client.LogConfiguration
-import java.util._
-import Expression._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.expr.Expression._
+import client.net.sf.saxon.ce.om.{Item, NodeInfo, SequenceIterator, StructuredQName}
+import client.net.sf.saxon.ce.orbeon.{Executable, _}
+import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.tree.iter.SingletonIterator
+import client.net.sf.saxon.ce.tree.util.{FastStringBuffer, SourceLocator}
+import client.net.sf.saxon.ce.value.{Cardinality, SequenceType, StringValue}
+
+import scala.beans.BeanProperty
+import scala.util.control.Breaks
 
 object Expression {
-
   val EVALUATE_METHOD = 1
-
   val ITERATE_METHOD = 2
-
   val PROCESS_METHOD = 4
 }
 
@@ -42,10 +33,11 @@ abstract class Expression {
 
   protected var staticProperties: Int = -1
 
-  protected var sourceLocator: SourceLocator = null
+  protected[expr] var sourceLocator: SourceLocator = null
 
-  @BeanProperty
-  var container: Container = _
+  private var _container: Container = _
+
+  def getContainer = _container
 
   @BeanProperty
   var traceProperties: ArrayList[Array[String]] = _
@@ -54,8 +46,8 @@ abstract class Expression {
    * An implementation of Expression must provide at least one of the methods evaluateItem(), iterate(), or process().
    * This method indicates which of these methods is provided directly. The other methods will always be available
    * indirectly, using an implementation that relies on one of the other methods.
-   * @return the implementation method, for example {@link #ITERATE_METHOD} or {@link #EVALUATE_METHOD} or
-   * {@link #PROCESS_METHOD}
+   * @return the implementation method, for example [[ITERATE_METHOD]] or [[EVALUATE_METHOD]] or
+   * [[PROCESS_METHOD]]
    */
   def getImplementationMethod(): Int = {
     if (Cardinality.allowsMany(getCardinality)) {
@@ -95,7 +87,7 @@ abstract class Expression {
    * Simplify an expression. This performs any static optimization (by rewriting the expression
    * as a different expression). The default implementation does nothing.
    *
-   * @exception client.net.sf.saxon.ce.trans.XPathException if an error is discovered during expression
+   * @throws client.net.sf.saxon.ce.trans.XPathException if an error is discovered during expression
    *     rewriting
    * @return the simplified expression
    * @param visitor an expression visitor
@@ -123,7 +115,7 @@ abstract class Expression {
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    * The parameter is set to null if it is known statically that the context item will be undefined.
    * If the type of the context item is not known statically, the argument is set to
-   * {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   * [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @throws XPathException if an error is discovered during this phase
    *     (typically a type error)
    * @return the original expression, rewritten to perform necessary run-time type checks,
@@ -157,7 +149,7 @@ abstract class Expression {
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    * The parameter is set to null if it is known statically that the context item will be undefined.
    * If the type of the context item is not known statically, the argument is set to
-   * {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   * [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @throws XPathException if an error is discovered during this phase
    *     (typically a type error)
    * @return the original expression, rewritten if appropriate to optimize execution
@@ -177,7 +169,7 @@ abstract class Expression {
    *     expressions that don't depend on the context to an outer level in
    *     the containing expression
    * @param parent
-   * @exception client.net.sf.saxon.ce.trans.XPathException if any error is detected
+   * @throws client.net.sf.saxon.ce.trans.XPathException if any error is detected
    * @return if the offer is not accepted, return this expression unchanged.
    *      Otherwise return the result of rewriting the expression to promote
    *      this subexpression
@@ -255,7 +247,7 @@ abstract class Expression {
    * sub-expressions.
    * @return an iterator containing the sub-expressions of this expression
    */
-  def iterateSubExpressions(): Iterator[Expression] = Collections.EMPTY_LIST.iterator()
+  def iterateSubExpressions(): Iterator[Expression] = Collections.emptyList().iterator()
 
   /**
    * Utility method to return an iterator over specific child expressions
@@ -297,7 +289,7 @@ abstract class Expression {
    * this condition will be detected.
    *
    * @param context The context in which the expression is to be evaluated
-   * @exception client.net.sf.saxon.ce.trans.XPathException if any dynamic error occurs evaluating the
+   * @throws client.net.sf.saxon.ce.trans.XPathException if any dynamic error occurs evaluating the
    *     expression
    * @return the node or atomic value that results from evaluating the
    *     expression; or null to indicate that the result is an empty
@@ -312,7 +304,7 @@ abstract class Expression {
    * return singleton values: for non-singleton expressions, the subclass must
    * provide its own implementation.
    *
-   * @exception client.net.sf.saxon.ce.trans.XPathException if any dynamic error occurs evaluating the
+   * @throws client.net.sf.saxon.ce.trans.XPathException if any dynamic error occurs evaluating the
    *     expression
    * @param context supplies the context for evaluation
    * @return a SequenceIterator that can be used to iterate over the result
@@ -329,7 +321,7 @@ abstract class Expression {
    * false. Otherwise it returns true.
    *
    * @param context The context in which the expression is to be evaluated
-   * @exception client.net.sf.saxon.ce.trans.XPathException if any dynamic error occurs evaluating the
+   * @throws client.net.sf.saxon.ce.trans.XPathException if any dynamic error occurs evaluating the
    *     expression
    * @return the effective boolean value
    */
@@ -344,9 +336,9 @@ abstract class Expression {
    * the result to a string, other than converting () to "". This method is used mainly to
    * evaluate expressions produced by compiling an attribute value template.
    *
-   * @exception client.net.sf.saxon.ce.trans.XPathException if any dynamic error occurs evaluating the
+   * @throws client.net.sf.saxon.ce.trans.XPathException if any dynamic error occurs evaluating the
    *     expression
-   * @exception ClassCastException if the result type of the
+   * @throws ClassCastException if the result type of the
    *     expression is not xs:string?
    * @param context The context in which the expression is to be evaluated
    * @return the value of the expression, evaluated in the current context.
@@ -379,7 +371,7 @@ abstract class Expression {
         while (true) {
           val it = iter.next()
           if (it == null) {
-            //break
+            return
           }
           out.append(it, NodeInfo.ALL_NAMESPACES)
         }
@@ -403,12 +395,15 @@ abstract class Expression {
   override def toString(): String = {
     val buff = new FastStringBuffer(FastStringBuffer.SMALL)
     var className = getClass.getName
-    while (true) {
-      val dot = className.indexOf('.')
-      if (dot >= 0) {
-        className = className.substring(dot + 1)
-      } else {
-        //break
+    import Breaks._
+    breakable {
+      while (true) {
+        val dot = className.indexOf('.')
+        if (dot >= 0) {
+          className = className.substring(dot + 1)
+        } else {
+          break()
+        }
       }
     }
     buff.append(className)
@@ -436,15 +431,15 @@ abstract class Expression {
    * @param container The container of this expression.
    */
   def setContainer(container: Container) {
-    this.container = container
-    if (container != null) {
+    this._container = container
+    if (_container != null) {
       val children = iterateSubExpressions()
       while (children.hasNext) {
-        val child = children.next().asInstanceOf[Expression]
-        if (child != null && child.getContainer != container && 
-          (child.container == null || 
-          child.container.getContainerGranularity < container.getContainerGranularity)) {
-          child.setContainer(container)
+        val child = children.next()
+        if (child != null && child.getContainer != _container &&
+          (child._container == null ||
+          child._container.getContainerGranularity < _container.getContainerGranularity)) {
+          child.setContainer(_container)
         }
       }
     }
@@ -465,10 +460,10 @@ abstract class Expression {
     if (child == null) {
       return
     }
-    if (container == null) {
-      container = child.container
+    if (_container == null) {
+      _container = child._container
     } else {
-      child.setContainer(container)
+      child.setContainer(_container)
     }
     if (sourceLocator == null) {
       ExpressionTool.copyLocationInfo(child, this)
@@ -485,7 +480,7 @@ abstract class Expression {
    */
   def setSourceLocator(location: SourceLocator) {
     sourceLocator = location
-    var iter = iterateSubExpressions()
+    val iter = iterateSubExpressions()
     while (iter.hasNext) {
       val child = iter.next()
       if (child != null && child.getSourceLocator == null) {
@@ -558,21 +553,21 @@ abstract class Expression {
    * Reset the static properties of the expression to -1, so that they have to be recomputed
    * next time they are used.
    */
-  protected def resetLocalStaticProperties() {
+  protected[expr] def resetLocalStaticProperties() {
     staticProperties = -1
   }
 
   /**
    * Compute the static cardinality of this expression
-   * @return the computed cardinality, as one of the values {@link StaticProperty#ALLOWS_ZERO_OR_ONE},
-   * {@link StaticProperty#EXACTLY_ONE}, {@link StaticProperty#ALLOWS_ONE_OR_MORE},
-   * {@link StaticProperty#ALLOWS_ZERO_OR_MORE}
+   * @return the computed cardinality, as one of the values [[StaticProperty.ALLOWS_ZERO_OR_ONE]],
+   * [[StaticProperty.EXACTLY_ONE]], [[StaticProperty.ALLOWS_ONE_OR_MORE]],
+   * [[StaticProperty.ALLOWS_ZERO_OR_MORE]]
    */
   protected def computeCardinality(): Int
 
   /**
    * Compute the special properties of this expression. These properties are denoted by a bit-significant
-   * integer, possible values are in class {@link StaticProperty}. The "special" properties are properties
+   * integer, possible values are in class [[StaticProperty]]. The "special" properties are properties
    * other than cardinality and dependencies, and most of them relate to properties of node sequences, for
    * example whether the nodes are in document order.
    * @return the special properties, as a bit-significant integer
@@ -589,9 +584,9 @@ abstract class Expression {
    */
   def computeDependencies(): Int = {
     var dependencies = getIntrinsicDependencies
-    var children = iterateSubExpressions()
+    val children = iterateSubExpressions()
     while (children.hasNext) {
-      val child = children.next().asInstanceOf[Expression]
+      val child = children.next()
       dependencies |= child.getDependencies
     }
     dependencies
@@ -652,6 +647,7 @@ abstract class Expression {
     throw e
   }
 
-  def evaluatePendingUpdates(context: XPathContext, pul: PendingUpdateList) {
-  }
+//ORBEON XSLT
+//  def evaluatePendingUpdates(context: XPathContext, pul: PendingUpdateList) {
+//  }
 }

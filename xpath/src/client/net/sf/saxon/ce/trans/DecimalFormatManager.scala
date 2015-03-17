@@ -1,11 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.trans
 
 import client.net.sf.saxon.ce.lib.NamespaceConstant
 import client.net.sf.saxon.ce.om.StructuredQName
-import java.util.HashMap
-import DecimalFormatManager._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.orbeon.HashMap
+import client.net.sf.saxon.ce.trans.DecimalFormatManager._
 
 object DecimalFormatManager {
 
@@ -32,7 +33,7 @@ class DecimalFormatManager {
 
   private var defaultDFS: DecimalSymbols = new DecimalSymbols()
 
-  private var formatTable: HashMap[StructuredQName, DecimalFormatInfo] = new HashMap[StructuredQName, DecimalFormatInfo](10)
+  private val formatTable: HashMap[StructuredQName, DecimalFormatInfo] = new HashMap[StructuredQName, DecimalFormatInfo](10)
 
   private var usingOriginalDefault: Boolean = true
 
@@ -106,7 +107,7 @@ class DecimalFormatManager {
    * or null if not set.
    */
   def getNamedDecimalFormat(qName: StructuredQName): DecimalSymbols = {
-    val dfi = formatTable.get(qName).asInstanceOf[DecimalFormatInfo]
+    val dfi = formatTable.get(qName)
     if (dfi == null) {
       return null
     }

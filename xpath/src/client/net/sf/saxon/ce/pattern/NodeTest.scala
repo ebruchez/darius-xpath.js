@@ -1,13 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.pattern
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType, Type}
+import client.net.sf.saxon.ce.om.{Item, NodeInfo, StructuredQName}
 
 /**
  * A NodeTest is a simple kind of pattern that enables a context-free test of whether
@@ -19,9 +16,9 @@ import scala.collection.JavaConversions._
  * <p>As well as being used to support XSLT pattern matching, NodeTests act as predicates in
  * axis steps, and also act as item types for type matching.</p>
  *
- * <p>For use in user-written application calling {@link NodeInfo#iterateAxis(byte, NodeTest)},
+ * <p>For use in user-written application calling [[NodeInfo.iterateAxis(byte, NodeTest)]],
  * it is possible to write a user-defined subclass of <code>NodeTest</code> that implements
- * a single method, {@link #matches(int, client.net.sf.saxon.ce.om.StructuredQName)}</p>
+ * a single method, [[matches(int, client.net.sf.saxon.ce.om.StructuredQName)]]</p>
  *
  * @author Michael H. Kay
  */

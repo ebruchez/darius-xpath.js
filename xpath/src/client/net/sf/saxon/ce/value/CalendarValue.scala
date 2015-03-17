@@ -1,23 +1,21 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.lib.StringCollator
+import client.net.sf.saxon.ce.regex.RegExp
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import com.google.gwt.regexp.shared.MatchResult
-import com.google.gwt.regexp.shared.RegExp
-import java.math.BigDecimal
-import CalendarValue._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.CalendarValue._
 
 object CalendarValue {
 
   val NO_TIMEZONE = Integer.MIN_VALUE
-
   val BAD_TIMEZONE = Integer.MAX_VALUE
 
-  private var timezonePattern: RegExp = RegExp.compile("[-+]([0-9][0-9]):([0-9][0-9])")
+  private val timezonePattern = RegExp.compile("[-+]([0-9][0-9]):([0-9][0-9])")
 
   def parseTimezone(zone: String): Int = {
     if (zone == null || zone.isEmpty) {

@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.style
 
 import client.net.sf.saxon.ce.trans.XPathException
@@ -119,7 +122,7 @@ class StylesheetModule(@BeanProperty var sourceElement: XSLStylesheet, var prece
   /**
    * Set the value of the input-type-annotations attribute, for this module combined with that
    * of all included/imported modules. The value is an or-ed combination of the two bits
-   * {@link XSLStylesheet#ANNOTATION_STRIP} and {@link XSLStylesheet#ANNOTATION_PRESERVE}
+   * [[XSLStylesheet#ANNOTATION_STRIP]] and [[XSLStylesheet#ANNOTATION_PRESERVE]]
    * @param annotations the value of the input-type-annotations attribute, for this module combined with that
    * of all included/imported modules.
    */

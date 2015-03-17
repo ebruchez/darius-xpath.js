@@ -1,28 +1,25 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import client.net.sf.saxon.ce.`type`.{ConversionResult, ValidationFailure}
 import client.net.sf.saxon.ce.functions.Component
+import client.net.sf.saxon.ce.regex.RegExp
 import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import com.google.gwt.regexp.shared.MatchResult
-import com.google.gwt.regexp.shared.RegExp
-import GDateValue._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object GDateValue {
 
   /**
    * Test whether a candidate date is actually a valid date in the proleptic Gregorian calendar
    */
-  protected var daysPerMonth: Array[Byte] = Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+  protected var daysPerMonth = Array[Byte](31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
-  protected val monthData = Array(306, 337, 0, 31, 61, 92, 122, 153, 184, 214, 245, 275)
+  protected[value] val monthData = Array[Short](306, 337, 0, 31, 61, 92, 122, 153, 184, 214, 245, 275)
 
-  private var datePattern: RegExp = RegExp.compile("\\-?([0-9]+)-([0-9][0-9])-([0-9][0-9])([-+Z].*)?")
+  private val datePattern: RegExp = RegExp.compile("\\-?([0-9]+)-([0-9][0-9])-([0-9][0-9])([-+Z].*)?")
 
-  protected def setLexicalValue(dt: GDateValue, s: CharSequence): ConversionResult = {
+  protected[value] def setLexicalValue(dt: GDateValue, s: CharSequence): ConversionResult = {
     val str = s.toString
     val `match` = datePattern.exec(str)
     if (`match` == null) {
@@ -36,15 +33,15 @@ object GDateValue {
     dt.month = DurationValue.simpleInteger(`match`.getGroup(2))
     dt.day = DurationValue.simpleInteger(`match`.getGroup(3))
     val tz = `match`.getGroup(4)
-    val tzmin = parseTimezone(tz)
-    if (tzmin == BAD_TIMEZONE) {
+    val tzmin = CalendarValue.parseTimezone(tz)
+    if (tzmin == CalendarValue.BAD_TIMEZONE) {
       return badDate("invalid timezone", str)
     }
     dt.setTimezoneInMinutes(tzmin)
     if (dt.year == 0) {
       return badDate("year zero", str)
     }
-    if (!DateValue.isValidDate(dt.year, dt.month, dt.day)) {
+    if (! GDateValue.isValidDate(dt.year, dt.month, dt.day)) {
       return badDate("non-existent date", s)
     }
     dt
@@ -175,9 +172,9 @@ abstract class GDateValue extends CalendarValue {
    * Get a component of the value. Returns null if the timezone component is
    * requested and is not present.
    */
-  def getComponent(component: Int): AtomicValue = component match {
+  override def getComponent(component: Int): AtomicValue = component match {
     case Component.YEAR => 
-      var value = if (year > 0) year else year - 1
+      val value = if (year > 0) year else year - 1
       new IntegerValue(value)
 
     case Component.MONTH => new IntegerValue(month)

@@ -1,41 +1,34 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
-import client.net.sf.saxon.ce.Configuration
+import java.net.URI
+
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType, TypeHierarchy}
 import client.net.sf.saxon.ce.expr._
+import client.net.sf.saxon.ce.expr.sort.SortKeyDefinition._
 import client.net.sf.saxon.ce.lib.StringCollator
+import client.net.sf.saxon.ce.orbeon.HashMap
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.URI
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
-import client.net.sf.saxon.ce.value.StringValue
-import client.net.sf.saxon.ce.value.Whitespace
-import java.util.HashMap
-import SortKeyDefinition._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{StringValue, Whitespace}
+
+import scala.beans.BeanProperty
 
 object SortKeyDefinition {
 
-  private var defaultOrder: StringLiteral = new StringLiteral("ascending")
+  private val defaultOrder: StringLiteral = new StringLiteral("ascending")
 
-  private var defaultCaseOrder: StringLiteral = new StringLiteral("#default")
+  private val defaultCaseOrder: StringLiteral = new StringLiteral("#default")
 
-  private var defaultLanguage: StringLiteral = new StringLiteral(StringValue.EMPTY_STRING)
+  private val defaultLanguage: StringLiteral = new StringLiteral(StringValue.EMPTY_STRING)
 
   val ORDER = 0
-
   val DATA_TYPE = 1
-
   val CASE_ORDER = 2
-
   val LANG = 3
-
   val COLLATION = 4
-
   val STABLE = 5
-
   val N = 6
 }
 
@@ -130,8 +123,8 @@ class SortKeyDefinition {
    * @return true if all information needed to create a Comparator is known statically
    */
   def isFixed(): Boolean = {
-    (0 until N).find(sortProperties(_) != null && !(sortProperties(_).isInstanceOf[Literal]))
-      .map(false)
+    (0 until N).find(x => sortProperties(x) != null && !sortProperties(x).isInstanceOf[Literal])
+      .map(_ => false)
       .getOrElse(true)
   }
 
@@ -191,7 +184,7 @@ class SortKeyDefinition {
       val cname = sortProperties(COLLATION).evaluateAsString(context)
         .toString
       var collationURI: URI = null
-      collationURI = new URI(cname, true)
+      collationURI = new URI(cname)//ORBEON true
       if (!collationURI.isAbsolute) {
         if (baseURI == null) {
           throw new XPathException("Collation URI is relative, and base URI is unknown")
@@ -208,7 +201,7 @@ class SortKeyDefinition {
       val caseOrderX = sortProperties(CASE_ORDER).evaluateAsString(context)
         .toString
       val languageX = sortProperties(LANG).evaluateAsString(context).toString
-      val props = new HashMap()
+      val props = new HashMap[String, String]()
       if (languageX.length != 0 && 
         !(sortProperties(LANG).isInstanceOf[StringLiteral])) {
         if (!StringValue.isValidLanguageCode(sortProperties(LANG).asInstanceOf[StringLiteral].getStringValue)) {

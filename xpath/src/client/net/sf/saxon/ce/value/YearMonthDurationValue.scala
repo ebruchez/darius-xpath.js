@@ -1,20 +1,20 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import java.math.BigDecimal
+
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
 import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.regex.ARegularExpression
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import java.math.BigDecimal
-import YearMonthDurationValue._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.tree.util.FastStringBuffer
+import client.net.sf.saxon.ce.value.YearMonthDurationValue._
 
 object YearMonthDurationValue {
 
-  private var YMDdurationPattern: ARegularExpression = ARegularExpression.make("-?P([0-9]+Y)?([0-9]+M)?([0-9]+D)?")
+  private val YMDdurationPattern: ARegularExpression = ARegularExpression.make("-?P([0-9]+Y)?([0-9]+M)?([0-9]+D)?")
 
   /**
    * Static factory: create a duration value from a supplied string, in
@@ -52,7 +52,7 @@ object YearMonthDurationValue {
 /**
  * A value of type xs:yearMonthDuration
  */
-class YearMonthDurationValue private () extends DurationValue with Comparable[_] {
+class YearMonthDurationValue private () extends DurationValue with Comparable[AnyRef] {
 
   /**
    * Determine the primitive type of the value. This delivers the same answer as
@@ -60,14 +60,14 @@ class YearMonthDurationValue private () extends DurationValue with Comparable[_]
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.YEAR_MONTH_DURATION
+  override def getItemType(): AtomicType = AtomicType.YEAR_MONTH_DURATION
 
   /**
    * Convert to string
    *
    * @return ISO 8601 representation.
    */
-  def getPrimitiveStringValue(): CharSequence = {
+  override def getPrimitiveStringValue(): CharSequence = {
     val y = getYears
     val m = getMonths
     val sb = new FastStringBuffer(32)
@@ -94,13 +94,13 @@ class YearMonthDurationValue private () extends DurationValue with Comparable[_]
   /**
    * Multiply duration by a number. Also used when dividing a duration by a number
    */
-  def multiply(n: Double): DurationValue = {
-    if (Double.isNaN(n)) {
+  override def multiply(n: Double): DurationValue = {
+    if (n.isNaN) {
       throw new XPathException("Cannot multiply/divide a duration by NaN", "FOCA0005")
     }
     val m = getLengthInMonths.toDouble
     val product = n * m
-    if (Double.isInfinite(product) || product > Integer.MAX_VALUE || 
+    if (product.isInfinite || product > Integer.MAX_VALUE ||
       product < Integer.MIN_VALUE) {
       throw new XPathException("Overflow when multiplying/dividing a duration by a number", "FODT0002")
     }
@@ -114,7 +114,7 @@ class YearMonthDurationValue private () extends DurationValue with Comparable[_]
    * @return the ratio, as a decimal
    * @throws XPathException
    */
-  def divide(other: DurationValue): DecimalValue = {
+  override def divide(other: DurationValue): DecimalValue = {
     if (other.isInstanceOf[YearMonthDurationValue]) {
       val v1 = BigDecimal.valueOf(getLengthInMonths)
       val v2 = BigDecimal.valueOf(other.asInstanceOf[YearMonthDurationValue].getLengthInMonths)
@@ -134,7 +134,7 @@ class YearMonthDurationValue private () extends DurationValue with Comparable[_]
   /**
    * Add two year-month-durations
    */
-  def add(other: DurationValue): DurationValue = {
+  override def add(other: DurationValue): DurationValue = {
     if (other.isInstanceOf[YearMonthDurationValue]) {
       fromMonths(getLengthInMonths + 
         other.asInstanceOf[YearMonthDurationValue].getLengthInMonths)
@@ -148,7 +148,7 @@ class YearMonthDurationValue private () extends DurationValue with Comparable[_]
   /**
    * Negate a duration (same as subtracting from zero, but it preserves the type of the original duration)
    */
-  def negate(): DurationValue = fromMonths(-getLengthInMonths)
+  override def negate(): DurationValue = fromMonths(-getLengthInMonths)
 
   /**
    * Compare the value to another duration value
@@ -180,7 +180,7 @@ class YearMonthDurationValue private () extends DurationValue with Comparable[_]
    * @param collator
    * @param implicitTimezone
    */
-  def getXPathComparable(ordered: Boolean, collator: StringCollator, implicitTimezone: Int): AnyRef = {
+  override def getXPathComparable(ordered: Boolean, collator: StringCollator, implicitTimezone: Int): AnyRef = {
     this
   }
 }

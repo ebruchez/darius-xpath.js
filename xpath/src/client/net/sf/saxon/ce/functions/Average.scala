@@ -1,14 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType}
 import client.net.sf.saxon.ce.expr._
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.value._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * Implementation of the fn:avg function
@@ -20,7 +19,7 @@ class Average extends Aggregate {
   /**
    * Determine the item type of the value returned by the function
    */
-  def getItemType(): ItemType = {
+  override def getItemType(): ItemType = {
     val base = Atomizer.getAtomizedItemType(argument(0), false)
     if (base == AtomicType.UNTYPED_ATOMIC) {
       AtomicType.DOUBLE
@@ -34,7 +33,7 @@ class Average extends Aggregate {
   /**
    * Evaluate the function
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val iter = argument(0).iterate(context)
     var count = 0
     var item = iter.next().asInstanceOf[AtomicValue]
@@ -66,6 +65,7 @@ class Average extends Aggregate {
         }
         item = ArithmeticExpression.compute(item, Token.PLUS, next, context)
       }
+      throw new IllegalStateException
     } else if (item.isInstanceOf[DurationValue]) {
       while (true) {
         val next = iter.next().asInstanceOf[AtomicValue]
@@ -78,6 +78,7 @@ class Average extends Aggregate {
         }
         item = item.asInstanceOf[DurationValue].add(next.asInstanceOf[DurationValue])
       }
+      throw new IllegalStateException
     } else {
       badMix(context)
       null

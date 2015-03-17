@@ -1,14 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.functions.FormatDate
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import DateValue._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.DateValue._
 
 object DateValue {
 
@@ -19,7 +18,7 @@ object DateValue {
    * @param in    the lexical form of the date
    * @return either a DateValue or a ValidationFailure
    */
-  def makeDateValue(in: CharSequence): ConversionResult = setLexicalValue(new DateValue(), in)
+  def makeDateValue(in: CharSequence): ConversionResult = GDateValue.setLexicalValue(new DateValue(), in)
 
   /**
    * Get the date that immediately follows a given date
@@ -60,7 +59,7 @@ object DateValue {
    */
   def getJulianDayNumber(year: Int, month: Int, day: Int): Int = {
     var z = year - (if (month < 3) 1 else 0)
-    val f = monthData(month - 1)
+    val f = GDateValue.monthData(month - 1)
     if (z >= 0) {
       day + f + 365 * z + z / 4 - z / 100 + z / 400 + 1721118
     } else {
@@ -173,7 +172,7 @@ object DateValue {
 /**
  * A value of type Date. Note that a Date may include a TimeZone.
  */
-class DateValue private () extends GDateValue with Comparable[_] {
+class DateValue private () extends GDateValue with Comparable[AnyRef] {
 
   /**
    * Constructor given a year, month, and day. Performs no validation.
@@ -197,7 +196,7 @@ class DateValue private () extends GDateValue with Comparable[_] {
    * @param month The month, 1-12
    * @param day   The day, 1-31
    * @param tz    the timezone displacement in minutes from UTC. Supply the value
-   *              {@link CalendarValue#NO_TIMEZONE} if there is no timezone component.
+   *              [[CalendarValue.NO_TIMEZONE]] if there is no timezone component.
    */
   def this(year: Int, 
       month: Int, 
@@ -219,7 +218,7 @@ class DateValue private () extends GDateValue with Comparable[_] {
    */
   def this(s: CharSequence) {
     this()
-    setLexicalValue(this, s).asAtomic()
+    GDateValue.setLexicalValue(this, s).asAtomic()
   }
 
   /**
@@ -288,7 +287,7 @@ class DateValue private () extends GDateValue with Comparable[_] {
    *          if the duration is an xs:duration, as distinct from
    *          a subclass thereof
    */
-  def add(duration: DurationValue): DateValue = {
+  override def add(duration: DurationValue): DateValue = {
     if (duration.isInstanceOf[DayTimeDurationValue]) {
       var microseconds = duration.asInstanceOf[DayTimeDurationValue].getLengthInMicroseconds
       val negative = (microseconds < 0)
@@ -315,7 +314,7 @@ class DateValue private () extends GDateValue with Comparable[_] {
       }
       m += 1
       var d = day
-      while (!isValidDate(y, m, d)) {
+      while (! GDateValue.isValidDate(y, m, d)) {
         d -= 1
       }
       new DateValue(y, m.toByte, d.toByte, getTimezoneInMinutes)
@@ -332,7 +331,7 @@ class DateValue private () extends GDateValue with Comparable[_] {
    * @return the duration as an xs:dayTimeDuration
    * @throws XPathException for example if one value is a date and the other is a time
    */
-  def subtract(other: CalendarValue, context: XPathContext): DayTimeDurationValue = {
+  override def subtract(other: CalendarValue, context: XPathContext): DayTimeDurationValue = {
     if (!(other.isInstanceOf[DateValue])) {
       throw new XPathException("First operand of '-' is a date, but the second is not", "XPTY0004")
     }

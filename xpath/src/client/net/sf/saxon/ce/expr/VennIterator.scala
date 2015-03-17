@@ -1,12 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
 import client.net.sf.saxon.ce.expr.sort.NodeOrderComparer
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.om.{Item, NodeInfo, SequenceIterator}
 import client.net.sf.saxon.ce.trans.XPathException
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * An iterator representing a nodeset that is a union, intersection, or difference of two other NodeSets.
@@ -72,26 +71,28 @@ class VennIterator(p1: SequenceIterator,
       }
       deliverEndOfSequence()
 
-    case Token.EXCEPT => while (true) {
-      if (nextNode1 == null) {
-        deliverEndOfSequence()
-      }
-      if (nextNode2 == null) {
-        return deliver1()
-      }
-      val c = comparer.compare(nextNode1, nextNode2)
-      if (c < 0) {
-        deliver1()
-      } else if (c > 0) {
-        nextNode2 = next(e2)
-        if (nextNode2 == null) {
-          deliver1()
+    case Token.EXCEPT =>
+      while (true) {
+        if (nextNode1 == null) {
+          deliverEndOfSequence()
         }
-      } else {
-        nextNode2 = next(e2)
-        nextNode1 = next(e1)
+        if (nextNode2 == null) {
+          return deliver1()
+        }
+        val c = comparer.compare(nextNode1, nextNode2)
+        if (c < 0) {
+          deliver1()
+        } else if (c > 0) {
+          nextNode2 = next(e2)
+          if (nextNode2 == null) {
+            deliver1()
+          }
+        } else {
+          nextNode2 = next(e2)
+          nextNode1 = next(e1)
+        }
       }
-    }
+      throw new IllegalStateException
     case _ => null
   }
 

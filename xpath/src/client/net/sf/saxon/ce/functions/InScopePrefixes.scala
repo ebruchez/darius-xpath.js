@@ -1,18 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.om.NamespaceBinding
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.value.StringValue
-import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.om.{NodeInfo, SequenceIterator}
+import client.net.sf.saxon.ce.orbeon.ArrayList
 import client.net.sf.saxon.ce.tree.iter.ListIterator
 import client.net.sf.saxon.ce.tree.util.NamespaceIterator
-import java.util.ArrayList
-import java.util.Iterator
-import java.util.List
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.StringValue
 
 /**
  * This class supports the function in-scope-prefixes()
@@ -24,7 +20,7 @@ class InScopePrefixes extends SystemFunction {
   /**
    * Iterator over the results of the expression
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val element = argument(0).evaluateItem(context).asInstanceOf[NodeInfo]
     val iter = NamespaceIterator.iterateNamespaces(element)
     val prefixes = new ArrayList[StringValue]()

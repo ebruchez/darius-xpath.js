@@ -1,31 +1,25 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.expr.instruct.Block
-import client.net.sf.saxon.ce.expr.instruct.Choose
-import client.net.sf.saxon.ce.functions.CurrentGroup
-import client.net.sf.saxon.ce.functions.CurrentGroupingKey
-import client.net.sf.saxon.ce.functions.RegexGroup
+import client.net.sf.saxon.ce.`type`._
+import client.net.sf.saxon.ce.expr.ExpressionParser._
+import client.net.sf.saxon.ce.expr.instruct.{Block, Choose}
 import client.net.sf.saxon.ce.functions.SystemFunction
 import client.net.sf.saxon.ce.lib.NamespaceConstant
 import client.net.sf.saxon.ce.om._
+import client.net.sf.saxon.ce.orbeon.{ArrayList, Stack}
 import client.net.sf.saxon.ce.pattern._
-import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`._
+import client.net.sf.saxon.ce.trans.{Err, XPathException}
 import client.net.sf.saxon.ce.value._
-import java.util.ArrayList
-import java.util.List
-import java.util.Stack
-import ExpressionParser._
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.util.control.Breaks._
 
 object ExpressionParser {
 
   val XPATH = 0
-
   val XSLT_PATTERN = 1
-
   val SEQUENCE_TYPE = 2
 
   class ForClause {
@@ -55,7 +49,7 @@ class ExpressionParser {
 
   protected var env: StaticContext = _
 
-  protected var rangeVariables: Stack[Binding] = new Stack[Binding]()
+  protected var rangeVariables = new Stack[Binding]()
 
   protected var defaultContainer: Container = _
 
@@ -110,7 +104,7 @@ class ExpressionParser {
    * @throws XPathException always thrown: an exception containing the
    *     supplied message
    */
-  def grumble(message: String) {
+  def grumble(message: String): Nothing = {
     grumble(message, (if (language == XSLT_PATTERN) "XTSE0340" else "XPST0003"))
   }
 
@@ -122,7 +116,7 @@ class ExpressionParser {
    * @throws XPathException always thrown: an exception containing the
    *                                        supplied message
    */
-  def grumble(message: String, errorCode: String) {
+  def grumble(message: String, errorCode: String): Nothing = {
     grumble(message, new StructuredQName("", NamespaceConstant.ERR, errorCode))
   }
 
@@ -130,11 +124,12 @@ class ExpressionParser {
    * Report a static error
    *
    * @param message the error message
-   * @param errorCode the error code
+   * @param _errorCode the error code
    * @throws XPathException always thrown: an exception containing the
    *     supplied message
    */
-  protected def grumble(message: String, errorCode: StructuredQName) {
+  protected def grumble(message: String, _errorCode: StructuredQName): Nothing = {
+    var errorCode = _errorCode
     if (errorCode == null) {
       errorCode = new StructuredQName("err", NamespaceConstant.ERR, "XPST0003")
     }
@@ -152,10 +147,10 @@ class ExpressionParser {
 
   /**
    * Set the current language (XPath or XQuery, XSLT Pattern, or SequenceType)
-   * @param language one of the constants {@link #XPATH}, {@link #XSLT_PATTERN}, {@link #SEQUENCE_TYPE}
+   * @param language one of the constants [[XPATH]], [[XSLT_PATTERN]], [[SEQUENCE_TYPE]]
    */
-  def setLanguage(language: Int) language match {
-    case XPATH | XSLT_PATTERN | SEQUENCE_TYPE => //break
+  def setLanguage(language: Int) = language match {
+    case XPATH | XSLT_PATTERN | SEQUENCE_TYPE =>
     case _ => throw new IllegalArgumentException("Unknown language " + language)
   }
 
@@ -212,6 +207,7 @@ class ExpressionParser {
       if (t.currentToken == Token.EOF && terminator == Token.RCURLY) {
         grumble("Missing curly brace after expression in attribute value template", "XTSE0350")
       } else {
+        //println(s"xxx `${t.currentToken}`")
         grumble("Unexpected token " + currentTokenDisplay() + " beyond end of expression")
       }
     }
@@ -289,32 +285,32 @@ class ExpressionParser {
    * Algorithm for the mainstream binary operators is from Wikipedia article
    * on precedence parsing;  operator precedences are from the XQuery specification
    * appendix B.
-   * @param lhs Left-hand side "basic expression"
-   * @param
+   * @param _lhs Left-hand side "basic expression"
    */
-  def parseBinaryExpression(lhs: Expression, minPrecedence: Int): Expression = {
+  def parseBinaryExpression(_lhs: Expression, minPrecedence: Int): Expression = {
+    var lhs = _lhs
     while (getCurrentOperatorPrecedence >= minPrecedence) {
       val operator = t.currentToken
       val prec = getCurrentOperatorPrecedence
       operator match {
-        case Token.INSTANCE_OF | Token.TREAT_AS => 
+        case Token.INSTANCE_OF | Token.TREAT_AS =>
           nextToken()
-          var seq = parseSequenceType()
+          val seq = parseSequenceType()
           lhs = makeSequenceTypeExpression(lhs, operator, seq)
           setLocation(lhs)
           if (getCurrentOperatorPrecedence >= prec) {
             grumble("Left operand of '" + Token.tokens(t.currentToken) + "' needs parentheses")
           }
 
-        case Token.CAST_AS | Token.CASTABLE_AS => 
+        case Token.CAST_AS | Token.CASTABLE_AS =>
           nextToken()
           expect(Token.NAME)
-          var at = getAtomicType(t.currentTokenValue)
+          val at = getAtomicType(t.currentTokenValue)
           if (at == AtomicType.ANY_ATOMIC) {
             grumble("No value is castable to xs:anyAtomicType", "XPST0080")
           }
           nextToken()
-          var allowEmpty = (t.currentToken == Token.QMARK)
+          val allowEmpty = t.currentToken == Token.QMARK
           if (allowEmpty) {
             nextToken()
           }
@@ -324,7 +320,7 @@ class ExpressionParser {
             grumble("Left operand of '" + Token.tokens(t.currentToken) + "' needs parentheses")
           }
 
-        case _ => 
+        case _ =>
           nextToken()
           var rhs = parseUnaryExpression()
           while (getCurrentOperatorPrecedence > prec) {
@@ -356,13 +352,13 @@ class ExpressionParser {
 
   private def makeBinaryExpression(lhs: Expression, operator: Int, rhs: Expression): Expression = operator match {
     case Token.OR | Token.AND => new BooleanExpression(lhs, operator, rhs)
-    case Token.FEQ | Token.FNE | Token.FLE | Token.FLT | Token.FGE | Token.FGT => new ValueComparison(lhs, 
+    case Token.FEQ | Token.FNE | Token.FLE | Token.FLT | Token.FGE | Token.FGT => new ValueComparison(lhs,
       operator, rhs)
-    case Token.EQUALS | Token.NE | Token.LE | Token.LT | Token.GE | Token.GT => new GeneralComparison(lhs, 
+    case Token.EQUALS | Token.NE | Token.LE | Token.LT | Token.GE | Token.GT => new GeneralComparison(lhs,
       operator, rhs)
     case Token.IS | Token.PRECEDES | Token.FOLLOWS => new IdentityComparison(lhs, operator, rhs)
     case Token.TO => new RangeExpression(lhs, operator, rhs)
-    case Token.PLUS | Token.MINUS | Token.MULT | Token.DIV | Token.IDIV | Token.MOD => new ArithmeticExpression(lhs, 
+    case Token.PLUS | Token.MINUS | Token.MULT | Token.DIV | Token.IDIV | Token.MOD => new ArithmeticExpression(lhs,
       operator, rhs)
     case Token.UNION | Token.INTERSECT | Token.EXCEPT => new VennExpression(lhs, operator, rhs)
     case _ => throw new IllegalArgumentException()
@@ -370,10 +366,10 @@ class ExpressionParser {
 
   private def makeSequenceTypeExpression(lhs: Expression, operator: Int, `type`: SequenceType): Expression = operator match {
     case Token.INSTANCE_OF => new InstanceOfExpression(lhs, `type`)
-    case Token.TREAT_AS => 
-      var role = new RoleLocator(RoleLocator.TYPE_OP, "treat as", 0)
+    case Token.TREAT_AS =>
+      val role = new RoleLocator(RoleLocator.TYPE_OP, "treat as", 0)
       role.setErrorCode("XPDY0050")
-      var e = CardinalityChecker.makeCardinalityChecker(lhs, `type`.getCardinality, role)
+      val e = CardinalityChecker.makeCardinalityChecker(lhs, `type`.getCardinality, role)
       new ItemChecker(e, `type`.getPrimaryType, role)
 
     case _ => throw new IllegalArgumentException()
@@ -452,7 +448,8 @@ class ExpressionParser {
       skipToken(Token.IN)
       clause.sequence = parseExprSingle()
       declareRangeVariable(clause.rangeVariable)
-    } while (t.currentToken == Token.COMMA);
+    } while (t.currentToken == Token.COMMA)
+
     if (operator == Token.FOR) {
       skipToken(Token.RETURN)
     } else {
@@ -460,25 +457,30 @@ class ExpressionParser {
     }
     var action = parseExprSingle()
     val th = TypeHierarchy.getInstance
-    var i = clauseList.size - 1
-    while (i >= 0) {
-      val fc = clauseList.get(i)
-      val exp = fc.rangeVariable
-      setLocation(exp)
-      exp.setSequence(fc.sequence)
-      val `type` = SequenceType.makeSequenceType(fc.sequence.getItemType, StaticProperty.EXACTLY_ONE)
-      fc.rangeVariable.setRequiredType(`type`)
-      exp.setAction(action)
-      action = exp
-      i -= 1
-    }
-    var i = clauseList.size - 1
-    while (i >= 0) {
-      val clause = clauseList.get(i)
-      for (n <- 0 until clause.numberOfRangeVariables()) {
-        undeclareRangeVariable()
+
+    locally {
+      var i = clauseList.size - 1
+      while (i >= 0) {
+        val fc = clauseList.get(i)
+        val exp = fc.rangeVariable
+        setLocation(exp)
+        exp.setSequence(fc.sequence)
+        val `type` = SequenceType.makeSequenceType(fc.sequence.getItemType, StaticProperty.EXACTLY_ONE)
+        fc.rangeVariable.setRequiredType(`type`)
+        exp.setAction(action)
+        action = exp
+        i -= 1
       }
-      i -= 1
+    }
+    locally {
+      var i = clauseList.size - 1
+      while (i >= 0) {
+        val clause = clauseList.get(i)
+        for (n <- 0 until clause.numberOfRangeVariables()) {
+          undeclareRangeVariable()
+        }
+        i -= 1
+      }
     }
     action
   }
@@ -587,11 +589,11 @@ class ExpressionParser {
   private def parseUnaryExpression(): Expression = {
     var exp: Expression = null
     t.currentToken match {
-      case Token.MINUS => 
+      case Token.MINUS =>
         nextToken()
         exp = new ArithmeticExpression(new Literal(IntegerValue.ZERO), Token.NEGATE, parseUnaryExpression())
 
-      case Token.PLUS => 
+      case Token.PLUS =>
         nextToken()
         exp = new ArithmeticExpression(new Literal(IntegerValue.ZERO), Token.PLUS, parseUnaryExpression())
 
@@ -632,7 +634,7 @@ class ExpressionParser {
    * @return the resulting subexpression
    */
   protected def parsePathExpression(): Expression = t.currentToken match {
-    case Token.SLASH => 
+    case Token.SLASH =>
       nextToken()
       val start = new RootExpression()
       setLocation(start)
@@ -647,7 +649,7 @@ class ExpressionParser {
         start
       }
 
-    case Token.SLSL => 
+    case Token.SLSL =>
       nextToken()
       val start2 = new RootExpression()
       setLocation(start2)
@@ -698,23 +700,25 @@ class ExpressionParser {
   protected def parseRemainingPath(start: Expression): Expression = {
     var exp = start
     var op = Token.SLASH
-    while (true) {
-      val next = parseStepExpression(false)
-      if (op == Token.SLASH) {
-        exp = new SlashExpression(exp, next)
-      } else {
-        val descOrSelf = new AxisExpression(Axis.DESCENDANT_OR_SELF, null)
-        setLocation(descOrSelf)
-        val step = new SlashExpression(descOrSelf, next)
-        setLocation(step)
-        exp = new SlashExpression(exp, step)
+    breakable {
+      while (true) {
+        val next = parseStepExpression(false)
+        if (op == Token.SLASH) {
+          exp = new SlashExpression(exp, next)
+        } else {
+          val descOrSelf = new AxisExpression(Axis.DESCENDANT_OR_SELF, null)
+          setLocation(descOrSelf)
+          val step = new SlashExpression(descOrSelf, next)
+          setLocation(step)
+          exp = new SlashExpression(exp, step)
+        }
+        setLocation(exp)
+        op = t.currentToken
+        if (op != Token.SLASH && op != Token.SLSL) {
+          break()
+        }
+        nextToken()
       }
-      setLocation(exp)
-      op = t.currentToken
-      if (op != Token.SLASH && op != Token.SLSL) {
-        //break
-      }
-      nextToken()
     }
     exp
   }
@@ -728,17 +732,19 @@ class ExpressionParser {
    */
   protected def parseStepExpression(firstInPattern: Boolean): Expression = {
     var step = parseBasicStep(firstInPattern)
-    val reverse = (step.isInstanceOf[AxisExpression]) && 
+    val reverse = step.isInstanceOf[AxisExpression] &&
       !Axis.isForwards(step.asInstanceOf[AxisExpression].getAxis)
-    while (true) {
-      if (t.currentToken == Token.LSQB) {
-        nextToken()
-        val predicate = parsePredicate()
-        skipToken(Token.RSQB)
-        step = new FilterExpression(step, predicate)
-        setLocation(step)
-      } else {
-        //break
+    breakable {
+      while (true) {
+        if (t.currentToken == Token.LSQB) {
+          nextToken()
+          val predicate = parsePredicate()
+          skipToken(Token.RSQB)
+          step = new FilterExpression(step, predicate)
+          setLocation(step)
+        } else {
+          break()
+        }
       }
     }
     if (reverse) {
@@ -763,32 +769,32 @@ class ExpressionParser {
    */
   protected def parseBasicStep(firstInPattern: Boolean): Expression = t.currentToken match {
     case Token.DOLLAR => parseVariableReference()
-    case Token.LPAR => 
+    case Token.LPAR =>
       nextToken()
       if (t.currentToken == Token.RPAR) {
         nextToken()
         new Literal(EmptySequence.getInstance)
       }
-      var seq = parseExpression()
+      val seq = parseExpression()
       skipToken(Token.RPAR)
       seq
 
     case Token.STRING_LITERAL => parseStringLiteral()
     case Token.NUMBER => parseNumericLiteral()
     case Token.FUNCTION => parseFunctionCall()
-    case Token.DOT => 
+    case Token.DOT =>
       nextToken()
-      var cie = new ContextItemExpression()
+      val cie = new ContextItemExpression()
       setLocation(cie)
       cie
 
-    case Token.DOTDOT => 
+    case Token.DOTDOT =>
       nextToken()
-      var pne = new ParentNodeExpression()
+      val pne = new ParentNodeExpression()
       setLocation(pne)
       pne
 
-    case Token.NODEKIND | Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR => 
+    case Token.NODEKIND | Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR =>
       var defaultAxis = Axis.CHILD
       if (t.currentToken == Token.NODEKIND && 
         (t.currentTokenValue == "attribute" || t.currentTokenValue == "schema-attribute")) {
@@ -800,22 +806,22 @@ class ExpressionParser {
       if (test.isInstanceOf[AnyNodeTest]) {
         test = (if (defaultAxis == Axis.CHILD) AnyChildNodeTest.getInstance else NodeKindTest.ATTRIBUTE)
       }
-      var ae = new AxisExpression(defaultAxis, test)
+      val ae = new AxisExpression(defaultAxis, test)
       setLocation(ae)
       ae
 
-    case Token.AT => 
+    case Token.AT =>
       nextToken()
       t.currentToken match {
-        case Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR | Token.NODEKIND => 
-          var ae2 = new AxisExpression(Axis.ATTRIBUTE, parseNodeTest(Type.ATTRIBUTE))
+        case Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR | Token.NODEKIND =>
+          val ae2 = new AxisExpression(Axis.ATTRIBUTE, parseNodeTest(Type.ATTRIBUTE))
           setLocation(ae2)
           ae2
 
         case _ => grumble("@ must be followed by a NodeTest")
       }
 
-    case Token.AXIS => 
+    case Token.AXIS =>
       var axis: Byte = 0
       try {
         axis = Axis.getAxisNumber(t.currentTokenValue)
@@ -825,11 +831,11 @@ class ExpressionParser {
           axis = Axis.CHILD
         }
       }
-      var principalNodeType = Axis.principalNodeType(axis)
+      val principalNodeType = Axis.principalNodeType(axis)
       nextToken()
       t.currentToken match {
-        case Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR | Token.NODEKIND => 
-          var ax = new AxisExpression(axis, parseNodeTest(principalNodeType))
+        case Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR | Token.NODEKIND =>
+          val ax = new AxisExpression(axis, parseNodeTest(principalNodeType))
           setLocation(ax)
           ax
 
@@ -908,27 +914,27 @@ class ExpressionParser {
     val tok = t.currentToken
     var tokv = t.currentTokenValue
     tok match {
-      case Token.NAME => 
+      case Token.NAME =>
         nextToken()
-        var nameCode = makeStructuredQName(tokv, (if (nodeType == Type.ELEMENT) env.getDefaultElementNamespace else ""))
+        val nameCode = makeStructuredQName(tokv, (if (nodeType == Type.ELEMENT) env.getDefaultElementNamespace else ""))
         new NameTest(nodeType, nameCode)
 
-      case Token.PREFIX => 
+      case Token.PREFIX =>
         nextToken()
         makeNamespaceTest(nodeType, tokv)
 
-      case Token.SUFFIX => 
+      case Token.SUFFIX =>
         nextToken()
         tokv = t.currentTokenValue
         skipToken(Token.NAME)
         makeLocalNameTest(nodeType, tokv)
 
-      case Token.STAR => 
+      case Token.STAR =>
         nextToken()
         NodeKindTest.makeNodeKindTest(nodeType)
 
       case Token.NODEKIND => parseKindTest()
-      case _ => 
+      case _ =>
         grumble("Unrecognized node test")
         null
 
@@ -954,14 +960,14 @@ class ExpressionParser {
     }
     var result: NodeTest = null
     primaryType match {
-      case Type.ITEM => 
+      case Type.ITEM =>
         grumble("item() is not allowed in a path expression")
         return null
 
       case Type.NODE => result = AnyNodeTest.getInstance
       case Type.TEXT => result = NodeKindTest.TEXT
       case Type.COMMENT => result = NodeKindTest.COMMENT
-      case Type.DOCUMENT => 
+      case Type.DOCUMENT =>
         result = NodeKindTest.DOCUMENT
         if (!empty) {
           val innerType = getSystemType(t.currentTokenValue)
@@ -973,7 +979,7 @@ class ExpressionParser {
           return new DocumentNodeTest(inner)
         }
 
-      case Type.PROCESSING_INSTRUCTION => 
+      case Type.PROCESSING_INSTRUCTION =>
         result = NodeKindTest.PROCESSING_INSTRUCTION
         if (!empty) {
           var piName: StructuredQName = null
@@ -992,7 +998,7 @@ class ExpressionParser {
           return new NameTest(Type.PROCESSING_INSTRUCTION, piName)
         }
 
-      case Type.ATTRIBUTE | Type.ELEMENT => 
+      case Type.ATTRIBUTE | Type.ELEMENT =>
         result = NodeKindTest.makeNodeKindTest(primaryType)
         if (!empty) {
           if (t.currentToken == Token.STAR || t.currentToken == Token.MULT) {
@@ -1030,7 +1036,7 @@ class ExpressionParser {
           return result
         }
 
-      case _ => 
+      case _ =>
         grumble("Unknown node kind")
         return null
 
@@ -1057,7 +1063,7 @@ class ExpressionParser {
    * kinds such as element and attribute, and the generic types node() and item()
    *
    * @param name the name of the system type, for example "element" or "comment"
-   * @return the integer constant denoting the type, for example {@link Type#ITEM} or {@link Type#ELEMENT}
+   * @return the integer constant denoting the type, for example [[Type.ITEM]] or [[Type.ELEMENT]]
    * @throws XPathException if the name is not recognized
    */
   private def getSystemType(name: String): Int = {
@@ -1080,13 +1086,15 @@ class ExpressionParser {
     val functionName = makeStructuredQName(fname, env.getDefaultFunctionNamespace)
     nextToken()
     if (t.currentToken != Token.RPAR) {
-      while (true) {
-        val arg = parseFunctionArgument()
-        args.add(arg)
-        if (t.currentToken == Token.COMMA) {
-          nextToken()
-        } else {
-          //break
+      breakable {
+        while (true) {
+          val arg = parseFunctionArgument()
+          args.add(arg)
+          if (t.currentToken == Token.COMMA) {
+            nextToken()
+          } else {
+            break()
+          }
         }
       }
       expect(Token.RPAR)
@@ -1127,23 +1135,23 @@ class ExpressionParser {
           env)
         return new Literal(av)
       } catch {
-        case e: XPathException => {
+        case e: XPathException =>
           grumble(e.getMessage, e.getErrorCodeQName)
           return null
-        }
       }
     }
-    if (language == XSLT_PATTERN) {
-      if (fcall.isInstanceOf[RegexGroup]) {
-        return new Literal(EmptySequence.getInstance)
-      } else if (fcall.isInstanceOf[CurrentGroup]) {
-        grumble("The current-group() function cannot be used in a pattern", "XTSE1060")
-        return null
-      } else if (fcall.isInstanceOf[CurrentGroupingKey]) {
-        grumble("The current-grouping-key() function cannot be used in a pattern", "XTSE1070")
-        return null
-      }
-    }
+//ORBEON XSLT
+//    if (language == XSLT_PATTERN) {
+//      if (fcall.isInstanceOf[RegexGroup]) {
+//        return new Literal(EmptySequence.getInstance)
+//      } else if (fcall.isInstanceOf[CurrentGroup]) {
+//        grumble("The current-group() function cannot be used in a pattern", "XTSE1060")
+//        return null
+//      } else if (fcall.isInstanceOf[CurrentGroupingKey]) {
+//        grumble("The current-grouping-key() function cannot be used in a pattern", "XTSE1070")
+//        return null
+//      }
+//    }
     setLocation(fcall)
     for (argument <- arguments) {
       fcall.adoptChildExpression(argument)
@@ -1189,7 +1197,7 @@ class ExpressionParser {
   protected def findRangeVariable(qName: StructuredQName): Binding = {
     var v = rangeVariables.size - 1
     while (v >= 0) {
-      val b = rangeVariables.elementAt(v)
+      val b = rangeVariables.get(v)
       if (b.getVariableQName == qName) {
         return b
       }
@@ -1213,10 +1221,9 @@ class ExpressionParser {
       val qn = makeStructuredQName(prefix + ":a", "")
       uri = qn.getNamespaceURI
     } catch {
-      case e: XPathException => {
+      case e: XPathException =>
         grumble(e.getMessage, "XPST0081")
         return null
-      }
     }
     new NamespaceTest(nodeType, uri)
   }

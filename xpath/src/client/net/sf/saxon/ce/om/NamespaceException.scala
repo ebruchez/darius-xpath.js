@@ -1,7 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.om
-
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * A NamespaceException represents an error condition whereby a QName (for example a variable
@@ -9,7 +9,7 @@ import scala.collection.JavaConversions._
  */
 class NamespaceException(var prefix: String) extends Exception {
 
-  def getMessage(): String = {
+  override def getMessage(): String = {
     "Namespace prefix " + prefix + " has not been declared"
   }
 

@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.`type`
 
 import client.net.sf.saxon.ce.om.StructuredQName
@@ -93,11 +96,11 @@ class TypeHierarchy {
    * Determine the relationship of one item type to another.
    * @param t1 the first item type
    * @param t2 the second item type
-   * @return {@link #SAME_TYPE} if the types are the same; {@link #SUBSUMES} if the first
+   * @return [[#SAME_TYPE]] if the types are the same; [[#SUBSUMES]] if the first
    * type subsumes the second (that is, all instances of the second type are also instances
-   * of the first); {@link #SUBSUMED_BY} if the second type subsumes the first;
-   * {@link #OVERLAPS} if the two types overlap (have a non-empty intersection, but neither
-   * subsumes the other); {@link #DISJOINT} if the two types are disjoint (have an empty intersection)
+   * of the first); [[#SUBSUMED_BY]] if the second type subsumes the first;
+   * [[#OVERLAPS]] if the two types overlap (have a non-empty intersection, but neither
+   * subsumes the other); [[#DISJOINT]] if the two types are disjoint (have an empty intersection)
    */
   def relationship(t1: ItemType, t2: ItemType): Int = {
     if (t1 == null) {
@@ -119,11 +122,11 @@ class TypeHierarchy {
    * Determine the relationship of one item type to another.
    * @param t1 the first item type
    * @param t2 the second item type
-   * @return {@link #SAME_TYPE} if the types are the same; {@link #SUBSUMES} if the first
+   * @return [[#SAME_TYPE]] if the types are the same; [[#SUBSUMES]] if the first
    * type subsumes the second (that is, all instances of the second type are also instances
-   * of the first); {@link #SUBSUMED_BY} if the second type subsumes the first;
-   * {@link #OVERLAPS} if the two types overlap (have a non-empty intersection, but neither
-   * subsumes the other); {@link #DISJOINT} if the two types are disjoint (have an empty intersection)
+   * of the first); [[#SUBSUMED_BY]] if the second type subsumes the first;
+   * [[#OVERLAPS]] if the two types overlap (have a non-empty intersection, but neither
+   * subsumes the other); [[#DISJOINT]] if the two types are disjoint (have an empty intersection)
    */
   private def computeRelationship(t1: ItemType, t2: ItemType): Int = {
     if (t1 == t2) {

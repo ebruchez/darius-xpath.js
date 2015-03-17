@@ -1,12 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.iter
 
 import client.net.sf.saxon.ce.expr.LastPositionFinder
 import client.net.sf.saxon.ce.functions.Count
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
 import client.net.sf.saxon.ce.trans.XPathException
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * An iterator that maintains the values of position() and current(), as a wrapper
@@ -18,7 +18,7 @@ class FocusIterator(var base: SequenceIterator) extends SequenceIterator {
 
   private var pos: Int = 0
 
-  private var last: Int = -1
+  private var _last: Int = -1
 
   /**
    * Get the underlying iterator
@@ -88,15 +88,15 @@ class FocusIterator(var base: SequenceIterator) extends SequenceIterator {
    * @throws XPathException if a failure occurs reading the sequence
    */
   def last(): Int = {
-    if (last == -1) {
+    if (_last == -1) {
       if (base.isInstanceOf[LastPositionFinder]) {
-        last = base.asInstanceOf[LastPositionFinder].getLastPosition
+        _last = base.asInstanceOf[LastPositionFinder].getLastPosition
       }
-      if (last == -1) {
-        last = Count.count(base.getAnother)
+      if (_last == -1) {
+        _last = Count.count(base.getAnother)
       }
     }
-    last
+    _last
   }
 
   /**

@@ -1,13 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
 import client.net.sf.saxon.ce.lib.StringCollator
-import CodepointCollator._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object CodepointCollator {
 
-  private var theInstance: CodepointCollator = new CodepointCollator()
+  private val theInstance: CodepointCollator = new CodepointCollator()
 
   def getInstance(): CodepointCollator = theInstance
 }
@@ -33,8 +33,8 @@ class CodepointCollator extends StringCollator {
   def compareCS(a: CharSequence, b: CharSequence): Int = {
     val alen = a.length
     val blen = b.length
-    val i = 0
-    val j = 0
+    var i = 0
+    var j = 0
     while (true) {
       if (i == alen) {
         if (j == blen) {
@@ -46,21 +46,24 @@ class CodepointCollator extends StringCollator {
       if (j == blen) {
         return +1
       }
-      var nexta = a.charAt(i += 1).toInt
+      var nexta = a.charAt(i).toInt
+      i += 1
       if (nexta >= 55296 && nexta <= 56319) {
-        nexta = ((nexta - 55296) * 1024) + (a.charAt(i += 1).toInt - 56320) + 
-          65536
+        nexta = ((nexta - 55296) * 1024) + (a.charAt(i).toInt - 56320) + 65536
+        i += 1
       }
-      var nextb = b.charAt(j += 1).toInt
+      var nextb = b.charAt(j).toInt
+      j += 1
       if (nextb >= 55296 && nextb <= 56319) {
-        nextb = ((nextb - 55296) * 1024) + (b.charAt(j += 1).toInt - 56320) + 
-          65536
+        nextb = ((nextb - 55296) * 1024) + (b.charAt(j).toInt - 56320) + 65536
+        j += 1
       }
       val c = nexta - nextb
       if (c != 0) {
         c
       }
     }
+    throw new IllegalStateException
   }
 
   /**

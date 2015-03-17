@@ -1,15 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
+import client.net.sf.saxon.ce.`type`.StringToDouble
 import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.value._
-import client.net.sf.saxon.ce.`type`.StringToDouble
-import NumericComparer._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object NumericComparer {
 
-  private var THE_INSTANCE: NumericComparer = new NumericComparer()
+  private val THE_INSTANCE: NumericComparer = new NumericComparer()
 
   def getInstance(): NumericComparer = THE_INSTANCE
 }
@@ -44,14 +44,14 @@ class NumericComparer protected () extends AtomicComparer {
     var d2: Double = 0.0
     d1 = makeDouble(a)
     d2 = makeDouble(b)
-    if (Double.isNaN(d1)) {
-      if (Double.isNaN(d2)) {
+    if (d1.isNaN) {
+      if (d2.isNaN) {
         return 0
       } else {
         return -1
       }
     }
-    if (Double.isNaN(d2)) {
+    if (d2.isNaN) {
       return +1
     }
     if (d1 < d2) return -1

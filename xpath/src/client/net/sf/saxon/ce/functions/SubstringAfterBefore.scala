@@ -1,34 +1,32 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.expr.sort.CodepointCollator
+import client.net.sf.saxon.ce.functions.SubstringAfterBefore._
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.value.StringValue
-import SubstringAfterBefore._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object SubstringAfterBefore {
-
   val AFTER = 1
-
   val BEFORE = 2
 }
 
 /**
  * Implements the fn:substring-after() function
  */
-class SubstringAfterBefore(operation: Int) extends CollatingFunction {
+class SubstringAfterBefore(_operation: Int) extends CollatingFunction {
 
-  this.operation = operation
+  this.operation = _operation
 
   def newInstance(): SubstringAfterBefore = new SubstringAfterBefore(operation)
 
   /**
    * Evaluate the function
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     if (!(stringCollator.isInstanceOf[CodepointCollator])) {
       doesNotSupportSubstringMatching(context)
     }

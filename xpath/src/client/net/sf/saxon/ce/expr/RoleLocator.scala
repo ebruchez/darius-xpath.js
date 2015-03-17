@@ -1,38 +1,26 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.StructuredQName
 import client.net.sf.saxon.ce.`type`.ItemType
-import RoleLocator._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.expr.RoleLocator._
+import client.net.sf.saxon.ce.om.StructuredQName
 
 object RoleLocator {
 
   val FUNCTION = 0
-
   val BINARY_EXPR = 1
-
   val TYPE_OP = 2
-
   val VARIABLE = 3
-
   val INSTRUCTION = 4
-
   val FUNCTION_RESULT = 5
-
   val ORDER_BY = 6
-
   val TEMPLATE_RESULT = 7
-
   val PARAM = 8
-
   val UNARY_EXPR = 9
-
   val UPDATING_EXPR = 10
-
   val GROUPING_KEY = 11
-
   val EVALUATE_RESULT = 12
 
   /**
@@ -57,8 +45,7 @@ object RoleLocator {
  */
 class RoleLocator(var kind: Int, var operation: AnyRef, var operand: Int) {
 
-  @BeanProperty
-  var errorCode: String = "XPTY0004"
+  private var _errorCode: String = "XPTY0004"
 
   if (!(operation.isInstanceOf[String] || operation.isInstanceOf[StructuredQName])) {
     throw new IllegalArgumentException("operation")
@@ -70,9 +57,11 @@ class RoleLocator(var kind: Int, var operation: AnyRef, var operand: Int) {
    */
   def setErrorCode(code: String) {
     if (code != null) {
-      this.errorCode = code
+      _errorCode = code
     }
   }
+
+  def getErrorCode = _errorCode
 
   /**
    * Construct and return the error message indicating a type error

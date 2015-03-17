@@ -1,20 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.ArithmeticExpression
-import client.net.sf.saxon.ce.expr.Atomizer
-import client.net.sf.saxon.ce.expr.Token
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType, Type}
+import client.net.sf.saxon.ce.expr.{ArithmeticExpression, Atomizer, Token, XPathContext}
+import client.net.sf.saxon.ce.functions.Sum._
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.SourceLocator
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.value._
-import Sum._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object Sum {
 
@@ -56,9 +51,10 @@ object Sum {
         }
         sum = ArithmeticExpression.compute(sum, Token.PLUS, next, context)
         if (sum.isNaN && sum.isInstanceOf[DoubleValue]) {
-          sum
+          return sum
         }
       }
+      throw new IllegalStateException
     } else if (sum.isInstanceOf[DurationValue]) {
       if (!((sum.isInstanceOf[DayTimeDurationValue]) || (sum.isInstanceOf[YearMonthDurationValue]))) {
         throw new XPathException("Input to sum() contains a duration that is neither a dayTimeDuration nor a yearMonthDuration", 
@@ -75,6 +71,7 @@ object Sum {
         }
         sum = sum.asInstanceOf[DurationValue].add(next.asInstanceOf[DurationValue])
       }
+      throw new IllegalStateException
     } else {
       throw new XPathException("Input to sum() contains a value of type " + sum.getItemType.getDisplayName + 
         " which is neither numeric, nor a duration", "FORG0006", location)
@@ -89,7 +86,7 @@ class Sum extends Aggregate {
 
   def newInstance(): Sum = new Sum()
 
-  def getItemType(): ItemType = {
+  override def getItemType(): ItemType = {
     var base = Atomizer.getAtomizedItemType(argument(0), false)
     if (base == AtomicType.UNTYPED_ATOMIC) {
       base = AtomicType.DOUBLE
@@ -108,7 +105,7 @@ class Sum extends Aggregate {
   /**
    * Evaluate the function
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val sum = total(argument(0).iterate(context), context, getSourceLocator)
     if (sum != null) {
       sum

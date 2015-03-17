@@ -1,20 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.ExpressionVisitor
-import client.net.sf.saxon.ce.expr.StaticProperty
-import client.net.sf.saxon.ce.expr.XPathContext
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType}
+import client.net.sf.saxon.ce.expr.{Expression, ExpressionVisitor, StaticProperty, XPathContext}
+import client.net.sf.saxon.ce.functions.Lang._
 import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.om.{Item, NodeInfo}
 import client.net.sf.saxon.ce.tree.util.Navigator
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.value.BooleanValue
-import Lang._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object Lang {
 
@@ -49,6 +44,7 @@ object Lang {
       }
       doclang = doclang.substring(0, hyphen)
     }
+    throw new IllegalStateException
   }
 }
 
@@ -56,7 +52,7 @@ class Lang extends SystemFunction {
 
   def newInstance(): Lang = new Lang()
 
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     if (argument.length == 1) {
       if (contextItemType == null) {
         typeError("The context item for lang() is undefined", "XPDY0002")
@@ -70,7 +66,7 @@ class Lang extends SystemFunction {
   /**
    * Evaluate in a general context
    */
-  def evaluateItem(c: XPathContext): Item = {
+  override def evaluateItem(c: XPathContext): Item = {
     var target: NodeInfo = null
     if (argument.length > 1) {
       target = argument(1).evaluateItem(c).asInstanceOf[NodeInfo]
@@ -93,7 +89,7 @@ class Lang extends SystemFunction {
   /**
    * Determine the dependencies
    */
-  def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies(): Int = {
     (if (argument.length == 1) StaticProperty.DEPENDS_ON_CONTEXT_ITEM else 0)
   }
 }

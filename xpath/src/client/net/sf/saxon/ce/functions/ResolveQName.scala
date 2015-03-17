@@ -1,12 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.om._
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.QNameValue
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{AtomicValue, QNameValue}
 
 /**
  * This class supports the resolve-QName function in XPath 2.0
@@ -18,7 +18,7 @@ class ResolveQName extends SystemFunction {
   /**
    * Evaluate the expression
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val arg0 = argument(0).evaluateItem(context).asInstanceOf[AtomicValue]
     if (arg0 == null) {
       return null

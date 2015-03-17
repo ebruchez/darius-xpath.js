@@ -1,41 +1,35 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.ExpressionVisitor
-import client.net.sf.saxon.ce.expr.StaticContext
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.style.StyleNodeFactory
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.value.BooleanValue
-import client.net.sf.saxon.ce.value.NumericValue
-import Available._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.expr.{ExpressionVisitor, StaticContext, XPathContext}
+import client.net.sf.saxon.ce.functions.Available._
+import client.net.sf.saxon.ce.lib.NamespaceConstant
+import client.net.sf.saxon.ce.om.{Item, StructuredQName}
+import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.value.{BooleanValue, NumericValue}
 
 object Available {
 
   val ELEMENT_AVAILABLE = 0
-
   val FUNCTION_AVAILABLE = 1
-
   val TYPE_AVAILABLE = 2
 }
 
 /**
  * This class supports the XSLT element-available and function-available functions.
  */
-class Available(operation: Int) extends SystemFunction {
+class Available(_operation: Int) extends SystemFunction {
 
-  this.operation = operation
+  this.operation = _operation
 
   def newInstance(): Available = new Available(operation)
 
   private var env: StaticContext = _
 
-  def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor) {
     if (env == null) {
       env = visitor.getStaticContext
     }
@@ -55,10 +49,11 @@ class Available(operation: Int) extends SystemFunction {
   override def effectiveBooleanValue(context: XPathContext): Boolean = {
     val lexicalQName = argument(0).evaluateAsString(context).toString
     operation match {
-      case ELEMENT_AVAILABLE => {
-        val qName = StructuredQName.fromLexicalQName(lexicalQName, env.getDefaultElementNamespace, env.getNamespaceResolver)
-        new StyleNodeFactory(context.getConfiguration).isElementAvailable(qName.getNamespaceURI, qName.getLocalName)
-      }
+//ORBEON XSLT
+//      case ELEMENT_AVAILABLE => {
+//        val qName = StructuredQName.fromLexicalQName(lexicalQName, env.getDefaultElementNamespace, env.getNamespaceResolver)
+//        new StyleNodeFactory(context.getConfiguration).isElementAvailable(qName.getNamespaceURI, qName.getLocalName)
+//      }
       case FUNCTION_AVAILABLE => {
         var arity = -1
         if (argument.length == 2) {
@@ -96,7 +91,7 @@ class Available(operation: Int) extends SystemFunction {
    * Run-time evaluation. This is the only thing in the spec that requires information
    * about in-scope functions to be available at run-time.
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     BooleanValue.get(effectiveBooleanValue(context))
   }
 }

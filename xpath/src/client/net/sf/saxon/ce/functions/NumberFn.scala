@@ -1,16 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.ExpressionVisitor
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`._
-import client.net.sf.saxon.ce.value._
-import client.net.sf.saxon.ce.value.StringValue
-import NumberFn._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.expr.{Expression, ExpressionVisitor, XPathContext}
+import client.net.sf.saxon.ce.om.Item
+import client.net.sf.saxon.ce.value.{StringValue, _}
 
 object NumberFn {
 
@@ -56,7 +52,7 @@ class NumberFn extends SystemFunction {
    * This is a pure function so it can be simplified in advance if the arguments are known
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     argument(0).setFlattened(true)
     simplifyArguments(visitor)
   }
@@ -66,7 +62,7 @@ class NumberFn extends SystemFunction {
    * if all the arguments are constant; functions that do not require this behavior
    * can override the preEvaluate method.
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val e2 = super.typeCheck(visitor, contextItemType)
     if (e2 != this) {
       return e2
@@ -80,7 +76,7 @@ class NumberFn extends SystemFunction {
   /**
    * Evaluate in a general context
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val arg0 = argument(0).evaluateItem(context)
     if (arg0 == null) {
       return DoubleValue.NaN

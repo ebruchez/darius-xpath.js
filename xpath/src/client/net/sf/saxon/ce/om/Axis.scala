@@ -1,76 +1,77 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.om
 
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`.Type
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.trans.XPathException
 
 object Axis {
 
   /**
    * Constant representing the ancestor axis
    */
-  val ANCESTOR = 0
+  val ANCESTOR: Byte = 0
 
   /**
    Constant representing the ancestor-or-self axis
    */
-  val ANCESTOR_OR_SELF = 1
+  val ANCESTOR_OR_SELF: Byte = 1
 
   /**
    Constant representing the attribute axis
    */
-  val ATTRIBUTE = 2
+  val ATTRIBUTE: Byte = 2
 
   /**
    Constant representing the child axis
    */
-  val CHILD = 3
+  val CHILD: Byte = 3
 
   /**
    Constant representing the descendant axis
    */
-  val DESCENDANT = 4
+  val DESCENDANT: Byte = 4
 
   /**
    Constant representing the descendant-or-self axis
    */
-  val DESCENDANT_OR_SELF = 5
+  val DESCENDANT_OR_SELF: Byte = 5
 
   /**
    Constant representing the following axis
    */
-  val FOLLOWING = 6
+  val FOLLOWING: Byte = 6
 
   /**
    Constant representing the following-sibling axis
    */
-  val FOLLOWING_SIBLING = 7
+  val FOLLOWING_SIBLING: Byte = 7
 
   /**
    Constant representing the namespace axis
    */
-  val NAMESPACE = 8
+  val NAMESPACE: Byte = 8
 
   /**
    Constant representing the parent axis
    */
-  val PARENT = 9
+  val PARENT: Byte = 9
 
   /**
    Constant representing the preceding axis
    */
-  val PRECEDING = 10
+  val PRECEDING: Byte = 10
 
   /**
    Constant representing the preceding-sibling axis
    */
-  val PRECEDING_SIBLING = 11
+  val PRECEDING_SIBLING: Byte = 11
 
   /**
    Constant representing the self axis
    */
-  val SELF = 12
+  val SELF: Byte = 12
 
   /**
    * Table indicating the principal node type of each axis
@@ -131,13 +132,13 @@ object Axis {
 
   private val NAM = 1 << Type.NAMESPACE
 
-  private var voidAxisTable: Array[Int] = Array(DOC, 0, DOC | ATT | TEX | PIN | COM | NAM, ATT | TEX | PIN | COM | NAM, ATT | TEX | PIN | COM | NAM, 0, DOC, DOC | ATT | NAM, DOC | ATT | TEX | PIN | COM | NAM, DOC, DOC, DOC | ATT | NAM, 0)
+  private val voidAxisTable: Array[Int] = Array(DOC, 0, DOC | ATT | TEX | PIN | COM | NAM, ATT | TEX | PIN | COM | NAM, ATT | TEX | PIN | COM | NAM, 0, DOC, DOC | ATT | NAM, DOC | ATT | TEX | PIN | COM | NAM, DOC, DOC, DOC | ATT | NAM, 0)
 
   /**
    * Ask whether a given axis can contain any nodes when starting at the specified node kind.
    * For example, the attribute axis when starting at an attribute node will always be empty
-   * @param axis the axis, for example {@link Axis#ATTRIBUTE}
-   * @param nodeKind the node kind of the origin node, for example {@link Type#ATTRIBUTE}
+   * @param axis the axis, for example [[Axis.ATTRIBUTE]]
+   * @param nodeKind the node kind of the origin node, for example [[Type.ATTRIBUTE]]
    * @return true if no nodes will ever appear on the specified axis when starting at the specified
    * node kind.
    */
@@ -148,13 +149,13 @@ object Axis {
   /**
    * The following table indicates the kinds of node found on each axis
    */
-  private var nodeKindTable: Array[Int] = Array(DOC | ELE, DOC | ELE | ATT | TEX | PIN | COM | NAM, ATT, ELE | TEX | PIN | COM, ELE | TEX | PIN | COM, DOC | ELE | ATT | TEX | PIN | COM | NAM, ELE | TEX | PIN | COM, ELE | TEX | PIN | COM, NAM, DOC | ELE, DOC | ELE | TEX | PIN | COM, ELE | TEX | PIN | COM, DOC | ELE | ATT | TEX | PIN | COM | NAM)
+  private val nodeKindTable: Array[Int] = Array(DOC | ELE, DOC | ELE | ATT | TEX | PIN | COM | NAM, ATT, ELE | TEX | PIN | COM, ELE | TEX | PIN | COM, DOC | ELE | ATT | TEX | PIN | COM | NAM, ELE | TEX | PIN | COM, ELE | TEX | PIN | COM, NAM, DOC | ELE, DOC | ELE | TEX | PIN | COM, ELE | TEX | PIN | COM, DOC | ELE | ATT | TEX | PIN | COM | NAM)
 
   /**
    * Determine whether a given kind of node can be found on a given axis. For example,
    * the attribute axis will never contain any element nodes.
-   * @param axis the axis, for example {@link Axis#ATTRIBUTE}
-   * @param nodeKind the node kind of the origin node, for example {@link Type#ELEMENT}
+   * @param axis the axis, for example [[Axis.ATTRIBUTE]]
+   * @param nodeKind the node kind of the origin node, for example [[Type.ELEMENT]]
    * @return true if the given kind of node can appear on the specified axis
    */
   def containsNodeKind(axis: Int, nodeKind: Int): Boolean = {

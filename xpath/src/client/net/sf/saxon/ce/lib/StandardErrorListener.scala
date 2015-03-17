@@ -1,19 +1,20 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.lib
 
+import java.io.PrintStream
+import java.util.logging.{Level, Logger}
+
+import client.net.sf.saxon.ce.LogConfiguration
+import client.net.sf.saxon.ce.lib.StandardErrorListener._
 import client.net.sf.saxon.ce.om.StructuredQName
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.SourceLocator
-import com.google.gwt.logging.client.LogConfiguration
-import java.io.PrintStream
-import java.util.logging.Level
-import java.util.logging.Logger
-import StandardErrorListener._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object StandardErrorListener {
 
-  private var logger: Logger = Logger.getLogger("StandardErrorListener")
+  private val logger: Logger = Logger.getLogger("StandardErrorListener")
 
   private def getLocationMessageText(loc: SourceLocator): String = "at " + loc.getLocation
 
@@ -47,7 +48,8 @@ object StandardErrorListener {
           case 570 => codeText = " The value of a variable" + suffix
           case 600 => codeText = " Default value of a template paremeter" + suffix
           case 590 => codeText = " Supplied value of a template parameter" + suffix
-          case _}
+          case _ =>
+        }
       } else if (code.startsWith("XPTY")) {
         code = code.substring(4)
         val q = Integer.parseInt(code)
@@ -56,7 +58,8 @@ object StandardErrorListener {
           case 18 => codeText = " Last step in path expression contains both nodes and atomic values"
           case 19 => codeText = " A path expression step contains an atomic value"
           case 20 => codeText = " In an axis step, the context item is not a node"
-          case _}
+          case _ =>
+        }
       }
     }
     codeText
@@ -85,7 +88,7 @@ object StandardErrorListener {
     if (additionalLocationText != null) {
       message += " " + additionalLocationText
     }
-    var e = err
+    var e: Throwable = err
     val msgLen = message.length
     while (true) {
       if (e == null) {
@@ -160,7 +163,7 @@ class StandardErrorListener extends ErrorListener {
 
   private var warningCount: Int = 0
 
-  @transient protected var errorOutput: PrintStream = System.err
+  protected var errorOutput: PrintStream = System.err
 
   /**
    * Make a clean copy of this ErrorListener. This is necessary because the
@@ -255,10 +258,11 @@ class StandardErrorListener extends ErrorListener {
   /**
    * Get a string identifying the location of an error.
    *
-   * @param err the exception containing the location information
+   * @param _err the exception containing the location information
    * @return a message string describing the location
    */
-  def getLocationMessage(err: XPathException): String = {
+  def getLocationMessage(_err: XPathException): String = {
+    var err = _err
     var loc = err.getLocator
     while (loc == null) {
       if (err.getCause.isInstanceOf[XPathException]) {

@@ -1,18 +1,16 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.pattern.EmptySequenceTest
-import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
 import client.net.sf.saxon.ce.`type`.ItemType
-import EmptySequence._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.{Item, Sequence}
+import client.net.sf.saxon.ce.pattern.EmptySequenceTest
+import client.net.sf.saxon.ce.tree.iter.{EmptyIterator, UnfailingIterator}
 
 object EmptySequence {
 
-  private var THE_INSTANCE: EmptySequence = new EmptySequence()
+  private val THE_INSTANCE: EmptySequence = new EmptySequence()
 
   /**
    * Get the implicit instance of this class
@@ -48,7 +46,7 @@ class EmptySequence private () extends Sequence {
    * @throws ClassCastException if the values are not comparable
    */
   override def equals(other: Any): Boolean = {
-    if (!(other.isInstanceOf[EmptySequence])) {
+    if (! other.isInstanceOf[EmptySequence]) {
       throw new ClassCastException("Cannot compare " + other.getClass + " to empty sequence")
     }
     true

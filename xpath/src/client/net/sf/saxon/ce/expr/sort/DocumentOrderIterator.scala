@@ -1,12 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.om.{Item, NodeInfo, SequenceIterator}
 import client.net.sf.saxon.ce.value.SequenceExtent
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * DocumentOrderIterator takes as input an iteration of nodes in any order, and
@@ -16,9 +14,8 @@ import scala.collection.JavaConversions._
 class DocumentOrderIterator(base: SequenceIterator, var comparer: NodeOrderComparer)
     extends SequenceIterator with Sortable {
 
+  private val sequence: SequenceExtent[Item] = if (base ne null) SequenceExtent(base) else null
   private var iterator: SequenceIterator = sequence.iterate()
-
-  private var sequence: SequenceExtent = new SequenceExtent(base)
 
   private var current: NodeInfo = null
 
@@ -29,8 +26,8 @@ class DocumentOrderIterator(base: SequenceIterator, var comparer: NodeOrderCompa
   /**
    * Private constructor used only by getAnother()
    */
-  private def this() {
-  }
+  private def this() =
+    this(null, null)
 
   /**
    * Compare two nodes in document sequence
@@ -54,13 +51,12 @@ class DocumentOrderIterator(base: SequenceIterator, var comparer: NodeOrderCompa
         current = null
         return null
       }
-      if (current != null && next.isSameNodeInfo(current)) {
-        //continue
-      } else {
+      if (! (current != null && next.isSameNodeInfo(current))) {//ORBEON: was continue, negated condition
         current = next
-        current
+        return current
       }
     }
+    throw new IllegalStateException
   }
 
   def getAnother(): SequenceIterator = {

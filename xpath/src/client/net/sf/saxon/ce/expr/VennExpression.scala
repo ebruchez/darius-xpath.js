@@ -1,16 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
+import client.net.sf.saxon.ce.`type`.{ItemType, Type}
 import client.net.sf.saxon.ce.expr.instruct.Block
-import client.net.sf.saxon.ce.expr.sort.DocumentOrderIterator
-import client.net.sf.saxon.ce.expr.sort.GlobalOrderComparer
-import client.net.sf.saxon.ce.om.Axis
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
+import client.net.sf.saxon.ce.expr.sort.{DocumentOrderIterator, GlobalOrderComparer}
+import client.net.sf.saxon.ce.om.{Axis, SequenceIterator}
 import client.net.sf.saxon.ce.value.SequenceType
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * An expression representing a nodeset that is a union, difference, or
@@ -31,7 +28,7 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
   /**
    * Determine the static cardinality of the expression
    */
-  def computeCardinality(): Int = {
+  override def computeCardinality(): Int = {
     val c1 = operand0.getCardinality
     val c2 = operand1.getCardinality
     operator match {
@@ -59,7 +56,7 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
    * bit-signficant. These properties are used for optimizations. In general, if
    * property bit is set, it is true, but if it is unset, the value is unknown.
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     val prop0 = operand0.getSpecialProperties
     val prop1 = operand1.getSpecialProperties
     var props = StaticProperty.ORDERED_NODESET
@@ -117,7 +114,7 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
    * Simplify the expression
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     operand0 = visitor.simplify(operand0)
     operand1 = visitor.simplify(operand1)
     operator match {
@@ -158,7 +155,7 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand0 = visitor.typeCheck(operand0, contextItemType)
     operand1 = visitor.typeCheck(operand1, contextItemType)
     val role0 = new RoleLocator(RoleLocator.BINARY_EXPR, Token.tokens(operator), 0)
@@ -178,13 +175,13 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws client.net.sf.saxon.ce.trans.XPathException
    *          if an error is discovered during this phase
    *          (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val e = super.optimize(visitor, contextItemType)
     if (e != this) {
       return e
@@ -212,7 +209,7 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
    * @param c The context for evaluation
    * @return a SequenceIterator representing the union of the two operands
    */
-  def iterate(c: XPathContext): SequenceIterator = {
+  override def iterate(c: XPathContext): SequenceIterator = {
     var i1 = operand0.iterate(c)
     if ((operand0.getSpecialProperties & StaticProperty.ORDERED_NODESET) == 
       0) {
@@ -230,7 +227,7 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
    * Get the effective boolean value. In the case of a union expression, this
    * is reduced to an OR expression, for efficiency
    */
-  def effectiveBooleanValue(context: XPathContext): Boolean = {
+  override def effectiveBooleanValue(context: XPathContext): Boolean = {
     if (operator == Token.UNION) {
       operand0.effectiveBooleanValue(context) || operand1.effectiveBooleanValue(context)
     } else {

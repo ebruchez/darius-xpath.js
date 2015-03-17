@@ -1,12 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.`type`
 
 import client.net.sf.saxon.ce.lib.NamespaceConstant
 import client.net.sf.saxon.ce.om.StructuredQName
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.value.AtomicValue
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * This exception indicates a failure when validating an instance against a type
@@ -17,15 +17,15 @@ import scala.collection.JavaConversions._
  * and validation of values in a union, cause validation failures on a success path and it is costly to throw,
  * or even to create, exception objects on a success path.</p>
  */
-class ValidationFailure(@BeanProperty var message: String) extends ConversionResult {
+class ValidationFailure(val message: String, private var errorCode: StructuredQName) extends ConversionResult {
 
-  private var errorCode: StructuredQName = _
+  def this(message: String) =
+    this(message, null: StructuredQName)
 
-  def this(message: String, errorCode: String) {
-    this()
-    this.message = message
-    setErrorCode(errorCode)
-  }
+  def this(message: String, errorCode: String) =
+    this(message, new StructuredQName("err", NamespaceConstant.ERR, errorCode))
+
+  def getMessage = message
 
   /**
    * Returns the String representation of this Exception
@@ -38,10 +38,6 @@ class ValidationFailure(@BeanProperty var message: String) extends ConversionRes
 
   def setErrorCode(errorCode: String) {
     this.errorCode = new StructuredQName("err", NamespaceConstant.ERR, errorCode)
-  }
-
-  def setErrorCodeQName(errorCode: StructuredQName) {
-    this.errorCode = errorCode
   }
 
   def getErrorCodeQName(): StructuredQName = errorCode

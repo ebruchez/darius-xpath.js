@@ -1,10 +1,9 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
 
 /**
  * ContextMappingIterator merges a sequence of sequences into a single flat
@@ -19,7 +18,7 @@ import scala.collection.JavaConversions._
 class ContextMappingIterator(var action: ContextMappingFunction, var context: XPathContext)
     extends SequenceIterator {
 
-  private var base: SequenceIterator = context.getCurrentIterator
+  private val base: SequenceIterator = context.getCurrentIterator
 
   private var stepIterator: SequenceIterator = null
 
@@ -29,7 +28,7 @@ class ContextMappingIterator(var action: ContextMappingFunction, var context: XP
       if (stepIterator != null) {
         nextItem = stepIterator.next()
         if (nextItem != null) {
-          //break
+          return nextItem
         } else {
           stepIterator = null
         }
@@ -40,14 +39,14 @@ class ContextMappingIterator(var action: ContextMappingFunction, var context: XP
         if (nextItem == null) {
           stepIterator = null
         } else {
-          //break
+          return nextItem
         }
       } else {
         stepIterator = null
         return null
       }
     }
-    nextItem
+    throw new IllegalStateException
   }
 
   def getAnother(): SequenceIterator = {

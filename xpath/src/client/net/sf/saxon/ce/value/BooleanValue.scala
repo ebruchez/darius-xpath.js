@@ -1,14 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
 import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import BooleanValue._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object BooleanValue {
 
@@ -34,11 +31,11 @@ object BooleanValue {
   /**
    * Convert a string to a boolean value, using the XML Schema rules (including
    * whitespace trimming)
-   * @param s the input string
+   * @param _s the input string
    * @return the relevant BooleanValue if validation succeeds; or a ValidationFailure if not.
    */
-  def fromString(s: CharSequence): ConversionResult = {
-    s = Whitespace.trimWhitespace(s)
+  def fromString(_s: CharSequence): ConversionResult = {
+    val s = Whitespace.trimWhitespace(_s)
     val len = s.length
     if (len == 1) {
       val c = s.charAt(0)
@@ -66,7 +63,7 @@ object BooleanValue {
 /**
  * A boolean XPath value
  */
-class BooleanValue private (var value: Boolean) extends AtomicValue with Comparable[_] {
+class BooleanValue private (var value: Boolean) extends AtomicValue with Comparable[AnyRef] {
 
   /**
    * Get the value
@@ -79,7 +76,7 @@ class BooleanValue private (var value: Boolean) extends AtomicValue with Compara
    *
    * @return the boolean value
    */
-  def effectiveBooleanValue(): Boolean = value
+  override def effectiveBooleanValue(): Boolean = value
 
   /**
    * Determine the primitive type of the value. This delivers the same answer as
@@ -144,7 +141,7 @@ class BooleanValue private (var value: Boolean) extends AtomicValue with Compara
    *     one is the higher. False is considered to be less than true.
    */
   def compareTo(other: AnyRef): Int = {
-    if (!(other.isInstanceOf[BooleanValue])) {
+    if (! other.isInstanceOf[BooleanValue]) {
       throw new ClassCastException("Boolean values are not comparable to " + other.getClass)
     }
     if (value == other.asInstanceOf[BooleanValue].value) return 0

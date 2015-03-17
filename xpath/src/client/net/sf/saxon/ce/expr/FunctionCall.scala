@@ -1,15 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
+import client.net.sf.saxon.ce.`type`.ItemType
+import client.net.sf.saxon.ce.expr.FunctionCall._
 import client.net.sf.saxon.ce.om.StructuredQName
+import client.net.sf.saxon.ce.orbeon.Iterator
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.value.SequenceExtent
-import java.util.Arrays
-import java.util.Iterator
-import FunctionCall._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object FunctionCall {
 
@@ -38,7 +38,7 @@ abstract class FunctionCall extends Expression {
    * The array of expressions representing the actual parameters
    * to the function call
    */
-  protected var argument: Array[Expression] = _
+  protected[expr] var argument: Array[Expression] = _
 
   /**
    * Set the name of the function being called
@@ -82,7 +82,7 @@ abstract class FunctionCall extends Expression {
    * evaluate the function if all are now known.
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = simplifyArguments(visitor)
+  override def simplify(visitor: ExpressionVisitor): Expression = simplifyArguments(visitor)
 
   /**
    * Simplify the arguments of the function.
@@ -106,7 +106,7 @@ abstract class FunctionCall extends Expression {
    * if all the arguments are constant; functions that do not require this behavior
    * can override the preEvaluate method.
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     var fixed = true
     for (i <- 0 until argument.length) {
       val exp = visitor.typeCheck(argument(i), contextItemType)
@@ -136,12 +136,12 @@ abstract class FunctionCall extends Expression {
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     var fixed = true
     for (i <- 0 until argument.length) {
       val exp = visitor.optimize(argument(i), contextItemType)
@@ -180,7 +180,7 @@ abstract class FunctionCall extends Expression {
   /**
    * Promote this expression if possible
    */
-  def promote(offer: PromotionOffer, parent: Expression): Expression = {
+  override def promote(offer: PromotionOffer, parent: Expression): Expression = {
     val exp = offer.accept(parent, this)
     if (exp != null) {
       exp
@@ -232,7 +232,7 @@ abstract class FunctionCall extends Expression {
   /**
    * Get the immediate subexpressions of this expression
    */
-  def iterateSubExpressions(): Iterator[Expression] = Arrays.asList(argument:_*).iterator()
+  override def iterateSubExpressions(): Iterator[Expression] = Iterator(argument.iterator)
 
   /**
    * Get the name of the function for display in messages

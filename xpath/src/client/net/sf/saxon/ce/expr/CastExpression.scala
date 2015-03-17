@@ -1,18 +1,18 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
+import client.net.sf.saxon.ce.`type`._
+import client.net.sf.saxon.ce.expr.CastExpression._
 import client.net.sf.saxon.ce.functions.StringFn
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.om.StructuredQName
+import client.net.sf.saxon.ce.om.{Item, StructuredQName}
+import client.net.sf.saxon.ce.orbeon.HashMap
 import client.net.sf.saxon.ce.pattern.EmptySequenceTest
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`._
 import client.net.sf.saxon.ce.value._
-import java.util.HashMap
-import CastExpression._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 object CastExpression {
 
@@ -144,12 +144,13 @@ object CastExpression {
 
   /**
    * Determine whether casting from a source type to a target type is possible
-   * @param source a primitive type (one that has an entry in the casting table)
+   * @param _source a primitive type (one that has an entry in the casting table)
    * @param target another primitive type
    * @return true if the entry in the casting table is either "Y" (casting always succeeds)
    * or "M" (casting allowed but may fail for some values)
    */
-  def isPossibleCast(source: AtomicType, target: AtomicType): Boolean = {
+  def isPossibleCast(_source: AtomicType, target: AtomicType): Boolean = {
+    var source = _source
     if (source == AtomicType.ANY_ATOMIC) {
       return true
     }
@@ -208,7 +209,7 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
    * @return the simplified expression
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     operand = visitor.simplify(operand)
     if (Literal.isAtomic(operand)) {
       return typeCheck(visitor, Type.ITEM_TYPE)
@@ -219,7 +220,7 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand = visitor.typeCheck(operand, contextItemType)
     val atomicType = SequenceType.makeSequenceType(AtomicType.ANY_ATOMIC, getCardinality)
     val role = new RoleLocator(RoleLocator.TYPE_OP, "cast as", 0)
@@ -265,13 +266,13 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws client.net.sf.saxon.ce.trans.XPathException
    *          if an error is discovered during this phase
    *          (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val th = TypeHierarchy.getInstance
     val e2 = super.optimize(visitor, contextItemType)
     if (e2 != this) {
@@ -314,20 +315,20 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
   /**
    * Get the static cardinality of the expression
    */
-  def computeCardinality(): Int = {
+  override def computeCardinality(): Int = {
     (if (allowEmpty && Cardinality.allowsZero(operand.getCardinality)) StaticProperty.ALLOWS_ZERO_OR_ONE else StaticProperty.EXACTLY_ONE)
   }
 
   /**
    * Get the static type of the expression
    */
-  def getItemType(): ItemType = targetType
+  override def getItemType(): ItemType = targetType
 
   /**
    * Determine the special properties of this expression
-   * @return {@link StaticProperty#NON_CREATIVE}.
+   * @return [[StaticProperty.NON_CREATIVE]].
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     val p = super.computeSpecialProperties()
     p | StaticProperty.NON_CREATIVE
   }
@@ -335,7 +336,7 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
   /**
    * Evaluate the expression
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val value = operand.evaluateItem(context).asInstanceOf[AtomicValue]
     if (value == null) {
       if (allowEmpty) {
@@ -365,7 +366,7 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
    * Is this expression the same as another expression?
    */
   override def equals(other: Any): Boolean = {
-    super == other && 
+    super.equals(other) &&
       targetType == other.asInstanceOf[CastExpression].targetType && 
       allowEmpty == other.asInstanceOf[CastExpression].allowEmpty
   }

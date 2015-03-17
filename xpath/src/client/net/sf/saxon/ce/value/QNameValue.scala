@@ -1,30 +1,48 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import client.net.sf.saxon.ce.`type`._
 import client.net.sf.saxon.ce.functions.Component
 import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.om._
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`._
-//remove if not needed
-import scala.collection.JavaConversions._
+
+object QNameValue {
+  
+  def newQNameValueValidate(
+    _prefix: String, 
+    _uri: String, 
+    localName: String, 
+    validate: Boolean
+  ) = {
+    if (!NameChecker.isValidNCName(localName)) {
+      val err = new XPathException("Malformed local name in QName: '" + localName + '\'')
+      err.setErrorCode("FORG0001")
+      throw err
+    }
+    val prefix = if (_prefix == null) "" else _prefix
+    val uri = if ("" == _uri) null else _uri
+    if (uri == null && prefix.length != 0) {
+      val err = new XPathException("QName has null namespace but non-empty prefix")
+      err.setErrorCode("FOCA0002")
+      throw err
+    }
+    new StructuredQName(prefix, uri, localName)
+  }
+  
+}
 
 /**
  * A QName value. This implements the so-called "triples proposal", in which the prefix is retained as
  * part of the value. The prefix is not used in any operation on a QName other than conversion of the
  * QName to a string.
  */
-class QNameValue(prefix: String, uri: String, localName: String) extends AtomicValue {
+class QNameValue(protected var qName: StructuredQName) extends AtomicValue {
 
-  protected var qName: StructuredQName = new StructuredQName(prefix, uri, localName)
-
-  /**
-   * Constructor starting from a StructuredQName
-   * @param name the QName
-   */
-  def this(name: StructuredQName) {
-    this()
-    qName = name
-  }
+  def this(prefix: String, uri: String, localName: String) =
+    this(new StructuredQName(prefix, uri, localName))
 
   /**
    * Constructor. This constructor validates that the local part is a valid NCName.
@@ -43,22 +61,8 @@ class QNameValue(prefix: String, uri: String, localName: String) extends AtomicV
   def this(prefix: String, 
       uri: String, 
       localName: String, 
-      validate: Boolean) {
-    this()
-    if (!NameChecker.isValidNCName(localName)) {
-      val err = new XPathException("Malformed local name in QName: '" + localName + '\'')
-      err.setErrorCode("FORG0001")
-      throw err
-    }
-    prefix = (if (prefix == null) "" else prefix)
-    uri = (if ("" == uri) null else uri)
-    if (uri == null && prefix.length != 0) {
-      val err = new XPathException("QName has null namespace but non-empty prefix")
-      err.setErrorCode("FOCA0002")
-      throw err
-    }
-    qName = new StructuredQName(prefix, uri, localName)
-  }
+      validate: Boolean) =
+    this(QNameValue.newQNameValueValidate(prefix, uri, localName, validate))
 
   /**
    * Determine the primitive type of the value. This delivers the same answer as
@@ -93,7 +97,7 @@ class QNameValue(prefix: String, uri: String, localName: String) extends AtomicV
    * component of the value is required
    * @return either the local name or the namespace URI, in each case as a StringValue
    */
-  def getComponent(part: Int): AtomicValue = {
+  override def getComponent(part: Int): AtomicValue = {
     if (part == Component.LOCALNAME) {
       new StringValue(getLocalName)
     } else if (part == Component.NAMESPACE) {

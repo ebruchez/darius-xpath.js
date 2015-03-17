@@ -1,13 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.`type`.{ItemType, Type}
+import client.net.sf.saxon.ce.om.{Item, NodeInfo, SequenceIterator}
 
 /**
  * This class performs the first phase of processing in "constructing simple content":
@@ -33,7 +30,7 @@ class EmptyTextNodeRemover(p0: Expression) extends UnaryExpression(p0) {
    * An implementation of Expression must provide at least one of the methods evaluateItem(), iterate(), or process().
    * This method indicates which of these methods is prefered.
    */
-  def getImplementationMethod(): Int = Expression.ITERATE_METHOD
+  override def getImplementationMethod(): Int = Expression.ITERATE_METHOD
 
   /**
    * Return an Iterator to iterate over the values of a sequence. The value of every

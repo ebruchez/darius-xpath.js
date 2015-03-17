@@ -1,11 +1,9 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import AnyURIValue._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
 
 object AnyURIValue {
 
@@ -22,11 +20,10 @@ object AnyURIValue {
  * <p>This implementation of xs:anyURI allows any string to be contained in the value space,
  * reflecting the specification in XSD 1.1.</p>
  */
-class AnyURIValue(value: CharSequence) extends StringValue {
+class AnyURIValue(_value: CharSequence)
+  extends StringValue(if (_value == null) "" else Whitespace.collapseWhitespace(_value).toString) {
 
-  this.value = (if (value == null) "" else Whitespace.collapseWhitespace(value).toString)
-
-  def getItemType(): AtomicType = AtomicType.ANY_URI
+  override def getItemType(): AtomicType = AtomicType.ANY_URI
 
   /**
    * Convert to target data type
@@ -34,7 +31,7 @@ class AnyURIValue(value: CharSequence) extends StringValue {
    * @param requiredType integer code representing the item type required
    * @return the result of the conversion, or an ErrorValue
    */
-  def convert(requiredType: AtomicType): ConversionResult = {
+  override def convert(requiredType: AtomicType): ConversionResult = {
     if (requiredType == AtomicType.ANY_ATOMIC || requiredType == AtomicType.ANY_URI) {
       this
     } else if (requiredType == AtomicType.UNTYPED_ATOMIC) {

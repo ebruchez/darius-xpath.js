@@ -1,23 +1,17 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import client.net.sf.saxon.ce.`type`.{AnyItemType, ItemType, Type}
 import client.net.sf.saxon.ce.expr.LastPositionFinder
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.om.{Item, Sequence, SequenceIterator}
+import client.net.sf.saxon.ce.orbeon.{ArrayList, LinkedList, List}
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.ArrayIterator
-import client.net.sf.saxon.ce.tree.iter.GroundedIterator
-import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
+import client.net.sf.saxon.ce.tree.iter.{ArrayIterator, GroundedIterator, UnfailingIterator}
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.AnyItemType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-import java.util.ArrayList
-import java.util.LinkedList
-import java.util.List
-import SequenceExtent._
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.util.control.Breaks
 
 object SequenceExtent {
 
@@ -25,9 +19,9 @@ object SequenceExtent {
    * Factory method to make a Value holding the contents of any SequenceIterator
    * @param iter a Sequence iterator that will be consumed to deliver the items in the sequence
    * @return a ValueRepresentation holding the items delivered by the SequenceIterator. If the
-   * sequence is empty the result will be an instance of {@link EmptySequence}. If it is of length
-   * one, the result will be an {@link Item}. In all other cases, it will be an instance of
-   * {@link SequenceExtent}.
+   * sequence is empty the result will be an instance of [[EmptySequence]]. If it is of length
+   * one, the result will be an [[Item]]. In all other cases, it will be an instance of
+   * [[SequenceExtent]].
    * @throws XPathException if a dynamic error occurs while evaluating the iterator
    */
   def makeSequenceExtent(iter: SequenceIterator): Sequence = {
@@ -37,7 +31,7 @@ object SequenceExtent {
         return value
       }
     }
-    val extent = new SequenceExtent(iter)
+    val extent = SequenceExtent(iter)
     val len = extent.getLength
     if (len == 0) {
       EmptySequence.getInstance
@@ -55,25 +49,28 @@ object SequenceExtent {
    * order of the supplied iterator
    * @throws XPathException if an error occurs evaluating the sequence
    */
-  def makeReversed(iter: SequenceIterator): SequenceExtent = {
+  def makeReversed(iter: SequenceIterator): SequenceExtent[Item] = {
     val list = new LinkedList[Item]()
-    while (true) {
-      val item = iter.next()
-      if (item == null) {
-        //break
+    import Breaks._
+    breakable {
+      while (true) {
+        val item = iter.next()
+        if (item == null) {
+          break()
+        }
+        list.addFirst(item)
       }
-      list.addFirst(item)
     }
-    new SequenceExtent(list)
+    SequenceExtent(list)
   }
 
   /**
    * Factory method to make a Value holding the contents of any List of items
    * @param input a List containing the items in the sequence
    * @return a ValueRepresentation holding the items in the list. If the
-   * sequence is empty the result will be an instance of {@link EmptySequence}. If it is of length
-   * one, the result will be an {@link Item}. In all other cases, it will be an instance of
-   * {@link SequenceExtent}.
+   * sequence is empty the result will be an instance of [[EmptySequence]]. If it is of length
+   * one, the result will be an [[Item]]. In all other cases, it will be an instance of
+   * [[SequenceExtent]].
    */
   def makeSequenceExtent(input: List[Item]): Sequence = {
     val len = input.size
@@ -82,76 +79,77 @@ object SequenceExtent {
     } else if (len == 1) {
       input.get(0)
     } else {
-      new SequenceExtent(input)
+      SequenceExtent(input)
     }
   }
+
+  //ORBEON: There is makeSequenceExtent above, and the following, and both take a SequenceIterator! Confusing!
+  /**
+   * Construct a sequence containing all the items in a SequenceIterator.
+   *
+   * @throws client.net.sf.saxon.ce.trans.XPathException if reading the items using the
+   *     SequenceIterator raises an error
+   * @param iter The supplied sequence of items. This must be positioned at
+   *     the start, so that hasNext() returns true if there are any nodes in
+   *      the node-set, and next() returns the first node.
+   */
+  def apply(iter: SequenceIterator): SequenceExtent[Item] = {
+    var allocated = -1
+    if (iter.isInstanceOf[LastPositionFinder]) {
+      allocated = iter.asInstanceOf[LastPositionFinder].getLastPosition
+    }
+    import Breaks._
+    val value =
+      if (allocated == -1) {
+        val list = new ArrayList[Item](20)
+        breakable {
+          while (true) {
+            val it = iter.next()
+            if (it == null) {
+              break()
+            }
+            list.add(it)
+          }
+        }
+        val array = Array.ofDim[Item](list.size)
+        list.toArray(array)
+      } else {
+        val result = Array.ofDim[Item](allocated)
+        var i = 0
+        breakable {
+          while (true) {
+            val it = iter.next()
+            if (it == null) {
+              break()
+            }
+            result(i) = it
+            i += 1
+          }
+        }
+        result
+      }
+    
+    new SequenceExtent(value)
+  }
+
+  def apply[T  <: Item](list: List[T]): SequenceExtent[Item] =
+    new SequenceExtent(list.toArray(Array.ofDim[Item](list.size)))
 }
 
 /**
  * A sequence value implemented extensionally. That is, this class represents a sequence
  * by allocating memory to each item in the sequence.
  */
-class SequenceExtent(@transient var value: Array[Item]) extends Sequence {
+class SequenceExtent[T <: Item](val value: Array[T]) extends Sequence {
 
   private var itemType: ItemType = null
 
   /**
-   * Construct a SequenceExtent from a List. The members of the list must all
-   * be Items
-   *
-   * @param list the list of items to be included in the sequence
-   */
-  def this(list: List[_ <: Item]) {
-    this()
-    val array = Array.ofDim[Item](list.size)
-    value = list.toArray(array)
-  }
-
-  /**
-   * Construct a sequence containing all the items in a SequenceIterator.
-   *
-   * @exception client.net.sf.saxon.ce.trans.XPathException if reading the items using the
-   *     SequenceIterator raises an error
-   * @param iter The supplied sequence of items. This must be positioned at
-   *     the start, so that hasNext() returns true if there are any nodes in
-   *      the node-set, and next() returns the first node.
-   */
-  def this(iter: SequenceIterator) {
-    this()
-    var allocated = -1
-    if (iter.isInstanceOf[LastPositionFinder]) {
-      allocated = iter.asInstanceOf[LastPositionFinder].getLastPosition
-    }
-    if (allocated == -1) {
-      val list = new ArrayList[Item](20)
-      while (true) {
-        val it = iter.next()
-        if (it == null) {
-          //break
-        }
-        list.add(it)
-      }
-      val array = Array.ofDim[Item](list.size)
-      value = list.toArray(array)
-    } else {
-      value = Array.ofDim[Item](allocated)
-      val i = 0
-      while (true) {
-        val it = iter.next()
-        if (it == null) {
-          //break
-        }
-        value(i += 1) = it
-      }
-    }
-  }
-
-  /**
    * Simplify this SequenceExtent
    * @return a Value holding the items delivered by the SequenceIterator. If the
-   * sequence is empty the result will be an instance of {@link EmptySequence}. If it is of length
-   * one, the result will be an {@link AtomicValue} or a {@link client.net.sf.saxon.ce.om.NodeInfo}.
-   * In all other cases, the {@link SequenceExtent} will be returned unchanged.
+   * sequence is empty the result will be an instance of [[EmptySequence]]. If it is of length
+   * one, the result will be an [[AtomicValue]] or a [[client.net.sf.saxon.ce.om.NodeInfo]].
+   * In all other cases, the [[SequenceExtent]] will be returned unchanged.
    */
   def simplify(): Sequence = {
     val n = getLength

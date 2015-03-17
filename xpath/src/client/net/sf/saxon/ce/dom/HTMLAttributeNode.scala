@@ -1,36 +1,35 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.dom
 
+import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.event.Receiver
 import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.pattern.AnyNodeTest
-import client.net.sf.saxon.ce.pattern.NodeTest
-import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.pattern.{AnyNodeTest, NodeTest}
 import client.net.sf.saxon.ce.tree.iter._
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.tree.util.Navigator
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.AbstractNode
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.UntypedAtomicValue
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.tree.util.{FastStringBuffer, Navigator}
+import client.net.sf.saxon.ce.value.{AbstractNode, AtomicValue, UntypedAtomicValue}
 
 /**
  * An attribute node in the DOM - may be XML or HTML
  */
-class HTMLAttributeNode(var element: HTMLNodeWrapper, 
-    var name: String, 
-    var prefix: String, 
-    var uri: String, 
-    var value: String) extends AbstractNode with NodeInfo {
+class HTMLAttributeNode(
+  var element : HTMLNodeWrapper,
+  var name    : String,
+  var prefix  : String,
+  var uri     : String,
+  var value   : String
+) extends AbstractNode
+  with NodeInfo {
 
-  private var qname: StructuredQName = new StructuredQName(prefix, uri, name)
+  private val qname = new StructuredQName(prefix, uri, name)
 
   def getNodeKind(): Int = Type.ATTRIBUTE
 
   def isSameNodeInfo(other: NodeInfo): Boolean = {
-    other.isInstanceOf[HTMLAttributeNode] && 
-      element.isSameNodeInfo(other.asInstanceOf[HTMLAttributeNode].element) && 
+    other.isInstanceOf[HTMLAttributeNode] &&
+      element.isSameNodeInfo(other.asInstanceOf[HTMLAttributeNode].element) &&
       name == other.asInstanceOf[HTMLAttributeNode].name
   }
 
@@ -68,8 +67,7 @@ class HTMLAttributeNode(var element: HTMLNodeWrapper,
 
   private def iterateAxis0(axisNumber: Byte): UnfailingIterator = axisNumber match {
     case Axis.ANCESTOR => element.iterateAxis(Axis.ANCESTOR_OR_SELF, AnyNodeTest.getInstance)
-    case Axis.ANCESTOR_OR_SELF => new PrependIterator(this, element.iterateAxis(Axis.ANCESTOR_OR_SELF, 
-      AnyNodeTest.getInstance))
+    case Axis.ANCESTOR_OR_SELF => new PrependIterator(this, element.iterateAxis(Axis.ANCESTOR_OR_SELF, AnyNodeTest.getInstance))
     case Axis.ATTRIBUTE => EmptyIterator.getInstance
     case Axis.CHILD => EmptyIterator.getInstance
     case Axis.DESCENDANT => EmptyIterator.getInstance
@@ -109,10 +107,5 @@ class HTMLAttributeNode(var element: HTMLNodeWrapper,
 
   def getTypedValue(): AtomicValue = new UntypedAtomicValue(value)
 
-  /**
-   * Get the index position of this node among its siblings (starting from 0)
-   *
-   * @return 0 for the first child, 1 for the second child, etc.
-   */
   def getSiblingPosition(): Int = 1
 }

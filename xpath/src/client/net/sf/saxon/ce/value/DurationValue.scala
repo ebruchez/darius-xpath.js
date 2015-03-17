@@ -1,17 +1,16 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import java.math.BigDecimal
+
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
 import client.net.sf.saxon.ce.functions.Component
 import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.regex.ARegularExpression
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import java.math.BigDecimal
-import DurationValue._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object DurationValue {
 
@@ -20,17 +19,17 @@ object DurationValue {
    * ISO 8601 format [-]PnYnMnDTnHnMnS
    *
    * @param s a string in the lexical space of xs:duration
-   * @return the constructed xs:duration value, or a {@link ValidationFailure} if the
+   * @return the constructed xs:duration value, or a [[ValidationFailure]] if the
    *         supplied string is lexically invalid.
    */
   def makeDuration(s: CharSequence): ConversionResult = makeDuration(s, durationPattern1)
 
-  private var durationPattern1: ARegularExpression = ARegularExpression.make("-?P([0-9]+Y)?([0-9]+M)?([0-9]+D)?(T([0-9]+H)?([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?)?")
+  private val durationPattern1 = ARegularExpression.make("-?P([0-9]+Y)?([0-9]+M)?([0-9]+D)?(T([0-9]+H)?([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?)?")
 
-  private var durationPattern2: ARegularExpression = ARegularExpression.make("[YMDHS]")
+  private val durationPattern2 = ARegularExpression.make("[YMDHS]")
 
-  protected def makeDuration(s: CharSequence, constrainingPattern: ARegularExpression): ConversionResult = {
-    s = Whitespace.trimWhitespace(s)
+  def makeDuration(_s: CharSequence, constrainingPattern: ARegularExpression): ConversionResult = {
+    val s = Whitespace.trimWhitespace(_s)
     if (!constrainingPattern.matches(s)) {
       badDuration("Incorrect format", s)
     }
@@ -56,11 +55,11 @@ object DurationValue {
       c match {
         case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => part = part * 10 + (c - '0')
         case 'T' => inTimePart = true
-        case 'Y' => 
+        case 'Y' =>
           year = part
           part = 0
 
-        case 'M' => 
+        case 'M' =>
           if (inTimePart) {
             minute = part
           } else {
@@ -68,15 +67,15 @@ object DurationValue {
           }
           part = 0
 
-        case 'D' => 
+        case 'D' =>
           day = part
           part = 0
 
-        case 'H' => 
+        case 'H' =>
           hour = part
           part = 0
 
-        case 'S' => 
+        case 'S' =>
           if (positionOfDot >= 0) {
             val fraction = (s.subSequence(positionOfDot + 1, i).toString + "000000")
               .substring(0, 6)
@@ -86,12 +85,13 @@ object DurationValue {
           }
           part = 0
 
-        case '.' => 
+        case '.' =>
           second = part
           part = 0
           positionOfDot = i
 
-        case _}
+        case _ =>
+      }
     }
     try {
       new DurationValue(!negative, year, month, day, hour, minute, second, micro)
@@ -110,7 +110,7 @@ object DurationValue {
    * @param s the string containing the sequence of digits. No sign or whitespace is allowed.
    * @return the integer. Return -1 if the string is not a sequence of digits or exceeds 2^31
    */
-  protected def simpleInteger(s: String): Int = {
+  protected[value] def simpleInteger(s: String): Int = {
     var result = 0
     if (s == null) {
       return -1
@@ -130,7 +130,7 @@ object DurationValue {
         return -1
       }
     }
-    result.toInt
+    result
   }
 }
 
@@ -186,7 +186,7 @@ class DurationValue protected () extends AtomicValue {
     if (days.toDouble * (24 * 60 * 60) + hours.toDouble * (60 * 60) + 
       minutes.toDouble * 60 + 
       seconds.toDouble > 
-      Long.MAX_VALUE) {
+      Long.MaxValue) {
       throw new IllegalArgumentException("Duration seconds limit exceeded")
     }
     this.months = years * 12 + months
@@ -219,7 +219,7 @@ class DurationValue protected () extends AtomicValue {
    *
    *
    * @param requiredType an integer identifying the required atomic type
-   * @return an AtomicValue, a value of the required type; or a {@link ValidationFailure} if
+   * @return an AtomicValue, a value of the required type; or a [[ValidationFailure]] if
    *         the value cannot be converted.
    */
   def convert(requiredType: AtomicType): ConversionResult = {
@@ -301,7 +301,7 @@ class DurationValue protected () extends AtomicValue {
    * @return ISO 8601 representation.
    */
   def getPrimitiveStringValue(): CharSequence = {
-    if (months == 0 && seconds == 0L && microseconds == 0) {
+    if (this.months == 0 && this.seconds == 0L && this.microseconds == 0) {
       return "PT0S"
     }
     val sb = new FastStringBuffer(32)
@@ -373,28 +373,28 @@ class DurationValue protected () extends AtomicValue {
   /**
    * Get a component of the normalized value
    */
-  def getComponent(component: Int): AtomicValue = component match {
-    case Component.YEAR => 
+  override def getComponent(component: Int): AtomicValue = component match {
+    case Component.YEAR =>
       var value5 = (if (negative) -getYears else getYears)
       new IntegerValue(value5)
 
-    case Component.MONTH => 
+    case Component.MONTH =>
       var value4 = (if (negative) -getMonths else getMonths)
       new IntegerValue(value4)
 
-    case Component.DAY => 
+    case Component.DAY =>
       var value3 = (if (negative) -getDays else getDays)
       new IntegerValue(value3)
 
-    case Component.HOURS => 
+    case Component.HOURS =>
       var value2 = (if (negative) -getHours else getHours)
       new IntegerValue(value2)
 
-    case Component.MINUTES => 
+    case Component.MINUTES =>
       var value1 = (if (negative) -getMinutes else getMinutes)
       new IntegerValue(value1)
 
-    case Component.SECONDS => 
+    case Component.SECONDS =>
       var sb = new FastStringBuffer(FastStringBuffer.TINY)
       var ms = ("000000" + microseconds)
       ms = ms.substring(ms.length - 6)
@@ -402,7 +402,7 @@ class DurationValue protected () extends AtomicValue {
       DecimalValue.makeDecimalValue(sb).asInstanceOf[AtomicValue]
 
     case Component.WHOLE_SECONDS => new IntegerValue(new BigDecimal(if (negative) -seconds else seconds))
-    case Component.MICROSECONDS => 
+    case Component.MICROSECONDS =>
       var value = (if (negative) -microseconds else microseconds)
       new IntegerValue(value)
 

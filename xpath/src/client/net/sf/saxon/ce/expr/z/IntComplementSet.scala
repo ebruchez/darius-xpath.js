@@ -1,14 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.z
-
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * An immutable integer set containing all int values except those in an excluded set
  */
-class IntComplementSet(exclusions: IntSet) extends IntSet {
+class IntComplementSet(_exclusions: IntSet) extends IntSet {
 
-  private var exclusions: IntSet = exclusions.copy()
+  private val exclusions: IntSet = _exclusions.copy()
 
   def copy(): IntSet = new IntComplementSet(exclusions)
 

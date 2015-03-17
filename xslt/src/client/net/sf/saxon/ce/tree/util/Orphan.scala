@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.util
 
 import client.net.sf.saxon.ce.event.Receiver
@@ -39,7 +42,7 @@ class Orphan extends AbstractNode with NodeInfo {
 
   /**
    * Set the node kind
-   * @param kind the kind of node, for example {@link Type#ELEMENT} or {@link Type#ATTRIBUTE}
+   * @param kind the kind of node, for example [[Type#ELEMENT]] or [[Type#ATTRIBUTE]]
    */
   def setNodeKind(kind: Int) {
     this.kind = kind

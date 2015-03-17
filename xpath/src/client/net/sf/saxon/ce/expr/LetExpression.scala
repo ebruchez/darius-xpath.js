@@ -1,20 +1,16 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.expr.instruct.DocumentInstr
-import client.net.sf.saxon.ce.expr.instruct.TailCall
-import client.net.sf.saxon.ce.expr.instruct.TailCallReturner
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.om.Sequence
+import client.net.sf.saxon.ce.`type`.{ItemType, TypeHierarchy}
+import client.net.sf.saxon.ce.expr.instruct.{TailCall, TailCallReturner}
+import client.net.sf.saxon.ce.om.{Item, Sequence, SequenceIterator, StructuredQName}
+import client.net.sf.saxon.ce.orbeon.ArrayList
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
 import client.net.sf.saxon.ce.value.SequenceType
-import java.util.ArrayList
-import java.util.List
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.util.control.Breaks._
 
 /**
  * A LetExpression is modelled on the XQuery syntax let $x := expr return expr. This syntax
@@ -36,7 +32,7 @@ class LetExpression extends Assignation with TailCallReturner {
    * Type-check the expression. This also has the side-effect of counting the number of references
    * to the variable (treating references that occur within a loop specially)
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     sequence = visitor.typeCheck(sequence, contextItemType)
     val role = new RoleLocator(RoleLocator.VARIABLE, getVariableQName, 0)
     val th = TypeHierarchy.getInstance
@@ -53,7 +49,7 @@ class LetExpression extends Assignation with TailCallReturner {
    * @return true - this expression has a non-trivial implementation of the staticTypeCheck()
    *         method
    */
-  def implementsStaticTypeCheck(): Boolean = true
+  override def implementsStaticTypeCheck(): Boolean = true
 
   /**
    * Static type checking for let expressions is delegated to the expression itself,
@@ -67,7 +63,7 @@ class LetExpression extends Assignation with TailCallReturner {
    * @throws XPathException if failures occur, for example if the static type of one branch of the conditional
    * is incompatible with the required type
    */
-  def staticTypeCheck(req: SequenceType, backwardsCompatible: Boolean, role: RoleLocator): Expression = {
+  override def staticTypeCheck(req: SequenceType, backwardsCompatible: Boolean, role: RoleLocator): Expression = {
     action = TypeChecker.staticTypeCheck(action, req, backwardsCompatible, role)
     this
   }
@@ -82,43 +78,50 @@ class LetExpression extends Assignation with TailCallReturner {
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val env = visitor.getStaticContext
     if (action.isInstanceOf[VariableReference] && 
       action.asInstanceOf[VariableReference].getBinding == this) {
       return visitor.optimize(sequence, contextItemType)
     }
-    if (sequence.isInstanceOf[DocumentInstr] && sequence.asInstanceOf[DocumentInstr].isTextOnly) {
-      if (allReferencesAreFlattened()) {
-        sequence = sequence.asInstanceOf[DocumentInstr].getStringValueExpression(env)
-        requiredType = SequenceType.SINGLE_UNTYPED_ATOMIC
-        adoptChildExpression(sequence)
-      }
-    }
+//ORBEON XSLT
+//    if (sequence.isInstanceOf[DocumentInstr] && sequence.asInstanceOf[DocumentInstr].isTextOnly) {
+//      if (allReferencesAreFlattened()) {
+//        sequence = sequence.asInstanceOf[DocumentInstr].getStringValueExpression(env)
+//        requiredType = SequenceType.SINGLE_UNTYPED_ATOMIC
+//        adoptChildExpression(sequence)
+//      }
+//    }
     var tries = 0
-    while (tries += 1 < 5) {
-      val seq2 = visitor.optimize(sequence, contextItemType)
-      if (seq2 == sequence) {
-        //break
+    breakable {
+      while (tries < 5) {
+        tries += 1
+        val seq2 = visitor.optimize(sequence, contextItemType)
+        if (seq2 == sequence) {
+          break()
+        }
+        sequence = seq2
+        adoptChildExpression(sequence)
+        visitor.resetStaticProperties()
       }
-      sequence = seq2
-      adoptChildExpression(sequence)
-      visitor.resetStaticProperties()
     }
     tries = 0
-    while (tries += 1 < 5) {
-      val act2 = visitor.optimize(action, contextItemType)
-      if (act2 == action) {
-        //break
+    breakable {
+      while (tries < 5) {
+        tries += 1
+        val act2 = visitor.optimize(action, contextItemType)
+        if (act2 == action) {
+          break()
+        }
+        action = act2
+        adoptChildExpression(action)
+        visitor.resetStaticProperties()
       }
-      action = act2
-      adoptChildExpression(action)
-      visitor.resetStaticProperties()
     }
     evaluationMode = ExpressionTool.lazyEvaluationMode(sequence)
     this
@@ -149,15 +152,17 @@ class LetExpression extends Assignation with TailCallReturner {
   /**
    * Iterate over the result of the expression to return a sequence of items
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     var let = this
-    while (true) {
-      val `val` = let.eval(context)
-      context.setLocalVariable(let.getLocalSlotNumber, `val`)
-      if (let.action.isInstanceOf[LetExpression]) {
-        let = let.action.asInstanceOf[LetExpression]
-      } else {
-        //break
+    breakable {
+      while (true) {
+        val `val` = let.eval(context)
+        context.setLocalVariable(let.getLocalSlotNumber, `val`)
+        if (let.action.isInstanceOf[LetExpression]) {
+          let = let.action.asInstanceOf[LetExpression]
+        } else {
+          break()
+        }
       }
     }
     let.action.iterate(context)
@@ -178,15 +183,17 @@ class LetExpression extends Assignation with TailCallReturner {
   /**
    * Evaluate the expression as a singleton
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     var let = this
-    while (true) {
-      val `val` = let.eval(context)
-      context.setLocalVariable(let.getLocalSlotNumber, `val`)
-      if (let.action.isInstanceOf[LetExpression]) {
-        let = let.action.asInstanceOf[LetExpression]
-      } else {
-        //break
+    breakable {
+      while (true) {
+        val `val` = let.eval(context)
+        context.setLocalVariable(let.getLocalSlotNumber, `val`)
+        if (let.action.isInstanceOf[LetExpression]) {
+          let = let.action.asInstanceOf[LetExpression]
+        } else {
+          break()
+        }
       }
     }
     let.action.evaluateItem(context)
@@ -196,15 +203,17 @@ class LetExpression extends Assignation with TailCallReturner {
    * Process this expression as an instruction, writing results to the current
    * outputter
    */
-  def process(context: XPathContext) {
+  override def process(context: XPathContext) {
     var let = this
-    while (true) {
-      val `val` = let.eval(context)
-      context.setLocalVariable(let.getLocalSlotNumber, `val`)
-      if (let.action.isInstanceOf[LetExpression]) {
-        let = let.action.asInstanceOf[LetExpression]
-      } else {
-        //break
+    breakable {
+      while (true) {
+        val `val` = let.eval(context)
+        context.setLocalVariable(let.getLocalSlotNumber, `val`)
+        if (let.action.isInstanceOf[LetExpression]) {
+          let = let.action.asInstanceOf[LetExpression]
+        } else {
+          break()
+        }
       }
     }
     let.action.process(context)
@@ -228,7 +237,7 @@ class LetExpression extends Assignation with TailCallReturner {
    * bit-signficant. These properties are used for optimizations. In general, if
    * property bit is set, it is true, but if it is unset, the value is unknown.
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     var props = action.getSpecialProperties
     val seqProps = sequence.getSpecialProperties
     if ((seqProps & StaticProperty.NON_CREATIVE) == 0) {
@@ -240,14 +249,14 @@ class LetExpression extends Assignation with TailCallReturner {
   /**
    * Mark tail function calls
    */
-  def markTailFunctionCalls(qName: StructuredQName, arity: Int): Int = {
+  override def markTailFunctionCalls(qName: StructuredQName, arity: Int): Int = {
     ExpressionTool.markTailFunctionCalls(action, qName, arity)
   }
 
   /**
    * Promote this expression if possible
    */
-  def promote(offer: PromotionOffer, parent: Expression): Expression = {
+  override def promote(offer: PromotionOffer, parent: Expression): Expression = {
     val exp = offer.accept(parent, this)
     if (exp != null) {
       exp
@@ -281,13 +290,15 @@ class LetExpression extends Assignation with TailCallReturner {
    */
   def processLeavingTail(context: XPathContext): TailCall = {
     var let = this
-    while (true) {
-      val `val` = let.eval(context)
-      context.setLocalVariable(let.getLocalSlotNumber, `val`)
-      if (let.action.isInstanceOf[LetExpression]) {
-        let = let.action.asInstanceOf[LetExpression]
-      } else {
-        //break
+    breakable {
+      while (true) {
+        val `val` = let.eval(context)
+        context.setLocalVariable(let.getLocalSlotNumber, `val`)
+        if (let.action.isInstanceOf[LetExpression]) {
+          let = let.action.asInstanceOf[LetExpression]
+        } else {
+          break()
+        }
       }
     }
     if (let.action.isInstanceOf[TailCallReturner]) {

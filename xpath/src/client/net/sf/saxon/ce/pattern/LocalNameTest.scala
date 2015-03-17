@@ -1,10 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.pattern
 
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.StructuredQName
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.{NodeInfo, StructuredQName}
+
+import scala.beans.BeanProperty
 
 /**
  * NodeTest is an interface that enables a test of whether a node has a particular
@@ -32,7 +33,7 @@ class LocalNameTest(var nodeKind: Int, @BeanProperty var localName: String) exte
    * for example DOM or JDOM nodes.
    * @param node the node to be matched
    */
-  def matches(node: NodeInfo): Boolean = {
+  override def matches(node: NodeInfo): Boolean = {
     localName == node.getLocalPart && nodeKind == node.getNodeKind
   }
 
@@ -53,13 +54,13 @@ class LocalNameTest(var nodeKind: Int, @BeanProperty var localName: String) exte
    * For patterns that match nodes of several types, return Type.NODE
    * @return the type of node matched by this pattern. e.g. Type.ELEMENT or Type.TEXT
    */
-  def getRequiredNodeKind(): Int = nodeKind
+  override def getRequiredNodeKind(): Int = nodeKind
 
   /**
    * Get a mask indicating which kinds of nodes this NodeTest can match. This is a combination
    * of bits: 1<<Type.ELEMENT for element nodes, 1<<Type.TEXT for text nodes, and so on.
    */
-  def getNodeKindMask(): Int = 1 << nodeKind
+  override def getNodeKindMask(): Int = 1 << nodeKind
 
   override def toString(): String = "*:" + localName
 

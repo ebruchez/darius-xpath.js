@@ -1,29 +1,25 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
 import java.math.BigDecimal
-import DoubleValue._
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
+import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.value.DoubleValue._
 
 object DoubleValue {
 
   val ZERO = new DoubleValue(0.0)
-
   val NEGATIVE_ZERO = new DoubleValue(-0.0)
-
   val ONE = new DoubleValue(1.0)
-
   val NaN = new DoubleValue(Double.NaN)
 
+  //ORBEON saxon bug? Double to DoubleValue!
   def isNegativeZero(d: Double): Boolean = {
     new java.lang.Double(d) == NEGATIVE_ZERO
   }
-
-  /* native */ def convertToString(num: Double): String
 }
 
 /**
@@ -44,7 +40,7 @@ class DoubleValue(var value: Double) extends NumericValue {
    *
    * @return the value as a double
    */
-  def getDoubleValue(): Double = value
+  override def getDoubleValue(): Double = value
 
   /**
    * Get the hashCode. This must conform to the rules for other NumericValue hashcodes
@@ -62,14 +58,14 @@ class DoubleValue(var value: Double) extends NumericValue {
   /**
    * Test whether the value is the double/float value NaN
    */
-  def isNaN(): Boolean = Double.isNaN(value)
+  override def isNaN(): Boolean = value.isNaN
 
   /**
    * Get the effective boolean value
    *
    * @return the effective boolean value (true unless the value is zero or NaN)
    */
-  def effectiveBooleanValue(): Boolean = (value != 0.0 && !Double.isNaN(value))
+  override def effectiveBooleanValue(): Boolean = value != 0.0 && ! value.isNaN
 
   /**
    * Convert to target data type
@@ -85,10 +81,10 @@ class DoubleValue(var value: Double) extends NumericValue {
     } else if (requiredType == AtomicType.BOOLEAN) {
       BooleanValue.get(effectiveBooleanValue())
     } else if (requiredType == AtomicType.INTEGER) {
-      if (Double.isNaN(value)) {
+      if (value.isNaN) {
         return new ValidationFailure("Cannot convert double NaN to an integer", "FOCA0002")
       }
-      if (Double.isInfinite(value)) {
+      if (value.isInfinity) {
         return new ValidationFailure("Cannot convert double INF to an integer", "FOCA0002")
       }
       IntegerValue.decimalToInteger(new BigDecimal(value))
@@ -115,10 +111,10 @@ class DoubleValue(var value: Double) extends NumericValue {
    * @return the string value
    */
   def getPrimitiveStringValue(): CharSequence = {
-    if (Double.isNaN(value)) {
+    if (value.isNaN) {
       return "NaN"
-    } else if (Double.isInfinite(value)) {
-      return (if (value > 0) "INF" else "-INF")
+    } else if (value.isInfinite) {
+      return if (value > 0) "INF" else "-INF"
     }
     val a = Math.abs(value)
     if (isWholeNumber && a < 1e6) {
@@ -129,17 +125,18 @@ class DoubleValue(var value: Double) extends NumericValue {
     } else {
       if (a < 1e6) {
         if (a >= 1e-3) {
-          Double toString value
+          value.toString
         } else if (a >= 1e-6) {
           BigDecimal.valueOf(value).toPlainString()
         } else {
           val dec = BigDecimal.valueOf(value)
           dec.toString
         }
-      } else if (a < 1e7) {
-        convertToString(value)
+//ORBEON hopefully we don't need to use the hack used with GWT
+//      } else if (a < 1e7) {
+//        convertToString(value)
       } else {
-        Double toString value
+        value.toString
       }
     }
   }
@@ -163,10 +160,10 @@ class DoubleValue(var value: Double) extends NumericValue {
    * Implement the XPath round() function
    */
   def round(): NumericValue = {
-    if (Double.isNaN(value)) {
+    if (value.isNaN) {
       return this
     }
-    if (Double.isInfinite(value)) {
+    if (value.isInfinite) {
       return this
     }
     if (value == 0.0) {
@@ -175,7 +172,7 @@ class DoubleValue(var value: Double) extends NumericValue {
     if (value >= -0.5 && value < 0.0) {
       return new DoubleValue(-0.0)
     }
-    if (value > Long.MIN_VALUE && value < Long.MAX_VALUE) {
+    if (value > Long.MinValue && value < Long.MaxValue) {
       return new DoubleValue(Math.round(value))
     }
     this
@@ -185,12 +182,12 @@ class DoubleValue(var value: Double) extends NumericValue {
    * Implement the XPath round-to-half-even() function
    */
   def roundHalfToEven(scale: Int): NumericValue = {
-    if (Double.isNaN(value)) return this
-    if (Double.isInfinite(value)) return this
+    if (value.isNaN) return this
+    if (value.isInfinite) return this
     if (value == 0.0) return this
     val factor = Math.pow(10, scale + 1)
     var d = Math.abs(value * factor)
-    if (Double.isInfinite(d)) {
+    if (d.isInfinite) {
       var dec = new BigDecimal(value)
       dec = dec.setScale(scale, BigDecimal.ROUND_HALF_EVEN)
       return new DoubleValue(dec.doubleValue())
@@ -220,7 +217,7 @@ class DoubleValue(var value: Double) extends NumericValue {
    * @return -1 if negative, 0 if zero (including negative zero), +1 if positive, NaN if NaN
    */
   def signum(): Double = {
-    if (Double.isNaN(value)) {
+    if (value.isNaN) {
       return value
     }
     if (value > 0) return 1
@@ -233,7 +230,7 @@ class DoubleValue(var value: Double) extends NumericValue {
    * equal to some integer
    */
   def isWholeNumber(): Boolean = {
-    value == Math.floor(value) && !Double.isInfinite(value)
+    value == Math.floor(value) && ! value.isInfinite
   }
 
   /**

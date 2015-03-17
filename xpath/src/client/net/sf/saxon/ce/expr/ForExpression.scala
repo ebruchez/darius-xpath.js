@@ -1,18 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
-import client.net.sf.saxon.ce.value.Cardinality
-import client.net.sf.saxon.ce.value.IntegerValue
-import client.net.sf.saxon.ce.value.SequenceType
-import ForExpression._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.`type`.{ItemType, TypeHierarchy}
+import client.net.sf.saxon.ce.expr.ForExpression._
+import client.net.sf.saxon.ce.om.{Item, Sequence, SequenceIterator, StructuredQName}
+import client.net.sf.saxon.ce.value.{Cardinality, IntegerValue, SequenceType}
 
 object ForExpression {
 
@@ -31,7 +25,8 @@ object ForExpression {
     def map(item: Item): SequenceIterator = {
       context.setLocalVariable(slotNumber, item)
       if (pslot >= 0) {
-        val value = position += 1
+        val value = position
+        position += 1
         context.setLocalVariable(pslot, new IntegerValue(value))
       }
       action.iterate(context)
@@ -40,7 +35,8 @@ object ForExpression {
     def mapItem(item: Item): Item = {
       context.setLocalVariable(slotNumber, item)
       if (pslot >= 0) {
-        val value = position += 1
+        val value = position
+        position += 1
         context.setLocalVariable(pslot, new IntegerValue(value))
       }
       action.evaluateItem(context)
@@ -70,14 +66,14 @@ class ForExpression extends Assignation {
    * @param nr the slot number allocated to the range variable on the local stack frame.
    * This implicitly allocates the next slot number to the position variable if there is one.
    */
-  def setSlotNumber(nr: Int) {
+  override def setSlotNumber(nr: Int) {
     super.setSlotNumber(nr)
   }
 
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     sequence = visitor.typeCheck(sequence, contextItemType)
     if (Literal.isEmptySequence(sequence)) {
       return sequence
@@ -109,7 +105,7 @@ class ForExpression extends Assignation {
   /**
    * Optimize the expression
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val seq2 = visitor.optimize(sequence, contextItemType)
     if (seq2 != sequence) {
       sequence = seq2
@@ -158,7 +154,7 @@ class ForExpression extends Assignation {
    * @param child the immediate subexpression
    * @return true if the child expression is evaluated repeatedly
    */
-  def hasLoopingSubexpression(child: Expression): Boolean = child == action
+  override def hasLoopingSubexpression(child: Expression): Boolean = child == action
 
   /**
    * Extract subexpressions in the action part that don't depend on the range variable
@@ -182,7 +178,7 @@ class ForExpression extends Assignation {
    * Mark tail function calls: only possible if the for expression iterates zero or one times.
    * (This arises in XSLT/XPath, which does not have a LET expression, so FOR gets used instead)
    */
-  def markTailFunctionCalls(qName: StructuredQName, arity: Int): Int = {
+  override def markTailFunctionCalls(qName: StructuredQName, arity: Int): Int = {
     if (!Cardinality.allowsMany(sequence.getCardinality)) {
       ExpressionTool.markTailFunctionCalls(action, qName, arity)
     } else {
@@ -195,12 +191,12 @@ class ForExpression extends Assignation {
    * This method indicates which of these methods is provided. This implementation provides both iterate() and
    * process() methods natively.
    */
-  def getImplementationMethod(): Int = ITERATE_METHOD | PROCESS_METHOD
+  override def getImplementationMethod(): Int = Expression.ITERATE_METHOD | Expression.PROCESS_METHOD
 
   /**
    * Iterate over the sequence of values
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val base = sequence.iterate(context)
     val pslot = -1
     val map = new MappingAction(context, getLocalSlotNumber, pslot, action)
@@ -215,17 +211,19 @@ class ForExpression extends Assignation {
    * Process this expression as an instruction, writing results to the current
    * outputter
    */
-  def process(context: XPathContext) {
+  override def process(context: XPathContext) {
     val iter = sequence.iterate(context)
-    val position = 1
+    var position = 1
     val slot = getLocalSlotNumber
     val pslot = -1
     while (true) {
       val item = iter.next()
-      if (item == null) //break
+      if (item == null)
+        return
       context.setLocalVariable(slot, item)
       if (pslot >= 0) {
-        val value = position += 1
+        val value = position
+        position += 1
         context.setLocalVariable(pslot, new IntegerValue(value))
       }
       action.process(context)

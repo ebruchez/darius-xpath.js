@@ -1,8 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
-import client.net.sf.saxon.ce.Configuration
 import client.net.sf.saxon.ce.event.Receiver
 import client.net.sf.saxon.ce.om._
+import client.net.sf.saxon.ce.orbeon.Configuration
 import client.net.sf.saxon.ce.pattern.NodeTest
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.iter.ArrayIterator
@@ -233,7 +236,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
 
   /**
    * Set user data on the document node. The user data can be retrieved subsequently
-   * using {@link #getUserData}
+   * using [[#getUserData]]
    * @param key   A string giving the name of the property to be set. Clients are responsible
    *              for choosing a key that is likely to be unique. Must not be null.
    * @param value The value to be set for the property. May be null, which effectively
@@ -252,7 +255,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
 
   /**
    * Get user data held in the document node. This retrieves properties previously set using
-   * {@link #setUserData}
+   * [[#setUserData]]
    * @param key A string giving the name of the property to be retrieved.
    * @return the value of the property, or null if the property has not been defined.
    */

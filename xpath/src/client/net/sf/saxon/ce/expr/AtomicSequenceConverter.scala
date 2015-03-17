@@ -1,17 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.Cardinality
-import client.net.sf.saxon.ce.value.SequenceExtent
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType, TypeHierarchy}
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
+import client.net.sf.saxon.ce.value.{AtomicValue, Cardinality, SequenceExtent}
 
 /**
  * An AtomicSequenceConverter is an expression that performs a cast on each member of
@@ -26,7 +20,7 @@ class AtomicSequenceConverter(sequence: Expression, var requiredItemType: Atomic
    * Simplify an expression
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     operand = visitor.simplify(operand)
     if (operand.isInstanceOf[Literal]) {
       val `val` = SequenceExtent.makeSequenceExtent(iterate(new EarlyEvaluationContext(visitor.getConfiguration)))
@@ -38,7 +32,7 @@ class AtomicSequenceConverter(sequence: Expression, var requiredItemType: Atomic
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand = visitor.typeCheck(operand, contextItemType)
     val th = TypeHierarchy.getInstance
     if (th.isSubType(operand.getItemType, requiredItemType)) {
@@ -55,9 +49,9 @@ class AtomicSequenceConverter(sequence: Expression, var requiredItemType: Atomic
 
   /**
    * Determine the special properties of this expression
-   * @return {@link StaticProperty#NON_CREATIVE}.
+   * @return [[StaticProperty.NON_CREATIVE]].
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     val p = super.computeSpecialProperties()
     p | StaticProperty.NON_CREATIVE
   }
@@ -65,7 +59,7 @@ class AtomicSequenceConverter(sequence: Expression, var requiredItemType: Atomic
   /**
    * Iterate over the sequence of values
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val base = operand.iterate(context)
     val converter = new ItemMappingFunction() {
 
@@ -80,7 +74,7 @@ class AtomicSequenceConverter(sequence: Expression, var requiredItemType: Atomic
   /**
    * Evaluate as an Item. This should only be called if the AtomicSequenceConverter has cardinality zero-or-one
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val item = operand.evaluateItem(context)
     if (item == null) return null
     item.asInstanceOf[AtomicValue].convert(requiredItemType)
@@ -92,18 +86,18 @@ class AtomicSequenceConverter(sequence: Expression, var requiredItemType: Atomic
    * @return a value such as Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.NODE,
    * or Type.ITEM (meaning not known in advance)
    */
-  def getItemType(): ItemType = requiredItemType
+  override def getItemType(): ItemType = requiredItemType
 
   /**
    * Determine the static cardinality of the expression
    */
-  def computeCardinality(): Int = operand.getCardinality
+  override def computeCardinality(): Int = operand.getCardinality
 
   /**
    * Is this expression the same as another expression?
    */
   override def equals(other: Any): Boolean = {
-    super == other && 
+    super.equals(other) &&
       requiredItemType == 
       other.asInstanceOf[AtomicSequenceConverter].requiredItemType
   }

@@ -1,11 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.expr.ItemMappingIterator._
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
 import client.net.sf.saxon.ce.trans.XPathException
-import ItemMappingIterator._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object ItemMappingIterator {
 
@@ -25,10 +25,8 @@ object ItemMappingIterator {
  * in cases where a single input item never maps to a sequence of more than one
  * output item.
  */
-class ItemMappingIterator(var base: SequenceIterator, var action: ItemMappingFunction)
+class ItemMappingIterator(var base: SequenceIterator, var action: ItemMappingFunction, private var oneToOne: Boolean)
     extends SequenceIterator with LastPositionFinder {
-
-  private var oneToOne: Boolean = false
 
   /**
    * Construct an ItemMappingIterator that will apply a specified ItemMappingFunction to
@@ -36,14 +34,9 @@ class ItemMappingIterator(var base: SequenceIterator, var action: ItemMappingFun
    *
    * @param base   the base iterator
    * @param action the mapping function to be applied
-   * @param oneToOne true if this iterator is one-to-one
    */
-  def this(base: SequenceIterator, action: ItemMappingFunction, oneToOne: Boolean) {
-    this()
-    this.base = base
-    this.action = action
-    this.oneToOne = oneToOne
-  }
+  def this(base: SequenceIterator, action: ItemMappingFunction) =
+    this(base, action, oneToOne = false)
 
   protected def getBaseIterator(): SequenceIterator = base
 
@@ -58,12 +51,14 @@ class ItemMappingIterator(var base: SequenceIterator, var action: ItemMappingFun
       try {
         val curr = action.mapItem(nextSource)
         if (curr != null) {
-          curr
+          return curr
         }
       } catch {
-        case e: EarlyExitException => null
+        case e: EarlyExitException =>
+          return null
       }
     }
+    throw new IllegalStateException
   }
 
   def getAnother(): SequenceIterator = {

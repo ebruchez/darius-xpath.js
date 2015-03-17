@@ -1,18 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType, Type}
 import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.pattern.AnyNodeTest
-import client.net.sf.saxon.ce.pattern.NameTest
-import client.net.sf.saxon.ce.pattern.NodeKindTest
-import client.net.sf.saxon.ce.pattern.NodeTest
+import client.net.sf.saxon.ce.pattern.{AnyNodeTest, NameTest, NodeKindTest, NodeTest}
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.value.AtomicValue
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 /**
  * An AxisExpression is always obtained by simplifying a PathExpression.
@@ -41,7 +38,7 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
    * @param visitor an expression visitor
    * @return the simplified expression
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     if (axis == Axis.PARENT && (test == null || test.isInstanceOf[AnyNodeTest])) {
       val p = new ParentNodeExpression()
       ExpressionTool.copyLocationInfo(this, p)
@@ -53,7 +50,7 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     if (contextItemType == null) {
       typeError(visitor, "Axis step " + toString + 
         " cannot be used here: the context item is undefined", "XPDY0002")
@@ -80,16 +77,16 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
 
   /**
    * Is this expression the same as another expression?
    */
   override def equals(other: Any): Boolean = {
-    if (!(other.isInstanceOf[AxisExpression])) {
+    if (! other.isInstanceOf[AxisExpression]) {
       return false
     }
     if (axis != other.asInstanceOf[AxisExpression].axis) {
@@ -117,7 +114,7 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
    * a bitwise-or'ed value composed from constants such as XPathContext.VARIABLES and
    * XPathContext.CURRENT_NODE
    */
-  def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_CONTEXT_ITEM
+  override def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_CONTEXT_ITEM
 
   /**
    * Copy an expression. This makes a deep copy.
@@ -138,7 +135,7 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
    * bit-signficant. These properties are used for optimizations. In general, if
    * property bit is set, it is true, but if it is unset, the value is unknown.
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     StaticProperty.CONTEXT_DOCUMENT_NODESET | StaticProperty.SINGLE_DOCUMENT_NODESET | 
       StaticProperty.NON_CREATIVE | 
       (if (Axis.isForwards(axis)) StaticProperty.ORDERED_NODESET else StaticProperty.REVERSE_DOCUMENT_ORDER) | 
@@ -196,7 +193,7 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
    *
    * @param context the evaluation context
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val item = context.getContextItem
     if (item.isInstanceOf[NodeInfo]) {
       if (test == null) {

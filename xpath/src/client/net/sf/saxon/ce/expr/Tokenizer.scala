@@ -1,10 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
+import client.net.sf.saxon.ce.expr.Tokenizer._
+import client.net.sf.saxon.ce.orbeon.Util
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.value.Whitespace
-import Tokenizer._
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.util.control.Breaks._
 
 object Tokenizer {
 
@@ -28,36 +32,40 @@ object Tokenizer {
   private def getBinaryOp(s: String): Int = s.length match {
     case 2 => 
       if (s == "or") Token.OR
-      if (s == "is") Token.IS
-      if (s == "to") Token.TO
-      if (s == "in") Token.IN
-      if (s == "eq") Token.FEQ
-      if (s == "ne") Token.FNE
-      if (s == "gt") Token.FGT
-      if (s == "ge") Token.FGE
-      if (s == "lt") Token.FLT
-      if (s == "le") Token.FLE
-      if (s == "as") Token.AS
-
+      else if (s == "is") Token.IS
+      else if (s == "to") Token.TO
+      else if (s == "in") Token.IN
+      else if (s == "eq") Token.FEQ
+      else if (s == "ne") Token.FNE
+      else if (s == "gt") Token.FGT
+      else if (s == "ge") Token.FGE
+      else if (s == "lt") Token.FLT
+      else if (s == "le") Token.FLE
+      else if (s == "as") Token.AS
+      else Token.UNKNOWN
     case 3 => 
       if (s == "and") Token.AND
-      if (s == "div") Token.DIV
-      if (s == "mod") Token.MOD
-
+      else if (s == "div") Token.DIV
+      else if (s == "mod") Token.MOD
+      else Token.UNKNOWN
     case 4 => 
       if (s == "idiv") Token.IDIV
-      if (s == "then") Token.THEN
-      if (s == "else") Token.ELSE
-
-    case 5 => if (s == "union") Token.UNION
+      else if (s == "then") Token.THEN
+      else if (s == "else") Token.ELSE
+      else Token.UNKNOWN
+    case 5 =>
+      if (s == "union") Token.UNION
+      else Token.UNKNOWN
     case 6 => 
       if (s == "except") Token.EXCEPT
-      if (s == "return") Token.RETURN
-
+      else if (s == "return") Token.RETURN
+      else Token.UNKNOWN
     case 9 => 
       if (s == "intersect") Token.INTERSECT
-      if (s == "satisfies") Token.SATISFIES
-
+      else if (s == "satisfies") Token.SATISFIES
+      else Token.UNKNOWN
+    case _ =>
+      Token.UNKNOWN
   }
 
   /**
@@ -68,24 +76,28 @@ object Tokenizer {
    * @return the token number
    */
   private def getFunctionType(s: String): Int = s.length match {
-    case 2 => if (s == "if") Token.IF
+    case 2 =>
+      if (s == "if") Token.IF
+      else Token.FUNCTION
     case 4 => 
       if (s == "node") Token.NODEKIND
-      if (s == "item") Token.NODEKIND
-      if (s == "text") Token.NODEKIND
-
+      else if (s == "item") Token.NODEKIND
+      else if (s == "text") Token.NODEKIND
+      else Token.FUNCTION
     case 7 => 
       if (s == "element") Token.NODEKIND
-      if (s == "comment") Token.NODEKIND
-
-    case 9 => if (s == "attribute") Token.NODEKIND
+      else if (s == "comment") Token.NODEKIND
+      else Token.FUNCTION
+    case 9 =>
+      if (s == "attribute") Token.NODEKIND
+      else Token.FUNCTION
     case _ => 
       if (s == "document-node") Token.NODEKIND
-      if (s == "empty-sequence") Token.NODEKIND
-      if (s == "schema-element") Token.NODEKIND
-      if (s == "schema-attribute") Token.NODEKIND
-      if (s == "processing-instruction") Token.NODEKIND
-
+      else if (s == "empty-sequence") Token.NODEKIND
+      else if (s == "schema-element") Token.NODEKIND
+      else if (s == "schema-attribute") Token.NODEKIND
+      else if (s == "processing-instruction") Token.NODEKIND
+      else Token.FUNCTION
   }
 }
 
@@ -96,7 +108,7 @@ object Tokenizer {
  */
 class Tokenizer {
 
-  private var state: Int = DEFAULT_STATE
+  private val state: Int = DEFAULT_STATE
 
   /**
    * The number identifying the most recently read token
@@ -186,7 +198,7 @@ class Tokenizer {
     currentTokenStartOffset = nextTokenStartOffset
     currentToken match {
       case Token.NAME => 
-        var optype = getBinaryOp(currentTokenValue)
+        val optype = getBinaryOp(currentTokenValue)
         if (optype != Token.UNKNOWN && !followsOperator(precedingToken)) {
           currentToken = optype
         }
@@ -194,6 +206,7 @@ class Tokenizer {
       case Token.STAR => if (!followsOperator(precedingToken)) {
         currentToken = Token.MULT
       }
+      case _ => //ORBEON
     }
     if (currentToken == Token.RCURLY) {
       return
@@ -209,7 +222,7 @@ class Tokenizer {
       }
       nextToken match {
         case Token.LPAR => 
-          var op = getBinaryOp(currentTokenValue)
+          val op = getBinaryOp(currentTokenValue)
           if (op == Token.UNKNOWN || followsOperator(oldPrecedingToken)) {
             currentToken = getFunctionType(currentTokenValue)
             lookAhead()
@@ -233,18 +246,17 @@ class Tokenizer {
           currentToken = Token.EVERY
         }
         case Token.NAME => 
-          var composite = currentTokenValue + ' ' + nextTokenValue
-          var `val` = Token.doubleKeywords.get(composite)
-          if (`val` == null) {
-            //break
-          } else {
+          val composite = currentTokenValue + ' ' + nextTokenValue
+          val `val` = Token.doubleKeywords.get(composite)
+          if (`val` != null) {
             currentToken = `val`
             currentTokenValue = composite
             lookAhead()
             return
           }
 
-        case _}
+        case _ =>
+      }
     }
   }
 
@@ -264,7 +276,8 @@ class Tokenizer {
         nextToken = Token.EOF
         return
       }
-      var c = input.charAt(inputOffset += 1)
+      var c = input.charAt(inputOffset)
+      inputOffset += 1
       c match {
         case '/' => 
           if (inputOffset < inputLength && input.charAt(inputOffset) == '/') {
@@ -427,35 +440,45 @@ class Tokenizer {
           var allowE = true
           var allowSign = false
           var allowDot = true
-          var endOfNum = false
-          numloop: while (!endOfNum) c match {
-            case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => allowSign = false
-            case '.' => if (allowDot) {
-              allowDot = false
-              allowSign = false
-            } else {
-              inputOffset -= 1
-              //break
-            }
-            case 'E' | 'e' => if (allowE) {
-              allowSign = true
-              allowE = false
-            } else {
-              inputOffset -= 1
-              //break
-            }
-            case '+' | '-' => if (allowSign) {
-              allowSign = false
-            } else {
-              inputOffset -= 1
-              //break
-            }
-            case _ => 
-              if (('a' <= c && c <= 'z') || c > 127) {
-                throw new XPathException("Separator needed after numeric literal")
-              }
-              inputOffset -= 1
+          val endOfNum = false
 
+          breakable {
+            while (!endOfNum) {
+              c match {
+                case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' =>
+                  allowSign = false
+                case '.' => if (allowDot) {
+                  allowDot = false
+                  allowSign = false
+                } else {
+                  inputOffset -= 1
+                  break()
+                }
+                case 'E' | 'e' => if (allowE) {
+                  allowSign = true
+                  allowE = false
+                } else {
+                  inputOffset -= 1
+                  break()
+                }
+                case '+' | '-' => if (allowSign) {
+                  allowSign = false
+                } else {
+                  inputOffset -= 1
+                  break()
+                }
+                case _ =>
+                  if (('a' <= c && c <= 'z') || c > 127) {
+                    throw new XPathException("Separator needed after numeric literal")
+                  }
+                  inputOffset -= 1
+                  break()
+              }
+              if (inputOffset >= inputLength)
+                break()
+              c = input.charAt(inputOffset)
+              inputOffset += 1
+            }
           }
           nextTokenValue = input.substring(nextTokenStartOffset, inputOffset)
           nextToken = Token.NUMBER
@@ -463,59 +486,68 @@ class Tokenizer {
 
         case '"' | '\'' => 
           nextTokenValue = ""
-          while (true) {
-            inputOffset = input.indexOf(c, inputOffset)
-            if (inputOffset < 0) {
-              inputOffset = nextTokenStartOffset + 1
-              throw new XPathException("Unmatched quote in expression")
-            }
-            nextTokenValue += input.substring(nextTokenStartOffset + 1, inputOffset += 1)
-            if (inputOffset < inputLength) {
-              val n = input.charAt(inputOffset)
-              if (n == c) {
-                nextTokenValue += c
-                nextTokenStartOffset = inputOffset
-                inputOffset += 1
-              } else {
-                //break
+          breakable {
+            while (true) {
+              inputOffset = input.indexOf(c, inputOffset)
+              if (inputOffset < 0) {
+                inputOffset = nextTokenStartOffset + 1
+                throw new XPathException("Unmatched quote in expression")
               }
-            } else {
-              //break
+              nextTokenValue += input.substring(nextTokenStartOffset + 1, inputOffset)
+              inputOffset += 1
+              if (inputOffset < inputLength) {
+                val n = input.charAt(inputOffset)
+                if (n == c) {
+                  nextTokenValue += c
+                  nextTokenStartOffset = inputOffset
+                  inputOffset += 1
+                } else {
+                  break()
+                }
+              } else {
+                break()
+              }
             }
           }
           nextToken = Token.STRING_LITERAL
           return
 
         case '\n' | ' ' | '\t' | '\r' => nextTokenStartOffset = inputOffset
-        case _ => if (c < 0x80 && !Character.isLetter(c)) {
-          throw new XPathException("Invalid character '" + c + "' in expression")
-        }
-        case '_' => 
-          loop: while (inputOffset < inputLength) {
-            c = input.charAt(inputOffset)
-            c match {
-              case ':' => if (inputOffset + 1 < inputLength) {
-                val nc = input.charAt(inputOffset + 1)
-                if (nc == ':') {
-                  nextTokenValue = input.substring(nextTokenStartOffset, inputOffset)
-                  nextToken = Token.AXIS
-                  inputOffset += 2
-                  return
-                } else if (nc == '*') {
-                  nextTokenValue = input.substring(nextTokenStartOffset, inputOffset)
-                  nextToken = Token.PREFIX
-                  inputOffset += 2
-                  return
-                } else if (nc == '=') {
-                  nextTokenValue = input.substring(nextTokenStartOffset, inputOffset)
-                  nextToken = Token.NAME
-                  return
+        case other =>
+
+          if (other != '_' && other < 0x80 && ! Util.isLetter(other)) {
+            throw new XPathException("Invalid character '" + other + "' in expression")
+          }
+
+          breakable {
+            while (inputOffset < inputLength) {
+              c = input.charAt(inputOffset)
+              c match {
+                case ':' => if (inputOffset + 1 < inputLength) {
+                  val nc = input.charAt(inputOffset + 1)
+                  if (nc == ':') {
+                    nextTokenValue = input.substring(nextTokenStartOffset, inputOffset)
+                    nextToken = Token.AXIS
+                    inputOffset += 2
+                    return
+                  } else if (nc == '*') {
+                    nextTokenValue = input.substring(nextTokenStartOffset, inputOffset)
+                    nextToken = Token.PREFIX
+                    inputOffset += 2
+                    return
+                  } else if (nc == '=') {
+                    nextTokenValue = input.substring(nextTokenStartOffset, inputOffset)
+                    nextToken = Token.NAME
+                    return
+                  }
                 }
+                case '.' | '-' | '_' =>
+                case _ =>
+                  if (c < 0x80 && ! Util.isLetterOrDigit(c))
+                    break()
               }
-              case '.' | '-' | '_' => //break
-              case _ => if (c < 0x80 && !Character.isLetterOrDigit(c)) //break
+              inputOffset += 1
             }
-            inputOffset += 1
           }
           nextTokenValue = input.substring(nextTokenStartOffset, inputOffset)
           nextToken = Token.NAME

@@ -1,16 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType, TypeHierarchy}
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
-import client.net.sf.saxon.ce.value.BooleanValue
-import client.net.sf.saxon.ce.value.Cardinality
-import client.net.sf.saxon.ce.value.SequenceType
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{BooleanValue, Cardinality, SequenceType}
 
 /**
  * InstanceOf Expression: implements "Expr instance of data-type"
@@ -28,7 +24,7 @@ class InstanceOfExpression(source: Expression, var targetType: SequenceType)
    * Type-check the expression
    * @return the checked expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand = visitor.typeCheck(operand, contextItemType)
     if (operand.isInstanceOf[Literal]) {
       val lit = Literal.makeLiteral(evaluateItem(new EarlyEvaluationContext(visitor.getConfiguration)))
@@ -63,12 +59,12 @@ class InstanceOfExpression(source: Expression, var targetType: SequenceType)
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val e = super.optimize(visitor, contextItemType)
     if (e != this) {
       return e
@@ -79,7 +75,7 @@ class InstanceOfExpression(source: Expression, var targetType: SequenceType)
   /**
    * Is this expression the same as another expression?
    */
-  override def equals(other: Any): Boolean = super == other && targetType == other
+  override def equals(other: Any): Boolean = super.equals(other) && targetType == other
 
   /**
    * get HashCode for comparing two expressions. Note that this hashcode gives the same
@@ -90,24 +86,24 @@ class InstanceOfExpression(source: Expression, var targetType: SequenceType)
   /**
    * Determine the cardinality
    */
-  def computeCardinality(): Int = StaticProperty.EXACTLY_ONE
+  override def computeCardinality(): Int = StaticProperty.EXACTLY_ONE
 
   /**
    * Determine the data type of the result of the InstanceOf expression
    */
-  def getItemType(): ItemType = AtomicType.BOOLEAN
+  override def getItemType(): ItemType = AtomicType.BOOLEAN
 
   /**
    * Evaluate the expression
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     BooleanValue.get(effectiveBooleanValue(context))
   }
 
   /**
    * Evaluate the expression as a boolean
    */
-  def effectiveBooleanValue(context: XPathContext): Boolean = {
+  override def effectiveBooleanValue(context: XPathContext): Boolean = {
     val iter = operand.iterate(context)
     TypeChecker.testConformance(iter, targetType) == null
   }

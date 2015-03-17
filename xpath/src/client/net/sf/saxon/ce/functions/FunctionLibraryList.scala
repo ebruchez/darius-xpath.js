@@ -1,15 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.Container
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.StaticContext
+import client.net.sf.saxon.ce.expr.{Container, Expression, StaticContext}
 import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.trans.XPathException
-import java.util.ArrayList
-import java.util.Iterator
-import java.util.List
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.orbeon.{ArrayList, List}
 
 /**
  * A FunctionLibraryList is a list of FunctionLibraries. It is also a FunctionLibrary in its own right.
@@ -45,9 +41,9 @@ class FunctionLibraryList extends FunctionLibrary {
    * function, as an array of sequence types in which the zeroth entry represents the return type; otherwise null
    */
   def hasFunctionSignature(functionName: StructuredQName, arity: Int): Boolean = {
-    var it = libraryList.iterator()
+    val it = libraryList.iterator()
     while (it.hasNext) {
-      val lib = it.next().asInstanceOf[FunctionLibrary]
+      val lib = it.next()
       val b = lib.hasFunctionSignature(functionName, arity)
       if (b) {
         return true

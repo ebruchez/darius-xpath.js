@@ -1,13 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.functions.codenorm.Normalizer
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.value.StringValue
-import client.net.sf.saxon.ce.value.Whitespace
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{StringValue, Whitespace}
+
+import scala.util.control.Breaks
 
 /**
  * Implement the XPath normalize-unicode() function
@@ -19,7 +20,7 @@ class NormalizeUnicode extends SystemFunction {
   /**
    * Evaluate in a general context
    */
-  def evaluateItem(c: XPathContext): Item = {
+  override def evaluateItem(c: XPathContext): Item = {
     val sv = argument(0).evaluateItem(c).asInstanceOf[StringValue]
     if (sv == null) {
       return StringValue.EMPTY_STRING
@@ -44,12 +45,15 @@ class NormalizeUnicode extends SystemFunction {
     var allASCII = true
     val chars = sv.getStringValue
     var i = chars.length - 1
-    while (i >= 0) {
-      if (chars.charAt(i) > 127) {
-        allASCII = false
-        //break
+    import Breaks._
+    breakable {
+      while (i >= 0) {
+        if (chars.charAt(i) > 127) {
+          allASCII = false
+          break()
+        }
+        i -= 1
       }
-      i -= 1
     }
     if (allASCII) {
       return sv

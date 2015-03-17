@@ -1,15 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`.ItemType
+import client.net.sf.saxon.ce.om.{Sequence, StructuredQName}
+import client.net.sf.saxon.ce.orbeon.{ArrayList, Iterator}
 import client.net.sf.saxon.ce.value.SequenceType
-import java.util.ArrayList
-import java.util.Iterator
-import java.util.List
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * Assignation is an abstract superclass for the kinds of expression
@@ -124,7 +121,7 @@ abstract class Assignation extends Expression with Binding {
    * Simplify the expression
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     sequence = visitor.simplify(sequence)
     action = visitor.simplify(action)
     this
@@ -133,7 +130,7 @@ abstract class Assignation extends Expression with Binding {
   /**
    * Promote this expression if possible
    */
-  def promote(offer: PromotionOffer, parent: Expression): Expression = {
+  override def promote(offer: PromotionOffer, parent: Expression): Expression = {
     val exp = offer.accept(parent, this)
     if (exp != null) {
       exp
@@ -171,7 +168,7 @@ abstract class Assignation extends Expression with Binding {
   /**
    * Get the immediate subexpressions of this expression
    */
-  def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(sequence, action)
+  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(sequence, action)
 
   /**
    * Get the display name of the range variable, for diagnostics only

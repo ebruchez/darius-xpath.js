@@ -1,10 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
 import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.value.AtomicValue
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 /**
  * An AtomicComparer used for comparing strings, untypedAtomic values, and URIs using a collation.
@@ -15,10 +17,10 @@ import scala.collection.JavaConversions._
  * @author Michael H. Kay
  *
  */
-class CollatingAtomicComparer(collator: StringCollator) extends AtomicComparer {
+class CollatingAtomicComparer(_collator: StringCollator) extends AtomicComparer {
 
   @BeanProperty
-  var collator: StringCollator = if (collator == null) CodepointCollator.getInstance else collator
+  var collator: StringCollator = if (_collator == null) CodepointCollator.getInstance else _collator
 
   /**
    * Compare two AtomicValue objects according to the rules for their data type. UntypedAtomic

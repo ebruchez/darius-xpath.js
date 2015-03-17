@@ -1,22 +1,21 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.instruct
 
-import client.net.sf.saxon.ce.Configuration
+import java.util.{HashMap, HashSet}
+
 import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.event._
 import client.net.sf.saxon.ce.functions.FunctionLibraryList
-import client.net.sf.saxon.ce.om.CopyOptions
-import client.net.sf.saxon.ce.om.DocumentInfo
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.style._
+import client.net.sf.saxon.ce.om.{CopyOptions, DocumentInfo, Sequence, StructuredQName}
+import client.net.sf.saxon.ce.orbeon.Configuration
 import client.net.sf.saxon.ce.trans._
-import client.net.sf.saxon.ce.tree.linked.DocumentImpl
-import client.net.sf.saxon.ce.tree.linked.LinkedTreeBuilder
+import client.net.sf.saxon.ce.tree.linked.{DocumentImpl, LinkedTreeBuilder}
 import client.net.sf.saxon.ce.value.DecimalValue
-import java.util.HashMap
-import java.util.HashSet
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
+
+import scala.beans.BeanProperty
+
+
 import scala.collection.JavaConversions._
 
 /**
@@ -28,7 +27,7 @@ class Executable(config: Configuration) {
   @transient private var config: Configuration = _
 
   @BeanProperty
-  lazy var stripperRules: StripSpaceRules = new StripSpaceRules()
+  var stripperRules: StripSpaceRules = new StripSpaceRules()
 
   @BeanProperty
   lazy val keyManager = new KeyManager()

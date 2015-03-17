@@ -1,24 +1,25 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.number
 
-import Numberer_en._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.expr.number.Numberer_en._
 
 object Numberer_en {
 
-  private var englishUnits: Array[String] = Array("", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thir", "Four", "Fif", "Six", "Seven", "Eigh", "Nine")
+  private val englishUnits: Array[String] = Array("", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thir", "Four", "Fif", "Six", "Seven", "Eigh", "Nine")
 
-  private var englishTens: Array[String] = Array("", "", "Twen", "Thir", "For", "Fif", "Six", "Seven", "Eigh", "Nine")
+  private val englishTens: Array[String] = Array("", "", "Twen", "Thir", "For", "Fif", "Six", "Seven", "Eigh", "Nine")
 
-  private var englishOrdinalUnits: Array[String] = Array("", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth", "Eleventh", "Twelfth")
+  private val englishOrdinalUnits: Array[String] = Array("", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth", "Eleventh", "Twelfth")
 
   private def abbreviate(name: String, max: Int): String = {
     (if (name.length > max) name.substring(0, 3) else name)
   }
 
-  private var englishMonths: Array[String] = Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+  private val englishMonths: Array[String] = Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 
-  private var englishDays: Array[String] = Array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+  private val englishDays: Array[String] = Array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 }
 
 /**
@@ -60,7 +61,7 @@ class Numberer_en extends AbstractNumberer {
    * @param number       the number being formatted
    * @return the ordinal suffix to be appended to the formatted number
    */
-  protected def ordinalSuffix(ordinalParam: String, number: Long): String = {
+  override protected def ordinalSuffix(ordinalParam: String, number: Long): String = {
     val penult = (number % 100).toInt / 10
     val ult = (number % 10).toInt
     if (penult == 1) {
@@ -113,15 +114,6 @@ class Numberer_en extends AbstractNumberer {
     }
   }
 
-  /**
-   * Show an ordinal number as English words in a requested case (for example, Twentyfirst)
-   *
-   * @param ordinalParam the value of the "ordinal" attribute as supplied by the user
-   * @param number       the number to be formatted
-   * @param wordCase     the required case for example {@link #UPPER_CASE},
-   *                     {@link #LOWER_CASE}, {@link #TITLE_CASE}
-   * @return the formatted number
-   */
   def toOrdinalWords(ordinalParam: String, number: Long, wordCase: Int): String = {
     var s: String = null
     if (number >= 1000000000) {
@@ -154,9 +146,9 @@ class Numberer_en extends AbstractNumberer {
           englishOrdinalUnits(rem)
       }
     }
-    if (wordCase == UPPER_CASE) {
+    if (wordCase == AbstractNumberer.UPPER_CASE) {
       s.toUpperCase()
-    } else if (wordCase == LOWER_CASE) {
+    } else if (wordCase == AbstractNumberer.LOWER_CASE) {
       s.toLowerCase()
     } else {
       s

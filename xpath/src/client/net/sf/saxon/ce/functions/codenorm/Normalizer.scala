@@ -1,33 +1,28 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions.codenorm
 
-import client.net.sf.saxon.ce.Configuration
-import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.functions.codenorm.Normalizer._
+import client.net.sf.saxon.ce.orbeon.Configuration
 import client.net.sf.saxon.ce.tree.util.UTF16CharacterSet
-import Normalizer._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object Normalizer {
 
   /**
    * Masks for the form selector
    */
-  val COMPATIBILITY_MASK = 1
-
-  val COMPOSITION_MASK = 2
+  val COMPATIBILITY_MASK: Byte = 1
+  val COMPOSITION_MASK: Byte = 2
 
   /**
    * Normalization Form Selector
    */
-  val D = 0
-
-  val C = COMPOSITION_MASK
-
-  val KD = COMPATIBILITY_MASK
-
-  val KC = (COMPATIBILITY_MASK + COMPOSITION_MASK).toByte
-
-  val NO_ACTION = 8
+  val D: Byte = 0
+  val C: Byte = COMPOSITION_MASK
+  val KD: Byte = COMPATIBILITY_MASK
+  val KC: Byte = (COMPATIBILITY_MASK + COMPOSITION_MASK).toByte
+  val NO_ACTION: Byte = 8
 
   /**
    * Set the 32-bit character at a particular 16-bit offset in a string buffer,
@@ -115,18 +110,22 @@ class Normalizer(var form: Byte, config: Configuration) {
     var i = 0
     while (i < source.length) {
       buffer.setLength(0)
-      ch32 = source.charAt(i += 1)
+      ch32 = source.charAt(i)
+      i += 1
       if (UTF16CharacterSet.isHighSurrogate(ch32)) {
-        val low = source.charAt(i += 1)
+        val low = source.charAt(i)
+        i += 1
         ch32 = UTF16CharacterSet.combinePair(ch32.toChar, low)
       }
       data.getRecursiveDecomposition(canonical, ch32, buffer)
       var ch: Int = 0
       var j = 0
       while (j < buffer.length) {
-        ch = buffer.charAt(j += 1)
+        ch = buffer.charAt(j)
+        j += 1
         if (UTF16CharacterSet.isHighSurrogate(ch)) {
-          val low = buffer.charAt(j += 1)
+          val low = buffer.charAt(j)
+          j += 1
           ch = UTF16CharacterSet.combinePair(ch.toChar, low)
         }
         val chClass = data.getCanonicalClass(ch)
@@ -163,7 +162,7 @@ class Normalizer(var form: Byte, config: Configuration) {
    */
   private def internalCompose(target: StringBuffer) {
     var starterPos = 0
-    var starterCh = target.charAt(0)
+    var starterCh: Int = target.charAt(0)
     var compPos = 1
     if (UTF16CharacterSet.isHighSurrogate(starterCh)) {
       starterCh = UTF16CharacterSet.combinePair(starterCh.toChar, target.charAt(1))
@@ -175,9 +174,11 @@ class Normalizer(var form: Byte, config: Configuration) {
     var ch: Int = 0
     var decompPos = compPos
     while (decompPos < target.length) {
-      ch = target.charAt(decompPos += 1)
+      ch = target.charAt(decompPos)
+      decompPos += 1
       if (UTF16CharacterSet.isHighSurrogate(ch)) {
-        ch = UTF16CharacterSet.combinePair(ch.toChar, target.charAt(decompPos += 1))
+        ch = UTF16CharacterSet.combinePair(ch.toChar, target.charAt(decompPos))
+        decompPos += 1
       }
       val chClass = data.getCanonicalClass(ch)
       val composite = data.getPairwiseComposition(starterCh, ch)

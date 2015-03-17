@@ -1,27 +1,17 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.Configuration
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType, Type, TypeHierarchy}
 import client.net.sf.saxon.ce.expr.instruct.ForEach
-import client.net.sf.saxon.ce.expr.sort.DocumentOrderIterator
-import client.net.sf.saxon.ce.expr.sort.GlobalOrderComparer
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.expr.sort.{DocumentOrderIterator, GlobalOrderComparer}
+import client.net.sf.saxon.ce.om.{Item, NodeInfo, SequenceIterator}
+import client.net.sf.saxon.ce.orbeon.Iterator
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.tree.iter.OneItemGoneIterator
+import client.net.sf.saxon.ce.tree.iter.{EmptyIterator, OneItemGoneIterator}
 import client.net.sf.saxon.ce.tree.util.SourceLocator
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.Cardinality
-import client.net.sf.saxon.ce.value.EmptySequence
-import client.net.sf.saxon.ce.value.SequenceType
-import java.util.Iterator
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{AtomicValue, Cardinality, EmptySequence, SequenceType}
 
 /**
  * A slash expression is any expression using the binary slash operator "/". The parser initially generates a slash
@@ -76,7 +66,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * @return the simplified expression
    * @param visitor the expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     setStartExpression(visitor.simplify(start))
     setStepExpression(visitor.simplify(step))
     if (Literal.isEmptySequence(start)) {
@@ -100,7 +90,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val th = TypeHierarchy.getInstance
     var start2 = visitor.typeCheck(start, contextItemType)
     val role0 = new RoleLocator(RoleLocator.BINARY_EXPR, "/", 0)
@@ -137,7 +127,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
     }
   }
 
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val th = TypeHierarchy.getInstance
     setStartExpression(visitor.optimize(start, contextItemType))
     setStepExpression(step.optimize(visitor, start.getItemType))
@@ -175,7 +165,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
   /**
    * Promote this expression if possible
    */
-  def promote(offer: PromotionOffer, parent: Expression): Expression = {
+  override def promote(offer: PromotionOffer, parent: Expression): Expression = {
     val exp = offer.accept(parent, this)
     if (exp != null) {
       exp
@@ -191,7 +181,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
   /**
    * Get the immediate subexpressions of this expression
    */
-  def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(start, step)
+  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(start, step)
 
   /**
    * Given an expression that is an immediate child of this expression, test whether
@@ -200,14 +190,14 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * @param child the immediate subexpression
    * @return true if the child expression is evaluated repeatedly
    */
-  def hasLoopingSubexpression(child: Expression): Boolean = child == step
+  override def hasLoopingSubexpression(child: Expression): Boolean = child == step
 
   /**
    * Determine which aspects of the context the expression depends on. The result is
    * a bitwise-or'ed value composed from constants such as XPathContext.VARIABLES and
    * XPathContext.CURRENT_NODE
    */
-  def computeDependencies(): Int = {
+  override def computeDependencies(): Int = {
     start.getDependencies | 
       (step.getDependencies & 
       (StaticProperty.DEPENDS_ON_XSLT_CONTEXT | StaticProperty.DEPENDS_ON_LOCAL_VARIABLES | 
@@ -219,7 +209,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * bit-signficant. These properties are used for optimizations. In general, if
    * property bit is set, it is true, but if it is unset, the value is unknown.
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     var p = super.computeSpecialProperties()
     if ((start.getSpecialProperties & step.getSpecialProperties & 
       StaticProperty.NON_CREATIVE) != 
@@ -260,7 +250,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * Iterate the path-expression in a given context
    * @param context the evaluation context
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     var result = start.iterate(context)
     val context2 = context.newMinorContext()
     context2.setCurrentIterator(result)

@@ -1,32 +1,36 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
+import java.math.BigDecimal
+
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType, TypeHierarchy}
+import client.net.sf.saxon.ce.expr.ArithmeticExpression._
 import client.net.sf.saxon.ce.om.Item
 import client.net.sf.saxon.ce.pattern.EmptySequenceTest
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
 import client.net.sf.saxon.ce.value._
-import java.math.BigDecimal
-import ArithmeticExpression._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object ArithmeticExpression {
 
   /**
    * Static method to apply arithmetic to two values
    *
-   * @param value0   the first value
-   * @param operator the operator as denoted in the Token class, for example {@link Token#PLUS}
-   * @param value1   the second value
+   * @param _value0   the first value
+   * @param operator the operator as denoted in the Token class, for example [[Token.PLUS]]
+   * @param _value1   the second value
    * @param context  the XPath dynamic evaluation context
    * @return the result of the arithmetic operation
    */
-  def compute(value0: AtomicValue, 
+  def compute(_value0: AtomicValue,
       operator: Int, 
-      value1: AtomicValue, 
+      _value1: AtomicValue,
       context: XPathContext): AtomicValue = {
+
+    var value0 = _value0
+    var value1 = _value1
+
     var p0 = value0.getItemType
     var p1 = value1.getItemType
     val th = TypeHierarchy.getInstance
@@ -52,7 +56,7 @@ object ArithmeticExpression {
         val d1 = n1.getDoubleValue
         var result: Double = 0.0
         operator match {
-          case Token.PLUS |  => result = d0 + d1
+          case Token.PLUS  => result = d0 + d1
           case Token.MINUS => result = d0 - d1
           case Token.MULT => result = d0 * d1
           case Token.DIV => result = d0 / d1
@@ -61,10 +65,10 @@ object ArithmeticExpression {
             if (d1 == 0.0) {
               throw new XPathException("Integer division by zero", "FOAR0001")
             }
-            if (Double.isNaN(d0) || Double.isInfinite(d0)) {
+            if (d0.isNaN || d0.isInfinite) {
               throw new XPathException("First operand of idiv is NaN or infinity", "FOAR0002")
             }
-            if (Double.isNaN(d1)) {
+            if (d1.isNaN) {
               throw new XPathException("Second operand of idiv is NaN", "FOAR0002")
             }
             return new DoubleValue(d0 / d1).convert(AtomicType.INTEGER)
@@ -77,7 +81,7 @@ object ArithmeticExpression {
         val f1 = n1.getFloatValue
         var result: Float = 0.0f
         operator match {
-          case Token.PLUS |  => result = f0 + f1
+          case Token.PLUS  => result = f0 + f1
           case Token.MINUS => result = f0 - f1
           case Token.MULT => result = f0 * f1
           case Token.DIV => result = f0 / f1
@@ -86,10 +90,10 @@ object ArithmeticExpression {
             if (f1 == 0.0) {
               throw new XPathException("Integer division by zero", "FOAR0001")
             }
-            if (Float.isNaN(f0) || Float.isInfinite(f0)) {
+            if (f0.isNaN || f0.isInfinite) {
               throw new XPathException("First operand of idiv is NaN or infinity", "FOAR0002")
             }
-            if (Float.isNaN(f1)) {
+            if (f1.isNaN) {
               throw new XPathException("Second operand of idiv is NaN", "FOAR0002")
             }
             return new FloatValue(f0 / f1).convert(AtomicType.INTEGER)
@@ -102,12 +106,12 @@ object ArithmeticExpression {
         val d1 = n1.getDecimalValue
         var result: BigDecimal = null
         operator match {
-          case Token.PLUS |  => result = d0.add(d1)
+          case Token.PLUS  => result = d0.add(d1)
           case Token.MINUS => result = d0.subtract(d1)
           case Token.MULT => result = d0.multiply(d1)
           case Token.DIV => 
             var result1: BigDecimal = null
-            var scale = Math.max(DecimalValue.DIVIDE_PRECISION, Math.max(d0.scale(), d1.scale()))
+            val scale = Math.max(DecimalValue.DIVIDE_PRECISION, Math.max(d0.scale(), d1.scale()))
             try {
               result1 = d0.divide(d1, scale, BigDecimal.ROUND_HALF_DOWN)
             } catch {
@@ -186,14 +190,14 @@ object ArithmeticExpression {
 /**
  * Arithmetic Expression: an expression using one of the operators
  * plus, minus, multiply, div, idiv, mod. Note that this code does not handle backwards
- * compatibility mode: see {@link ArithmeticExpression10}
+ * compatibility mode: see [[ArithmeticExpression10]]
  */
 class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extends BinaryExpression(p0, 
   operator, p1) {
 
   protected var simplified: Boolean = false
 
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     if (simplified) {
       return this
     }
@@ -217,7 +221,7 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
    * Type-check the expression statically. We try to work out which particular
    * arithmetic function to use if the types of operands are known an compile time.
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  def NHtypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val th = TypeHierarchy.getInstance
     val oldOp0 = operand0
     val oldOp1 = operand1
@@ -306,7 +310,7 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
   /**
    * Evaluate the expression.
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val v0 = operand0.evaluateItem(context).asInstanceOf[AtomicValue]
     if (v0 == null) {
       return null

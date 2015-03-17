@@ -1,20 +1,18 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import java.math.BigDecimal
+
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.functions.Component
-import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.regex.RegExp
+import client.net.sf.saxon.ce.trans.{Err, XPathException}
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import com.google.gwt.regexp.shared.MatchResult
-import com.google.gwt.regexp.shared.RegExp
-import java.math.BigDecimal
-import TimeValue._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 object TimeValue {
 
@@ -27,7 +25,7 @@ object TimeValue {
    * @return either a TimeValue corresponding to the xs:time, or a ValidationFailure
    *         if the supplied value was invalid
    */
-  private var timePattern: RegExp = RegExp.compile("([0-9][0-9]):([0-9][0-9]):([0-9][0-9])(\\.[0-9]*)?([-+Z].*)?")
+  private val timePattern: RegExp = RegExp.compile("([0-9][0-9]):([0-9][0-9]):([0-9][0-9])(\\.[0-9]*)?([-+Z].*)?")
 
   def makeTimeValue(s: CharSequence): ConversionResult = {
     val str = s.toString
@@ -41,12 +39,12 @@ object TimeValue {
     dt.second = DurationValue.simpleInteger(`match`.getGroup(3))
     val frac = `match`.getGroup(4)
     if (frac != null && frac.length > 0) {
-      val fractionalSeconds = Double.parseDouble(frac)
+      val fractionalSeconds = frac.toDouble
       dt.microsecond = (Math.round(fractionalSeconds * 1000000)).toInt
     }
     val tz = `match`.getGroup(5)
-    val tzmin = parseTimezone(tz)
-    if (tzmin == BAD_TIMEZONE) {
+    val tzmin = CalendarValue.parseTimezone(tz)
+    if (tzmin == CalendarValue.BAD_TIMEZONE) {
       return badTime("Invalid timezone", str)
     }
     dt.setTimezoneInMinutes(tzmin)
@@ -93,7 +91,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    * @param second      the seconds value, 0-59
    * @param microsecond the number of microseconds, 0-999999
    * @param tz          the timezone displacement in minutes from UTC. Supply the value
-   *                    {@link CalendarValue#NO_TIMEZONE} if there is no timezone component.
+   *                    [[CalendarValue.NO_TIMEZONE]] if there is no timezone component.
    */
   def this(hour: Int, 
       minute: Int, 
@@ -143,11 +141,11 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    */
   def getPrimitiveStringValue(): CharSequence = {
     val sb = new FastStringBuffer(FastStringBuffer.TINY)
-    appendTwoDigits(sb, hour)
+    CalendarValue.appendTwoDigits(sb, hour)
     sb.append(':')
-    appendTwoDigits(sb, minute)
+    CalendarValue.appendTwoDigits(sb, minute)
     sb.append(':')
-    appendTwoDigits(sb, second)
+    CalendarValue.appendTwoDigits(sb, second)
     if (microsecond != 0) {
       sb.append('.')
       var ms = microsecond
@@ -199,7 +197,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    * Get a component of the value. Returns null if the timezone component is
    * requested and is not present.
    */
-  def getComponent(component: Int): AtomicValue = component match {
+  override def getComponent(component: Int): AtomicValue = component match {
     case Component.HOURS => new IntegerValue(hour)
     case Component.MINUTES => new IntegerValue(minute)
     case Component.SECONDS => 
@@ -267,7 +265,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    *          if the duration is an xs:duration, as distinct from
    *          a subclass thereof
    */
-  def add(duration: DurationValue): TimeValue = {
+  override def add(duration: DurationValue): TimeValue = {
     if (duration.isInstanceOf[DayTimeDurationValue]) {
       val dt = toDateTime().add(duration)
       new TimeValue(dt.getHour, dt.getMinute, dt.getSecond, dt.getMicrosecond, getTimezoneInMinutes)
@@ -284,7 +282,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    * @return the duration as an xs:dayTimeDuration
    * @throws XPathException for example if one value is a date and the other is a time
    */
-  def subtract(other: CalendarValue, context: XPathContext): DayTimeDurationValue = {
+  override def subtract(other: CalendarValue, context: XPathContext): DayTimeDurationValue = {
     if (!(other.isInstanceOf[TimeValue])) {
       throw new XPathException("First operand of '-' is a time, but the second is not", "XPTY0004")
     }

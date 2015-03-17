@@ -1,16 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType}
+import client.net.sf.saxon.ce.expr.IdentityComparison._
 import client.net.sf.saxon.ce.expr.sort.GlobalOrderComparer
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value.BooleanValue
-import client.net.sf.saxon.ce.value.SequenceType
-import IdentityComparison._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.{Item, NodeInfo}
+import client.net.sf.saxon.ce.value.{BooleanValue, SequenceType}
 
 object IdentityComparison {
 
@@ -29,7 +26,7 @@ class IdentityComparison(p1: Expression, op: Int, p2: Expression) extends Binary
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand0 = visitor.typeCheck(operand0, contextItemType)
     operand1 = visitor.typeCheck(operand1, contextItemType)
     val role0 = new RoleLocator(RoleLocator.BINARY_EXPR, Token.tokens(operator), 0)
@@ -42,7 +39,7 @@ class IdentityComparison(p1: Expression, op: Int, p2: Expression) extends Binary
   /**
    * Evaluate the expression
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val node1 = getNode(operand0, context)
     if (node1 == null) {
       return null
@@ -54,7 +51,7 @@ class IdentityComparison(p1: Expression, op: Int, p2: Expression) extends Binary
     BooleanValue.get(compareIdentity(node1, node2))
   }
 
-  def effectiveBooleanValue(context: XPathContext): Boolean = {
+  override def effectiveBooleanValue(context: XPathContext): Boolean = {
     val node1 = getNode(operand0, context)
     if (node1 == null) {
       return false

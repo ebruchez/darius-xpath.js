@@ -1,11 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.trans.XPathException
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.{Item, NodeInfo}
 
 /**
  * Implement the XPath 2.0 root() function
@@ -19,7 +18,7 @@ class Root extends SystemFunction {
    * bit-significant. These properties are used for optimizations. In general, if
    * property bit is set, it is true, but if it is unset, the value is unknown.
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     var prop = StaticProperty.ORDERED_NODESET | StaticProperty.SINGLE_DOCUMENT_NODESET | 
       StaticProperty.NON_CREATIVE
     if ((getNumberOfArguments == 0) || 
@@ -33,7 +32,7 @@ class Root extends SystemFunction {
   /**
    * Evaluate in a general context
    */
-  def evaluateItem(c: XPathContext): Item = {
+  override def evaluateItem(c: XPathContext): Item = {
     val start = argument(0).evaluateItem(c).asInstanceOf[NodeInfo]
     if (start == null) {
       return null

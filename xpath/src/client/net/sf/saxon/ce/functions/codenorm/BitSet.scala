@@ -1,7 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions.codenorm
-
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  *  Reimplementation of the JDK class BitSet, with heavily subsetted functionality.
@@ -10,7 +10,7 @@ import scala.collection.JavaConversions._
  */
 class BitSet(bits: Int) {
 
-  private var words: Array[Int] = new Array[Int]((bits >> 5) + 1)
+  private val words: Array[Int] = new Array[Int]((bits >> 5) + 1)
 
   /**
    * Set the n'th bit.

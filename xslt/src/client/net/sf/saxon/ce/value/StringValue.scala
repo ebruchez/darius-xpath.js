@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
 import client.net.sf.saxon.ce.lib.StringCollator
@@ -45,7 +48,7 @@ object StringValue {
    * @param value        the value to be converted
    * @param requiredType the required atomic type. This must not be a namespace-sensitive type.
    * @return the result of the conversion, if successful. If unsuccessful, the value returned
-   *         will be a {@link ValidationFailure}. The caller must check for this condition. No exception is thrown, instead
+   *         will be a [[ValidationFailure]]. The caller must check for this condition. No exception is thrown, instead
    *         the exception will be encapsulated within the ValidationFailure.
    */
   def convertStringToBuiltInType(value: CharSequence, requiredType: AtomicType): ConversionResult = {

@@ -1,16 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, Type}
 import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.StringValue
-import client.net.sf.saxon.ce.value.UntypedAtomicValue
-import AtomicSortComparer._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{AtomicValue, StringValue, UntypedAtomicValue}
+
+import scala.beans.BeanProperty
 
 object AtomicSortComparer {
 
@@ -107,8 +105,8 @@ class AtomicSortComparer protected (@BeanProperty var collator: StringCollator, 
         collator.compareStrings(a.getStringValue, b.getStringValue)
       }
     } else {
-      val ac = a.getXPathComparable(true, collator, implicitTimezone).asInstanceOf[Comparable[_]]
-      val bc = b.getXPathComparable(true, collator, implicitTimezone).asInstanceOf[Comparable[_]]
+      val ac = a.getXPathComparable(true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef]]
+      val bc = b.getXPathComparable(true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef] with AnyRef]//ORBEON with AnyRef is ugly!
       if (ac == null || bc == null) {
         throw new ClassCastException("Values are not comparable (" + Type.displayTypeName(a) + 
           ", " + 

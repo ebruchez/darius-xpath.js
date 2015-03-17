@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/xpath/xpath.iml" filepath="$PROJECT_DIR$/xpath/xpath.iml" />
-      <module fileurl="file://$PROJECT_DIR$/xslt/xslt.iml" filepath="$PROJECT_DIR$/xslt/xslt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/saxon-ce-scala.iml" filepath="$PROJECT_DIR$/.idea/modules/saxon-ce-scala.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/saxon-ce-scala-build.iml" filepath="$PROJECT_DIR$/.idea/modules/saxon-ce-scala-build.iml" />
     </modules>
   </component>
 </project>

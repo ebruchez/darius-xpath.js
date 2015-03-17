@@ -1,21 +1,17 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.expr.sort.CodepointCollator
-import client.net.sf.saxon.ce.lib.StringCollator
+import client.net.sf.saxon.ce.functions.Contains._
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.value._
-import Contains._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object Contains {
-
   val CONTAINS = 0
-
   val STARTS_WITH = 1
-
   val ENDS_WITH = 2
 }
 
@@ -28,7 +24,7 @@ class Contains(op: Int) extends CollatingFunction {
 
   def newInstance(): Contains = new Contains(operation)
 
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     var result: Boolean = false
     val arg1 = argument(1).evaluateItem(context).asInstanceOf[StringValue]
     if (arg1 == null || arg1.isZeroLength) {
@@ -44,7 +40,7 @@ class Contains(op: Int) extends CollatingFunction {
         if (collator.isInstanceOf[CodepointCollator]) operation match {
           case CONTAINS => result = s0.indexOf(s1, 0) >= 0
           case STARTS_WITH => result = s0.startsWith(s1, 0)
-          case ENDS_WITH |  => result = s0.endsWith(s1)
+          case ENDS_WITH => result = s0.endsWith(s1)
         } else {
           doesNotSupportSubstringMatching(context)
           result = false

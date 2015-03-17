@@ -1,15 +1,17 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import java.math.{BigDecimal, BigInteger}
+
+import client.net.sf.saxon.ce.`type`._
 import client.net.sf.saxon.ce.lib.StringCollator
+import client.net.sf.saxon.ce.orbeon.Util
 import client.net.sf.saxon.ce.regex.ARegularExpression
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`._
-import java.math.BigDecimal
-import java.math.BigInteger
-import DayTimeDurationValue._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.DayTimeDurationValue._
 
 object DayTimeDurationValue {
 
@@ -17,7 +19,7 @@ object DayTimeDurationValue {
 
   val MINUS_ONE_DAY = new DayTimeDurationValue(-1, 1, 0, 0, 0, 0)
 
-  private var DTDdurationPattern: ARegularExpression = ARegularExpression.make("-?P([0-9]+D)?(T([0-9]+H)?([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?)?")
+  private val DTDdurationPattern = ARegularExpression.make("-?P([0-9]+D)?(T([0-9]+H)?([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?)?")
 
   /**
    * Factory method: create a duration value from a supplied string, in
@@ -38,10 +40,11 @@ object DayTimeDurationValue {
   /**
    * Construct a duration value as a number of seconds.
    *
-   * @param seconds the number of seconds in the duration. May be negative
+   * @param _seconds the number of seconds in the duration. May be negative
    * @return the xs:dayTimeDuration value with the specified length
    */
-  def fromSeconds(seconds: BigDecimal): DayTimeDurationValue = {
+  def fromSeconds(_seconds: BigDecimal): DayTimeDurationValue = {
+    var seconds = _seconds
     val sdv = new DayTimeDurationValue()
     sdv.negative = (seconds.signum() < 0)
     if (sdv.negative) {
@@ -58,13 +61,14 @@ object DayTimeDurationValue {
   /**
    * Construct a duration value as a number of milliseconds.
    *
-   * @param milliseconds the number of milliseconds in the duration (may be negative)
+   * @param _milliseconds the number of milliseconds in the duration (may be negative)
    * @return the corresponding xs:dayTimeDuration value
    * @throws XPathException if implementation-defined limits are exceeded, specifically
    * if the total number of seconds exceeds 2^63.
    */
-  def fromMilliseconds(milliseconds: Long): DayTimeDurationValue = {
-    val sign = Long.signum(milliseconds)
+  def fromMilliseconds(_milliseconds: Long): DayTimeDurationValue = {
+    var milliseconds = _milliseconds
+    val sign = Util.signum(milliseconds)
     if (sign < 0) {
       milliseconds = -milliseconds
     }
@@ -74,13 +78,14 @@ object DayTimeDurationValue {
   /**
    * Construct a duration value as a number of microseconds.
    *
-   * @param microseconds the number of microseconds in the duration. The maximum and minimum
+   * @param _microseconds the number of microseconds in the duration. The maximum and minimum
    *                     limits are such that the number of days in the duration must fit in a 32-bit signed integer.
    * @return the xs:dayTimeDuration represented by the given number of microseconds
    * @throws IllegalArgumentException if the value is out of range.
    */
-  def fromMicroseconds(microseconds: Long): DayTimeDurationValue = {
-    val sign = Long.signum(microseconds)
+  def fromMicroseconds(_microseconds: Long): DayTimeDurationValue = {
+    var microseconds = _microseconds
+    val sign = Util.signum(microseconds)
     if (sign < 0) {
       microseconds = -microseconds
     }
@@ -91,7 +96,7 @@ object DayTimeDurationValue {
 /**
  * A value of type xs:dayTimeDuration
  */
-class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
+class DayTimeDurationValue private () extends DurationValue with Comparable[AnyRef] {
 
   /**
    * Create a dayTimeDuration given the number of days, hours, minutes, and seconds. This
@@ -103,7 +108,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
    * @param hours        number of hours
    * @param minutes      number of minutes
    * @param seconds      number of seconds
-   * @param microseconds number of microseconds
+   * @param _microseconds number of microseconds
    * @throws IllegalArgumentException if the value is out of range; specifically, if the total
    * number of seconds exceeds 2^63; or if any of the values is negative
    */
@@ -112,8 +117,11 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
       hours: Int, 
       minutes: Int, 
       seconds: Long, 
-      microseconds: Int) {
+      _microseconds: Int) {
     this()
+
+    var microseconds = _microseconds
+
     if (days < 0 || hours < 0 || minutes < 0 || seconds < 0 || 
       microseconds < 0) {
       throw new IllegalArgumentException("Negative component value")
@@ -121,7 +129,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
     if (days.toDouble * (24 * 60 * 60) + hours.toDouble * (60 * 60) + 
       minutes.toDouble * 60 + 
       seconds.toDouble > 
-      Long.MAX_VALUE) {
+      Long.MaxValue) {
       throw new IllegalArgumentException("Duration seconds limit exceeded")
     }
     negative = (sign < 0)
@@ -146,14 +154,14 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.DAY_TIME_DURATION
+  override def getItemType(): AtomicType = AtomicType.DAY_TIME_DURATION
 
   /**
    * Convert to string
    *
    * @return ISO 8601 representation.
    */
-  def getPrimitiveStringValue(): CharSequence = {
+  override def getPrimitiveStringValue(): CharSequence = {
     val sb = new FastStringBuffer(32)
     if (negative) {
       sb.append('-')
@@ -202,7 +210,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
   /**
    * Get length of duration in seconds
    */
-  def getLengthInSeconds(): Double = {
+  override def getLengthInSeconds(): Double = {
     val a = seconds + (microseconds.toDouble / 1000000)
     (if (negative) -a else a)
   }
@@ -220,15 +228,15 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
   /**
    * Multiply duration by a number. This is also used when dividing a duration by a number.
    */
-  def multiply(n: Double): DurationValue = {
-    if (Double.isNaN(n)) {
+  override def multiply(n: Double): DurationValue = {
+    if (n.isNaN) {
       throw new XPathException("Cannot multiply/divide a duration by NaN", "FOCA0005")
     }
     val m = getLengthInMicroseconds.toDouble
     val product = n * m
-    if (Double.isInfinite(product) || Double.isNaN(product) || 
-      product > Long.MAX_VALUE || 
-      product < Long.MIN_VALUE) {
+    if (product.isInfinite || product.isNaN ||
+      product > Long.MaxValue ||
+      product < Long.MinValue) {
       throw new XPathException("Overflow when multiplying/dividing a duration by a number", "FODT0002")
     }
     try {
@@ -249,7 +257,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
    * @return the ratio, as a decimal
    * @throws XPathException
    */
-  def divide(other: DurationValue): DecimalValue = {
+  override def divide(other: DurationValue): DecimalValue = {
     if (other.isInstanceOf[DayTimeDurationValue]) {
       val v1 = BigDecimal.valueOf(getLengthInMicroseconds)
       val v2 = BigDecimal.valueOf(other.asInstanceOf[DayTimeDurationValue].getLengthInMicroseconds)
@@ -265,7 +273,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
   /**
    * Add two dayTimeDurations
    */
-  def add(other: DurationValue): DurationValue = {
+  override def add(other: DurationValue): DurationValue = {
     if (other.isInstanceOf[DayTimeDurationValue]) {
       fromMicroseconds(getLengthInMicroseconds + 
         other.asInstanceOf[DayTimeDurationValue].getLengthInMicroseconds)
@@ -281,7 +289,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
    *          be negated (because the limit for positive durations is one second
    *          off from the limit for negative durations)
    */
-  def negate(): DurationValue = {
+  override def negate(): DurationValue = {
     fromMicroseconds(-getLengthInMicroseconds)
   }
 
@@ -322,7 +330,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
    * @param collator Collation used for string comparison
    * @param implicitTimezone
    */
-  def getXPathComparable(ordered: Boolean, collator: StringCollator, implicitTimezone: Int): AnyRef = {
+  override def getXPathComparable(ordered: Boolean, collator: StringCollator, implicitTimezone: Int): AnyRef = {
     this
   }
 }

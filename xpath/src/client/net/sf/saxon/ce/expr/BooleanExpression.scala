@@ -1,16 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.expr.instruct.Choose
-import client.net.sf.saxon.ce.functions.BooleanFn
-import client.net.sf.saxon.ce.functions.SystemFunction
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType, TypeHierarchy}
+import client.net.sf.saxon.ce.functions.{BooleanFn, SystemFunction}
 import client.net.sf.saxon.ce.om.Item
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
 import client.net.sf.saxon.ce.value.BooleanValue
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * Boolean expression: two truth values combined using AND or OR.
@@ -18,7 +15,7 @@ import scala.collection.JavaConversions._
 class BooleanExpression(p1: Expression, operator: Int, p2: Expression) extends BinaryExpression(p1, operator, 
   p2) {
 
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val e = super.typeCheck(visitor, contextItemType)
     if (e == this) {
       val err0 = TypeChecker.ebvError(operand0)
@@ -46,7 +43,7 @@ class BooleanExpression(p1: Expression, operator: Int, p2: Expression) extends B
   /**
    * Determine the static cardinality. Returns [1..1]
    */
-  def computeCardinality(): Int = StaticProperty.EXACTLY_ONE
+  override def computeCardinality(): Int = StaticProperty.EXACTLY_ONE
 
   /**
    * Perform optimisation of an expression and its subexpressions.
@@ -58,12 +55,12 @@ class BooleanExpression(p1: Expression, operator: Int, p2: Expression) extends B
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val e = super.optimize(visitor, contextItemType)
     val th = TypeHierarchy.getInstance
     if (e != this) {
@@ -95,13 +92,14 @@ class BooleanExpression(p1: Expression, operator: Int, p2: Expression) extends B
         return forceToBoolean(operand0, th)
       }
     }
-    if (e == this && operator == Token.AND && operand1.isInstanceOf[UserFunctionCall] && 
-      th.isSubType(operand1.getItemType, AtomicType.BOOLEAN) && 
-      !visitor.isLoopingSubexpression(null)) {
-      val cond = Choose.makeConditional(operand0, operand1, Literal.makeLiteral(BooleanValue.FALSE))
-      ExpressionTool.copyLocationInfo(this, cond)
-      return cond
-    }
+//ORBEON unused UserFunctionCall
+//    if (e == this && operator == Token.AND && operand1.isInstanceOf[UserFunctionCall] &&
+//      th.isSubType(operand1.getItemType, AtomicType.BOOLEAN) &&
+//      !visitor.isLoopingSubexpression(null)) {
+//      val cond = Choose.makeConditional(operand0, operand1, Literal.makeLiteral(BooleanValue.FALSE))
+//      ExpressionTool.copyLocationInfo(this, cond)
+//      return cond
+//    }
     this
   }
 
@@ -116,14 +114,14 @@ class BooleanExpression(p1: Expression, operator: Int, p2: Expression) extends B
   /**
    * Evaluate the expression
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     BooleanValue.get(effectiveBooleanValue(context))
   }
 
   /**
    * Evaluate as a boolean.
    */
-  def effectiveBooleanValue(c: XPathContext): Boolean = operator match {
+  override def effectiveBooleanValue(c: XPathContext): Boolean = operator match {
     case Token.AND => operand0.effectiveBooleanValue(c) && operand1.effectiveBooleanValue(c)
     case Token.OR => operand0.effectiveBooleanValue(c) || operand1.effectiveBooleanValue(c)
     case _ => throw new UnsupportedOperationException("Unknown operator in boolean expression")

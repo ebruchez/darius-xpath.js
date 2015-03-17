@@ -1,27 +1,22 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.om.{Item, NodeInfo, SequenceIterator}
 import client.net.sf.saxon.ce.tree.iter.FocusIterator
-import client.net.sf.saxon.ce.value.BooleanValue
-import client.net.sf.saxon.ce.value.NumericValue
-import client.net.sf.saxon.ce.value.StringValue
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{BooleanValue, NumericValue, StringValue}
 
 /**
  * A FilterIterator filters an input sequence using a filter expression. Note that a FilterIterator
  * is not used where the filter is a constant number (PositionFilter is used for this purpose instead),
  * so this class does no optimizations for numeric predicates.
  */
-class FilterIterator(base: SequenceIterator, protected var filter: Expression, context: XPathContext)
+class FilterIterator(_base: SequenceIterator, protected var filter: Expression, context: XPathContext)
     extends SequenceIterator {
 
-  protected var base: FocusIterator = filterContext.setCurrentIterator(base)
-
   protected var filterContext: XPathContext = context.newMinorContext()
+  protected var base: FocusIterator = filterContext.setCurrentIterator(_base)
 
   /**
    * Get the next item if there is one
@@ -40,9 +35,10 @@ class FilterIterator(base: SequenceIterator, protected var filter: Expression, c
         return null
       }
       if (matches()) {
-        next
+        return next
       }
     }
+    throw new IllegalStateException
   }
 
   /**

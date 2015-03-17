@@ -1,8 +1,9 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.om
 
-import java.util._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.orbeon._
 
 /**
  * An object representing the collection of documents handled during
@@ -16,9 +17,9 @@ import scala.collection.JavaConversions._
  */
 class DocumentPool {
 
-  private var documentNameMap: Map[DocumentURI, DocumentInfo] = new HashMap[DocumentURI, DocumentInfo](10)
+  private val documentNameMap: Map[DocumentURI, DocumentInfo] = new HashMap[DocumentURI, DocumentInfo](10)
 
-  private var unavailableDocuments: Set[DocumentURI] = new HashSet[DocumentURI](10)
+  private val unavailableDocuments: Set[DocumentURI] = new HashSet[DocumentURI](10)
 
   /**
    * Add a document to the pool
@@ -67,7 +68,7 @@ class DocumentPool {
    * @return The uri of the document node, if present in the pool, or the systemId of the document node otherwise
    */
   def getDocumentURI(doc: NodeInfo): String = {
-    val iter = documentNameMap.keySet.iterator()
+    val iter = documentNameMap.keysIterator()
     while (iter.hasNext) {
       val uri = iter.next()
       if (find(uri).isSameNodeInfo(doc)) {
@@ -82,7 +83,7 @@ class DocumentPool {
    * @param doc the document being sought
    * @return true if the document is present, false otherwise
    */
-  def contains(doc: DocumentInfo): Boolean = documentNameMap.values.contains(doc)
+  def contains(doc: DocumentInfo): Boolean = documentNameMap.containsValue(doc)
 
   /**
    * Release a document from the document pool. This means that if the same document is
@@ -91,9 +92,7 @@ class DocumentPool {
    * @return the document supplied in the doc parameter
    */
   def discard(doc: DocumentInfo): DocumentInfo = {
-    for ((key, value) <- documentNameMap) {
-      val name = key
-      val entry = value
+    for ((name, entry) <- documentNameMap) {
       if (entry.isSameNodeInfo(doc)) {
         documentNameMap.remove(name)
         return doc

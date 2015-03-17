@@ -1,28 +1,24 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.FunctionCall
-import client.net.sf.saxon.ce.expr.XPathContext
+import client.net.sf.saxon.ce.expr.{Expression, XPathContext}
+import client.net.sf.saxon.ce.functions.Exists._
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.value.BooleanValue
-import Exists._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object Exists {
-
   val EXISTS = 2
-
   val EMPTY = 3
 }
 
 /**
  * Implementation of the fn:exists and fn:empty functions
  */
-class Exists(operation: Int) extends Aggregate {
+class Exists(_operation: Int) extends Aggregate {
 
-  this.operation = operation
+  this.operation = _operation
 
   def newInstance(): Exists = new Exists(operation)
 
@@ -39,14 +35,14 @@ class Exists(operation: Int) extends Aggregate {
   /**
    * Evaluate the function
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     BooleanValue.get(effectiveBooleanValue(context))
   }
 
   /**
    * Evaluate the function in a boolean context
    */
-  def effectiveBooleanValue(c: XPathContext): Boolean = {
+  override def effectiveBooleanValue(c: XPathContext): Boolean = {
     val next = argument(0).iterate(c).next()
     (if (operation == EXISTS) next != null else next == null)
   }

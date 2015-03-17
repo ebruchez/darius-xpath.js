@@ -1,6 +1,8 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.style
 
-import client.net.sf.saxon.ce.Configuration
 import client.net.sf.saxon.ce.LogController
 import client.net.sf.saxon.ce.expr._
 import client.net.sf.saxon.ce.expr.instruct._
@@ -9,6 +11,7 @@ import client.net.sf.saxon.ce.expr.sort.SortKeyDefinition
 import client.net.sf.saxon.ce.functions.Current
 import client.net.sf.saxon.ce.lib.NamespaceConstant
 import client.net.sf.saxon.ce.om._
+import client.net.sf.saxon.ce.orbeon.Configuration
 import client.net.sf.saxon.ce.pattern._
 import client.net.sf.saxon.ce.trace.Location
 import client.net.sf.saxon.ce.trace.XSLTTraceListener
@@ -768,7 +771,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
   /**
    * Get the default XPath namespace for elements and types
    * @return the default namespace for elements and types.
-   *         Return {@link NamespaceConstant#NULL} for the non-namespace
+   *         Return [[NamespaceConstant#NULL]] for the non-namespace
    */
   protected def getDefaultXPathNamespace(): String = {
     var anc = this

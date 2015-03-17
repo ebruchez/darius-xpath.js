@@ -1,11 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
 import client.net.sf.saxon.ce.value.AtomicValue
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * A NumericPromoter performs numeric promotion on each item in a supplied sequence.
@@ -17,7 +16,7 @@ abstract class NumericPromoter(exp: Expression) extends UnaryExpression(exp) {
    * Simplify an expression
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     operand = visitor.simplify(operand)
     this
   }
@@ -25,7 +24,7 @@ abstract class NumericPromoter(exp: Expression) extends UnaryExpression(exp) {
   /**
    * Iterate over the sequence of values
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val base = operand.iterate(context)
     val promoter = new ItemMappingFunction() {
 
@@ -39,7 +38,7 @@ abstract class NumericPromoter(exp: Expression) extends UnaryExpression(exp) {
   /**
    * Evaluate as an Item. This should only be called if the expression has cardinality zero-or-one
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val item = operand.evaluateItem(context)
     if (item == null) return null
     promote(item.asInstanceOf[AtomicValue])

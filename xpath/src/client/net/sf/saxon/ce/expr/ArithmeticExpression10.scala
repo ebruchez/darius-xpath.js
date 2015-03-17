@@ -1,20 +1,19 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType}
 import client.net.sf.saxon.ce.functions.NumberFn
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.Sequence
 import client.net.sf.saxon.ce.pattern.EmptySequenceTest
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.value._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * Arithmetic Expression: an expression using one of the operators
  * plus, minus, multiply, div, idiv, mod, in backwards
- * compatibility mode: see {@link ArithmeticExpression} for the non-backwards
+ * compatibility mode: see [[ArithmeticExpression]] for the non-backwards
  * compatible case.
  */
 class ArithmeticExpression10(p0: Expression, operator: Int, p1: Expression) extends BinaryExpression(p0, 
@@ -24,7 +23,7 @@ class ArithmeticExpression10(p0: Expression, operator: Int, p1: Expression) exte
    * Type-check the expression statically. We try to work out which particular
    * arithmetic function to use if the types of operands are known an compile time.
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val e2 = super.typeCheck(visitor, contextItemType)
     if (e2 != this) {
       return e2
@@ -60,7 +59,8 @@ class ArithmeticExpression10(p0: Expression, operator: Int, p1: Expression) exte
     this
   }
 
-  private def createConversionCode(operand: Expression): Expression = {
+  private def createConversionCode(_operand: Expression): Expression = {
+    var operand = _operand
     if (Cardinality.allowsMany(operand.getCardinality)) {
       val fie = new FirstItemExpression(operand)
       ExpressionTool.copyLocationInfo(this, fie)
@@ -77,7 +77,7 @@ class ArithmeticExpression10(p0: Expression, operator: Int, p1: Expression) exte
   /**
    * Evaluate the expression.
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     var v1 = operand0.evaluateItem(context).asInstanceOf[AtomicValue]
     v1 = convertOperand(v1)
     var v2 = operand1.evaluateItem(context).asInstanceOf[AtomicValue]

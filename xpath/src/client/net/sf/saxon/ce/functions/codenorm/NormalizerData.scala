@@ -1,10 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions.codenorm
 
+import client.net.sf.saxon.ce.functions.codenorm.NormalizerData._
+import client.net.sf.saxon.ce.orbeon.Map
 import client.net.sf.saxon.ce.tree.util.UTF16CharacterSet
-import java.util.Map
-import NormalizerData._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object NormalizerData {
 
@@ -14,9 +15,9 @@ object NormalizerData {
   val NOT_COMPOSITE = '￿'
 }
 
-class NormalizerData(var canonicalClass: Map[Integer, Integer], 
-    var decompose: Map[_,_], 
-    var compose: Map[Integer, Integer], 
+class NormalizerData(var canonicalClass: Map[Int, Integer],
+    var decompose: Map[Int, String],
+    var compose: Map[Int, Integer],
     var isCompatibility: BitSet, 
     var isExcluded: BitSet) {
 
@@ -79,5 +80,5 @@ class NormalizerData(var canonicalClass: Map[Integer, Integer],
   /**
    * Just accessible for testing.
    */
-  def getRawDecompositionMapping(ch: Char): String = decompose.get(ch).asInstanceOf[String]
+  def getRawDecompositionMapping(ch: Char): String = decompose.get(ch.toInt)
 }

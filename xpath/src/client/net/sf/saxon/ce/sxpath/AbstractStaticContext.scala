@@ -1,14 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.sxpath
 
-import client.net.sf.saxon.ce.Configuration
 import client.net.sf.saxon.ce.expr.StaticContext
-import client.net.sf.saxon.ce.functions.FunctionLibrary
-import client.net.sf.saxon.ce.functions.FunctionLibraryList
+import client.net.sf.saxon.ce.functions.{FunctionLibrary, FunctionLibraryList}
 import client.net.sf.saxon.ce.lib.NamespaceConstant
+import client.net.sf.saxon.ce.orbeon.Configuration
 import client.net.sf.saxon.ce.trans.DecimalFormatManager
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 /**
  * An abstract and configurable implementation of the StaticContext interface,

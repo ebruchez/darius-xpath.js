@@ -1,20 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.util
-
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object UTF16CharacterSet {
 
   val NONBMP_MIN = 0x10000
-
   val NONBMP_MAX = 0x10FFFF
-
   val SURROGATE1_MIN = 0xD800
-
   val SURROGATE1_MAX = 0xDBFF
-
   val SURROGATE2_MIN = 0xDC00
-
   val SURROGATE2_MAX = 0xDFFF
 
   /**
@@ -60,7 +55,7 @@ object UTF16CharacterSet {
    * @return true if the character is the first character in a surrogate pair
    */
   def isHighSurrogate(ch: Int): Boolean = {
-    (SURROGATE1_MIN <= ch && ch <= SURROGATE1_MAX)
+    SURROGATE1_MIN <= ch && ch <= SURROGATE1_MAX
   }
 
   /**
@@ -69,6 +64,6 @@ object UTF16CharacterSet {
    * @return true if the character is the second character in a surrogate pair
    */
   def isLowSurrogate(ch: Int): Boolean = {
-    (SURROGATE2_MIN <= ch && ch <= SURROGATE2_MAX)
+    SURROGATE2_MIN <= ch && ch <= SURROGATE2_MAX
   }
 }

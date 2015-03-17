@@ -1,16 +1,16 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
+import client.net.sf.saxon.ce.`type`._
 import client.net.sf.saxon.ce.functions.SystemFunction
-import client.net.sf.saxon.ce.om.Item
 import client.net.sf.saxon.ce.om.SequenceIterator
 import client.net.sf.saxon.ce.pattern.EmptySequenceTest
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`._
-import client.net.sf.saxon.ce.value.Cardinality
-import client.net.sf.saxon.ce.value.SequenceTool
-import client.net.sf.saxon.ce.value.SequenceType
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{Cardinality, SequenceTool, SequenceType}
+
+import scala.util.control.Breaks
 
 object TypeChecker {
 
@@ -197,9 +197,9 @@ object TypeChecker {
     if (!cardOK) {
       if (exp.isInstanceOf[Literal]) {
         val err = new XPathException("Required cardinality of " + role.getMessage + " is " + 
-          Cardinality toString reqCard + 
+          Cardinality.toString(reqCard) +
           "; supplied value has cardinality " + 
-          Cardinality toString suppliedCard, supplied.getSourceLocator)
+          Cardinality.toString(suppliedCard), supplied.getSourceLocator)
         err.setIsTypeError(true)
         err.setErrorCode(role.getErrorCode)
         throw err
@@ -224,15 +224,18 @@ object TypeChecker {
   def testConformance(iter: SequenceIterator, requiredType: SequenceType): String = {
     val reqItemType = requiredType.getPrimaryType
     var count = 0
-    while (true) {
-      val item = iter.next()
-      if (item == null) {
-        //break
-      }
-      count += 1
-      if (!reqItemType.matchesItem(item)) {
-        return ("Required type is " + reqItemType + "; supplied value includes an item of type " + 
-          SequenceTool.getItemType(item))
+    import Breaks._
+    breakable {
+      while (true) {
+        val item = iter.next()
+        if (item == null) {
+          break()
+        }
+        count += 1
+        if (!reqItemType.matchesItem(item)) {
+          return ("Required type is " + reqItemType + "; supplied value includes an item of type " +
+            SequenceTool.getItemType(item))
+        }
       }
     }
     val reqCardinality = requiredType.getCardinality

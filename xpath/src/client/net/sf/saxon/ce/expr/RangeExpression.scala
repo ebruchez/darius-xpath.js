@@ -1,16 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.tree.iter.SteppingIterator
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType}
+import client.net.sf.saxon.ce.expr.RangeExpression._
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
+import client.net.sf.saxon.ce.tree.iter.{EmptyIterator, SteppingIterator}
 import client.net.sf.saxon.ce.value._
-import RangeExpression._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object RangeExpression {
 
@@ -42,7 +39,7 @@ class RangeExpression(start: Expression, op: Int, end: Expression) extends Binar
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand0 = visitor.typeCheck(operand0, contextItemType)
     operand1 = visitor.typeCheck(operand1, contextItemType)
     val backCompat = visitor.getStaticContext.isInBackwardsCompatibleMode
@@ -53,7 +50,7 @@ class RangeExpression(start: Expression, op: Int, end: Expression) extends Binar
     this
   }
 
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand0 = visitor.optimize(operand0, contextItemType)
     operand1 = visitor.optimize(operand1, contextItemType)
     this
@@ -67,12 +64,12 @@ class RangeExpression(start: Expression, op: Int, end: Expression) extends Binar
   /**
    * Determine the static cardinality
    */
-  def computeCardinality(): Int = StaticProperty.ALLOWS_ZERO_OR_MORE
+  override def computeCardinality(): Int = StaticProperty.ALLOWS_ZERO_OR_MORE
 
   /**
    * Return an iteration over the sequence
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val av1 = operand0.evaluateItem(context).asInstanceOf[AtomicValue]
     if (av1 == null) {
       return EmptyIterator.getInstance

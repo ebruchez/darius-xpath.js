@@ -1,21 +1,19 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.NumericValue
-import Insert._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.functions.Insert._
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
+import client.net.sf.saxon.ce.value.{AtomicValue, NumericValue}
 
 object Insert {
 
-  class InsertIterator(var base: SequenceIterator, var insert: SequenceIterator, insertPosition: Int)
+  class InsertIterator(var base: SequenceIterator, var insert: SequenceIterator, _insertPosition: Int)
       extends SequenceIterator {
 
-    private var insertPosition: Int = (if (insertPosition < 1) 1 else insertPosition)
+    private val insertPosition: Int = if (_insertPosition < 1) 1 else _insertPosition
 
     private var position: Int = 0
 
@@ -74,7 +72,7 @@ class Insert extends SystemFunction {
   /**
    * Evaluate the function to return an iteration of selected nodes.
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val seq = argument(0).iterate(context)
     val n0 = argument(1).evaluateItem(context).asInstanceOf[AtomicValue]
     val n = n0.asInstanceOf[NumericValue]

@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
 import client.net.sf.saxon.ce.expr.XPathContext
@@ -93,7 +96,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    * @param second      the seconds value, 0-59
    * @param microsecond the number of microseconds, 0-999999
    * @param tz          the timezone displacement in minutes from UTC. Supply the value
-   *                    {@link CalendarValue#NO_TIMEZONE} if there is no timezone component.
+   *                    [[CalendarValue#NO_TIMEZONE]] if there is no timezone component.
    */
   def this(hour: Int, 
       minute: Int, 

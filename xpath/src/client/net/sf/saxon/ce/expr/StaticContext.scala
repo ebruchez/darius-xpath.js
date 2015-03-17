@@ -1,12 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.Configuration
 import client.net.sf.saxon.ce.functions.FunctionLibrary
-import client.net.sf.saxon.ce.om.NamespaceResolver
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.trans.XPathException
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.{NamespaceResolver, StructuredQName}
+import client.net.sf.saxon.ce.orbeon.Configuration
 
 /**
  * A StaticContext contains the information needed while an expression or pattern
@@ -41,7 +40,7 @@ trait StaticContext {
    * Bind a variable used in this element to the XSLVariable element in which it is declared
    * @param qName The name of the variable
    * @return an expression representing the variable reference, This will often be
-   * a {@link VariableReference}, suitably initialized to refer to the corresponding variable declaration,
+   * a [[VariableReference]], suitably initialized to refer to the corresponding variable declaration,
    * but in general it can be any expression.
    */
   def bindVariable(qName: StructuredQName): Expression

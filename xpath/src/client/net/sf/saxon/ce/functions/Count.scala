@@ -1,14 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.LastPositionFinder
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.expr.{LastPositionFinder, XPathContext}
+import client.net.sf.saxon.ce.functions.Count._
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
 import client.net.sf.saxon.ce.value._
-import Count._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object Count {
 
@@ -46,7 +44,7 @@ class Count extends Aggregate {
   /**
    * Evaluate the function
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val iter = argument(0).iterate(context)
     new IntegerValue(count(iter))
   }

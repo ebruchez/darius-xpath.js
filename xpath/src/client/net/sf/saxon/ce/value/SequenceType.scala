@@ -1,15 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import client.net.sf.saxon.ce.`type`.{AnyItemType, AtomicType, ItemType}
 import client.net.sf.saxon.ce.expr.StaticProperty
-import client.net.sf.saxon.ce.pattern.AnyNodeTest
-import client.net.sf.saxon.ce.pattern.EmptySequenceTest
-import client.net.sf.saxon.ce.`type`.AnyItemType
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import SequenceType._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.pattern.{AnyNodeTest, EmptySequenceTest}
+
+import scala.beans.BeanProperty
 
 object SequenceType {
 
@@ -92,11 +90,11 @@ object SequenceType {
  * is element or attribute, there may also be a content type, indicating the required type
  * annotation on the element or attribute content.
  */
-class SequenceType private (@BeanProperty var primaryType: ItemType, cardinality: Int)
+class SequenceType private (@BeanProperty var primaryType: ItemType, _cardinality: Int)
     {
 
   @BeanProperty
-  var cardinality: Int = if (primaryType.isInstanceOf[EmptySequenceTest]) StaticProperty.EMPTY else cardinality
+  var cardinality: Int = if (primaryType.isInstanceOf[EmptySequenceTest]) StaticProperty.EMPTY else _cardinality
 
   /**
    * Return a string representation of this SequenceType

@@ -1,16 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.Configuration
-import client.net.sf.saxon.ce.expr.instruct.Executable
+import client.net.sf.saxon.ce.`type`.ItemType
+import client.net.sf.saxon.ce.orbeon.{Configuration, Executable, Stack}
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.SourceLocator
-import client.net.sf.saxon.ce.`type`.ItemType
-import java.util.Iterator
-import java.util.Stack
-import ExpressionVisitor._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 object ExpressionVisitor {
 
@@ -35,7 +33,7 @@ object ExpressionVisitor {
  */
 class ExpressionVisitor {
 
-  private var stack: Stack[Expression] = new Stack[Expression]()
+  private val stack: Stack[Expression] = new Stack[Expression]()
 
   @BeanProperty
   var executable: Executable = _
@@ -153,7 +151,7 @@ class ExpressionVisitor {
         return false
       }
       val parent = stack.get(top - 1)
-      if (parent.hasLoopingSubexpression((stack.get(top)))) {
+      if (parent.hasLoopingSubexpression(stack.get(top))) {
         return true
       }
       if (parent == ancestor) {
@@ -161,6 +159,7 @@ class ExpressionVisitor {
       }
       top -= 1
     }
+    false
   }
 
   /**

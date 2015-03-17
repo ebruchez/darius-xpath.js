@@ -1,12 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.instruct
 
-import client.net.sf.saxon.ce.Configuration
 import client.net.sf.saxon.ce.expr.Expression
 import client.net.sf.saxon.ce.expr.ExpressionVisitor
 import client.net.sf.saxon.ce.expr.StaticProperty
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.functions.SystemFunction
 import client.net.sf.saxon.ce.om.StructuredQName
+import client.net.sf.saxon.ce.orbeon.Configuration
 import client.net.sf.saxon.ce.pattern.NodeKindTest
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`.ItemType

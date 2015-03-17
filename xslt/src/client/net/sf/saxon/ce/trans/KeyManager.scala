@@ -1,11 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.trans
 
-import client.net.sf.saxon.ce.Configuration
 import client.net.sf.saxon.ce.Controller
 import client.net.sf.saxon.ce.expr._
 import client.net.sf.saxon.ce.expr.sort.LocalOrderComparer
 import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.om._
+import client.net.sf.saxon.ce.orbeon.Configuration
 import client.net.sf.saxon.ce.pattern.Pattern
 import client.net.sf.saxon.ce.tree.iter.EmptyIterator
 import client.net.sf.saxon.ce.tree.iter.ListIterator

@@ -1,18 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.event.SequenceReceiver
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value._
-import client.net.sf.saxon.ce.value.StringValue
-import Literal._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.{Item, NodeInfo, Sequence, SequenceIterator}
+import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.value.{StringValue, _}
+
+import scala.beans.BeanProperty
 
 object Literal {
 
@@ -93,8 +89,8 @@ object Literal {
 }
 
 /**
- * A Literal is an expression whose value is constant: it is a class that implements the {@link Expression}
- * interface as a wrapper around a {@link client.net.sf.saxon.ce.value.SequenceTool}. This may derive from an actual literal in an XPath expression
+ * A Literal is an expression whose value is constant: it is a class that implements the [[Expression]]
+ * interface as a wrapper around a [[client.net.sf.saxon.ce.value.SequenceTool]]. This may derive from an actual literal in an XPath expression
  * or query, or it may be the result of evaluating a constant subexpression such as true() or xs:date('2007-01-16')
  */
 class Literal(@BeanProperty var value: Sequence) extends Expression {
@@ -103,13 +99,13 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
    * TypeCheck an expression
    * @return for a Value, this always returns the value unchanged
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
 
   /**
    * Optimize an expression
    * @return for a Value, this always returns the value unchanged
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
 
   /**
    * Determine the data type of the items in the expression, if possible
@@ -145,10 +141,10 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
 
   /**
    * Compute the static properties of this expression (other than its type). For a
-   * Value, the only special property is {@link StaticProperty#NON_CREATIVE}.
-   * @return the value {@link StaticProperty#NON_CREATIVE}
+   * Value, the only special property is [[StaticProperty.NON_CREATIVE]].
+   * @return the value [[StaticProperty.NON_CREATIVE]]
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     if (getValue.isInstanceOf[EmptySequence]) {
       return StaticProperty.SPECIAL_PROPERTY_MASK & ~StaticProperty.HAS_SIDE_EFFECTS
     }
@@ -168,7 +164,7 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
    * StaticProperty.CURRENT_NODE
    * @return for a Value, this always returns zero.
    */
-  def getDependencies(): Int = 0
+  override def getDependencies(): Int = 0
 
   /**
    * Return an Iterator to iterate over the values of a sequence. The value of every
@@ -184,14 +180,14 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
    *          if any dynamic error occurs evaluating the
    *          expression
    */
-  def iterate(context: XPathContext): SequenceIterator = value.iterate()
+  override def iterate(context: XPathContext): SequenceIterator = value.iterate()
 
   /**
    * Evaluate as a singleton item (or empty sequence). Note: this implementation returns
    * the first item in the sequence. The method should not be used unless appropriate type-checking
    * has been done to ensure that the value will be a singleton.
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     if (value.isInstanceOf[AtomicValue]) {
       return value.asInstanceOf[AtomicValue]
     }
@@ -203,17 +199,18 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
    * @param context The dynamic context, giving access to the current node,
    * the current variables, etc.
    */
-  def process(context: XPathContext) {
+  override def process(context: XPathContext) {
     val iter = value.iterate()
     val out = context.getReceiver
     while (true) {
       val it = iter.next()
-      if (it == null) //break
+      if (it == null)
+        return
       out.append(it, NodeInfo.ALL_NAMESPACES)
     }
   }
 
-  def evaluateAsString(context: XPathContext): CharSequence = {
+  override def evaluateAsString(context: XPathContext): CharSequence = {
     val value = evaluateItem(context).asInstanceOf[AtomicValue]
     if (value == null) return ""
     value.getStringValue
@@ -266,6 +263,7 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
           }
         }
       }
+      throw new IllegalStateException
     } catch {
       case err: XPathException => false
     }

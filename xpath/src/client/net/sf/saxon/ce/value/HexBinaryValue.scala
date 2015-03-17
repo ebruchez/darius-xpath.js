@@ -1,52 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
 import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import java.util.Arrays
-//remove if not needed
-import scala.collection.JavaConversions._
 
-/**
- * A value of type xs:hexBinary
- */
-class HexBinaryValue(in: CharSequence) extends AtomicValue {
-
-  private var binaryValue: Array[Byte] = new Array[Byte](s.length / 2)
-
-  val s = Whitespace.trimWhitespace(in)
-
-  if ((s.length & 1) != 0) {
-    val err = new XPathException("A hexBinary value must contain an even number of characters")
-    err.setErrorCode("FORG0001")
-    throw err
-  }
-
-  for (i <- 0 until binaryValue.length) {
-    binaryValue(i) = ((fromHex(s.charAt(2 * i)) << 4) + (fromHex(s.charAt(2 * i + 1)))).toByte
-  }
-
-  /**
-   * Constructor: create a hexBinary value from a given array of bytes
-   *
-   * @param value the value as an array of bytes
-   */
-  def this(value: Array[Byte]) {
-    this()
-    binaryValue = value
-  }
-
-  /**
-   * Determine the primitive type of the value. This delivers the same answer as
-   * getItemType().getPrimitiveItemType(). The primitive types are
-   * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
-   * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
-   */
-  def getItemType(): AtomicType = AtomicType.HEX_BINARY
-
+private object HexBinaryValue {
   /**
    * Decode a single hex digit
    *
@@ -54,7 +16,7 @@ class HexBinaryValue(in: CharSequence) extends AtomicValue {
    * @return the numeric value of the hex digit
    * @throws XPathException if it isn't a hex digit
    */
-  private def fromHex(c: Char): Int = {
+  def fromHex(c: Char): Int = {
     var d = "0123456789ABCDEFabcdef".indexOf(c)
     if (d > 15) {
       d = d - 6
@@ -66,6 +28,40 @@ class HexBinaryValue(in: CharSequence) extends AtomicValue {
     }
     d
   }
+}
+
+/**
+ * A value of type xs:hexBinary
+ */
+class HexBinaryValue(private val binaryValue: Array[Byte]) extends AtomicValue {
+
+  def this(in: CharSequence) =
+    this(
+      {
+        val s = Whitespace.trimWhitespace(in)
+        val binaryValue = Array.ofDim[Byte](s.length / 2)
+
+        if ((s.length & 1) != 0) {
+          val err = new XPathException("A hexBinary value must contain an even number of characters")
+          err.setErrorCode("FORG0001")
+          throw err
+        }
+
+        for (i <- 0 until binaryValue.length) {
+          binaryValue(i) = ((HexBinaryValue.fromHex(s.charAt(2 * i)) << 4) + (HexBinaryValue.fromHex(s.charAt(2 * i + 1)))).toByte
+        }
+
+        binaryValue
+      }
+    )
+
+  /**
+   * Determine the primitive type of the value. This delivers the same answer as
+   * getItemType().getPrimitiveItemType(). The primitive types are
+   * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
+   * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
+   */
+  def getItemType(): AtomicType = AtomicType.HEX_BINARY
 
   /**
    * Convert to target data type
@@ -126,7 +122,7 @@ class HexBinaryValue(in: CharSequence) extends AtomicValue {
    * Test if the two hexBinary or Base64Binaryvalues are equal.
    */
   override def equals(other: Any): Boolean = other match {
-    case other: HexBinaryValue => Arrays.==(binaryValue, other.binaryValue)
+    case other: HexBinaryValue => binaryValue.sameElements(other.binaryValue)
     case _ => false
   }
 

@@ -1,8 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
 import client.net.sf.saxon.ce.lib.StringCollator
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.orbeon.Util
 
 /**
  * A StringCollator that sorts lowercase before uppercase, or vice versa.
@@ -14,7 +16,7 @@ import scala.collection.JavaConversions._
  */
 class CaseFirstCollator(base: StringCollator, var upperFirst: Boolean) extends StringCollator {
 
-  private var baseCollator: StringCollator = base
+  private val baseCollator: StringCollator = base
 
   /**
    * Compare two string objects: case is irrelevant, unless the strings are equal ignoring
@@ -35,10 +37,10 @@ class CaseFirstCollator(base: StringCollator, var upperFirst: Boolean) extends S
         i += 1
         j += 1
       }
-      while (i < a.length && !Character.isLetter(a.charAt(i))) {
+      while (i < a.length && ! Util.isLetter(a.charAt(i))) {
         i += 1
       }
-      while (j < b.length && !Character.isLetter(b.charAt(j))) {
+      while (j < b.length && ! Util.isLetter(b.charAt(j))) {
         j += 1
       }
       if (i >= a.length) {
@@ -47,15 +49,18 @@ class CaseFirstCollator(base: StringCollator, var upperFirst: Boolean) extends S
       if (j >= b.length) {
         return 0
       }
-      val aFirst = (if (upperFirst) Character.isUpperCase(a.charAt(i += 1)) else Character.isLowerCase(a.charAt(i += 1)))
-      val bFirst = (if (upperFirst) Character.isUpperCase(b.charAt(j += 1)) else Character.isLowerCase(b.charAt(j += 1)))
+      val aFirst = if (upperFirst) Character.isUpperCase(a.charAt(i)) else Character.isLowerCase(a.charAt(i))
+      i += 1
+      val bFirst = if (upperFirst) Character.isUpperCase(b.charAt(j)) else Character.isLowerCase(b.charAt(j))
+      j += 1
       if (aFirst && !bFirst) {
         return -1
       }
       if (bFirst && !aFirst) {
-        +1
+        return +1
       }
     }
+    throw new IllegalStateException
   }
 
   /**

@@ -1,21 +1,19 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`.ItemType
+import client.net.sf.saxon.ce.expr.BinaryExpression._
+import client.net.sf.saxon.ce.orbeon.{ArrayList, Iterator, List}
+import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.value.Cardinality
-import java.util.ArrayList
-import java.util.Iterator
-import java.util.List
-import BinaryExpression._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object BinaryExpression {
 
   /**
    * Determine whether a binary operator is commutative, that is, A op B = B op A.
-   * @param operator the operator, for example {@link Token#PLUS}
+   * @param operator the operator, for example [[Token.PLUS]]
    * @return true if the operator is commutative
    */
   protected def isCommutative(operator: Int): Boolean = {
@@ -31,7 +29,7 @@ object BinaryExpression {
 
   /**
    * Determine whether an operator is associative, that is, ((a^b)^c) = (a^(b^c))
-   * @param operator the operator, for example {@link Token#PLUS}
+   * @param operator the operator, for example [[Token.PLUS]]
    * @return true if the operator is associative
    */
   protected def isAssociative(operator: Int): Boolean = {
@@ -59,16 +57,16 @@ object BinaryExpression {
 abstract class BinaryExpression(protected var operand0: Expression, protected var operator: Int, protected var operand1: Expression)
     extends Expression {
 
-  adoptChildExpression(p0)
+  adoptChildExpression(operand0)
 
-  adoptChildExpression(p1)
+  adoptChildExpression(operand1)
 
   /**
    * Simplify an expression
    * @return the simplified expression
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     operand0 = visitor.simplify(operand0)
     operand1 = visitor.simplify(operand1)
     this
@@ -78,7 +76,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
    * Type-check the expression. Default implementation for binary operators that accept
    * any kind of operand
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand0 = visitor.typeCheck(operand0, contextItemType)
     operand1 = visitor.typeCheck(operand1, contextItemType)
     this
@@ -94,12 +92,12 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand0 = visitor.optimize(operand0, contextItemType)
     operand1 = visitor.optimize(operand1, contextItemType)
     try {
@@ -108,7 +106,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
         return Literal.makeLiteral(v)
       }
     } catch {
-      case err: XPathException => 
+      case err: XPathException =>
     }
     this
   }
@@ -123,7 +121,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
    * @param flattened set to true if the result of the expression is atomized or otherwise turned into
    *                  an atomic value
    */
-  def setFlattened(flattened: Boolean) {
+  override def setFlattened(flattened: Boolean) {
     operand0.setFlattened(flattened)
     operand1.setFlattened(flattened)
   }
@@ -131,7 +129,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
   /**
    * Promote this expression if possible
    */
-  def promote(offer: PromotionOffer, parent: Expression): Expression = {
+  override def promote(offer: PromotionOffer, parent: Expression): Expression = {
     val exp = offer.accept(parent, this)
     if (exp != null) {
       exp
@@ -147,11 +145,11 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
   /**
    * Get the immediate subexpressions of this expression
    */
-  def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(operand0, operand1)
+  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(operand0, operand1)
 
   /**
    * Get the operator
-   * @return the operator, for example {@link Token#PLUS}
+   * @return the operator, for example [[Token.PLUS]]
    */
   def getOperator(): Int = operator
 
@@ -175,10 +173,10 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
 
   /**
    * Determine the special properties of this expression
-   * @return {@link StaticProperty#NON_CREATIVE}. This is overridden
+   * @return [[StaticProperty.NON_CREATIVE]]. This is overridden
    * for some subclasses.
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     val p = super.computeSpecialProperties()
     p | StaticProperty.NON_CREATIVE
   }
@@ -216,7 +214,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
    * @param list a list provided by the caller to contain the result
    * @return the list of expressions
    */
-  private def flattenExpression(list: List[_]): List[_] = {
+  private def flattenExpression(list: List[Expression]): List[Expression] = {
     if (operand0.isInstanceOf[BinaryExpression] && 
       operand0.asInstanceOf[BinaryExpression].operator == operator) {
       operand0.asInstanceOf[BinaryExpression].flattenExpression(list)

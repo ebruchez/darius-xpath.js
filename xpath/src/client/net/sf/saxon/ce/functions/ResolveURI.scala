@@ -1,16 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.ExpressionVisitor
-import client.net.sf.saxon.ce.expr.XPathContext
+import java.net.{URI, URISyntaxException}
+
+import client.net.sf.saxon.ce.expr.{ExpressionVisitor, XPathContext}
+import client.net.sf.saxon.ce.functions.ResolveURI._
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.URI
-import client.net.sf.saxon.ce.value.AnyURIValue
-import client.net.sf.saxon.ce.value.AtomicValue
-import ResolveURI._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.trans.{Err, XPathException}
+import client.net.sf.saxon.ce.value.{AnyURIValue, AtomicValue}
 
 object ResolveURI {
 
@@ -30,19 +29,20 @@ object ResolveURI {
    * <p>If no base URI is available, and the relative URI is not an absolute URI, then the current
    * directory is used as a base URI.</p>
    *
-   * @param relativeURI the relative URI. Null is permitted provided that the base URI is an absolute URI
-   * @param base        the base URI. Null is permitted provided that relativeURI is an absolute URI
+   * @param _relativeURI the relative URI. Null is permitted provided that the base URI is an absolute URI
+   * @param _base        the base URI. Null is permitted provided that relativeURI is an absolute URI
    * @return the absolutized URI
    * @throws java.net.URISyntaxException if either of the strings is not a valid URI or
    * if the resolution fails
    */
-  def makeAbsolute(relativeURI: String, base: String): URI = {
+  def makeAbsolute(_relativeURI: String, _base: String): URI = {
+    var relativeURI = _relativeURI
+    var base = _base
     var absoluteURI: URI = null
     if (relativeURI == null) {
-      absoluteURI = new URI(ResolveURI.escapeSpaces(base), true)
+      absoluteURI = new URI(ResolveURI.escapeSpaces(base))//ORBEON true
       if (!absoluteURI.isAbsolute) {
-        throw new URI.URISyntaxException(base + 
-          ": Relative URI not supplied, so base URI must be absolute")
+        throw new URISyntaxException(base, "Relative URI not supplied, so base URI must be absolute")
       } else {
         return absoluteURI
       }
@@ -50,7 +50,7 @@ object ResolveURI {
     relativeURI = ResolveURI.escapeSpaces(relativeURI)
     base = ResolveURI.escapeSpaces(base)
     if (base == null || base.length == 0) {
-      absoluteURI = new URI(relativeURI, true)
+      absoluteURI = new URI(relativeURI)//ORBEON true
       if (!absoluteURI.isAbsolute) {
         val expandedBase = ResolveURI.tryToExpand(base)
         if (expandedBase != base) {
@@ -67,7 +67,7 @@ object ResolveURI {
         }
         baseURI = new URI(base)
       }
-      new URI(relativeURI, true)
+      new URI(relativeURI)//ORBEON true
       absoluteURI = (if (relativeURI.length == 0) baseURI else baseURI.resolve(relativeURI))
     }
     absoluteURI
@@ -96,7 +96,7 @@ class ResolveURI extends SystemFunction {
 
   var expressionBaseURI: String = null
 
-  def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor) {
     if (expressionBaseURI == null) {
       super.checkArguments(visitor)
       expressionBaseURI = visitor.getStaticContext.getBaseURI
@@ -116,7 +116,7 @@ class ResolveURI extends SystemFunction {
   /**
    * Evaluate the function at run-time
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val arg0 = argument(0).evaluateItem(context).asInstanceOf[AtomicValue]
     if (arg0 == null) {
       return null
@@ -134,9 +134,9 @@ class ResolveURI extends SystemFunction {
       }
     }
     try {
-      val absoluteURI = new URI(base, true)
+      val absoluteURI = new URI(base)//ORBEON true
       if (!absoluteURI.isAbsolute) {
-        val relativeURI = new URI(relative, true)
+        val relativeURI = new URI(relative)//ORBEON true
         if (relativeURI.isAbsolute) {
           return new AnyURIValue(relative)
         }
@@ -146,7 +146,7 @@ class ResolveURI extends SystemFunction {
       val resolved = makeAbsolute(relative, base)
       new AnyURIValue(resolved.toString)
     } catch {
-      case err: URI.URISyntaxException => {
+      case err: URISyntaxException => {
         dynamicError(msgBase + Err.wrap(base) + " is invalid: " + err.getMessage, "FORG0002")
         null
       }

@@ -1,16 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
+import java.net.{URI, URISyntaxException}
+
 import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.expr.sort.CodepointCollator
-import client.net.sf.saxon.ce.expr.sort.GenericAtomicComparer
+import client.net.sf.saxon.ce.expr.sort.{CodepointCollator, GenericAtomicComparer}
 import client.net.sf.saxon.ce.lib.StringCollator
-import client.net.sf.saxon.ce.om.Sequence
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.URI
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.StringValue
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{AtomicValue, StringValue}
 
 abstract class CollatingFunction extends SystemFunction {
 
@@ -18,7 +17,7 @@ abstract class CollatingFunction extends SystemFunction {
 
   private var staticContext: StaticContext = null
 
-  def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor) {
     if (staticContext == null) {
       staticContext = visitor.getStaticContext
     }
@@ -52,7 +51,7 @@ abstract class CollatingFunction extends SystemFunction {
    * Get a GenericAtomicComparer that can be used to compare values. This method is called
    * at run time by subclasses to evaluate the parameter containing the collation name.
    * <p/>
-   * <p>The difference between this method and {@link #getCollator} is that a
+   * <p>The difference between this method and [[getCollator]] is that a
    * GenericAtomicComparer is capable of comparing values of any atomic type, not only
    * strings. It is therefore called by functions such as compare, deep-equal, index-of, and
    * min() and max() where the operands may include a mixture of strings and other types.</p>
@@ -69,7 +68,7 @@ abstract class CollatingFunction extends SystemFunction {
   /**
    * Get a collator suitable for comparing strings. Returns the collator specified in the
    * given function argument if present, otherwise returns the default collator. This method is
-   * called by subclasses at run time. It is used (in contrast to {@link #getAtomicComparer})
+   * called by subclasses at run time. It is used (in contrast to [[getAtomicComparer]])
    * when it is known that the values to be compared are always strings.
    *
    * @param arg     The argument position (counting from zero) that holds the collation
@@ -97,7 +96,7 @@ abstract class CollatingFunction extends SystemFunction {
   private def resolveCollationURI(collationName: String): String = {
     var collationURI: URI = null
     try {
-      collationURI = new URI(collationName, true)
+      collationURI = new URI(collationName)//ORBEON true
       if (!collationURI.isAbsolute) {
         val expressionBaseURI = staticContext.getBaseURI
         if (expressionBaseURI == null) {
@@ -113,7 +112,7 @@ abstract class CollatingFunction extends SystemFunction {
         collationName
       }
     } catch {
-      case e: URI.URISyntaxException => {
+      case e: URISyntaxException => {
         val err = new XPathException("Collation name '" + collationName + "' is not a valid URI")
         err.setErrorCode("FOCH0002")
         err.setLocator(this.getSourceLocator)

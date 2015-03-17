@@ -1,7 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.om
-
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * This interface represents a document node as defined in the XPath 2.0 data model.
@@ -12,7 +12,7 @@ import scala.collection.JavaConversions._
  * elements given their ID value, and one to locate unparsed entities. In addition,
  * document nodes have an important property that is not true of nodes in general:
  * two distinct Java DocumentInfo objects never represent the same document node.
- * So the Java "==" operator returns the same result as the {@link NodeInfo#isSameNodeInfo}
+ * So the Java "==" operator returns the same result as the [[NodeInfo.isSameNodeInfo]]
  * method.
  * <p>
  * This interface is part of the Saxon public API, and as such (from Saxon8.4 onwards)
@@ -37,7 +37,7 @@ trait DocumentInfo extends NodeInfo {
 
   /**
    * Set user data on the document node. The user data can be retrieved subsequently
-   * using {@link #getUserData}
+   * using [[getUserData]]
    * @param key A string giving the name of the property to be set. Clients are responsible
    * for choosing a key that is likely to be unique. Must not be null.
    * @param value The value to be set for the property. May be null, which effectively
@@ -47,7 +47,7 @@ trait DocumentInfo extends NodeInfo {
 
   /**
    * Get user data held in the document node. This retrieves properties previously set using
-   * {@link #setUserData}
+   * [[setUserData]]
    * @param key A string giving the name of the property to be retrieved.
    * @return the value of the property, or null if the property has not been defined.
    */

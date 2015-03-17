@@ -1,26 +1,17 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType, Type}
 import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.expr.sort.DocumentOrderIterator
-import client.net.sf.saxon.ce.expr.sort.LocalOrderComparer
-import client.net.sf.saxon.ce.om.DocumentInfo
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.expr.sort.{DocumentOrderIterator, LocalOrderComparer}
+import client.net.sf.saxon.ce.functions.Id._
+import client.net.sf.saxon.ce.om.{DocumentInfo, Item, NodeInfo, SequenceIterator}
+import client.net.sf.saxon.ce.orbeon.ArrayList
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.ListIterator
-import client.net.sf.saxon.ce.tree.iter.SingletonIterator
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.StringValue
-import client.net.sf.saxon.ce.value.Whitespace
-import java.util.ArrayList
-import java.util.List
-import Id._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.tree.iter.{ListIterator, SingletonIterator}
+import client.net.sf.saxon.ce.value.{AtomicValue, StringValue, Whitespace}
 
 object Id {
 
@@ -65,7 +56,7 @@ class Id extends SystemFunction {
    * Simplify: add a second implicit argument, the context document
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     val id = super.simplify(visitor).asInstanceOf[Id]
     if (argument.length == 1) {
       id.addContextDocumentArgument(1, getFunctionName.getLocalName)
@@ -78,7 +69,7 @@ class Id extends SystemFunction {
    * if all the arguments are constant; functions that do not require this behavior
    * can override the preEvaluate method.
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     if (argument(1).isInstanceOf[RootExpression] && contextItemType != null && 
       contextItemType.isInstanceOf[AtomicType]) {
       typeError(getFunctionName.getLocalName + 
@@ -90,7 +81,7 @@ class Id extends SystemFunction {
   /**
    * Static analysis: prevent sorting of the argument
    */
-  def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor) {
     super.checkArguments(visitor)
     argument(0) = ExpressionTool.unsorted(visitor.getConfiguration, argument(0), false)
   }
@@ -99,14 +90,14 @@ class Id extends SystemFunction {
    * preEvaluate: this method suppresses compile-time evaluation by doing nothing
    * @param visitor an expression visitor
    */
-  def preEvaluate(visitor: ExpressionVisitor): Expression = this
+  override def preEvaluate(visitor: ExpressionVisitor): Expression = this
 
   /**
    * Get the static properties of this expression (other than its type). The result is
    * bit-signficant. These properties are used for optimizations. In general, if
    * property bit is set, it is true, but if it is unset, the value is unknown.
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     var prop = StaticProperty.ORDERED_NODESET | StaticProperty.SINGLE_DOCUMENT_NODESET | 
       StaticProperty.NON_CREATIVE
     if ((getNumberOfArguments == 1) || 
@@ -120,7 +111,7 @@ class Id extends SystemFunction {
   /**
    * Evaluate the function to return an iteration of selected nodes.
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     var arg1: NodeInfo = null
     try {
       arg1 = argument(1).evaluateItem(context).asInstanceOf[NodeInfo]

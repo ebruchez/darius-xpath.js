@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
 import client.net.sf.saxon.ce.expr.XPathContext
@@ -197,7 +200,7 @@ class DateValue private () extends GDateValue with Comparable[_] {
    * @param month The month, 1-12
    * @param day   The day, 1-31
    * @param tz    the timezone displacement in minutes from UTC. Supply the value
-   *              {@link CalendarValue#NO_TIMEZONE} if there is no timezone component.
+   *              [[CalendarValue#NO_TIMEZONE]] if there is no timezone component.
    */
   def this(year: Int, 
       month: Int, 

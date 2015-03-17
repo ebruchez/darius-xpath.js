@@ -1,12 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.om
 
 import client.net.sf.saxon.ce.lib.NamespaceConstant
+import client.net.sf.saxon.ce.om.StructuredQName._
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.value.Whitespace
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import StructuredQName._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.Whitespace
 
 object StructuredQName {
 
@@ -80,28 +81,22 @@ object StructuredQName {
  *
  * <p><i>Instances of this class are immutable.</i></p>
  */
-class StructuredQName(prefix: String, uri: String, localName: String) extends Comparable[StructuredQName] {
-
-  private var content: Array[Char] = new Array[Char](ulen + llen + plen)
-
-  private var localNameStart: Int = _
-
-  private var prefixStart: Int = ulen + llen
+class StructuredQName(prefix: String, var uri: String, localName: String) extends Comparable[StructuredQName] {
 
   if (uri == null) {
     uri = ""
   }
 
   val plen = prefix.length
-
   val ulen = uri.length
-
   val llen = localName.length
 
+  private val content = new Array[Char](ulen + llen + plen)
+  private var localNameStart = ulen
+  private var prefixStart = ulen + llen
+
   uri.getChars(0, ulen, content, 0)
-
   localName.getChars(0, llen, content, ulen)
-
   prefix.getChars(0, plen, content, ulen + llen)
 
   /**
@@ -212,8 +207,8 @@ class StructuredQName(prefix: String, uri: String, localName: String) extends Co
    * Compare QNames alphabetically. Used to establish document order for attribute nodes
    */
   def compareTo(other: StructuredQName): Int = {
-    (0 until prefixStart).find(content(_) != other.content(_))
-      .map((if (content(_) < other.content(_)) -1 else +1))
+    (0 until prefixStart).find(i => content(i) != other.content(i))
+      .map(i => if (content(i) < other.content(i)) -1 else +1)
       .getOrElse(0)
   }
 }

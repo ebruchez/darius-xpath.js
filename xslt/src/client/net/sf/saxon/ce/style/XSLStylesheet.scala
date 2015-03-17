@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.style
 
 import client.net.sf.saxon.ce.expr.Expression
@@ -89,7 +92,7 @@ class XSLStylesheet extends StyleElement {
   /**
    * Get the value of the input-type-annotations attribute, for this module alone.
    * The value is an or-ed combination of the two bits
-   * {@link #ANNOTATION_STRIP} and {@link #ANNOTATION_PRESERVE}
+   * [[#ANNOTATION_STRIP]] and [[#ANNOTATION_PRESERVE]]
    * @return the value if the input-type-annotations attribute in this stylesheet module
    */
   def getInputTypeAnnotationsAttribute(): Int = {

@@ -1,13 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.value.DoubleValue
-import client.net.sf.saxon.ce.value.StringValue
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{DoubleValue, StringValue}
 
 /**
  * This class implements the XPath substring() function
@@ -19,7 +18,7 @@ class Substring extends SystemFunction {
   /**
    * Evaluate the function
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val sv = argument(0).evaluateItem(context).asInstanceOf[StringValue]
     if (sv == null) {
       return StringValue.EMPTY_STRING
@@ -41,14 +40,16 @@ class Substring extends SystemFunction {
     }
     val sb = new FastStringBuffer(length.toInt)
     var i = 0
-    val pos = 0
+    var pos = 0
     while (i < start - 1 && pos < str.length) {
-      val c = str.charAt(pos += 1).toInt
+      val c = str.charAt(pos).toInt
+      pos += 1
       if (c < 55296 || c > 56319) i += 1
     }
     var j = 0
     while (j < length && pos < str.length) {
-      val c = str.charAt(pos += 1)
+      val c = str.charAt(pos)
+      pos += 1
       sb.append(c)
       if (c.toInt < 55296 || c.toInt > 56319) j += 1
     }

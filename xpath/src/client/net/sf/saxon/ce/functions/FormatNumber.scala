@@ -1,19 +1,17 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.trans.DecimalFormatManager
-import client.net.sf.saxon.ce.trans.DecimalSymbols
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.value._
-import client.net.sf.saxon.ce.value.StringValue
 import java.math.BigDecimal
-import java.util.ArrayList
-import FormatNumber._
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import client.net.sf.saxon.ce.expr._
+import client.net.sf.saxon.ce.functions.FormatNumber._
+import client.net.sf.saxon.ce.om.{Item, StructuredQName}
+import client.net.sf.saxon.ce.orbeon.ArrayList
+import client.net.sf.saxon.ce.trans.{DecimalSymbols, XPathException}
+import client.net.sf.saxon.ce.tree.util.FastStringBuffer
+import client.net.sf.saxon.ce.value.{StringValue, _}
 
 object FormatNumber {
 
@@ -155,7 +153,7 @@ object FormatNumber {
         }
       }
     }
-    if (trial != null && 
+    if (trial != null &&
       (if (precision == 1) trial.floatValue() == value else trial.doubleValue() == value)) {
       trial
     } else {
@@ -200,9 +198,9 @@ object FormatNumber {
 
     val zeroDigit = dfs.zeroDigit
 
-    var wholePartPositions: ArrayList[Integer] = null
+    var wholePartPositions: ArrayList[Int] = null
 
-    var fractionalPartPositions: ArrayList[Integer] = null
+    var fractionalPartPositions: ArrayList[Int] = null
 
     var foundDigit = false
 
@@ -228,36 +226,36 @@ object FormatNumber {
         isPerMille = (c == perMilleSign)
         phase match {
           case 0 => prefix += unicodeChar(c)
-          case 1 | 2 | 3 | 4 | 5 => 
+          case 1 | 2 | 3 | 4 | 5 =>
             phase = 5
             suffix += unicodeChar(c)
 
         }
       } else if (c == digitSign) phase match {
-        case 0 | 1 => 
+        case 0 | 1 =>
           phase = 1
           maxWholePartSize += 1
 
         case 2 => grumble("Digit sign must not appear after a zero-digit sign in the integer part of a sub-picture")
-        case 3 | 4 => 
+        case 3 | 4 =>
           phase = 4
           maxFractionPartSize += 1
 
         case 5 => grumble("Passive character must not appear between active characters in a sub-picture")
       } else if (c == zeroDigit) phase match {
-        case 0 | 1 | 2 => 
+        case 0 | 1 | 2 =>
           phase = 2
           minWholePartSize += 1
           maxWholePartSize += 1
 
-        case 3 => 
+        case 3 =>
           minFractionPartSize += 1
           maxFractionPartSize += 1
 
         case 4 => grumble("Zero digit sign must not appear after a digit sign in the fractional part of a sub-picture")
         case 5 => grumble("Passive character must not appear between active characters in a sub-picture")
       } else if (c == decimalSeparator) phase match {
-        case 0 | 1 | 2 => 
+        case 0 | 1 | 2 =>
           phase = 3
           foundDecimalSeparator = true
 
@@ -267,25 +265,25 @@ object FormatNumber {
           grumble("Decimal separator cannot come after a character in the suffix")
         }
       } else if (c == groupingSeparator) phase match {
-        case 0 | 1 | 2 => 
+        case 0 | 1 | 2 =>
           if (wholePartPositions == null) {
-            wholePartPositions = new ArrayList[Integer](3)
+            wholePartPositions = new ArrayList[Int](3)
           }
           wholePartPositions.add(maxWholePartSize)
 
-        case 3 | 4 => 
+        case 3 | 4 =>
           if (maxFractionPartSize == 0) {
             grumble("Grouping separator cannot be adjacent to decimal separator")
           }
           if (fractionalPartPositions == null) {
-            fractionalPartPositions = new ArrayList[Integer](3)
+            fractionalPartPositions = new ArrayList[Int](3)
           }
           fractionalPartPositions.add(maxFractionPartSize)
 
         case 5 => grumble("Grouping separator found in suffix of sub-picture")
       } else phase match {
         case 0 => prefix += unicodeChar(c)
-        case 1 | 2 | 3 | 4 | 5 => 
+        case 1 | 2 | 3 | 4 | 5 =>
           phase = 5
           suffix += unicodeChar(c)
 
@@ -300,7 +298,7 @@ object FormatNumber {
       val n = wholePartPositions.size
       wholePartGroupingPositions = Array.ofDim[Int](n)
       for (i <- 0 until n) {
-        wholePartGroupingPositions(i) = maxWholePartSize - 
+        wholePartGroupingPositions(i) = maxWholePartSize -
           wholePartPositions.get(n - i - 1).asInstanceOf[java.lang.Integer]
       }
       if (n > 1) {
@@ -331,17 +329,17 @@ object FormatNumber {
     /**
      * Format a number using this sub-picture
      *
-     * @param value     the absolute value of the number to be formatted
+     * @param _value     the absolute value of the number to be formatted
      * @param dfs       the decimal format symbols to be used
      * @param minusSign the representation of a minus sign to be used
      * @return the formatted number
      */
-    def format(value: NumericValue, dfs: DecimalSymbols, minusSign: String): CharSequence = {
+    def format(_value: NumericValue, dfs: DecimalSymbols, minusSign: String): CharSequence = {
+      var value = _value
       if (value.isNaN) {
         return dfs.NaN
       }
-      if ((value.isInstanceOf[DoubleValue] || value.isInstanceOf[FloatValue]) && 
-        Double.isInfinite(value.getDoubleValue)) {
+      if ((value.isInstanceOf[DoubleValue] || value.isInstanceOf[FloatValue]) && value.getDoubleValue.isInfinite) {
         return minusSign + prefix + dfs.infinity + suffix
       }
       var multiplier = 1
@@ -391,14 +389,16 @@ object FormatNumber {
           val g = wholePartGroupingPositions(0)
           var p = point - g
           while (p > 0) {
-            ib = insert(ib, ibused += 1, dfs.groupingSeparator, p)
+            ib = insert(ib, ibused, dfs.groupingSeparator, p)
+            ibused += 1
             p -= g
           }
         } else {
           for (wholePartGroupingPosition <- wholePartGroupingPositions) {
             val p = point - wholePartGroupingPosition
             if (p > 0) {
-              ib = insert(ib, ibused += 1, dfs.groupingSeparator, p)
+              ib = insert(ib, ibused, dfs.groupingSeparator, p)
+              ibused += 1
             }
           }
         }
@@ -407,7 +407,8 @@ object FormatNumber {
         for (i <- 0 until fractionalPartGroupingPositions.length) {
           val p = point + 1 + fractionalPartGroupingPositions(i) + i
           if (p < ibused - 1) {
-            ib = insert(ib, ibused += 1, dfs.groupingSeparator, p)
+            ib = insert(ib, ibused, dfs.groupingSeparator, p)
+            ibused += 1
           } else {
             //break
           }
@@ -424,11 +425,11 @@ object FormatNumber {
     /**
      * Format a number supplied as a decimal
      *
-     * @param dval the decimal value
+     * @param _dval the decimal value
      * @param fsb  the FastStringBuffer to contain the result
      */
-    private def formatDecimal(dval: BigDecimal, fsb: FastStringBuffer) {
-      dval = dval.setScale(maxFractionPartSize, BigDecimal.ROUND_HALF_EVEN)
+    private def formatDecimal(_dval: BigDecimal, fsb: FastStringBuffer) {
+      val dval = _dval.setScale(maxFractionPartSize, BigDecimal.ROUND_HALF_EVEN)
       DecimalValue.decimalToString(dval, fsb)
       val point = fsb.indexOf('.')
       var intDigits: Int = 0
@@ -498,16 +499,17 @@ object FormatNumber {
   /**
    * Insert an integer into an array of integers. This may or may not modify the supplied array.
    *
-   * @param array    the initial array
+   * @param _array    the initial array
    * @param used     the number of items in the initial array that are used
    * @param value    the integer to be inserted
    * @param position the position of the new integer in the final array
    * @return the new array, with the new integer inserted
    */
-  private def insert(array: Array[Int], 
-      used: Int, 
-      value: Int, 
+  private def insert(_array: Array[Int],
+      used: Int,
+      value: Int,
       position: Int): Array[Int] = {
+    var array = _array
     if (used + 1 > array.length) {
       val a2 = Array.ofDim[Int](used + 10)
       System.arraycopy(array, 0, a2, 0, used)
@@ -528,7 +530,7 @@ class FormatNumber extends SystemFunction {
 
   private var staticContext: StaticContext = _
 
-  def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor) {
     if (staticContext == null) {
       staticContext = visitor.getStaticContext
     }
@@ -540,12 +542,12 @@ class FormatNumber extends SystemFunction {
    *
    * @param visitor the expression visitor
    */
-  def preEvaluate(visitor: ExpressionVisitor): Expression = this
+  override def preEvaluate(visitor: ExpressionVisitor): Expression = this
 
   /**
    * Evaluate in a context where a string is wanted
    */
-  def evaluateAsString(context: XPathContext): CharSequence = {
+  override def evaluateAsString(context: XPathContext): CharSequence = {
     val numArgs = argument.length
     var av0 = argument(0).evaluateItem(context).asInstanceOf[AtomicValue]
     if (av0 == null) {
@@ -566,7 +568,7 @@ class FormatNumber extends SystemFunction {
       }
       dfs = dfm.getNamedDecimalFormat(qName)
       if (dfs == null) {
-        dynamicError("format-number function: decimal-format '" + lexicalName + 
+        dynamicError("format-number function: decimal-format '" + lexicalName +
           "' is not defined", "XTDE1280")
       }
     }
@@ -578,5 +580,5 @@ class FormatNumber extends SystemFunction {
   /**
    * Evaluate in a general context
    */
-  def evaluateItem(c: XPathContext): Item = new StringValue(evaluateAsString(c))
+  override def evaluateItem(c: XPathContext): Item = new StringValue(evaluateAsString(c))
 }

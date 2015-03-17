@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.instruct
 
 import client.net.sf.saxon.ce.expr.Expression
@@ -18,7 +21,7 @@ import scala.collection.JavaConversions._
  *
  * <p>This is used only for parameters to XSLT templates. For function calls, the caller of the function
  * places supplied arguments onto the callee's stackframe and the callee does not need to do anything.
- * Global parameters (XQuery external variables) are handled using {@link GlobalParam}.</p>
+ * Global parameters (XQuery external variables) are handled using [[GlobalParam]].</p>
  *
  */
 class LocalParam extends GeneralVariable {

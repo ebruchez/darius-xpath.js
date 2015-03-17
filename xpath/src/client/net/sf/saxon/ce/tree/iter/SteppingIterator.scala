@@ -1,9 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.iter
 
 import client.net.sf.saxon.ce.om.Item
-import SteppingIterator._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.tree.iter.SteppingIterator._
 
 object SteppingIterator {
 
@@ -36,7 +37,7 @@ object SteppingIterator {
 class SteppingIterator(var origin: Item, var function: SteppingFunction, var includeSelf: Boolean)
     extends UnfailingIterator {
 
-  private var next: Item = origin
+  private var _next: Item = origin
 
   if (!includeSelf || !function.conforms(origin)) {
     advance()
@@ -47,18 +48,18 @@ class SteppingIterator(var origin: Item, var function: SteppingFunction, var inc
    */
   protected def advance() {
     do {
-      next = function.step(next)
-    } while (next != null && !function.conforms(next));
+      _next = function.step(_next)
+    } while (_next != null && !function.conforms(_next))
   }
 
   /**
    * Return the next node in the iteration
    */
   def next(): Item = {
-    if (next == null) {
+    if (_next == null) {
       null
     } else {
-      val curr = next
+      val curr = _next
       advance()
       curr
     }

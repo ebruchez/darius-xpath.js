@@ -1,11 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.z
 
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
 import java.io.Serializable
-import java.util.Arrays
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import client.net.sf.saxon.ce.tree.util.FastStringBuffer
+
+import scala.beans.BeanProperty
 
 /**
  * Set of int values. This implementation of IntSet uses a sorted array
@@ -23,7 +25,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
 
   private var used: Int = 0
 
-  private var hashCode: Int = -1
+  private var _hashCode: Int = -1
 
   var size: Int = 0
 
@@ -38,7 +40,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
     used = input.used
     System.arraycopy(input.startPoints, 0, startPoints, 0, used)
     System.arraycopy(input.endPoints, 0, endPoints, 0, used)
-    hashCode = input.hashCode
+    _hashCode = input._hashCode
   }
 
   /**
@@ -67,7 +69,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
     startPoints = Array.ofDim[Int](4)
     endPoints = Array.ofDim[Int](4)
     used = 0
-    hashCode = -1
+    _hashCode = -1
   }
 
   def copy(): IntSet = {
@@ -120,7 +122,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
    * @return true if the integer was added, false if it was already present
    */
   def add(value: Int): Boolean = {
-    hashCode = -1
+    _hashCode = -1
     if (used == 0) {
       ensureCapacity(1)
       startPoints(used - 1) = value
@@ -239,12 +241,10 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
    * IntRangeSet values are <b>NOT</b> comparable with other implementations of IntSet
    */
   override def equals(other: Any): Boolean = other match {
-    case other: IntSet => if (other.isInstanceOf[IntRangeSet]) {
-      used == other.used && Arrays.==(startPoints, other.startPoints) && 
-        Arrays.==(endPoints, other.endPoints)
-    } else {
+    case other: IntRangeSet =>
+      used == other.used && startPoints.sameElements(other.startPoints) && endPoints.sameElements(other.endPoints)
+    case other: IntSet =>
       containsAll(other)
-    }
     case _ => false
   }
 
@@ -252,14 +252,14 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
    * Construct a hash key that supports the equals() test
    */
   override def hashCode(): Int = {
-    if (hashCode == -1) {
+    if (_hashCode == -1) {
       var h = 0x836a89f1
       for (i <- 0 until used) {
         h ^= startPoints(i) + (endPoints(i) << 3)
       }
-      hashCode = h
+      _hashCode = h
     }
-    hashCode
+    _hashCode
   }
 
   /**
@@ -274,7 +274,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
       add(low)
       return
     }
-    hashCode = -1
+    _hashCode = -1
     if (used == 0) {
       ensureCapacity(1)
       startPoints(used - 1) = low

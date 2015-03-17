@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.iter
 
 import client.net.sf.saxon.ce.expr.LastPositionFinder
@@ -21,7 +24,7 @@ class ListIterator(var list: List[_ <: Item]) extends UnfailingIterator with Las
   /**
    * Create a ListIterator over the leading part of a given List
    *
-   * @param list   the list: all objects in the list must be instances of {@link Item}
+   * @param list   the list: all objects in the list must be instances of [[Item]]
    * @param length the number of items to be included
    */
   def this(list: List[_], length: Int) {

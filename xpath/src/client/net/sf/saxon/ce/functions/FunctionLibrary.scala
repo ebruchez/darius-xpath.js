@@ -1,19 +1,17 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.Container
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.StaticContext
+import client.net.sf.saxon.ce.expr.{Container, Expression, StaticContext}
 import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.trans.XPathException
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * A FunctionLibrary handles the binding of function calls in XPath (or XQuery) expressions.
  * There are a number of implementations of this
  * class to handle different kinds of function: system functions, constructor functions, vendor-defined
  * functions, Java extension functions, stylesheet functions, and so on. There is also an implementation
- * {@link client.net.sf.saxon.ce.functions.FunctionLibraryList} that allows a FunctionLibrary
+ * [[client.net.sf.saxon.ce.functions.FunctionLibraryList]] that allows a FunctionLibrary
  * to be constructed by combining other FunctionLibrary objects.
  */
 trait FunctionLibrary {

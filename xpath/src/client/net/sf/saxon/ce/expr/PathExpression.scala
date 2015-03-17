@@ -1,34 +1,28 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.Configuration
+import client.net.sf.saxon.ce.`type`.{ItemType, TypeHierarchy}
+import client.net.sf.saxon.ce.expr.PathExpression._
 import client.net.sf.saxon.ce.expr.sort.DocumentSorter
 import client.net.sf.saxon.ce.functions.SystemFunction
-import client.net.sf.saxon.ce.om.Axis
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.pattern.AnyNodeTest
-import client.net.sf.saxon.ce.pattern.NodeKindTest
-import client.net.sf.saxon.ce.pattern.NodeTest
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
-import client.net.sf.saxon.ce.value.Cardinality
-import client.net.sf.saxon.ce.value.EmptySequence
-import client.net.sf.saxon.ce.value.SequenceType
-import java.util.Stack
-import PathExpression._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.{Axis, SequenceIterator}
+import client.net.sf.saxon.ce.orbeon.Stack
+import client.net.sf.saxon.ce.pattern.{AnyNodeTest, NodeKindTest}
+import client.net.sf.saxon.ce.value.{Cardinality, EmptySequence, SequenceType}
 
 object PathExpression {
 
   /**
    * Determine whether an expression is an
    * axis step with optional filter predicates.
-   * @param exp the expression to be examined
+   * @param _exp the expression to be examined
    * @return true if the supplied expression is an AxisExpression, or an AxisExpression wrapped by one
    *         or more filter expressions
    */
-  private def isFilteredAxisPath(exp: Expression): Boolean = {
+  private def isFilteredAxisPath(_exp: Expression): Boolean = {
+    var exp = _exp
     if (exp.isInstanceOf[AxisExpression]) {
       true
     } else {
@@ -55,7 +49,7 @@ object PathExpression {
  */
 class PathExpression(start: Expression, step: Expression) extends SlashExpression(start, step) with ContextMappingFunction {
 
-  @transient private var state: Int = 0
+  private var state: Int = 0
 
   if (step.isInstanceOf[PathExpression]) {
     val stepPath = step.asInstanceOf[PathExpression]
@@ -66,7 +60,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
     }
   }
 
-  def isHybrid(): Boolean = false
+  override def isHybrid(): Boolean = false
 
   /**
    * Add a document sorting node to the expression tree, if needed
@@ -87,7 +81,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
    * @param visitor the expression visitor
    * @return the simplified expression
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     if (state > 0) {
       return this
     }
@@ -144,12 +138,12 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
     }
     val underlyingAxis = underlyingStep.asInstanceOf[AxisExpression]
     if (underlyingAxis.getAxis == Axis.CHILD) {
-      var newStep = new AxisExpression(Axis.DESCENDANT, underlyingStep.asInstanceOf[AxisExpression].getNodeTest)
+      var newStep: Expression = new AxisExpression(Axis.DESCENDANT, underlyingStep.asInstanceOf[AxisExpression].getNodeTest)
       ExpressionTool.copyLocationInfo(this, newStep)
       underlyingStep = step
       val filters = new Stack[Expression]()
       while (underlyingStep.isInstanceOf[FilterExpression]) {
-        filters.add(underlyingStep.asInstanceOf[FilterExpression].getFilter)
+        filters.push(underlyingStep.asInstanceOf[FilterExpression].getFilter)
         underlyingStep = underlyingStep.asInstanceOf[FilterExpression].getControllingExpression
       }
       while (!filters.isEmpty) {
@@ -173,7 +167,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
   /**
    * Perform type analysis
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val th = TypeHierarchy.getInstance
     if (state >= 2) {
       setStartExpression(visitor.typeCheck(start, contextItemType))
@@ -209,7 +203,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
   /**
    * Optimize the expression and perform type analysis
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val th = TypeHierarchy.getInstance
     if (state >= 3) {
       setStartExpression(visitor.optimize(start, contextItemType))
@@ -236,7 +230,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
   /**
    * Promote this expression if possible
    */
-  def promote(offer: PromotionOffer, parent: Expression): Expression = {
+  override def promote(offer: PromotionOffer, parent: Expression): Expression = {
     val p = this
     val exp = offer.accept(parent, p)
     if (exp != null) {
@@ -255,7 +249,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
    * bit-signficant. These properties are used for optimizations. In general, if
    * property bit is set, it is true, but if it is unset, the value is unknown.
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     var startProperties = start.getSpecialProperties
     var stepProperties = step.getSpecialProperties
     var p = 0
@@ -376,7 +370,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
    * Iterate the path-expression in a given context
    * @param context the evaluation context
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val master = start.iterate(context)
     val context2 = context.newMinorContext()
     context2.setCurrentIterator(master)

@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
 import client.net.sf.saxon.ce.functions.Component
@@ -20,7 +23,7 @@ object DurationValue {
    * ISO 8601 format [-]PnYnMnDTnHnMnS
    *
    * @param s a string in the lexical space of xs:duration
-   * @return the constructed xs:duration value, or a {@link ValidationFailure} if the
+   * @return the constructed xs:duration value, or a [[ValidationFailure]] if the
    *         supplied string is lexically invalid.
    */
   def makeDuration(s: CharSequence): ConversionResult = makeDuration(s, durationPattern1)
@@ -219,7 +222,7 @@ class DurationValue protected () extends AtomicValue {
    *
    *
    * @param requiredType an integer identifying the required atomic type
-   * @return an AtomicValue, a value of the required type; or a {@link ValidationFailure} if
+   * @return an AtomicValue, a value of the required type; or a [[ValidationFailure]] if
    *         the value cannot be converted.
    */
   def convert(requiredType: AtomicType): ConversionResult = {

@@ -1,8 +1,9 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.`type`
 
 import client.net.sf.saxon.ce.value.Whitespace
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object StringToDouble {
 
@@ -25,15 +26,15 @@ object StringToDouble {
     }
     val n = (if (containsWhitespace) Whitespace.trimWhitespace(s).toString else s.toString)
     if ("INF" == n) {
-      Double.POSITIVE_INFINITY
+      Double.PositiveInfinity
     } else if ("-INF" == n) {
-      Double.NEGATIVE_INFINITY
+      Double.NegativeInfinity
     } else if ("NaN" == n) {
       Double.NaN
     } else if (containsDisallowedChars) {
       throw new NumberFormatException("invalid floating point value: " + s)
     } else {
-      Double.parseDouble(n)
+      n.toDouble
     }
   }
 }

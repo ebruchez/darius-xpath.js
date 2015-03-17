@@ -1,13 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.tree.iter.SingletonIterator
+import client.net.sf.saxon.ce.`type`.{ItemType, Type}
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.tree.iter.SingletonIterator
 
 /**
  * This class represents the expression "(dot)", which always returns the context item.
@@ -32,7 +31,7 @@ class ContextItemExpression extends Expression {
   /**
    * Type-check the expression.
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     if (contextItemType == null) {
       typeError("The context item is undefined at this point", getErrorCodeForUndefinedContext)
     }
@@ -50,12 +49,12 @@ class ContextItemExpression extends Expression {
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = typeCheck(visitor, contextItemType)
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = typeCheck(visitor, contextItemType)
 
   /**
    * Determine the item type
@@ -69,9 +68,9 @@ class ContextItemExpression extends Expression {
 
   /**
    * Determine the special properties of this expression
-   * @return the value {@link StaticProperty#NON_CREATIVE}
+   * @return the value [[StaticProperty.NON_CREATIVE]]
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     val p = super.computeSpecialProperties()
     p | StaticProperty.NON_CREATIVE
   }
@@ -88,12 +87,12 @@ class ContextItemExpression extends Expression {
    */
   override def hashCode(): Int = "ContextItemExpression".hashCode
 
-  def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_CONTEXT_ITEM
+  override def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_CONTEXT_ITEM
 
   /**
    * Iterate over the value of the expression
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val item = context.getContextItem
     if (item == null) {
       dynamicError("The context item is not set", getErrorCodeForUndefinedContext)
@@ -104,7 +103,7 @@ class ContextItemExpression extends Expression {
   /**
    * Evaluate the expression
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val item = context.getContextItem
     if (item == null) {
       dynamicError("The context item is not set", getErrorCodeForUndefinedContext)

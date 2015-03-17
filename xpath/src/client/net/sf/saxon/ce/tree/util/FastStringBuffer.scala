@@ -1,18 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.util
 
 import java.util.Arrays
-import FastStringBuffer._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object FastStringBuffer {
-
   val TINY = 16
-
   val SMALL = 64
-
   val MEDIUM = 256
-
   val LARGE = 1024
 }
 
@@ -24,7 +20,7 @@ object FastStringBuffer {
  */
 class FastStringBuffer(initialSize: Int) extends CharSequence {
 
-  private var array: Array[Char] = new Array[Char](initialSize)
+  private var array: Array[Char] = Array.ofDim[Char](initialSize)
 
   private var used: Int = 0
 
@@ -34,8 +30,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * this content (it will be expanded if more content is added later).
    */
   def this(cs: CharSequence) {
-    this()
-    array = Array.ofDim[Char](cs.length)
+    this(cs.length)
     append(cs)
   }
 
@@ -118,7 +113,8 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    */
   def append(ch: Char) {
     ensureCapacity(1)
-    array(used += 1) = ch
+    array(used) = ch
+    used += 1
   }
 
   /**
@@ -216,7 +212,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    *                        to copy.
    * @param      dst        the destination array.
    * @param      dstBegin   the start offset in the destination array.
-   * @exception IndexOutOfBoundsException If any of the following
+   * @throws IndexOutOfBoundsException If any of the following
    *            is true:
    *            <ul><li><code>srcBegin</code> is negative.
    *            <li><code>srcBegin</code> is greater than <code>srcEnd</code>

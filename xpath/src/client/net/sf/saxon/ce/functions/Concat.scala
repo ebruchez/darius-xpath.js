@@ -1,14 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.SequenceType
-import client.net.sf.saxon.ce.value.StringValue
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{AtomicValue, SequenceType, StringValue}
 
 class Concat extends SystemFunction {
 
@@ -17,17 +15,17 @@ class Concat extends SystemFunction {
   /**
    * Get the required type of the nth argument
    */
-  protected def getRequiredType(arg: Int): SequenceType = getDetails().argumentTypes(0)
+  override protected def getRequiredType(arg: Int): SequenceType = getDetails().argumentTypes(0)
 
   /**
    * Evaluate the function in a string context
    */
-  def evaluateAsString(c: XPathContext): CharSequence = evaluateItem(c).getStringValue
+  override def evaluateAsString(c: XPathContext): CharSequence = evaluateItem(c).getStringValue
 
   /**
    * Evaluate in a general context
    */
-  def evaluateItem(c: XPathContext): Item = {
+  override def evaluateItem(c: XPathContext): Item = {
     val numArgs = argument.length
     val sb = new FastStringBuffer(FastStringBuffer.SMALL)
     for (i <- 0 until numArgs) {

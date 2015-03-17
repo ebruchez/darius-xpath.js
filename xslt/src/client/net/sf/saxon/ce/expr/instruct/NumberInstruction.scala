@@ -1,6 +1,8 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.instruct
 
-import client.net.sf.saxon.ce.Configuration
 import client.net.sf.saxon.ce.expr._
 import client.net.sf.saxon.ce.expr.number.NumberFormatter
 import client.net.sf.saxon.ce.expr.number.Numberer_en
@@ -9,6 +11,7 @@ import client.net.sf.saxon.ce.lib.Numberer
 import client.net.sf.saxon.ce.om.Item
 import client.net.sf.saxon.ce.om.NodeInfo
 import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.orbeon.Configuration
 import client.net.sf.saxon.ce.pattern.Pattern
 import client.net.sf.saxon.ce.pattern.PatternSponsor
 import client.net.sf.saxon.ce.trans.XPathException
@@ -135,7 +138,7 @@ class NumberInstruction(config: Configuration,
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    * The parameter is set to null if it is known statically that the context item will be undefined.
    * If the type of the context item is not known statically, the argument is set to
-   * {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   * [[client.net.sf.saxon.ce.type.Type#ITEM_TYPE]]
    * @throws XPathException if an error is discovered during this phase
    *     (typically a type error)
    * @return the original expression, rewritten to perform necessary
@@ -179,7 +182,7 @@ class NumberInstruction(config: Configuration,
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type#ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)

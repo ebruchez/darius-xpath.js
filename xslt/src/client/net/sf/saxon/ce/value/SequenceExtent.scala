@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
 import client.net.sf.saxon.ce.expr.LastPositionFinder
@@ -25,9 +28,9 @@ object SequenceExtent {
    * Factory method to make a Value holding the contents of any SequenceIterator
    * @param iter a Sequence iterator that will be consumed to deliver the items in the sequence
    * @return a ValueRepresentation holding the items delivered by the SequenceIterator. If the
-   * sequence is empty the result will be an instance of {@link EmptySequence}. If it is of length
-   * one, the result will be an {@link Item}. In all other cases, it will be an instance of
-   * {@link SequenceExtent}.
+   * sequence is empty the result will be an instance of [[EmptySequence]]. If it is of length
+   * one, the result will be an [[Item]]. In all other cases, it will be an instance of
+   * [[SequenceExtent]].
    * @throws XPathException if a dynamic error occurs while evaluating the iterator
    */
   def makeSequenceExtent(iter: SequenceIterator): Sequence = {
@@ -71,9 +74,9 @@ object SequenceExtent {
    * Factory method to make a Value holding the contents of any List of items
    * @param input a List containing the items in the sequence
    * @return a ValueRepresentation holding the items in the list. If the
-   * sequence is empty the result will be an instance of {@link EmptySequence}. If it is of length
-   * one, the result will be an {@link Item}. In all other cases, it will be an instance of
-   * {@link SequenceExtent}.
+   * sequence is empty the result will be an instance of [[EmptySequence]]. If it is of length
+   * one, the result will be an [[Item]]. In all other cases, it will be an instance of
+   * [[SequenceExtent]].
    */
   def makeSequenceExtent(input: List[Item]): Sequence = {
     val len = input.size
@@ -149,9 +152,9 @@ class SequenceExtent(@transient var value: Array[Item]) extends Sequence {
   /**
    * Simplify this SequenceExtent
    * @return a Value holding the items delivered by the SequenceIterator. If the
-   * sequence is empty the result will be an instance of {@link EmptySequence}. If it is of length
-   * one, the result will be an {@link AtomicValue} or a {@link client.net.sf.saxon.ce.om.NodeInfo}.
-   * In all other cases, the {@link SequenceExtent} will be returned unchanged.
+   * sequence is empty the result will be an instance of [[EmptySequence]]. If it is of length
+   * one, the result will be an [[AtomicValue]] or a [[client.net.sf.saxon.ce.om.NodeInfo]].
+   * In all other cases, the [[SequenceExtent]] will be returned unchanged.
    */
   def simplify(): Sequence = {
     val n = getLength

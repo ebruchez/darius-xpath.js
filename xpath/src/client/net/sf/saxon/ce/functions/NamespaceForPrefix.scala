@@ -1,15 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.om.InscopeNamespaceResolver
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NamespaceResolver
-import client.net.sf.saxon.ce.om.NodeInfo
+import client.net.sf.saxon.ce.om.{InscopeNamespaceResolver, Item, NodeInfo}
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.value.AnyURIValue
-import client.net.sf.saxon.ce.value.StringValue
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{AnyURIValue, StringValue}
 
 /**
  * This class supports the function namespace-uri-for-prefix()
@@ -25,7 +22,7 @@ class NamespaceForPrefix extends SystemFunction {
    * if the prefix is not in scope
    * @throws XPathException if a failure occurs evaluating the arguments
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val element = argument(1).evaluateItem(context).asInstanceOf[NodeInfo]
     val p = argument(0).evaluateItem(context).asInstanceOf[StringValue]
     var prefix: String = null

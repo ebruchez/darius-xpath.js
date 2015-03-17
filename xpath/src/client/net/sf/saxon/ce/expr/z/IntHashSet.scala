@@ -1,10 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.z
 
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
 import java.io.Serializable
-import IntHashSet._
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import client.net.sf.saxon.ce.expr.z.IntHashSet._
+import client.net.sf.saxon.ce.tree.util.FastStringBuffer
 
 object IntHashSet {
 
@@ -109,10 +111,11 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
   def isEmpty(): Boolean = _size == 0
 
   def getValues(): Array[Int] = {
-    val index = 0
+    var index = 0
     val values = Array.ofDim[Int](_size)
     for (_value <- _values if _value != ndv) {
-      values(index += 1) = _value
+      values(index) = _value
+      index += 1
     }
     values
   }
@@ -124,7 +127,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
     if (_values(i) == ndv) {
       return false
     }
-    _size
+    _size -= 1
     while (true) {
       _values(i) = ndv
       val j = i
@@ -138,6 +141,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
       } while ((i <= r && r < j) || (r < j && j < i) || (j < i && i <= r));
       _values(j) = _values(i)
     }
+    throw new IllegalStateException()
   }
 
   def add(value: Int): Boolean = {
@@ -146,7 +150,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
     }
     val i = indexOf(value)
     if (_values(i) == ndv) {
-      _size
+      _size += 1
       _values(i) = value
       if (_size > MAX_SIZE) {
         throw new RuntimeException("Too many elements (> " + MAX_SIZE + ')')
@@ -177,7 +181,8 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
     i
   }
 
-  private def setCapacity(capacity: Int) {
+  private def setCapacity(_capacity: Int) {
+    var capacity = _capacity
     if (capacity < _size) {
       capacity = _size
     }
@@ -195,8 +200,8 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
       return
     }
     _nmax = nmax
-    _nlo = (nmax / 4).toInt
-    _nhi = (MAX_SIZE / 4).toInt
+    _nlo = nmax / 4
+    _nhi = MAX_SIZE / 4
     _shift = 1 + NBIT - nbit
     _mask = nmax - 1
     _size = 0
@@ -207,7 +212,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
       for (i <- 0 until nold) {
         val value = values(i)
         if (value != ndv) {
-          _size
+          _size += 1
           _values(indexOf(value)) = value
         }
       }
@@ -223,10 +228,9 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
    * Test whether this set has exactly the same members as another set
    */
   override def equals(other: Any): Boolean = other match {
-    case other: IntSet => {
+    case other: IntSet =>
       val s = other
-      (size == s.size && containsAll(s))
-    }
+      size == s.size && containsAll(s)
     case _ => false
   }
 
@@ -272,10 +276,11 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
     val iter = iterator()
     var i = 0
     while (iter.hasNext) {
-      if (i += 1 % 10 == 0) {
+      if (i % 10 == 0) {
         System.err.println(sb.toString)
         sb.setLength(0)
       }
+      i += 1
       sb.append(iter.next() + ", ")
     }
     System.err.println(sb.toString)
@@ -301,6 +306,10 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
       false
     }
 
-    def next(): Int = _values(i += 1)
+    def next(): Int = {
+      val result = _values(i)
+      i += 1
+      result
+    }
   }
 }

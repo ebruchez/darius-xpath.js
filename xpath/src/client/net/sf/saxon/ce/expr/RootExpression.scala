@@ -1,13 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.DocumentInfo
-import client.net.sf.saxon.ce.om.Item
+import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.om.NodeInfo
 import client.net.sf.saxon.ce.pattern.NodeKindTest
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * An expression whose value is always a set of nodes containing a single node,
@@ -31,14 +29,14 @@ class RootExpression extends SingleNodeExpression {
   /**
    * Specify that the expression returns a singleton
    */
-  def computeCardinality(): Int = StaticProperty.EXACTLY_ONE
+  override def computeCardinality(): Int = StaticProperty.EXACTLY_ONE
 
   /**
    * Determine the data type of the items returned by this expression
    *
    * @return Type.NODE
    */
-  def getItemType(): ItemType = NodeKindTest.DOCUMENT
+  override def getItemType(): ItemType = NodeKindTest.DOCUMENT
 
   /**
    * get HashCode for comparing two expressions
@@ -72,7 +70,7 @@ class RootExpression extends SingleNodeExpression {
    * a bitwise-or'ed value composed from constants such as StaticProperty.VARIABLES and
    * StaticProperty.CURRENT_NODE
    */
-  def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies(): Int = {
     StaticProperty.DEPENDS_ON_CONTEXT_DOCUMENT
   }
 

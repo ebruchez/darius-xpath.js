@@ -1,22 +1,17 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.expr.instruct.Block
-import client.net.sf.saxon.ce.expr.instruct.Choose
-import client.net.sf.saxon.ce.expr.instruct.ValueOf
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.`type`.{ItemType, Type, TypeHierarchy}
+import client.net.sf.saxon.ce.expr.AdjacentTextNodeMerger._
+import client.net.sf.saxon.ce.expr.instruct.{Block, Choose, ValueOf}
+import client.net.sf.saxon.ce.om.{Item, NodeInfo, SequenceIterator}
 import client.net.sf.saxon.ce.pattern.NodeKindTest
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.tree.util.Orphan
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
+import client.net.sf.saxon.ce.tree.util.{FastStringBuffer, Orphan}
 import client.net.sf.saxon.ce.value.Cardinality
-import AdjacentTextNodeMerger._
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.util.control.Breaks
 
 object AdjacentTextNodeMerger {
 
@@ -28,20 +23,20 @@ object AdjacentTextNodeMerger {
 
     private var current: Item = _
 
-    private var next: Item = base.next()
+    private var _next: Item = base.next()
 
     def next(): Item = {
       current = next
       if (current == null) {
         return null
       }
-      next = base.next()
+      _next = base.next()
       if (isTextNode(current)) {
         val fsb = new FastStringBuffer(FastStringBuffer.MEDIUM)
         fsb.append(current.getStringValue)
         while (next != null && isTextNode(next)) {
           fsb.append(next.getStringValue)
-          next = base.next()
+          _next = base.next()
         }
         if (fsb.length == 0) {
           next()
@@ -109,31 +104,34 @@ class AdjacentTextNodeMerger(p0: Expression) extends UnaryExpression(p0) {
       var prevtext = false
       var needed = false
       var maybeEmpty = false
-      for (i <- 0 until actions.length) {
-        var maybetext: Boolean = false
-        if (actions(i).isInstanceOf[ValueOf]) {
-          maybetext = true
-          val content = actions(i).asInstanceOf[ValueOf].getContentExpression
-          if (content.isInstanceOf[StringLiteral]) {
-            maybeEmpty |= content.asInstanceOf[StringLiteral].getStringValue.length == 
-              0
+      import Breaks._
+      breakable {
+        for (i <- 0 until actions.length) {
+          var maybetext: Boolean = false
+          if (actions(i).isInstanceOf[ValueOf]) {
+            maybetext = true
+            val content = actions(i).asInstanceOf[ValueOf].getContentExpression
+            if (content.isInstanceOf[StringLiteral]) {
+              maybeEmpty |= content.asInstanceOf[StringLiteral].getStringValue.length ==
+                0
+            } else {
+              maybeEmpty = true
+            }
           } else {
-            maybeEmpty = true
+            maybetext = th.relationship(actions(i).getItemType, NodeKindTest.TEXT) !=
+              TypeHierarchy.DISJOINT
+            maybeEmpty |= maybetext
           }
-        } else {
-          maybetext = th.relationship(actions(i).getItemType, NodeKindTest.TEXT) != 
-            TypeHierarchy.DISJOINT
-          maybeEmpty |= maybetext
+          if (prevtext && maybetext) {
+            needed = true
+            break()
+          }
+          if (maybetext && Cardinality.allowsMany(actions(i).getCardinality)) {
+            needed = true
+            break()
+          }
+          prevtext = maybetext
         }
-        if (prevtext && maybetext) {
-          needed = true
-          //break
-        }
-        if (maybetext && Cardinality.allowsMany(actions(i).getCardinality)) {
-          needed = true
-          //break
-        }
-        prevtext = maybetext
       }
       if (!needed) {
         if (maybeEmpty) {
@@ -162,7 +160,7 @@ class AdjacentTextNodeMerger(p0: Expression) extends UnaryExpression(p0) {
    * An implementation of Expression must provide at least one of the methods evaluateItem(), iterate(), or process().
    * This method indicates which of these methods is prefered.
    */
-  def getImplementationMethod(): Int = {
+  override def getImplementationMethod(): Int = {
     Expression.PROCESS_METHOD | Expression.ITERATE_METHOD
   }
 

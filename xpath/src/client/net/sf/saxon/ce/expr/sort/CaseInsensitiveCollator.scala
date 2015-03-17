@@ -1,13 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
 import client.net.sf.saxon.ce.lib.StringCollator
-import CaseInsensitiveCollator._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.orbeon.Util
 
 object CaseInsensitiveCollator {
 
-  private var theInstance: CaseInsensitiveCollator = new CaseInsensitiveCollator()
+  private val theInstance: CaseInsensitiveCollator = new CaseInsensitiveCollator()
 
   def getInstance(): CaseInsensitiveCollator = theInstance
 }
@@ -22,9 +23,8 @@ class CaseInsensitiveCollator extends StringCollator {
    * @return <0 if a<b, 0 if a=b, >0 if a>b
    * @throws ClassCastException if the objects are of the wrong type for this Comparer
    */
-  def compareStrings(a: String, b: String): Int = {
-    String.CASE_INSENSITIVE_ORDER.compare(a, b)
-  }
+  def compareStrings(a: String, b: String): Int =
+    Util.compareStringsCaseInsensitive(a, b)
 
   /**
    * Test whether one string is equal to another, according to the rules

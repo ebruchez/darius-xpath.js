@@ -1,22 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.expr.instruct.GlobalParam
-import client.net.sf.saxon.ce.expr.instruct.UserFunctionParameter
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.`type`.{AnyItemType, ItemType, TypeHierarchy}
+import client.net.sf.saxon.ce.om.{Item, Sequence, SequenceIterator}
+import client.net.sf.saxon.ce.orbeon.Logger
 import client.net.sf.saxon.ce.pattern.NodeTest
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AnyItemType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
-import client.net.sf.saxon.ce.value.Cardinality
-import client.net.sf.saxon.ce.value.SequenceType
-import client.net.sf.saxon.ce.value.SequenceTool
-import java.util.logging.Logger
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{Cardinality, SequenceTool, SequenceType}
 
 /**
  * Variable reference: a reference to a variable. This may be an XSLT-defined variable, a range
@@ -30,10 +22,10 @@ class VariableReference extends Expression {
 
   protected var constantValue: Sequence = null
 
-  @transient var displayName: String = null
+  var displayName: String = null
 
-  @BooleanBeanProperty
-  var flattened: Boolean = false
+  private var _flattened: Boolean = false
+  def isFlattened = _flattened
 
   private var inLoop: Boolean = true
 
@@ -73,24 +65,25 @@ class VariableReference extends Expression {
    * return nodes, the identity of the nodes has no significance. This is called during type checking
    * of the parent expression. At present, only variable references take any notice of this notification.
    */
-  def setFlattened(flattened: Boolean) {
+  override def setFlattened(flattened: Boolean) {
     super.setFlattened(flattened)
-    this.flattened = flattened
+    this._flattened = flattened
   }
 
   /**
    * Type-check the expression. At this stage details of the static type must be known.
    * If the variable has a compile-time value, this is substituted for the variable reference
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     if (constantValue != null) {
       binding = null
       return Literal.makeLiteral(constantValue)
     }
     if (binding.isInstanceOf[Expression]) {
       inLoop = visitor.isLoopingSubexpression(binding.asInstanceOf[Expression])
-    } else if (binding.isInstanceOf[UserFunctionParameter]) {
-      inLoop = visitor.isLoopingSubexpression(null)
+//ORBEON XSLT
+//    } else if (binding.isInstanceOf[UserFunctionParameter]) {
+//      inLoop = visitor.isLoopingSubexpression(null)
     }
     this
   }
@@ -99,7 +92,7 @@ class VariableReference extends Expression {
    * Type-check the expression. At this stage details of the static type must be known.
    * If the variable has a compile-time value, this is substituted for the variable reference
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     if (constantValue != null) {
       binding = null
       return Literal.makeLiteral(constantValue)
@@ -187,9 +180,9 @@ class VariableReference extends Expression {
   /**
    * Determine the special properties of this expression
    *
-   * @return {@link StaticProperty#NON_CREATIVE}
+   * @return [[StaticProperty.NON_CREATIVE]]
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     var p = super.computeSpecialProperties()
     p |= StaticProperty.NON_CREATIVE
     if (binding.isInstanceOf[Assignation]) {
@@ -223,14 +216,15 @@ class VariableReference extends Expression {
     if (binding == null) 73619830 else binding.hashCode
   }
 
-  def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies(): Int = {
     var d = 0
     if (binding == null) {
       d |= (StaticProperty.DEPENDS_ON_LOCAL_VARIABLES | StaticProperty.DEPENDS_ON_RUNTIME_ENVIRONMENT)
     } else if (binding.isGlobal) {
-      if (binding.isInstanceOf[GlobalParam]) {
-        d |= StaticProperty.DEPENDS_ON_RUNTIME_ENVIRONMENT
-      }
+//ORBEON XSLT
+//      if (binding.isInstanceOf[GlobalParam]) {
+//        d |= StaticProperty.DEPENDS_ON_RUNTIME_ENVIRONMENT
+//      }
     } else {
       d |= StaticProperty.DEPENDS_ON_LOCAL_VARIABLES
     }
@@ -240,17 +234,17 @@ class VariableReference extends Expression {
   /**
    * Promote this expression if possible
    */
-  def promote(offer: PromotionOffer, parent: Expression): Expression = this
+  override def promote(offer: PromotionOffer, parent: Expression): Expression = this
 
   /**
    * An implementation of Expression must provide at least one of the methods evaluateItem(), iterate(), or process().
    * This method indicates which of these methods is provided. This implementation provides both all three methods
    * natively.
    */
-  def getImplementationMethod(): Int = {
-    (if (Cardinality.allowsMany(getCardinality)) 0 else EVALUATE_METHOD) | 
-      ITERATE_METHOD | 
-      PROCESS_METHOD
+  override def getImplementationMethod(): Int = {
+    (if (Cardinality.allowsMany(getCardinality)) 0 else Expression.EVALUATE_METHOD) |
+      Expression.ITERATE_METHOD |
+      Expression.PROCESS_METHOD
   }
 
   /**
@@ -260,7 +254,7 @@ class VariableReference extends Expression {
    * @return the value of the variable, if it is defined
    * @throws XPathException if the variable is undefined
    */
-  def iterate(c: XPathContext): SequenceIterator = {
+  override def iterate(c: XPathContext): SequenceIterator = {
     try {
       evaluateVariable(c).iterate()
     } catch {
@@ -278,7 +272,7 @@ class VariableReference extends Expression {
     }
   }
 
-  def evaluateItem(c: XPathContext): Item = {
+  override def evaluateItem(c: XPathContext): Item = {
     try {
       SequenceTool.asItem(evaluateVariable(c))
     } catch {
@@ -289,7 +283,7 @@ class VariableReference extends Expression {
     }
   }
 
-  def process(c: XPathContext) {
+  override def process(c: XPathContext) {
     try {
       val actual = evaluateVariable(c)
       SequenceTool.process(actual.iterate(), c)

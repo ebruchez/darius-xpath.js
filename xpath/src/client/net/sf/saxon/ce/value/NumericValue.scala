@@ -1,12 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import java.math.BigDecimal
+
+import client.net.sf.saxon.ce.`type`._
 import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`._
-import java.math.BigDecimal
-import NumericValue._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object NumericValue {
 
@@ -21,7 +22,7 @@ object NumericValue {
   def parseNumber(in: String): NumericValue = {
     if (in.indexOf('e') >= 0 || in.indexOf('E') >= 0) {
       try {
-        new DoubleValue(Double.parseDouble(in))
+        new DoubleValue(in.toDouble)
       } catch {
         case e: NumberFormatException => DoubleValue.NaN
       }
@@ -47,7 +48,7 @@ object NumericValue {
  * NumericValue is an abstract superclass for IntegerValue, DecimalValue,
  * FloatValue, and DoubleValue
  */
-abstract class NumericValue extends AtomicValue with Comparable[_] {
+abstract class NumericValue extends AtomicValue with Comparable[AnyRef] {
 
   /**
    * Get the numeric value as a double
@@ -90,7 +91,7 @@ abstract class NumericValue extends AtomicValue with Comparable[_] {
   /**
    * Return the numeric value as a Java int.
    *
-   * @exception client.net.sf.saxon.ce.trans.XPathException if the value is out of range
+   * @throws client.net.sf.saxon.ce.trans.XPathException if the value is out of range
    * @return the numeric value as a Java int. This performs truncation
    *     towards zero.
    */

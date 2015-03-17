@@ -1,8 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.om
-
-import AttributeCollection._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object AttributeCollection {
 
@@ -24,7 +23,7 @@ class AttributeCollection {
 
   /**
    * Add an attribute to an attribute list. The parameters correspond
-   * to the parameters of the {@link client.net.sf.saxon.ce.event.Receiver#attribute(StructuredQName, CharSequence)}
+   * to the parameters of the [[client.net.sf.saxon.ce.event.Receiver.attribute(StructuredQName, CharSequence)]]
    * method. There is no check that the name of the attribute is distinct from other attributes
    * already in the collection: this check must be made by the caller.
    *
@@ -47,7 +46,8 @@ class AttributeCollection {
       names = c2
     }
     names(used) = nameCode
-    values(used += 1) = value
+    values(used) = value
+    used += 1
   }
 
   /**
@@ -82,7 +82,7 @@ class AttributeCollection {
    * of slots used in the list, including any slots allocated to attributes that have since been deleted.
    * Such slots are not reused, to preserve attribute identity.
    */
-  def getLength(): Int = (if (values == null) 0 else used)
+  def getLength(): Int = if (values == null) 0 else used
 
   /**
    * Get the name of an attribute (by position).

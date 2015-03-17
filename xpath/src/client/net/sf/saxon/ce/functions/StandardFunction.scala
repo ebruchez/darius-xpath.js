@@ -1,17 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
+import client.net.sf.saxon.ce.`type`.{AnyItemType, AtomicType, ItemType}
 import client.net.sf.saxon.ce.expr.StaticProperty
 import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.pattern.AnyNodeTest
-import client.net.sf.saxon.ce.pattern.NodeKindTest
-import client.net.sf.saxon.ce.`type`.AnyItemType
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value.EmptySequence
-import client.net.sf.saxon.ce.value.SequenceType
-import java.util.HashMap
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.orbeon.HashMap
+import client.net.sf.saxon.ce.pattern.{AnyNodeTest, NodeKindTest}
+import client.net.sf.saxon.ce.value.{EmptySequence, SequenceType}
 
 object StandardFunction {
 
@@ -21,9 +18,7 @@ object StandardFunction {
    * Categories of functions, bit significant
    */
   val CORE = 1
-
   val XSLT = 2
-
   val USE_WHEN = 4
 
   /**
@@ -48,7 +43,8 @@ object StandardFunction {
     if (signature != "") {
       val args = signature.split("\\s")
       var first = true
-      for (arg <- args) {
+      for (_arg <- args) {
+        var arg = _arg
         if (arg.startsWith("$")) {
           for (i <- 1 until arg.length) {
             val c = arg.charAt(i)
@@ -163,7 +159,7 @@ object StandardFunction {
     e
   }
 
-  private var functionTable: HashMap[String, Entry] = new HashMap[String, Entry](200)
+  private val functionTable: HashMap[String, Entry] = new HashMap[String, Entry](200)
 
   register("abs", new Rounding(Rounding.ABS), "n? n? $s")
 
@@ -193,7 +189,7 @@ object StandardFunction {
 
   register("count", new Count(), "i *")
 
-  register("current", new Current(), "I $t")
+//  register("current", new Current(), "I $t")
 
   register("current-date", new CurrentDateTime(), "dat")
 
@@ -201,9 +197,9 @@ object StandardFunction {
 
   register("current-time", new CurrentDateTime(), "tim")
 
-  register("current-group", new CurrentGroup(), "* $t")
+//  register("current-group", new CurrentGroup(), "* $t")
 
-  register("current-grouping-key", new CurrentGroupingKey(), "a? $t")
+//  register("current-grouping-key", new CurrentGroupingKey(), "a? $t")
 
   register("dateTime", new DateTimeConstructor(), "dt? dat? tim?")
 
@@ -221,7 +217,7 @@ object StandardFunction {
 
   register("doc-available", new DocAvailable(), "b s?")
 
-  register("document", new DocumentFn(), "N* * ?N $t")
+//  register("document", new DocumentFn(), "N* * ?N $t")
 
   register("document-uri", new NamePart(NamePart.DOCUMENT_URI), "u? N*")
 
@@ -242,14 +238,14 @@ object StandardFunction {
   register("exists", new Exists(Exists.EXISTS), "b *")
 
   register("floor", new Rounding(Rounding.FLOOR), "n? n? $s")
-
-  register("format-date", new FormatDate(), "s dat? s ?s? ?s? ?s? $t")
-
-  register("format-dateTime", new FormatDate(), "s dt? s ?s? ?s? ?s? $t")
-
-  register("format-number", new FormatNumber(), "s n? s ?s $t")
-
-  register("format-time", new FormatDate(), "s tim? s ?s? ?s? ?s? $t")
+//
+//  register("format-date", new FormatDate(), "s dat? s ?s? ?s? ?s? $t")
+//
+//  register("format-dateTime", new FormatDate(), "s dt? s ?s? ?s? ?s? $t")
+//
+//  register("format-number", new FormatNumber(), "s n? s ?s $t")
+//
+//  register("format-time", new FormatDate(), "s tim? s ?s? ?s? ?s? $t")
 
   register("function-available", new Available(Available.FUNCTION_AVAILABLE), "b s ?i $u")
 
@@ -273,7 +269,7 @@ object StandardFunction {
 
   register("iri-to-uri", new EscapeURI(EscapeURI.IRI_TO_URI), "s s?")
 
-  register("key", new KeyFn(), "N* s a* ?N $t")
+//  register("key", new KeyFn(), "N* s a* ?N $t")
 
   register("lang", new Lang(), "b s? ?N")
 
@@ -331,7 +327,7 @@ object StandardFunction {
 
   register("QName", new QNameFn(), "q s? s")
 
-  register("regex-group", new RegexGroup(), "s i $t")
+//  register("regex-group", new RegexGroup(), "s i $t")
 
   register("remove", new Remove(), "* * i $s")
 
@@ -397,9 +393,9 @@ object StandardFunction {
 
   register("upper-case", new ForceCase(ForceCase.UPPERCASE), "s s?")
 
-  register("unparsed-text", new UnparsedText(UnparsedText.UNPARSED_TEXT), "s? s? ?s $t")
+//  register("unparsed-text", new UnparsedText(UnparsedText.UNPARSED_TEXT), "s? s? ?s $t")
 
-  register("unparsed-text-available", new UnparsedText(UnparsedText.UNPARSED_TEXT_AVAILABLE), "b s s $t")
+//  register("unparsed-text-available", new UnparsedText(UnparsedText.UNPARSED_TEXT_AVAILABLE), "b s s $t")
 
   register("year-from-date", new Component(Component.YEAR), "i? dat?")
 

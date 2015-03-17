@@ -1,12 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.lib
 
 import java.util.EventListener
-import client.net.sf.saxon.ce.Controller
+
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.om.Item
 import client.net.sf.saxon.ce.trace.InstructionInfo
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * This interface defines methods that are called by Saxon during the execution of
@@ -19,8 +20,6 @@ trait TraceListener extends EventListener {
 
   /**
    * Method called at the start of execution, that is, when the run-time transformation starts
-   * @param controller identifies the transformation controller, and provides the listener with
-   * access to context and configuration information
    */
   def open(): Unit
 

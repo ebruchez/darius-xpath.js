@@ -1,16 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType, TypeHierarchy}
 import client.net.sf.saxon.ce.expr._
+import client.net.sf.saxon.ce.functions.BooleanFn._
 import client.net.sf.saxon.ce.om.Item
 import client.net.sf.saxon.ce.pattern.NodeTest
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
 import client.net.sf.saxon.ce.value.BooleanValue
-import BooleanFn._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object BooleanFn {
 
@@ -50,16 +49,16 @@ object BooleanFn {
 /**
  * This class supports the XPath functions boolean(), not(), true(), and false()
  */
-class BooleanFn(operation: Int) extends SystemFunction {
+class BooleanFn(_operation: Int) extends SystemFunction {
 
-  this.operation = operation
+  this.operation = _operation
 
   def newInstance(): BooleanFn = new BooleanFn(operation)
 
   /**
    * Static analysis: prevent sorting of the argument
    */
-  def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor) {
     super.checkArguments(visitor)
     val err = TypeChecker.ebvError(argument(0))
     if (err != null) {
@@ -78,12 +77,12 @@ class BooleanFn(operation: Int) extends SystemFunction {
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val e = super.optimize(visitor, contextItemType)
     if (e == this) {
       if (operation == BOOLEAN) {
@@ -103,14 +102,14 @@ class BooleanFn(operation: Int) extends SystemFunction {
   /**
    * Evaluate the function
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     BooleanValue.get(effectiveBooleanValue(context))
   }
 
   /**
    * Evaluate the effective boolean value
    */
-  def effectiveBooleanValue(c: XPathContext): Boolean = {
+  override def effectiveBooleanValue(c: XPathContext): Boolean = {
     val b = argument(0).effectiveBooleanValue(c)
     (if (operation == BOOLEAN) b else !b)
   }

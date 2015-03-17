@@ -1,34 +1,31 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr.XPathContext
+import client.net.sf.saxon.ce.functions.ForceCase._
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.StringValue
-import ForceCase._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{AtomicValue, StringValue}
 
 object ForceCase {
-
   val UPPERCASE = 0
-
   val LOWERCASE = 1
 }
 
 /**
  * This class implements the upper-case() and lower-case() functions
  */
-class ForceCase(operation: Int) extends SystemFunction {
+class ForceCase(_operation: Int) extends SystemFunction {
 
-  this.operation = operation
+  this.operation = _operation
 
   def newInstance(): ForceCase = new ForceCase(operation)
 
   /**
    * Evaluate in a general context
    */
-  def evaluateItem(c: XPathContext): Item = {
+  override def evaluateItem(c: XPathContext): Item = {
     val sv = argument(0).evaluateItem(c).asInstanceOf[AtomicValue]
     if (sv == null) {
       return StringValue.EMPTY_STRING

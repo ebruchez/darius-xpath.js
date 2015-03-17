@@ -1,14 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
-import client.net.sf.saxon.ce.expr.LastPositionFinder
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.expr.{LastPositionFinder, XPathContext}
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.iter.FocusIterator
 import client.net.sf.saxon.ce.value.AtomicValue
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * Class to do a sorted iteration
@@ -61,7 +60,8 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
       doSort()
     }
     if (position < count) {
-      nodeKeys((position += 1) * recordSize).asInstanceOf[Item]
+      position += 1
+      nodeKeys(position * recordSize).asInstanceOf[Item]
     } else {
       position = -1
       null
@@ -120,11 +120,12 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
     }
   }
 
-  protected def populateArray(allocated: Int): Int = {
+  protected def populateArray(_allocated: Int): Int = {
+    var allocated = _allocated
     while (true) {
       val item = base.next()
       if (item == null) {
-        //break
+        return allocated
       }
       if (count == allocated) {
         allocated *= 2
@@ -140,7 +141,7 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
       nodeKeys(k + comparators.length + 1) = count
       count += 1
     }
-    allocated
+    throw new IllegalStateException
   }
 
   private def doSort() {
@@ -149,11 +150,10 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
     try {
       GenericSorter.quickSort(0, count, this)
     } catch {
-      case e: ClassCastException => {
+      case e: ClassCastException =>
         val err = new XPathException("Non-comparable types found while sorting: " + e.getMessage)
         err.setErrorCode("XTDE1030")
         throw err
-      }
     }
   }
 

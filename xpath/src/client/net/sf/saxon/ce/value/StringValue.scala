@@ -1,26 +1,19 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, StringToDouble, ValidationFailure}
 import client.net.sf.saxon.ce.lib.StringCollator
-import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.tree.util.UTF16CharacterSet
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.StringToDouble
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import StringValue._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.trans.{Err, XPathException}
+import client.net.sf.saxon.ce.tree.util.{FastStringBuffer, UTF16CharacterSet}
+import client.net.sf.saxon.ce.value.StringValue._
 
 object StringValue {
 
   val EMPTY_STRING = new StringValue("")
-
   val SINGLE_SPACE = new StringValue(" ")
-
   val TRUE = new StringValue("true")
-
   val FALSE = new StringValue("false")
 
   /**
@@ -45,7 +38,7 @@ object StringValue {
    * @param value        the value to be converted
    * @param requiredType the required atomic type. This must not be a namespace-sensitive type.
    * @return the result of the conversion, if successful. If unsuccessful, the value returned
-   *         will be a {@link ValidationFailure}. The caller must check for this condition. No exception is thrown, instead
+   *         will be a [[ValidationFailure]]. The caller must check for this condition. No exception is thrown, instead
    *         the exception will be encapsulated within the ValidationFailure.
    */
   def convertStringToBuiltInType(value: CharSequence, requiredType: AtomicType): ConversionResult = {
@@ -57,7 +50,7 @@ object StringValue {
           val dbl = StringToDouble.stringToNumber(value)
           new DoubleValue(dbl)
         } catch {
-          case err: NumberFormatException => new ValidationFailure("Cannot convert string to double: " + value.toString, 
+          case err: NumberFormatException => new ValidationFailure("Cannot convert string to double: " + value.toString,
             "FORG0001")
         }
       } else if (requiredType == AtomicType.INTEGER) {
@@ -69,7 +62,7 @@ object StringValue {
           val flt = StringToDouble.stringToNumber(value).toFloat
           new FloatValue(flt)
         } catch {
-          case err: NumberFormatException => new ValidationFailure("Cannot convert string to float: " + value.toString, 
+          case err: NumberFormatException => new ValidationFailure("Cannot convert string to float: " + value.toString,
             "FORG0001")
         }
       } else if (requiredType == AtomicType.DATE) {
@@ -109,14 +102,12 @@ object StringValue {
           "XPTY0004")
       }
     } catch {
-      case err: XPathException => {
-        val vf = new ValidationFailure(err.getMessage)
-        vf.setErrorCodeQName(err.getErrorCodeQName)
+      case err: XPathException =>
+        val vf = new ValidationFailure(err.getMessage, err.getErrorCodeQName)
         if (vf.getErrorCodeQName == null) {
           vf.setErrorCode("FORG0001")
         }
         vf
-      }
     }
   }
 
@@ -144,18 +135,20 @@ object StringValue {
    */
   def expand(s: CharSequence): Array[Int] = {
     val array = Array.ofDim[Int](getStringLength(s))
-    val o = 0
-    for (i <- 0 until s.length) {
-      var charval: Int = 0
+    var o = 0
+    var i = 0
+    while (i < s.length) {
+      var charval = 0
       val c = s.charAt(i)
       if (c >= 55296 && c <= 56319) {
-        charval = ((c - 55296) * 1024) + (s.charAt(i + 1).toInt - 56320) + 
-          65536
+        charval = ((c - 55296) * 1024) + (s.charAt(i + 1).toInt - 56320) + 65536
         i += 1
       } else {
         charval = c
       }
-      array(o += 1) = charval
+      array(o) = charval
+      o += 1
+      i += 1
     }
     array
   }
@@ -182,7 +175,7 @@ object StringValue {
 
   def isValidLanguageCode(`val`: CharSequence): Boolean = {
     val regex = "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
-    (`val`.toString.matches(regex))
+    `val`.toString.matches(regex)
   }
 
   /**
@@ -192,6 +185,7 @@ object StringValue {
    * @return a string in which non-Ascii-printable characters are replaced by \ uXXXX escapes
    */
   def diagnosticDisplay(s: String): String = {
+    val len = s.length
     val fsb = new FastStringBuffer(s.length)
     for (i <- 0 until len) {
       val c = s.charAt(i)
@@ -229,7 +223,7 @@ class StringValue protected () extends AtomicValue {
    */
   def this(value: CharSequence) {
     this()
-    this.value = (if (value == null) "" else value)
+    this.value = if (value == null) "" else value
   }
 
   /**
@@ -251,7 +245,9 @@ class StringValue protected () extends AtomicValue {
    * Get the string value as a String
    */
   def getPrimitiveStringValue(): String = {
-    (value = value.toString).asInstanceOf[String]
+    val result = value.toString
+    value = result
+    result
   }
 
   /**
@@ -281,7 +277,7 @@ class StringValue protected () extends AtomicValue {
     if (noSurrogates) {
       value.length
     } else {
-      val len = getStringLength(value)
+      val len = StringValue.getStringLength(value)
       if (len == value.length) {
         noSurrogates = true
       }
@@ -303,7 +299,7 @@ class StringValue protected () extends AtomicValue {
    * @return true if the string contains any non-BMP characters
    */
   def containsSurrogatePairs(): Boolean = {
-    (if (noSurrogates) false else getStringLength != value.length)
+    if (noSurrogates) false else getStringLength != value.length
   }
 
   /**
@@ -318,7 +314,7 @@ class StringValue protected () extends AtomicValue {
    *
    * @return an array of integers representing the Unicode code points
    */
-  def expand(): Array[Int] = expand(value)
+  def expand(): Array[Int] = StringValue.expand(value)
 
   /**
    * Get an object value that implements the XPath equality and ordering comparison semantics for this value.
@@ -372,7 +368,7 @@ class StringValue protected () extends AtomicValue {
    *
    * @return true if the string has length greater than zero
    */
-  def effectiveBooleanValue(): Boolean = value.length > 0
+  override def effectiveBooleanValue(): Boolean = value.length > 0
 
   override def toString(): String = "\"" + value + '\"'
 }

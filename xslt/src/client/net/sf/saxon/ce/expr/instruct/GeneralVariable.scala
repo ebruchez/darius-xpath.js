@@ -1,26 +1,23 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.instruct
 
+import java.util.Iterator
+
+import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.om.Sequence
+import client.net.sf.saxon.ce.expr.instruct.GeneralVariable._
+import client.net.sf.saxon.ce.om.{Item, Sequence, SequenceIterator, StructuredQName}
 import client.net.sf.saxon.ce.pattern.EmptySequenceTest
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.value.SequenceType
-import java.util.Iterator
-import GeneralVariable._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object GeneralVariable {
 
   private val REQUIRED = 4
-
   private val TUNNEL = 8
-
   private val IMPLICITLY_REQUIRED = 16
 }
 
@@ -124,14 +121,14 @@ abstract class GeneralVariable extends Instruction with Binding {
    * type is empty.
    * @return the empty type.
    */
-  def getItemType(): ItemType = EmptySequenceTest.getInstance
+  override def getItemType(): ItemType = EmptySequenceTest.getInstance
 
   /**
    * Get the cardinality of the result of this instruction. An xsl:variable instruction returns nothing, so the
    * type is empty.
    * @return the empty cardinality.
    */
-  def getCardinality(): Int = StaticProperty.EMPTY
+  override def getCardinality(): Int = StaticProperty.EMPTY
 
   def isGlobal(): Boolean = false
 
@@ -166,14 +163,14 @@ abstract class GeneralVariable extends Instruction with Binding {
    * @return the simplified expression
    * @throws XPathException
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     if (select != null) {
       select = visitor.simplify(select)
     }
     this
   }
 
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     if (select != null) {
       select = visitor.typeCheck(select, contextItemType)
       adoptChildExpression(select)
@@ -182,7 +179,7 @@ abstract class GeneralVariable extends Instruction with Binding {
     this
   }
 
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     if (select != null) {
       select = visitor.optimize(select, contextItemType)
       adoptChildExpression(select)
@@ -225,13 +222,13 @@ abstract class GeneralVariable extends Instruction with Binding {
    * this condition will be detected.
    *
    * @param context The context in which the expression is to be evaluated
-   * @exception XPathException if any dynamic error occurs evaluating the
+   * @throws XPathException if any dynamic error occurs evaluating the
    *     expression
    * @return the node or atomic value that results from evaluating the
    *     expression; or null to indicate that the result is an empty
    *     sequence
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     process(context)
     null
   }
@@ -246,13 +243,13 @@ abstract class GeneralVariable extends Instruction with Binding {
    * In principle instructions should implement a pipelined iterate() method that
    * avoids the overhead of intermediate storage.
    *
-   * @exception XPathException if any dynamic error occurs evaluating the
+   * @throws XPathException if any dynamic error occurs evaluating the
    *     expression
    * @param context supplies the context for evaluation
    * @return a SequenceIterator that can be used to iterate over the result
    *     of the expression
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     evaluateItem(context)
     EmptyIterator.getInstance
   }
@@ -277,7 +274,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * @param offer The type of rewrite being offered
    * @throws XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  override protected def promoteInst(offer: PromotionOffer) {
     if (select != null) {
       val e2 = doPromotion(select, offer)
       if (e2 != select) {
@@ -292,7 +289,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * (in XSLT terms, the expression present on attributes of the instruction,
    * as distinct from the child instructions in a sequence construction)
    */
-  def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(select)
+  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(select)
 
   /**
    * Get the slot number allocated to this variable

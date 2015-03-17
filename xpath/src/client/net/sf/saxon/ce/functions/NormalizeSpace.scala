@@ -1,14 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
+import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.expr._
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.StringValue
-import client.net.sf.saxon.ce.value.Whitespace
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{AtomicValue, StringValue, Whitespace}
 
 /**
  * Implement the XPath normalize-space() function
@@ -26,7 +24,7 @@ class NormalizeSpace extends SystemFunction {
    * @return a set of bit-significant flags identifying the "intrinsic"
    *         dependencies. The flags are documented in class client.net.sf.saxon.ce.value.StaticProperty
    */
-  def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies(): Int = {
     var d = super.getIntrinsicDependencies
     if (argument.length == 0) {
       d |= StaticProperty.DEPENDS_ON_CONTEXT_ITEM
@@ -34,7 +32,7 @@ class NormalizeSpace extends SystemFunction {
     d
   }
 
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     if (argument.length == 0 && contextItemType == null) {
       typeError("The context item for normalize-space() is undefined", "XPDY0002")
     }
@@ -46,7 +44,7 @@ class NormalizeSpace extends SystemFunction {
    * pre-evaluation, or that need access to context information, can override this method.
    * @param visitor an expression visitor
    */
-  def preEvaluate(visitor: ExpressionVisitor): Expression = {
+  override def preEvaluate(visitor: ExpressionVisitor): Expression = {
     if (argument.length == 0) {
       this
     } else {
@@ -57,7 +55,7 @@ class NormalizeSpace extends SystemFunction {
   /**
    * Evaluate in a general context
    */
-  def evaluateItem(c: XPathContext): Item = {
+  override def evaluateItem(c: XPathContext): Item = {
     if (argument.length == 0) {
       val item = c.getContextItem
       if (item == null) {
@@ -89,7 +87,7 @@ class NormalizeSpace extends SystemFunction {
    * @throws client.net.sf.saxon.ce.trans.XPathException
    *          if any dynamic error occurs evaluating the expression
    */
-  def effectiveBooleanValue(c: XPathContext): Boolean = {
+  override def effectiveBooleanValue(c: XPathContext): Boolean = {
     var cs: CharSequence = null
     if (argument.length == 0) {
       val item = c.getContextItem

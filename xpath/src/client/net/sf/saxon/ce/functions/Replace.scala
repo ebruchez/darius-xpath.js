@@ -1,14 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr.XPathContext
+import client.net.sf.saxon.ce.functions.Replace._
 import client.net.sf.saxon.ce.om.Item
 import client.net.sf.saxon.ce.regex.ARegularExpression
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.StringValue
-import Replace._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{AtomicValue, StringValue}
 
 object Replace {
 
@@ -56,7 +56,7 @@ class Replace extends SystemFunction {
   /**
    * Evaluate the function in a string context
    */
-  def evaluateItem(c: XPathContext): Item = {
+  override def evaluateItem(c: XPathContext): Item = {
     var arg0 = argument(0).evaluateItem(c).asInstanceOf[AtomicValue]
     if (arg0 == null) {
       arg0 = StringValue.EMPTY_STRING
@@ -85,12 +85,11 @@ class Replace extends SystemFunction {
       val res = re.replace(input, replacement)
       StringValue.makeStringValue(res)
     } catch {
-      case err: XPathException => {
+      case err: XPathException =>
         val de = new XPathException(err)
         de.setErrorCode("FORX0002")
         de.maybeSetLocation(getSourceLocator)
         throw de
-      }
     }
   }
 }

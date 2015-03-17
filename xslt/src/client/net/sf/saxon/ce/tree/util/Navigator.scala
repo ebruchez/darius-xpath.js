@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.util
 
 import client.net.sf.saxon.ce.Controller
@@ -360,7 +363,7 @@ object Navigator {
    * @param node            The node to be copied
    * @param out             The receiver to which events will be sent
    * @param copyOptions     Options for copying namespaces, type annotations, etc,
-   *                        as defined in {@link client.net.sf.saxon.ce.om.CopyOptions}
+   *                        as defined in [[client.net.sf.saxon.ce.om.CopyOptions]]
    * @throws XPathException on any failure reported by the Receiver
    */
   def copy(node: NodeInfo, out: Receiver, copyOptions: Int) node.getNodeKind match {

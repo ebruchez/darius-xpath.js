@@ -1,13 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.pattern
 
-import client.net.sf.saxon.ce.om.Axis
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
 import client.net.sf.saxon.ce.`type`.Type
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.{Axis, NodeInfo, StructuredQName}
+
+import scala.beans.BeanProperty
 
 class DocumentNodeTest(@BeanProperty var elementTest: NodeTest) extends NodeTest {
 
@@ -26,7 +25,7 @@ class DocumentNodeTest(@BeanProperty var elementTest: NodeTest) extends NodeTest
    * uses variables, or contains calls on functions such as document() or key().
    * @return true if the node matches the Pattern, false otherwise
    */
-  def matches(node: NodeInfo): Boolean = {
+  override def matches(node: NodeInfo): Boolean = {
     if (node.getNodeKind != Type.DOCUMENT) {
       return false
     }
@@ -47,10 +46,11 @@ class DocumentNodeTest(@BeanProperty var elementTest: NodeTest) extends NodeTest
         if (elementTest.matches(n)) {
           found = true
         } else {
-          false
+          return false
         }
       }
     }
+    throw new IllegalStateException
   }
 
   /**
@@ -62,13 +62,13 @@ class DocumentNodeTest(@BeanProperty var elementTest: NodeTest) extends NodeTest
    * Determine the types of nodes to which this pattern applies. Used for optimisation.
    * @return the type of node matched by this pattern. e.g. Type.ELEMENT or Type.TEXT
    */
-  def getRequiredNodeKind(): Int = Type.DOCUMENT
+  override def getRequiredNodeKind(): Int = Type.DOCUMENT
 
   /**
    * Get a mask indicating which kinds of nodes this NodeTest can match. This is a combination
    * of bits: 1<<Type.ELEMENT for element nodes, 1<<Type.TEXT for text nodes, and so on.
    */
-  def getNodeKindMask(): Int = 1 << Type.DOCUMENT
+  override def getNodeKindMask(): Int = 1 << Type.DOCUMENT
 
   override def toString(): String = {
     "document-node(" + elementTest.toString + ')'

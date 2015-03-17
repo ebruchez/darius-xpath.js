@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr.XPathContext
@@ -6,8 +9,6 @@ import client.net.sf.saxon.ce.regex.ARegularExpression
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.iter.EmptyIterator
 import client.net.sf.saxon.ce.value.AtomicValue
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * This class implements the tokenize() function for regular expression matching. This returns a
@@ -21,7 +22,7 @@ class Tokenize extends SystemFunction {
   /**
    * Iterate over the results of the function
    */
-  def iterate(c: XPathContext): SequenceIterator = {
+  override def iterate(c: XPathContext): SequenceIterator = {
     var sv = argument(0).evaluateItem(c).asInstanceOf[AtomicValue]
     if (sv == null) {
       return EmptyIterator.getInstance
@@ -47,11 +48,10 @@ class Tokenize extends SystemFunction {
       }
       re.tokenize(input)
     } catch {
-      case err: XPathException => {
+      case err: XPathException =>
         err.setErrorCode("FORX0002")
         err.maybeSetLocation(this.getSourceLocator)
         throw err
-      }
     }
   }
 }

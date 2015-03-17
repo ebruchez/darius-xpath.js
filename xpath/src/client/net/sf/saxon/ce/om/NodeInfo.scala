@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.om
 
 import client.net.sf.saxon.ce.event.Receiver
@@ -5,9 +8,6 @@ import client.net.sf.saxon.ce.pattern.NodeTest
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import NodeInfo._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object NodeInfo {
 
@@ -31,13 +31,13 @@ object NodeInfo {
  * The NodeInfo interface represents a node in Saxon's implementation of the XPath 2.0 data model.
  * <p>
  * Note that several NodeInfo objects may represent the same node. To test node identity, the
- * method {@link #isSameNodeInfo(NodeInfo)} should be used. An exception to this rule applies for
+ * method [[isSameNodeInfo(NodeInfo)]] should be used. An exception to this rule applies for
  * document nodes, where the correspondence between document nodes and DocumentInfo objects is one to
  * one. NodeInfo objects are never reused: a given NodeInfo object represents the same node for its entire
  * lifetime.
  * <p>
  * This is the primary interface for accessing trees in Saxon, and it forms part of the public
- * Saxon API. The only subclass of NodeInfo that applications should normally use is {@link DocumentInfo},
+ * Saxon API. The only subclass of NodeInfo that applications should normally use is [[DocumentInfo]],
  * which represents a document node. Methods that form part of the public API are (since Saxon 8.4)
  * labelled with a JavaDoc "since" tag: classes and methods that have no such label should not be
  * regarded as stable interfaces.
@@ -47,7 +47,7 @@ object NodeInfo {
  * the lower-level properties (such as "parent" and "children") directly. All navigation within trees,
  * except for a few convenience methods, is done by following the axes using the iterateAxis method.
  * This allows different implementations of the XPath tree model to implement axis navigation in different ways.
- * Some implementations may choose to use the helper methods provided in class {@link client.net.sf.saxon.ce.tree.util.Navigator}.
+ * Some implementations may choose to use the helper methods provided in class [[client.net.sf.saxon.ce.tree.util.Navigator]].
  * <p>
  * Note that the stability of this interface applies to classes that use the interface,
  * not to classes that implement it. The interface may be extended in future to add new methods.
@@ -61,8 +61,8 @@ object NodeInfo {
 trait NodeInfo extends Item with Sequence {
 
   /**
-   * Get the kind of node. This will be a value such as {@link client.net.sf.saxon.ce.type.Type#ELEMENT}
-   * or {@link client.net.sf.saxon.ce.type.Type#ATTRIBUTE}. There are seven kinds of node: documents, elements, attributes,
+   * Get the kind of node. This will be a value such as [[client.net.sf.saxon.ce.type.Type.ELEMENT]]
+   * or [[client.net.sf.saxon.ce.type.Type.ATTRIBUTE]]. There are seven kinds of node: documents, elements, attributes,
    * text, comments, processing-instructions, and namespaces.
    *
    * @return an integer identifying the kind of node. These integer values are the
@@ -224,10 +224,10 @@ trait NodeInfo extends Item with Sequence {
    * Return an iteration over all the nodes reached by the given axis from this node
    * that match a given NodeTest
    *
-   * @exception UnsupportedOperationException if the namespace axis is
+   * @throws UnsupportedOperationException if the namespace axis is
    *      requested and this axis is not supported for this implementation.
    * @param axisNumber an integer identifying the axis; one of the constants
-   *      defined in class {@link client.net.sf.saxon.ce.om.Axis}
+   *      defined in class [[client.net.sf.saxon.ce.om.Axis]]
    * @param nodeTest A condition to be satisfied by the returned nodes; nodes
    *      that do not satisfy this condition are not included in the result
    * @return an AxisIterator that delivers the nodes reached by the axis in
@@ -303,8 +303,8 @@ trait NodeInfo extends Item with Sequence {
    * @param out the Receiver to which the node should be copied. It is the caller's
    *     responsibility to ensure that this Receiver is open before the method is called
    *     (or that it is self-opening), and that it is closed after use.
-   * @param copyOptions a selection of the options defined in {@link CopyOptions}
-   * @exception XPathException
+   * @param copyOptions a selection of the options defined in [[CopyOptions]]
+   * @throws XPathException
    */
   def copy(out: Receiver, copyOptions: Int): Unit
 

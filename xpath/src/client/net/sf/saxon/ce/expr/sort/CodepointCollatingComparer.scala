@@ -1,17 +1,17 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
+import client.net.sf.saxon.ce.expr.sort.CodepointCollatingComparer._
 import client.net.sf.saxon.ce.lib.StringCollator
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.StringValue
-import CodepointCollatingComparer._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{AtomicValue, StringValue}
 
 object CodepointCollatingComparer {
 
-  private var collator: CodepointCollator = CodepointCollator.getInstance
+  private val collator: CodepointCollator = CodepointCollator.getInstance
 
-  private var THE_INSTANCE: CodepointCollatingComparer = new CodepointCollatingComparer()
+  private val THE_INSTANCE: CodepointCollatingComparer = new CodepointCollatingComparer()
 
   /**
    * Get the singular instance of this class
@@ -55,7 +55,7 @@ class CodepointCollatingComparer private () extends AtomicComparer {
    */
   def compareAtomicValues(a: AtomicValue, b: AtomicValue): Int = {
     if (a == null) {
-      return (if (b == null) 0 else -1)
+      return if (b == null) 0 else -1
     } else if (b == null) {
       return +1
     }

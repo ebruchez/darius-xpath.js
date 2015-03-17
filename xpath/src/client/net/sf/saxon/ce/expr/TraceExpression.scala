@@ -1,24 +1,17 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.LogController
-import client.net.sf.saxon.ce.expr.instruct.Instruction
-import client.net.sf.saxon.ce.expr.instruct.TailCall
-import client.net.sf.saxon.ce.lib.TraceListener
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NamespaceResolver
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.om.StructuredQName
+import client.net.sf.saxon.ce.`type`.ItemType
+import client.net.sf.saxon.ce.expr.instruct.{Instruction, TailCall}
+import client.net.sf.saxon.ce.om.{Item, NamespaceResolver, SequenceIterator, StructuredQName}
+import client.net.sf.saxon.ce.orbeon.{HashMap, Iterator}
 import client.net.sf.saxon.ce.trace.InstructionInfo
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.trans.update.PendingUpdateList
-import client.net.sf.saxon.ce.`type`.ItemType
-import com.google.gwt.logging.client.LogConfiguration
-import java.util.HashMap
-import java.util.Iterator
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.{LogConfiguration, LogController}
+
+import scala.beans.BeanProperty
 
 /**
  * A wrapper expression used to trace expressions in XPath and XQuery.
@@ -34,7 +27,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
   @BeanProperty
   var namespaceResolver: NamespaceResolver = null
 
-  private var properties: HashMap[String, Any] = new HashMap[String, Any](10)
+  private val properties: HashMap[String, AnyRef] = new HashMap[String, AnyRef](10)
 
   adoptChildExpression(child)
 
@@ -61,7 +54,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    * will be of type String, and each string can be supplied as input to the getProperty()
    * method to retrieve the value of the property.
    */
-  def getProperties(): Iterator[String] = properties.keySet.iterator()
+  def getProperties(): Iterator[String] = properties.keysIterator()
 
   /**
    * Get the InstructionInfo details about the construct. This is to satisfy the InstructionInfoProvider
@@ -70,7 +63,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    */
   def getInstructionInfo(): InstructionInfo = this
 
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     child = visitor.simplify(child)
     if (child.isInstanceOf[TraceExpression]) {
       return child
@@ -78,19 +71,19 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
     this
   }
 
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     child = visitor.typeCheck(child, contextItemType)
     adoptChildExpression(child)
     this
   }
 
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     child = visitor.optimize(child, contextItemType)
     adoptChildExpression(child)
     this
   }
 
-  def getImplementationMethod(): Int = child.getImplementationMethod
+  override def getImplementationMethod(): Int = child.getImplementationMethod
 
   /**
    * Offer promotion for this subexpression. The offer will be accepted if the subexpression
@@ -107,7 +100,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    * @throws XPathException
    *          if any error is detected
    */
-  def promote(offer: PromotionOffer, parent: Expression): Expression = {
+  override def promote(offer: PromotionOffer, parent: Expression): Expression = {
     val newChild = child.promote(offer, parent)
     if (newChild != child) {
       child = newChild
@@ -139,7 +132,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
     null
   }
 
-  def getItemType(): ItemType = child.getItemType
+  override def getItemType(): ItemType = child.getItemType
 
   /**
    * Determine the static cardinality of the expression. This establishes how many items
@@ -152,12 +145,12 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    *         implementation returns ZERO_OR_MORE (which effectively gives no
    *         information).
    */
-  def getCardinality(): Int = child.getCardinality
+  override def getCardinality(): Int = child.getCardinality
 
   /**
    * Determine which aspects of the context the expression depends on. The result is
-   * a bitwise-or'ed value composed from constants such as {@link StaticProperty#DEPENDS_ON_CONTEXT_ITEM} and
-   * {@link StaticProperty#DEPENDS_ON_CURRENT_ITEM}. The default implementation combines the intrinsic
+   * a bitwise-or'ed value composed from constants such as [[StaticProperty.DEPENDS_ON_CONTEXT_ITEM]] and
+   * [[StaticProperty.DEPENDS_ON_CURRENT_ITEM]]. The default implementation combines the intrinsic
    * dependencies of this expression with the dependencies of the subexpressions,
    * computed recursively. This is overridden for expressions such as FilterExpression
    * where a subexpression's dependencies are not necessarily inherited by the parent
@@ -166,14 +159,14 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    * @return a set of bit-significant flags identifying the dependencies of
    *     the expression
    */
-  def getDependencies(): Int = child.getDependencies
+  override def getDependencies(): Int = child.getDependencies
 
   /**
    * Determine whether this instruction creates new nodes.
    *
    *
    */
-  def createsNewNodes(): Boolean = {
+  override def createsNewNodes(): Boolean = {
     (child.getSpecialProperties & StaticProperty.NON_CREATIVE) == 
       0
   }
@@ -185,7 +178,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    *
    * @return a set of flags indicating static properties of this expression
    */
-  def computeDependencies(): Int = child.computeDependencies()
+  override def computeDependencies(): Int = child.computeDependencies()
 
   /**
    * Evaluate an expression as a single item. This always returns either a single Item or
@@ -201,7 +194,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    *     expression; or null to indicate that the result is an empty
    *     sequence
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     var result: Item = null
     if (LogConfiguration.loggingIsEnabled() && LogController.traceIsEnabled()) {
       LogController.getTraceListener.enter(getInstructionInfo, context)
@@ -213,7 +206,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
     result
   }
 
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     var result: SequenceIterator = null
     if (LogConfiguration.loggingIsEnabled() && LogController.traceIsEnabled()) {
       LogController.getTraceListener.enter(getInstructionInfo, context)
@@ -225,25 +218,26 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
     result
   }
 
-  def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(child)
+  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(child)
 
-  /**
-   * Evaluate an updating expression, adding the results to a Pending Update List.
-   * The default implementation of this method, which is used for non-updating expressions,
-   * throws an UnsupportedOperationException
-   *
-   * @param context the XPath dynamic evaluation context
-   * @param pul     the pending update list to which the results should be written
-   */
-  def evaluatePendingUpdates(context: XPathContext, pul: PendingUpdateList) {
-    if (LogConfiguration.loggingIsEnabled() && LogController.traceIsEnabled()) {
-      LogController.getTraceListener.enter(getInstructionInfo, context)
-      child.evaluatePendingUpdates(context, pul)
-      LogController.getTraceListener.leave(getInstructionInfo)
-    } else {
-      child.evaluatePendingUpdates(context, pul)
-    }
-  }
+//ORBEON XSLT
+//  /**
+//   * Evaluate an updating expression, adding the results to a Pending Update List.
+//   * The default implementation of this method, which is used for non-updating expressions,
+//   * throws an UnsupportedOperationException
+//   *
+//   * @param context the XPath dynamic evaluation context
+//   * @param pul     the pending update list to which the results should be written
+//   */
+//  def evaluatePendingUpdates(context: XPathContext, pul: PendingUpdateList) {
+//    if (LogConfiguration.loggingIsEnabled() && LogController.traceIsEnabled()) {
+//      LogController.getTraceListener.enter(getInstructionInfo, context)
+//      child.evaluatePendingUpdates(context, pul)
+//      LogController.getTraceListener.leave(getInstructionInfo)
+//    } else {
+//      child.evaluatePendingUpdates(context, pul)
+//    }
+//  }
 
   def getLineNumber(): Int = 0
 }

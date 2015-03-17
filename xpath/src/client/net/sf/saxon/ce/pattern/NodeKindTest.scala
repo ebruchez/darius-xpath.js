@@ -1,11 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.pattern
 
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.StructuredQName
 import client.net.sf.saxon.ce.`type`._
-import NodeKindTest._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.{NodeInfo, StructuredQName}
 
 object NodeKindTest {
 
@@ -79,7 +78,7 @@ class NodeKindTest private (var kind: Int) extends NodeTest {
    * @param nodeKind The type of node to be matched
    * @param qName identifies the expanded name of the node to be matched
    */
-  def matches(nodeKind: Int, qName: StructuredQName): Boolean = (kind == nodeKind)
+  def matches(nodeKind: Int, qName: StructuredQName): Boolean = kind == nodeKind
 
   /**
    * Test whether this node test is satisfied by a given node. This alternative
@@ -87,7 +86,7 @@ class NodeKindTest private (var kind: Int) extends NodeTest {
    * for example DOM or JDOM nodes.
    * @param node the node to be matched
    */
-  def matches(node: NodeInfo): Boolean = node.getNodeKind == kind
+  override def matches(node: NodeInfo): Boolean = node.getNodeKind == kind
 
   /**
    * Determine the default priority of this node test when used on its own as a Pattern
@@ -98,19 +97,19 @@ class NodeKindTest private (var kind: Int) extends NodeTest {
    * Determine the types of nodes to which this pattern applies. Used for optimisation.
    * @return the type of node matched by this pattern. e.g. Type.ELEMENT or Type.TEXT
    */
-  def getRequiredNodeKind(): Int = kind
+  override def getRequiredNodeKind(): Int = kind
 
   /**
    * Get a mask indicating which kinds of nodes this NodeTest can match. This is a combination
    * of bits: 1<<Type.ELEMENT for element nodes, 1<<Type.TEXT for text nodes, and so on.
    */
-  def getNodeKindMask(): Int = 1 << kind
+  override def getNodeKindMask(): Int = 1 << kind
 
   /**
    * Get the content type allowed by this NodeTest (that is, the type annotation).
    * Return AnyType if there are no restrictions. The default implementation returns AnyType.
    */
-  def getAtomizedItemType(): AtomicType = kind match {
+  override def getAtomizedItemType(): AtomicType = kind match {
     case Type.DOCUMENT => AtomicType.UNTYPED_ATOMIC
     case Type.ELEMENT => AtomicType.ANY_ATOMIC
     case Type.ATTRIBUTE => AtomicType.ANY_ATOMIC
@@ -121,7 +120,7 @@ class NodeKindTest private (var kind: Int) extends NodeTest {
     case _ => throw new AssertionError("Unknown node kind")
   }
 
-  override def toString(): String = toString kind
+  override def toString(): String = NodeKindTest.toString(kind)
 
   /**
    * Returns a hash code value for the object.

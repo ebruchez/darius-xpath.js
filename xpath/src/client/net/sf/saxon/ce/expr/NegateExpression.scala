@@ -1,13 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value.NumericValue
-import client.net.sf.saxon.ce.value.SequenceType
-import client.net.sf.saxon.ce.value.DoubleValue
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.Item
+import client.net.sf.saxon.ce.value.{DoubleValue, NumericValue, SequenceType}
 
 /**
  * Negate Expression: implements the unary minus operator.
@@ -27,7 +25,7 @@ class NegateExpression(base: Expression) extends UnaryExpression(base) {
     backwardsCompatible = compatible
   }
 
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val oldop = operand
     val role = new RoleLocator(RoleLocator.UNARY_EXPR, "-", 0)
     operand = TypeChecker.staticTypeCheck(operand, SequenceType.OPTIONAL_NUMERIC, backwardsCompatible, 
@@ -42,12 +40,12 @@ class NegateExpression(base: Expression) extends UnaryExpression(base) {
   /**
    * Determine the data type of the expression, if this is known statically
    */
-  def getItemType(): ItemType = operand.getItemType
+  override def getItemType(): ItemType = operand.getItemType
 
   /**
    * Evaluate the expression.
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val v1 = operand.evaluateItem(context).asInstanceOf[NumericValue]
     if (v1 == null) {
       return if (backwardsCompatible) DoubleValue.NaN else null

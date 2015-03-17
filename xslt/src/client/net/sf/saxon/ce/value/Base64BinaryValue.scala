@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
 import client.net.sf.saxon.ce.lib.StringCollator
@@ -30,8 +33,8 @@ object Base64BinaryValue {
 
   /**
    * Byte to text encoder using base 64 encoding. To create a base 64
-   * encoding of a byte stream call {@link #translate} for every
-   * sequence of bytes and {@link #getCharArray} to mark closure of
+   * encoding of a byte stream call [[#translate]] for every
+   * sequence of bytes and [[#getCharArray]] to mark closure of
    * the byte stream and retrieve the text presentation.
    *
    * @author Based on code from the Mozilla Directory SDK
@@ -124,8 +127,8 @@ object Base64BinaryValue {
 
   /**
    * Base 64 text to byte decoder. To produce the binary  array from
-   * base 64 encoding call {@link #translate} for each sequence of
-   * characters and {@link #getByteArray} to mark closure of the
+   * base 64 encoding call [[#translate]] for each sequence of
+   * characters and [[#getByteArray]] to mark closure of the
    * character stream and retrieve the binary contents.
    *
    * @author Based on code from the Mozilla Directory SDK

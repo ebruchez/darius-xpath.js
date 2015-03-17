@@ -1,23 +1,16 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.Configuration
-import client.net.sf.saxon.ce.expr.sort.AtomicComparer
-import client.net.sf.saxon.ce.expr.sort.CodepointCollator
-import client.net.sf.saxon.ce.expr.sort.GenericAtomicComparer
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType}
+import client.net.sf.saxon.ce.expr.GeneralComparison._
+import client.net.sf.saxon.ce.expr.sort.{AtomicComparer, CodepointCollator, GenericAtomicComparer}
 import client.net.sf.saxon.ce.functions.NumberFn
-import client.net.sf.saxon.ce.lib.StringCollator
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.om.Sequence
+import client.net.sf.saxon.ce.om.{Item, Sequence, SequenceIterator}
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.iter.SingletonIterator
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value._
-import client.net.sf.saxon.ce.value.StringValue
-import GeneralComparison._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{StringValue, _}
 
 object GeneralComparison {
 
@@ -67,7 +60,7 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
   /**
    * Determine the static cardinality. Returns [1..1]
    */
-  def computeCardinality(): Int = StaticProperty.EXACTLY_ONE
+  override def computeCardinality(): Int = StaticProperty.EXACTLY_ONE
 
   override def simplify(visitor: ExpressionVisitor): Expression = {
     backwardsCompatible = visitor.getStaticContext.isInBackwardsCompatibleMode
@@ -78,7 +71,7 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
    * Type-check the expression
    * @return the checked expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand0 = visitor.typeCheck(operand0, contextItemType)
     operand1 = visitor.typeCheck(operand1, contextItemType)
     val env = visitor.getStaticContext
@@ -98,7 +91,7 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
    * Optimize the expression
    * @return the checked expression
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val config = visitor.getConfiguration
     operand0 = visitor.optimize(operand0, contextItemType)
     operand1 = visitor.optimize(operand1, contextItemType)
@@ -112,7 +105,7 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
    * @param context the given context for evaluation
    * @return a BooleanValue representing the result of the numeric comparison of the two operands
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     BooleanValue.get(effectiveBooleanValue(context))
   }
 
@@ -121,7 +114,7 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
    * @param context the given context for evaluation
    * @return a boolean representing the result of the numeric comparison of the two operands
    */
-  def effectiveBooleanValue(context: XPathContext): Boolean = {
+  override def effectiveBooleanValue(context: XPathContext): Boolean = {
     var v0 = SequenceExtent.makeSequenceExtent(operand0.iterate(context))
     var v1 = SequenceExtent.makeSequenceExtent(operand1.iterate(context))
     if (backwardsCompatible) {
@@ -160,26 +153,29 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
       for (j <- 0 until val1.getLength) {
         val b = val1.itemAt(j).asInstanceOf[AtomicValue]
         if (compare(a, singletonOperator, b, comparer)) {
-          true
+          return true
         }
       }
     }
+    throw new IllegalStateException
   }
 
   /**
    * Compare two atomic values
    *
-   * @param a0 the first value to be compared
+   * @param _a0 the first value to be compared
    * @param operator the comparison operator
-   * @param a1 the second value to be compared
+   * @param _a1 the second value to be compared
    * @param comparer the comparer to be used (perhaps including a collation)
    * @return the result of the comparison
    * @throws XPathException if comparison fails
    */
-  private def compare(a0: AtomicValue, 
+  private def compare(_a0: AtomicValue,
       operator: Int, 
-      a1: AtomicValue, 
+      _a1: AtomicValue,
       comparer: AtomicComparer): Boolean = {
+    var a0 = _a0
+    var a1 = _a1
     val t0 = a0.getItemType
     val t1 = a1.getItemType
     if (backwardsCompatible) {

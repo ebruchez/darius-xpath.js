@@ -1,8 +1,9 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.om
 
-import DocumentURI._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.DocumentURI._
 
 object DocumentURI {
 
@@ -27,9 +28,9 @@ object DocumentURI {
  */
 class DocumentURI(uri: String) {
 
-  private var displayValue: String = uri
+  private val displayValue: String = uri
 
-  private var normalizedValue: String = normalizeURI(uri)
+  private val normalizedValue: String = normalizeURI(uri)
 
   if (uri == null) {
     throw new NullPointerException("uri")

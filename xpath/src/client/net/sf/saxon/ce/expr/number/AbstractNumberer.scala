@@ -1,23 +1,22 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.number
 
+import client.net.sf.saxon.ce.expr.number.AbstractNumberer._
 import client.net.sf.saxon.ce.lib.Numberer
-import client.net.sf.saxon.ce.tree.util.UTF16CharacterSet
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
+import client.net.sf.saxon.ce.tree.util.{FastStringBuffer, UTF16CharacterSet}
 import client.net.sf.saxon.ce.value.StringValue
-import AbstractNumberer._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 object AbstractNumberer {
 
   val UPPER_CASE = 0
-
   val LOWER_CASE = 1
-
   val TITLE_CASE = 2
 
-  protected val westernDigits = Array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+  protected val westernDigits = Array[Int]('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
 
   protected val latinUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -68,7 +67,7 @@ abstract class AbstractNumberer extends Numberer {
    * Format a number into a string. This method is provided for backwards compatibility. It merely
    * calls the other format method after constructing a RegularGroupFormatter. The method is final;
    * localization subclasses should implement the method
-   * {@link #format(long, String, NumericGroupFormatter, String, String)} rather than this method.
+   * [[format(long, String, NumericGroupFormatter, String, String)]] rather than this method.
    *
    * @param number         The number to be formatted
    * @param picture        The format token. This is a single component of the format attribute
@@ -117,30 +116,30 @@ abstract class AbstractNumberer extends Numberer {
     }
     val pictureLength = StringValue.getStringLength(picture)
     val sb = new FastStringBuffer(FastStringBuffer.TINY)
-    var formchar = picture.charAt(0)
+    var formchar: Int = picture.charAt(0)
     if (UTF16CharacterSet.isHighSurrogate(formchar)) {
       formchar = UTF16CharacterSet.combinePair(formchar.toChar, picture.charAt(1))
     }
     formchar match {
-      case '0' | '1' => 
+      case '0' | '1' =>
         sb.append(toRadical(number, westernDigits, pictureLength, numGroupFormatter))
         if (ordinal != null && ordinal.length > 0) {
           sb.append(ordinalSuffix(ordinal, number))
         }
 
-      case 'A' => 
+      case 'A' =>
         if (number == 0) {
           return "0"
         }
         return toAlphaSequence(number, latinUpper)
 
-      case 'a' => 
+      case 'a' =>
         if (number == 0) {
           return "0"
         }
         return toAlphaSequence(number, latinLower)
 
-      case 'w' | 'W' => 
+      case 'w' | 'W' =>
         var wordCase: Int = 0
         wordCase = if (picture == "W") UPPER_CASE else if (picture == "w") LOWER_CASE else TITLE_CASE
         if (ordinal != null && ordinal.length > 0) {
@@ -155,19 +154,19 @@ abstract class AbstractNumberer extends Numberer {
       case 'I' => if (letterValue == null || letterValue.length == 0 || letterValue == "traditional") {
         return toRoman(number).toUpperCase()
       }
-      case '①' => 
+      case '①' =>
         if (number == 0 || number > 20) {
           return "" + number
         }
         return "" + (0x2460 + number - 1).toChar
 
-      case '⑴' => 
+      case '⑴' =>
         if (number == 0 || number > 20) {
           return "" + number
         }
         return "" + (0x2474 + number - 1).toChar
 
-      case '⒈' => 
+      case '⒈' =>
         if (number == 0 || number > 20) {
           return "" + number
         }
@@ -175,7 +174,7 @@ abstract class AbstractNumberer extends Numberer {
 
       case 'Α' => return toAlphaSequence(number, greekUpper)
       case 'α' => return toAlphaSequence(number, greekLower)
-      case _ => 
+      case _ =>
         var digitValue = Alphanumeric.getDigitValue(formchar)
         if (digitValue >= 0) {
           val zero = formchar - digitValue
@@ -302,8 +301,8 @@ abstract class AbstractNumberer extends Numberer {
    * Format a number as English words with specified case options
    *
    * @param number   the number to be formatted
-   * @param wordCase the required case for example {@link #UPPER_CASE},
-   *                 {@link #LOWER_CASE}, {@link #TITLE_CASE}
+   * @param wordCase the required case for example [[UPPER_CASE]],
+   *                 [[LOWER_CASE]], [[TITLE_CASE]]
    * @return the formatted number
    */
   def toWords(number: Long, wordCase: Int): String = {
@@ -323,8 +322,8 @@ abstract class AbstractNumberer extends Numberer {
    *
    * @param ordinalParam the value of the "ordinal" attribute as supplied by the user
    * @param number       the number to be formatted
-   * @param wordCase     the required case for example {@link #UPPER_CASE},
-   *                     {@link #LOWER_CASE}, {@link #TITLE_CASE}
+   * @param wordCase     the required case for example [[UPPER_CASE]],
+   *                     [[LOWER_CASE]], [[TITLE_CASE]]
    * @return the formatted number
    */
   def toOrdinalWords(ordinalParam: String, number: Long, wordCase: Int): String

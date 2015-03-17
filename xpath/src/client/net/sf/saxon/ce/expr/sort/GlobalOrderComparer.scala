@@ -1,10 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
 import client.net.sf.saxon.ce.om.NodeInfo
-import GlobalOrderComparer._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.orbeon.Util
+
+import scala.beans.BeanProperty
 
 object GlobalOrderComparer {
 
@@ -31,6 +33,6 @@ class GlobalOrderComparer extends NodeOrderComparer {
     if (d1 == d2) {
       return a.compareOrder(b)
     }
-    Long.signum(d1 - d2)
+    Util.signum(d1 - d2)
   }
 }

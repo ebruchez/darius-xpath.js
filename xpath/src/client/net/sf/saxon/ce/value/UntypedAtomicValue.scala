@@ -1,24 +1,21 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, StringToDouble, ValidationFailure}
 import client.net.sf.saxon.ce.lib.StringCollator
-import client.net.sf.saxon.ce.trans.Err
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.StringToDouble
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * An Untyped Atomic value. This inherits from StringValue for implementation convenience, even
  * though an untypedAtomic value is not a String in the data model type hierarchy.
  */
-class UntypedAtomicValue(value: CharSequence) extends StringValue {
+class UntypedAtomicValue(_value: CharSequence) extends StringValue {
 
   var doubleValue: DoubleValue = null
 
-  this.value = (if (value == null) "" else value)
+  this.value = if (_value == null) "" else _value
 
   /**
    * Determine the primitive type of the value. This delivers the same answer as
@@ -26,7 +23,7 @@ class UntypedAtomicValue(value: CharSequence) extends StringValue {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.UNTYPED_ATOMIC
+  override def getItemType(): AtomicType = AtomicType.UNTYPED_ATOMIC
 
   /**
    * Convert a value to another primitive data type, with control over how validation is
@@ -37,7 +34,7 @@ class UntypedAtomicValue(value: CharSequence) extends StringValue {
    * will be a ValidationErrorValue. The caller must check for this condition. No exception is thrown, instead
    * the exception will be encapsulated within the ErrorValue.
    */
-  def convert(requiredType: AtomicType): ConversionResult = {
+  override def convert(requiredType: AtomicType): ConversionResult = {
     if (requiredType == AtomicType.STRING) {
       if (value.length == 0) {
         StringValue.EMPTY_STRING
@@ -93,7 +90,7 @@ class UntypedAtomicValue(value: CharSequence) extends StringValue {
           "' to type " + 
           other.getItemType)
       }
-      result.asInstanceOf[Comparable[_]].compareTo(other)
+      result.asInstanceOf[Comparable[AnyRef]].compareTo(other)
     }
   }
 }

@@ -1,32 +1,28 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.expr.sort.AtomicComparer
-import client.net.sf.saxon.ce.expr.sort.DescendingComparer
-import client.net.sf.saxon.ce.expr.sort.GenericAtomicComparer
-import client.net.sf.saxon.ce.lib.StringCollator
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`._
+import client.net.sf.saxon.ce.expr._
+import client.net.sf.saxon.ce.expr.sort.{AtomicComparer, DescendingComparer, GenericAtomicComparer}
+import client.net.sf.saxon.ce.functions.Minimax._
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
+import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.value._
-import Minimax._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BooleanBeanProperty
 
 object Minimax {
 
   val MIN = 2
-
   val MAX = 3
 
   /**
    * Static method to evaluate the minimum or maximum of a sequence
    * @param iter Iterator over the input sequence
-   * @param operation either {@link #MIN} or {@link #MAX}
-   * @param atomicComparer an AtomicComparer used to compare values
+   * @param operation either [[MIN]] or [[MAX]]
+   * @param _atomicComparer an AtomicComparer used to compare values
    * @param ignoreNaN true if NaN values are to be ignored
    * @param context dynamic evaluation context
    * @return the min or max value in the sequence, according to the rules of the fn:min() or fn:max() functions
@@ -34,9 +30,10 @@ object Minimax {
    */
   def minimax(iter: SequenceIterator, 
       operation: Int, 
-      atomicComparer: AtomicComparer, 
+      _atomicComparer: AtomicComparer,
       ignoreNaN: Boolean, 
       context: XPathContext): AtomicValue = {
+    var atomicComparer = _atomicComparer
     val th = TypeHierarchy.getInstance
     var foundDouble = false
     var foundFloat = false
@@ -148,9 +145,9 @@ object Minimax {
 /**
  * This class implements the min() and max() functions
  */
-class Minimax(operation: Int) extends CollatingFunction {
+class Minimax(_operation: Int) extends CollatingFunction {
 
-  this.operation = operation
+  this.operation = _operation
 
   def newInstance(): Minimax = new Minimax(operation)
 
@@ -162,7 +159,7 @@ class Minimax(operation: Int) extends CollatingFunction {
   /**
    * Static analysis: prevent sorting of the argument
    */
-  def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor) {
     super.checkArguments(visitor)
     argument(0) = ExpressionTool.unsorted(visitor.getConfiguration, argument(0), false)
   }
@@ -170,7 +167,7 @@ class Minimax(operation: Int) extends CollatingFunction {
   /**
    * Determine the cardinality of the function.
    */
-  def computeCardinality(): Int = {
+  override def computeCardinality(): Int = {
     var c = super.computeCardinality()
     if (!Cardinality.allowsZero(argument(0).getCardinality)) {
       c = StaticProperty.EXACTLY_ONE
@@ -188,12 +185,12 @@ class Minimax(operation: Int) extends CollatingFunction {
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val th = TypeHierarchy.getInstance
     argumentType = argument(0).getItemType.getAtomizedItemType.asInstanceOf[AtomicType]
     val e = super.optimize(visitor, contextItemType)
@@ -215,7 +212,7 @@ class Minimax(operation: Int) extends CollatingFunction {
    *
    * @return the statically inferred type of the expression
    */
-  def getItemType(): ItemType = {
+  override def getItemType(): ItemType = {
     val t = Atomizer.getAtomizedItemType(argument(0), false)
     if (t == AtomicType.UNTYPED_ATOMIC) {
       AtomicType.DOUBLE
@@ -227,7 +224,7 @@ class Minimax(operation: Int) extends CollatingFunction {
   /**
    * Evaluate the function
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val comparer = getAtomicComparer(context)
     val iter = argument(0).iterate(context)
     try {

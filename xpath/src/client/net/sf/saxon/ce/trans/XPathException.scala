@@ -1,70 +1,50 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.trans
 
 import client.net.sf.saxon.ce.lib.NamespaceConstant
 import client.net.sf.saxon.ce.om.StructuredQName
 import client.net.sf.saxon.ce.tree.util.SourceLocator
-import com.google.gwt.logging.client.LogConfiguration
-import org.xml.sax.Locator
-import XPathException._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
 
-object XPathException {
+import scala.beans.BeanProperty
 
-  /**
-   * Subclass of XPathException used to report circularities
-   */
-  class Circularity(message: String) extends XPathException(message)
-}
+/**
+ * Subclass of XPathException used to report circularities
+ */
+class Circularity(message: String) extends XPathException(message)
 
 /**
  * XPathException is used to indicate an error in an XPath expression.
  * It will generally be either a StaticError or a DynamicError;
  * ValidationExceptions (arising from schema validation) form a third category
  */
-class XPathException(message: String) extends Exception() {
+class XPathException(_message: String, _throwable: Throwable) extends Exception(_message, _throwable) {
 
-  var isTypeError: Boolean = false
-
-  var isStaticError: Boolean = false
+  var isTypeError = false
+  var isStaticError = false
 
   private var locationText: String = null
-
   private var errorCode: StructuredQName = _
 
-  var hasBeenReported: Boolean = false
-
-  @BeanProperty
-  var message: String = ""
+  private var _hasBeenReported = false
+  def hasBeenReported() = _hasBeenReported
 
   @BeanProperty
   var locator: SourceLocator = _
 
-  if (LogConfiguration.loggingIsEnabled()) {
-    this.message = message
-  }
+  def this(message: String) =
+    this(message, null: Throwable)
+
+  def this() =
+    this(null: String)
 
   /**
    * Create an XPathException that wraps another exception
    * @param err the wrapped error or exception
    */
-  def this(err: Throwable) {
-    super(err)
-  }
-
-  /**
-   * Create an XPathException that supplies an error message and wraps an underlying exception
-   * @param message the error message (which should generally explain what Saxon was doing when the
-   * underlying exception occurred)
-   * @param err the underlying exception (the cause of this exception)
-   */
-  def this(message: String, err: Throwable) {
-    super(err)
-    if (LogConfiguration.loggingIsEnabled()) {
-      this.message = message
-    }
-  }
+  def this(err: Throwable) =
+    this(null, err)
 
   /**
    * Create an XPathException that supplies an error message and supplies location information
@@ -73,14 +53,11 @@ class XPathException(message: String) extends Exception() {
    * document) the error occurred
    */
   def this(message: String, loc: SourceLocator) {
-    super()
-    if (LogConfiguration.loggingIsEnabled()) {
-      this.message = message
-    }
+    this(message)
     this.locator = loc
   }
 
-  override def toString(): String = message
+  override def toString(): String = getMessage
 
   /**
    * Create an XPathException that supplies an error message and an error code
@@ -89,10 +66,7 @@ class XPathException(message: String) extends Exception() {
    * system error code namespace
    */
   def this(message: String, errorCode: String) {
-    super()
-    if (LogConfiguration.loggingIsEnabled()) {
-      this.message = message
-    }
+    this(message)
     setErrorCode(errorCode)
     if (errorCode == "XPTY0004") {
       setIsTypeError(true)
@@ -108,10 +82,7 @@ class XPathException(message: String) extends Exception() {
    * document) the error occurred
    */
   def this(message: String, errorCode: String, loc: SourceLocator) {
-    super()
-    if (LogConfiguration.loggingIsEnabled()) {
-      this.message = message
-    }
+    this(message)
     setErrorCode(errorCode)
     this.locator = loc
   }
@@ -169,7 +140,7 @@ class XPathException(message: String) extends Exception() {
 
   /**
    * Set the error code. The error code is a QName; this method sets the local part of the name,
-   * setting the namespace of the error code to the standard system namespace {@link client.net.sf.saxon.ce.lib.NamespaceConstant#ERR}
+   * setting the namespace of the error code to the standard system namespace [[client.net.sf.saxon.ce.lib.NamespaceConstant.ERR]]
    * @param code The local part of the name of the error code
    */
   def setErrorCode(code: String) {
@@ -181,7 +152,7 @@ class XPathException(message: String) extends Exception() {
   /**
    * Set the error code, provided it has not already been set.
    * The error code is a QName; this method sets the local part of the name,
-   * setting the namespace of the error code to the standard system namespace {@link NamespaceConstant#ERR}
+   * setting the namespace of the error code to the standard system namespace [[NamespaceConstant.ERR]]
    * @param code The local part of the name of the error code
    */
   def maybeSetErrorCode(code: String) {
@@ -226,7 +197,7 @@ class XPathException(message: String) extends Exception() {
    * @param reported true if the error has been reported to the error listener
    */
   def setHasBeenReported(reported: Boolean) {
-    hasBeenReported = reported
+    _hasBeenReported = reported
   }
 
   /**

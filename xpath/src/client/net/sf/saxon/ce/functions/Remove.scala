@@ -1,16 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.NumericValue
-import client.net.sf.saxon.ce.value.IntegerValue
-import Remove._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.expr._
+import client.net.sf.saxon.ce.functions.Remove._
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
+import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.value.{AtomicValue, DecimalValue, IntegerValue, NumericValue}
 
 object Remove {
 
@@ -28,7 +26,9 @@ object Remove {
      * @return either the output item, or null.
      */
     def mapItem(item: Item): Item = {
-      (if (position += 1 == removeIndex) null else item)
+      val result = if (position == removeIndex) null else item
+      position += 1
+      result
     }
 
     /**
@@ -53,7 +53,7 @@ class Remove extends SystemFunction {
    * Simplify. Recognize remove(seq, 1) as a TailExpression.
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     val exp = super.simplify(visitor)
     if (exp.isInstanceOf[Remove]) {
       exp.asInstanceOf[Remove].simplifyAsTailExpression()
@@ -75,7 +75,7 @@ class Remove extends SystemFunction {
         if (value <= 0) {
           return argument(0)
         } else if (value == 1) {
-          val t = SystemFunction.makeSystemFunction("subsequence", Array(argument(0), new Literal(IntegerValue.TWO)))
+          val t = SystemFunction.makeSystemFunction("subsequence", Array(argument(0), new Literal(DecimalValue.TWO)))
           ExpressionTool.copyLocationInfo(this, t)
           return t
         }
@@ -96,13 +96,13 @@ class Remove extends SystemFunction {
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws client.net.sf.saxon.ce.trans.XPathException
    *          if an error is discovered during this phase
    *          (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val e = super.optimize(visitor, contextItemType)
     if (e == this) {
       return simplifyAsTailExpression()
@@ -114,12 +114,12 @@ class Remove extends SystemFunction {
    * Determine the data type of the items in the sequence
    * @return the type of the input sequence
    */
-  def getItemType(): ItemType = argument(0).getItemType
+  override def getItemType(): ItemType = argument(0).getItemType
 
   /**
    * Evaluate the function to return an iteration of selected nodes.
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val seq = argument(0).iterate(context)
     val n0 = argument(1).evaluateItem(context).asInstanceOf[AtomicValue]
     val n = n0.asInstanceOf[NumericValue]

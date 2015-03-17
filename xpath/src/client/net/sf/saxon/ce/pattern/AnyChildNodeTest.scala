@@ -1,11 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.pattern
 
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.StructuredQName
 import client.net.sf.saxon.ce.`type`.Type
-import AnyChildNodeTest._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.om.{NodeInfo, StructuredQName}
 
 object AnyChildNodeTest {
 
@@ -41,7 +40,7 @@ class AnyChildNodeTest private () extends NodeTest {
    * for example DOM or JDOM nodes.
    * @param node the node to be matched
    */
-  def matches(node: NodeInfo): Boolean = {
+  override def matches(node: NodeInfo): Boolean = {
     val nodeKind = node.getNodeKind
     (nodeKind == Type.ELEMENT || nodeKind == Type.TEXT || nodeKind == Type.COMMENT || 
       nodeKind == Type.PROCESSING_INSTRUCTION)
@@ -57,7 +56,7 @@ class AnyChildNodeTest private () extends NodeTest {
    * Get a mask indicating which kinds of nodes this NodeTest can match. This is a combination
    * of bits: 1<<Type.ELEMENT for element nodes, 1<<Type.TEXT for text nodes, and so on.
    */
-  def getNodeKindMask(): Int = {
+  override def getNodeKindMask(): Int = {
     1 << Type.ELEMENT | 1 << Type.TEXT | 1 << Type.COMMENT | 
       1 << Type.PROCESSING_INSTRUCTION
   }

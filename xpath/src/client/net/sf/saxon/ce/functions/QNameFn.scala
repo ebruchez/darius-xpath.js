@@ -1,14 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NameChecker
-import client.net.sf.saxon.ce.om.QNameException
+import client.net.sf.saxon.ce.om.{Item, NameChecker, QNameException}
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.QNameValue
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{AtomicValue, QNameValue}
 
 /**
  * This class supports the fn:QName() function (previously named fn:expanded-QName())
@@ -22,7 +20,7 @@ class QNameFn extends SystemFunction {
    * pre-evaluation, or that need access to context information, can override this method.
    * @param visitor an expression visitor
    */
-  def preEvaluate(visitor: ExpressionVisitor): Expression = {
+  override def preEvaluate(visitor: ExpressionVisitor): Expression = {
     try {
       val early = new EarlyEvaluationContext(visitor.getConfiguration)
       val item1 = argument(1).evaluateItem(early)
@@ -52,7 +50,7 @@ class QNameFn extends SystemFunction {
   /**
    * Evaluate the expression
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val arg0 = argument(0).evaluateItem(context).asInstanceOf[AtomicValue]
     var uri: String = null
     uri = if (arg0 == null) null else arg0.getStringValue

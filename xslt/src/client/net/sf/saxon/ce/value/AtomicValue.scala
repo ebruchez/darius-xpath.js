@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
 import client.net.sf.saxon.ce.expr.XPathContext
@@ -168,7 +171,7 @@ abstract class AtomicValue extends Item with ConversionResult {
    * but defined at this level for convenience
    *
    * @param component identifies the required component, as a constant defined in class
-   *                  {@link client.net.sf.saxon.ce.functions.Component}, for example {@link client.net.sf.saxon.ce.functions.Component#HOURS}
+   *                  [[client.net.sf.saxon.ce.functions.Component]], for example [[client.net.sf.saxon.ce.functions.Component#HOURS]]
    * @return the value of the requested component of this value
    */
   def getComponent(component: Int): AtomicValue = {

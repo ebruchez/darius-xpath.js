@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.`type`
 
 import client.net.sf.saxon.ce.om.Item
@@ -13,9 +16,9 @@ import scala.collection.JavaConversions._
  * instances of SimpleType in the schema type hierarchy. Node Types, represented by
  * the class NodeTest, are also Patterns as used in XSLT.
  *
- * <p>Saxon assumes that apart from {@link AnyItemType} (which corresponds to <code>item()</item>
- * and matches anything), every ItemType will be either a {@link AtomicType}, or a
- *  {@link client.net.sf.saxon.ce.pattern.NodeTest}. User-defined implementations of ItemType must therefore extend one of those
+ * <p>Saxon assumes that apart from [[AnyItemType]] (which corresponds to <code>item()</item>
+ * and matches anything), every ItemType will be either a [[AtomicType]], or a
+ *  [[client.net.sf.saxon.ce.pattern.NodeTest]]. User-defined implementations of ItemType must therefore extend one of those
  * three classes/interfaces.</p>
  * @see AtomicType
  * @see client.net.sf.saxon.ce.pattern.NodeTest

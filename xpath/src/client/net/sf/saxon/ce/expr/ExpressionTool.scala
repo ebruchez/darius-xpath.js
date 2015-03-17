@@ -1,37 +1,23 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.Configuration
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.event.PipelineConfiguration
-import client.net.sf.saxon.ce.event.SequenceOutputter
-import client.net.sf.saxon.ce.functions.Current
-import client.net.sf.saxon.ce.lib.NamespaceConstant
 import client.net.sf.saxon.ce.om._
+import client.net.sf.saxon.ce.orbeon.{Configuration, List}
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.SourceLocator
-import client.net.sf.saxon.ce.value._
-import client.net.sf.saxon.ce.value.StringValue
-import java.util.Iterator
-import java.util.List
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{StringValue, _}
 
 object ExpressionTool {
 
   val UNDECIDED = -1
-
   val NO_EVALUATION_NEEDED = 0
-
   val EVALUATE_VARIABLE = 1
-
   val RETURN_EMPTY_SEQUENCE = 5
-
   val CALL_EVALUATE_ITEM = 7
-
   val ITERATE_AND_MATERIALIZE = 8
-
   val PROCESS = 9
-
   val EVALUATE_SUPPLIED_PARAMETER = 14
 
   /**
@@ -45,7 +31,7 @@ object ExpressionTool {
    *     context of the expression
    * @param container
    * @param start position of the first significant character in the expression
-   * @param terminator The token that marks the end of this expression; typically
+   * @param _terminator The token that marks the end of this expression; typically
    * Token.EOF, but may for example be a right curly brace
    * @param locator the source location of the expression for use in diagnostics
    */
@@ -53,8 +39,9 @@ object ExpressionTool {
       env: StaticContext, 
       container: Container, 
       start: Int, 
-      terminator: Int, 
+      _terminator: Int,
       locator: SourceLocator): Expression = {
+    var terminator = _terminator
     val parser = new ExpressionParser()
     parser.setDefaultContainer(container)
     if (terminator == -1) {
@@ -75,7 +62,7 @@ object ExpressionTool {
   def copyLocationInfo(from: Expression, to: Expression) {
     if (from != null && to != null) {
       if (from.sourceLocator != null) {
-        to.setSourceLocator(from.getSourceLocator)
+        to.setSourceLocator(from.sourceLocator)
         to.setContainer(from.getContainer)
       }
     }
@@ -164,41 +151,47 @@ object ExpressionTool {
    *     the expression is not evaluated immediately, then parts of the
    *     context on which the expression depends need to be saved as part of
    *      the Closure
-   * @exception XPathException if any error occurs in evaluating the
+   * @throws XPathException if any error occurs in evaluating the
    *     expression
    * @return a value: either the actual value obtained by evaluating the
    *     expression, or a Closure containing all the information needed to
    *     evaluate it later
    */
   def evaluate(exp: Expression, evaluationMode: Int, context: XPathContext): Sequence = evaluationMode match {
-    case NO_EVALUATION_NEEDED => exp.asInstanceOf[Literal].getValue
-    case EVALUATE_VARIABLE => exp.asInstanceOf[VariableReference].evaluateVariable(context)
-    case EVALUATE_SUPPLIED_PARAMETER => exp.asInstanceOf[SuppliedParameterReference].evaluateVariable(context)
-    case RETURN_EMPTY_SEQUENCE => EmptySequence.getInstance
+    case NO_EVALUATION_NEEDED =>
+      exp.asInstanceOf[Literal].getValue
+    case EVALUATE_VARIABLE =>
+      exp.asInstanceOf[VariableReference].evaluateVariable(context)
+    case EVALUATE_SUPPLIED_PARAMETER =>
+      exp.asInstanceOf[SuppliedParameterReference].evaluateVariable(context)
+    case RETURN_EMPTY_SEQUENCE =>
+      EmptySequence.getInstance
     case CALL_EVALUATE_ITEM => 
-      var item = exp.evaluateItem(context)
+      val item = exp.evaluateItem(context)
       if (item == null) {
         EmptySequence.getInstance
       } else {
         item
       }
-
-    case UNDECIDED | ITERATE_AND_MATERIALIZE => SequenceExtent.makeSequenceExtent(exp.iterate(context))
-    case PROCESS => 
-      var controller = context.getController
-      var c2 = context.newMinorContext()
-      var seq = controller.allocateSequenceOutputter(20)
-      var pipe = controller.makePipelineConfiguration()
+    case UNDECIDED | ITERATE_AND_MATERIALIZE =>
+      SequenceExtent.makeSequenceExtent(exp.iterate(context))
+    case PROCESS =>
+      ??? //ORBEON
+      /*
+      val controller = context.getController
+      val c2 = context.newMinorContext()
+      val seq = controller.allocateSequenceOutputter(20)
+      val pipe = controller.makePipelineConfiguration()
       seq.setPipelineConfiguration(pipe)
       c2.setTemporaryReceiver(seq)
       seq.open()
       exp.process(c2)
       seq.close()
-      var `val` = seq.getSequence
+      val `val` = seq.getSequence
       seq.reset()
-      `val`
-
-    case _ => throw new IllegalArgumentException("Unknown evaluation mode " + evaluationMode)
+      `val`*/
+    case _ =>
+      throw new IllegalArgumentException("Unknown evaluation mode " + evaluationMode)
   }
 
   /**
@@ -217,19 +210,20 @@ object ExpressionTool {
    * Allocate slot numbers to range variables
    *
    * @param exp the expression whose range variables need to have slot numbers assigned
-   * @param nextFree the next slot number that is available for allocation
+   * @param _nextFree the next slot number that is available for allocation
    * @return the next unallocated slot number.
    */
-  def allocateSlots(exp: Expression, nextFree: Int): Int = {
+  def allocateSlots(exp: Expression, _nextFree: Int): Int = {
+    var nextFree = _nextFree
     if (exp.isInstanceOf[Assignation]) {
       exp.asInstanceOf[Assignation].setSlotNumber(nextFree)
       nextFree += 1
     }
     if (exp.isInstanceOf[VariableReference]) {
-      val `var` = exp.asInstanceOf[VariableReference]
-      val binding = `var`.getBinding
+      val varRef = exp.asInstanceOf[VariableReference]
+      val binding = varRef.getBinding
       if (exp.isInstanceOf[LocalVariableReference]) {
-        `var`.asInstanceOf[LocalVariableReference].setSlotNumber(binding.getLocalSlotNumber)
+        varRef.asInstanceOf[LocalVariableReference].setSlotNumber(binding.getLocalSlotNumber)
       }
       if (binding.isInstanceOf[Assignation] && binding.getLocalSlotNumber < 0) {
         val decl = binding.asInstanceOf[Assignation]
@@ -238,9 +232,9 @@ object ExpressionTool {
         throw new IllegalStateException(msg)
       }
     }
-    var children = exp.iterateSubExpressions()
+    val children = exp.iterateSubExpressions()
     while (children.hasNext) {
-      val child = children.next().asInstanceOf[Expression]
+      val child = children.next()
       nextFree = allocateSlots(child, nextFree)
     }
     nextFree
@@ -310,12 +304,12 @@ object ExpressionTool {
     }
     if (e.isInstanceOf[VariableReference]) {
       (0 until bindingList.length).find(e.asInstanceOf[VariableReference].getBinding == bindingList(_))
-        .map(true)
+        .map(_ => true)
         .getOrElse(false)
     } else {
-      var children = e.iterateSubExpressions()
+      val children = e.iterateSubExpressions()
       while (children.hasNext) {
-        val child = children.next().asInstanceOf[Expression]
+        val child = children.next()
         if (dependsOnVariable(child, bindingList)) {
           return true
         }
@@ -337,7 +331,7 @@ object ExpressionTool {
     }
     val iter = exp.iterateSubExpressions()
     while (iter.hasNext) {
-      val e = iter.next().asInstanceOf[Expression]
+      val e = iter.next()
       if (callsFunction(e, qName)) {
         return true
       }
@@ -345,28 +339,30 @@ object ExpressionTool {
     false
   }
 
-  /**
-   * Resolve calls to the XSLT current() function within an expression
-   *
-   * @param exp the expression within which calls to current() should be resolved
-   * @return the expression after resolving calls to current()
-   */
-  def resolveCallsToCurrentFunction(exp: Expression): Expression = {
-    if (callsFunction(exp, Current.FN_CURRENT)) {
-      val let = new LetExpression()
-      let.setVariableQName(new StructuredQName("saxon", NamespaceConstant.SAXON, "current" + exp.hashCode))
-      let.setRequiredType(SequenceType.SINGLE_ITEM)
-      let.setSequence(new CurrentItemExpression())
-      val offer = new PromotionOffer()
-      offer.action = PromotionOffer.REPLACE_CURRENT
-      offer.containingExpression = let
-      exp = exp.promote(offer, null)
-      let.setAction(exp)
-      let
-    } else {
-      exp
-    }
-  }
+//ORBEON
+//  /**
+//   * Resolve calls to the XSLT current() function within an expression
+//   *
+//   * @param _exp the expression within which calls to current() should be resolved
+//   * @return the expression after resolving calls to current()
+//   */
+//  def resolveCallsToCurrentFunction(_exp: Expression): Expression = {
+//    var exp = _exp
+//    if (callsFunction(exp, Current.FN_CURRENT)) {
+//      val let = new LetExpression()
+//      let.setVariableQName(new StructuredQName("saxon", NamespaceConstant.SAXON, "current" + exp.hashCode))
+//      let.setRequiredType(SequenceType.SINGLE_ITEM)
+//      let.setSequence(new CurrentItemExpression())
+//      val offer = new PromotionOffer()
+//      offer.action = PromotionOffer.REPLACE_CURRENT
+//      offer.containingExpression = let
+//      exp = exp.promote(offer, null)
+//      let.setAction(exp)
+//      let
+//    } else {
+//      exp
+//    }
+//  }
 
   /**
    * Get a list of all references to a particular variable within a subtree
@@ -379,9 +375,9 @@ object ExpressionTool {
       exp.asInstanceOf[VariableReference].getBinding == binding) {
       list.add(exp.asInstanceOf[VariableReference])
     } else {
-      var iter = exp.iterateSubExpressions()
+      val iter = exp.iterateSubExpressions()
       while (iter.hasNext) {
-        gatherVariableReferences(iter.next().asInstanceOf[Expression], binding, list)
+        gatherVariableReferences(iter.next(), binding, list)
       }
     }
   }
@@ -400,7 +396,7 @@ object ExpressionTool {
     } else {
       val iter = exp.iterateSubExpressions()
       while (iter.hasNext) {
-        val e = iter.next().asInstanceOf[Expression]
+        val e = iter.next()
         rebindVariableReferences(e, oldBinding, newBinding)
       }
     }

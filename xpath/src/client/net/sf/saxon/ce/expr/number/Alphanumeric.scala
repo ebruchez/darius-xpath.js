@@ -1,7 +1,9 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.number
 
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.orbeon.Util
 
 object Alphanumeric {
 
@@ -18,11 +20,9 @@ object Alphanumeric {
       (c >= 0x30 && c <= 0x39) || (c >= 0x41 && c <= 0x5A) || 
         (c >= 0x61 && c <= 0x7A)
     } else if (c <= 0xffff) {
-      Character.isLetterOrDigit(c.toChar)
+      Util.isLetterOrDigit(c.toChar)
     } else {
-      (0 until startAstralAlphaNumeric.length).find(c <= endAstralAlphaNumeric(_))
-        .map((c >= startAstralAlphaNumeric(_)))
-        .getOrElse(false)
+      (0 until startAstralAlphaNumeric.length).find(c <= endAstralAlphaNumeric(_)).exists(c >= startAstralAlphaNumeric(_))
     }
   }
 

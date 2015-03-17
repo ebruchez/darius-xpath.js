@@ -1,19 +1,16 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.util
 
+import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.event.Receiver
 import client.net.sf.saxon.ce.om._
 import client.net.sf.saxon.ce.pattern.NodeTest
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.AbstractNode
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.StringValue
-import client.net.sf.saxon.ce.value.UntypedAtomicValue
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.tree.iter.{EmptyIterator, UnfailingIterator}
+import client.net.sf.saxon.ce.value.{AbstractNode, AtomicValue, StringValue, UntypedAtomicValue}
+
+import scala.beans.BeanProperty
 
 /**
  * A node (implementing the NodeInfo interface) representing an attribute, text node,
@@ -39,7 +36,7 @@ class Orphan extends AbstractNode with NodeInfo {
 
   /**
    * Set the node kind
-   * @param kind the kind of node, for example {@link Type#ELEMENT} or {@link Type#ATTRIBUTE}
+   * @param kind the kind of node, for example [[Type.ELEMENT]] or [[Type.ATTRIBUTE]]
    */
   def setNodeKind(kind: Int) {
     this.kind = kind
@@ -133,7 +130,7 @@ class Orphan extends AbstractNode with NodeInfo {
     if (this.isSameNodeInfo(other)) {
       return 0
     }
-    (if (this.hashCode < other.hashCode) -1 else +1)
+    if (this.hashCode < other.hashCode) -1 else +1
   }
 
   /**
@@ -161,7 +158,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * @return the local part of the name. For an unnamed node, returns "".
    */
   def getLocalPart(): String = {
-    (if (qName == null) "" else qName.getLocalName)
+    if (qName == null) "" else qName.getLocalName
   }
 
   /**
@@ -171,7 +168,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * For a node with an empty prefix, return an empty string.
    */
   def getURI(): String = {
-    (if (qName == null) "" else qName.getNamespaceURI)
+    if (qName == null) "" else qName.getNamespaceURI()
   }
 
   /**
@@ -181,7 +178,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * For a node with no name, return an empty string.
    */
   def getDisplayName(): String = {
-    (if (qName == null) "" else qName.getDisplayName)
+    if (qName == null) "" else qName.getDisplayName()
   }
 
   /**
@@ -245,7 +242,9 @@ class Orphan extends AbstractNode with NodeInfo {
    * Copy this node to a given outputter (deep copy)
    */
   def copy(out: Receiver, copyOptions: Int) {
-    Navigator.copy(this, out, copyOptions)
+    ???
+//ORBEON unused
+//    Navigator.copy(this, out, copyOptions)
   }
 
   /**

@@ -1,15 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
+import client.net.sf.saxon.ce.`type`._
 import client.net.sf.saxon.ce.expr.instruct.ForEach
 import client.net.sf.saxon.ce.functions.SystemFunction
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
 import client.net.sf.saxon.ce.pattern.NodeTest
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`._
 import client.net.sf.saxon.ce.value._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * An UntypedAtomicConverter is an expression that converts any untypedAtomic items in
@@ -28,7 +28,7 @@ class UntypedAtomicConverter(sequence: Expression,
    * Determine the data type of the items returned by the expression
    *
    */
-  def getItemType(): ItemType = {
+  override def getItemType(): ItemType = {
     val it = operand.getItemType
     singleton = (it.isInstanceOf[AtomicType]) && !Cardinality.allowsMany(operand.getCardinality)
     if (allConverted) {
@@ -38,7 +38,7 @@ class UntypedAtomicConverter(sequence: Expression,
     }
   }
 
-  def computeCardinality(): Int = {
+  override def computeCardinality(): Int = {
     if (singleton) {
       StaticProperty.ALLOWS_ZERO_OR_ONE
     } else {
@@ -49,7 +49,7 @@ class UntypedAtomicConverter(sequence: Expression,
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     if (allConverted && requiredItemType == AtomicType.QNAME) {
       typeError("Cannot convert untypedAtomic values to QNames", "XPTY0004")
     }
@@ -94,13 +94,13 @@ class UntypedAtomicConverter(sequence: Expression,
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws client.net.sf.saxon.ce.trans.XPathException
    *          if an error is discovered during this phase
    *          (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val th = TypeHierarchy.getInstance
     val e2 = super.optimize(visitor, contextItemType)
     if (e2 != this) {
@@ -122,9 +122,9 @@ class UntypedAtomicConverter(sequence: Expression,
   /**
    * Determine the special properties of this expression
    *
-   * @return {@link StaticProperty#NON_CREATIVE}.
+   * @return [[StaticProperty.NON_CREATIVE]].
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     val p = super.computeSpecialProperties()
     p | StaticProperty.NON_CREATIVE | StaticProperty.NOT_UNTYPED
   }
@@ -132,7 +132,7 @@ class UntypedAtomicConverter(sequence: Expression,
   /**
    * Iterate over the sequence of values
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val base = operand.iterate(context)
     new ItemMappingIterator(base, this, true)
   }
@@ -166,7 +166,7 @@ class UntypedAtomicConverter(sequence: Expression,
   /**
    * Evaluate as an Item. This should only be called if the UntypedAtomicConverter has cardinality zero-or-one
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val item = operand.evaluateItem(context)
     if (item == null) {
       null

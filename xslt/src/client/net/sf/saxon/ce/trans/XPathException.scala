@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.trans
 
 import client.net.sf.saxon.ce.lib.NamespaceConstant
@@ -169,7 +172,7 @@ class XPathException(message: String) extends Exception() {
 
   /**
    * Set the error code. The error code is a QName; this method sets the local part of the name,
-   * setting the namespace of the error code to the standard system namespace {@link client.net.sf.saxon.ce.lib.NamespaceConstant#ERR}
+   * setting the namespace of the error code to the standard system namespace [[client.net.sf.saxon.ce.lib.NamespaceConstant#ERR]]
    * @param code The local part of the name of the error code
    */
   def setErrorCode(code: String) {
@@ -181,7 +184,7 @@ class XPathException(message: String) extends Exception() {
   /**
    * Set the error code, provided it has not already been set.
    * The error code is a QName; this method sets the local part of the name,
-   * setting the namespace of the error code to the standard system namespace {@link NamespaceConstant#ERR}
+   * setting the namespace of the error code to the standard system namespace [[NamespaceConstant#ERR]]
    * @param code The local part of the name of the error code
    */
   def maybeSetErrorCode(code: String) {

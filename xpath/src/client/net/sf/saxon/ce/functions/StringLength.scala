@@ -1,12 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
+import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.expr._
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.value._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * Implement the XPath string-length() function
@@ -24,7 +24,7 @@ class StringLength extends SystemFunction {
    * @return a set of bit-significant flags identifying the "intrinsic"
    *         dependencies. The flags are documented in class client.net.sf.saxon.ce.value.StaticProperty
    */
-  def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies(): Int = {
     var d = super.getIntrinsicDependencies
     if (argument.length == 0) {
       d |= StaticProperty.DEPENDS_ON_CONTEXT_ITEM
@@ -38,7 +38,7 @@ class StringLength extends SystemFunction {
    * @param visitor an expression visitor
    * @return the expression, either unchanged, or pre-evaluated
    */
-  def preEvaluate(visitor: ExpressionVisitor): Expression = {
+  override def preEvaluate(visitor: ExpressionVisitor): Expression = {
     if (argument.length == 0) {
       this
     } else {
@@ -46,7 +46,7 @@ class StringLength extends SystemFunction {
     }
   }
 
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     if (argument.length == 0 && contextItemType == null) {
       typeError("The context item for string-length() is undefined", "XPDY0002")
     }
@@ -56,7 +56,7 @@ class StringLength extends SystemFunction {
   /**
    * Evaluate in a general context
    */
-  def evaluateItem(c: XPathContext): Item = {
+  override def evaluateItem(c: XPathContext): Item = {
     var sv: AtomicValue = null
     if (argument.length == 0) {
       val contextItem = c.getContextItem

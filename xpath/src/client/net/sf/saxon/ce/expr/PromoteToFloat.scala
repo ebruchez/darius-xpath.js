@@ -1,14 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.NumericValue
-import client.net.sf.saxon.ce.value.UntypedAtomicValue
-import client.net.sf.saxon.ce.value.DoubleValue
-import client.net.sf.saxon.ce.trans.XPathException
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType}
+import client.net.sf.saxon.ce.value.{AtomicValue, DoubleValue, NumericValue, UntypedAtomicValue}
 
 /**
  * Expression that performs numeric promotion to xs:double
@@ -20,7 +16,7 @@ class PromoteToFloat(exp: Expression) extends NumericPromoter(exp) {
    * @return a value such as Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.NODE,
    * or Type.ITEM (meaning not known in advance)
    */
-  def getItemType(): ItemType = AtomicType.FLOAT
+  override def getItemType(): ItemType = AtomicType.FLOAT
 
   /**
    * Perform the promotion

@@ -1,32 +1,26 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
-import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
+import java.math.{BigDecimal, BigInteger}
+
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
+import client.net.sf.saxon.ce.regex.RegExp
+import client.net.sf.saxon.ce.trans.{Err, XPathException}
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import com.google.gwt.regexp.shared.RegExp
-import java.math.BigDecimal
-import java.math.BigInteger
-import DecimalValue._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.DecimalValue._
+
+import scala.util.control.Breaks
 
 object DecimalValue {
 
   val DIVIDE_PRECISION = 18
-
   val BIG_DECIMAL_ONE_MILLION = BigDecimal.valueOf(1000000)
-
   val BIG_DECIMAL_MAX_INT = BigDecimal.valueOf(Integer.MAX_VALUE)
-
   val BIG_DECIMAL_MIN_INT = BigDecimal.valueOf(Integer.MIN_VALUE)
-
   val ZERO = new DecimalValue(BigDecimal.valueOf(0))
-
   val ONE = new DecimalValue(BigDecimal.valueOf(1))
-
   val TWO = new DecimalValue(BigDecimal.valueOf(2))
 
   /**
@@ -48,11 +42,15 @@ object DecimalValue {
     var lastZeroPos = -1
     val zeroCh = '0'
     var i = str.length - 1
-    while (i > -1) {
-      val ch = str.charAt(i)
-      if (ch != zeroCh) //break
-      lastZeroPos = i
-      i -= 1
+    import Breaks._
+    breakable {
+      while (i > -1) {
+        val ch = str.charAt(i)
+        if (ch != zeroCh)
+          break()
+        lastZeroPos = i
+        i -= 1
+      }
     }
     if (lastZeroPos > -1) {
       if (lastZeroPos - dotPos == 1) lastZeroPos = dotPos
@@ -85,20 +83,20 @@ object DecimalValue {
           case ' ' | '\t' | '\r' | '\n' => if (state != 0) {
             state = 5
           }
-          case '+' => 
+          case '+' =>
             if (state != 0) {
               throw new NumberFormatException("unexpected sign")
             }
             state = 1
 
-          case '-' => 
+          case '-' =>
             if (state != 0) {
               throw new NumberFormatException("unexpected sign")
             }
             state = 1
             digits.append(c)
 
-          case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => 
+          case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' =>
             if (state == 0) {
               state = 1
             } else if (state >= 3) {
@@ -110,7 +108,7 @@ object DecimalValue {
             digits.append(c)
             foundDigit = true
 
-          case '.' => 
+          case '.' =>
             if (state == 5) {
               throw new NumberFormatException("contains embedded whitespace")
             }
@@ -125,12 +123,15 @@ object DecimalValue {
       if (!foundDigit) {
         throw new NumberFormatException("no digits in value")
       }
-      while (scale > 0) {
-        if (digits.charAt(digits.length - 1) == '0') {
-          digits.setLength(digits.length - 1)
-          scale -= 1
-        } else {
-          //break
+      import Breaks._
+      breakable {
+        while (scale > 0) {
+          if (digits.charAt(digits.length - 1) == '0') {
+            digits.setLength(digits.length - 1)
+            scale -= 1
+          } else {
+            break()
+          }
         }
       }
       if (digits.length == 0 || (digits.length == 1 && digits.charAt(0) == '-')) {
@@ -140,7 +141,7 @@ object DecimalValue {
       val bigDec = new BigDecimal(bigInt, scale)
       new DecimalValue(bigDec)
     } catch {
-      case err: NumberFormatException => new ValidationFailure("Cannot convert string " + Err.wrap(Whitespace.trim(in), 
+      case err: NumberFormatException => new ValidationFailure("Cannot convert string " + Err.wrap(Whitespace.trim(in),
         Err.VALUE) + 
         " to xs:decimal: " + 
         err.getMessage, "FORG0001")
@@ -213,9 +214,15 @@ object DecimalValue {
 /**
  * A decimal value
  */
-class DecimalValue(value: BigDecimal) extends NumericValue {
+class DecimalValue(_value: Either[BigDecimal, Double]) extends NumericValue {
 
-  private var value: BigDecimal = stripTrailingZeros(value)
+  private val value = _value match {
+    case Left(decimal) => stripTrailingZeros(decimal)
+    case Right(double) => new BigDecimal(double)
+  }
+
+  def this(in: BigDecimal) =
+    this(Left(in))
 
   /**
    * Constructor supplying a double
@@ -223,21 +230,16 @@ class DecimalValue(value: BigDecimal) extends NumericValue {
    * @param in the value of the DecimalValue
    * @throws XPathException if the double cannot be converted (e.g. Infinity or NaN)
    */
-  def this(in: Double) {
-    this()
-    val d = new BigDecimal(in)
-    value = d
-  }
+  def this(in: Double) =
+    this(Right(in))
 
   /**
    * Constructor supplying a long integer
    *
    * @param in the value of the DecimalValue
    */
-  def this(in: Long) {
-    this()
-    value = BigDecimal.valueOf(in)
-  }
+  def this(in: Long) =
+    this(BigDecimal.valueOf(in))
 
   /**
    * Determine the primitive type of the value. This delivers the same answer as
@@ -250,7 +252,7 @@ class DecimalValue(value: BigDecimal) extends NumericValue {
   /**
    * Get the value
    */
-  def getDecimalValue(): BigDecimal = value
+  override def getDecimalValue(): BigDecimal = value
 
   /**
    * Get the hashCode. This must conform to the rules for other NumericValue hashcodes
@@ -259,15 +261,15 @@ class DecimalValue(value: BigDecimal) extends NumericValue {
    */
   override def hashCode(): Int = {
     val round = value.setScale(0, BigDecimal.ROUND_DOWN)
-    val value = round.longValue()
-    if (value > Integer.MIN_VALUE && value < Integer.MAX_VALUE) {
-      value.toInt
+    val result = round.longValue()
+    if (result > Integer.MIN_VALUE && result < Integer.MAX_VALUE) {
+      result.toInt
     } else {
       new java.lang.Double(getDoubleValue).hashCode
     }
   }
 
-  def effectiveBooleanValue(): Boolean = value.signum() != 0
+  override def effectiveBooleanValue(): Boolean = value.signum() != 0
 
   /**
    * Convert to target data type
@@ -327,7 +329,7 @@ class DecimalValue(value: BigDecimal) extends NumericValue {
   def round(): NumericValue = value.signum() match {
     case -1 => new DecimalValue(value.setScale(0, BigDecimal.ROUND_HALF_DOWN))
     case 0 => this
-    case +1 => new DecimalValue(value.setScale(0, BigDecimal.ROUND_HALF_UP))
+    case 1 => new DecimalValue(value.setScale(0, BigDecimal.ROUND_HALF_UP))
     case _ => this
   }
 
@@ -373,7 +375,7 @@ class DecimalValue(value: BigDecimal) extends NumericValue {
   /**
    * Compare the value to another numeric value
    */
-  def compareTo(other: AnyRef): Int = {
+  override def compareTo(other: AnyRef): Int = {
     if (other.isInstanceOf[DecimalValue]) {
       value.compareTo(other.asInstanceOf[DecimalValue].value)
     } else if (other.isInstanceOf[FloatValue]) {

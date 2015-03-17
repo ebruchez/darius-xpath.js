@@ -1,17 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`.ItemType
+import client.net.sf.saxon.ce.expr._
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
+import client.net.sf.saxon.ce.orbeon.{ArrayList, Iterator}
+import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.tree.iter.EmptyIterator
 import client.net.sf.saxon.ce.value.Cardinality
-import java.util.ArrayList
-import java.util.Iterator
-import java.util.List
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * Expression equivalent to the imaginary syntax
@@ -25,7 +23,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
   val children = iterateSubExpressions()
 
   while (children.hasNext) {
-    val exp = children.next().asInstanceOf[Expression]
+    val exp = children.next()
     adoptChildExpression(exp)
   }
 
@@ -42,7 +40,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
    *
    * @return an iterator containing the sub-expressions of this expression
    */
-  def iterateSubExpressions(): Iterator[Expression] = iterateSubExpressions(true)
+  override def iterateSubExpressions(): Iterator[Expression] = iterateSubExpressions(true)
 
   private def iterateSubExpressions(includeSortKey: Boolean): Iterator[Expression] = {
     val list = new ArrayList[Expression](8)
@@ -68,13 +66,13 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
    * @param child the immediate subexpression
    * @return true if the child expression is evaluated repeatedly
    */
-  def hasLoopingSubexpression(child: Expression): Boolean = isSortKey(child)
+  override def hasLoopingSubexpression(child: Expression): Boolean = isSortKey(child)
 
   /**
    * Simplify an expression
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     select = visitor.simplify(select)
     this
   }
@@ -82,7 +80,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val select2 = visitor.typeCheck(select, contextItemType)
     if (select2 != select) {
       adoptChildExpression(select2)
@@ -90,7 +88,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
     }
     val sortedItemType = select.getItemType
     var allKeysFixed = true
-    for (sortKeyDefinition <- sortKeyDefinitions if !(sortKeyDefinition.isFixed)) {
+    for (sortKeyDefinition <- sortKeyDefinitions if ! sortKeyDefinition.isFixed) {
       allKeysFixed = false
       //break
     }
@@ -131,12 +129,12 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val select2 = visitor.optimize(select, contextItemType)
     if (select2 != select) {
       adoptChildExpression(select2)
@@ -172,7 +170,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
    * @throws client.net.sf.saxon.ce.trans.XPathException
    *          if any error is detected
    */
-  def promote(offer: PromotionOffer, parent: Expression): Expression = {
+  override def promote(offer: PromotionOffer, parent: Expression): Expression = {
     val exp = offer.accept(parent, this)
     if (exp != null) {
       exp
@@ -225,7 +223,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
    * bit-significant. These properties are used for optimizations. In general, if
    * property bit is set, it is true, but if it is unset, the value is unknown.
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     var props = 0
     if ((select.getSpecialProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 
       0) {
@@ -245,7 +243,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
   /**
    * Enumerate the results of the expression
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val iter = select.iterate(context)
     if (iter.isInstanceOf[EmptyIterator]) {
       return iter

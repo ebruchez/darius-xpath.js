@@ -1,13 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`._
-import client.net.sf.saxon.ce.value.AtomicValue
+import client.net.sf.saxon.ce.om.Item
 import client.net.sf.saxon.ce.value.BooleanValue
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.util.control.Breaks
 
 /**
  * Castable Expression: implements "Expr castable as atomic-type?".
@@ -21,7 +21,7 @@ class CastableExpression(source: Expression, var targetType: AtomicType, var all
    * @return the simplified expression
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     operand = visitor.simplify(operand)
     preEvaluate(visitor)
   }
@@ -39,7 +39,7 @@ class CastableExpression(source: Expression, var targetType: AtomicType, var all
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand = visitor.typeCheck(operand, contextItemType)
     val th = TypeHierarchy.getInstance
     if (!CastExpression.isPossibleCast(operand.getItemType.getAtomizedItemType, targetType)) {
@@ -51,7 +51,7 @@ class CastableExpression(source: Expression, var targetType: AtomicType, var all
   /**
    * Optimize the expression
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand = visitor.optimize(operand, contextItemType)
     preEvaluate(visitor)
   }
@@ -60,7 +60,7 @@ class CastableExpression(source: Expression, var targetType: AtomicType, var all
    * Is this expression the same as another expression?
    */
   override def equals(other: Any): Boolean = {
-    super == other && 
+    super.equals(other) &&
       targetType == other.asInstanceOf[CastableExpression].targetType && 
       allowEmpty == other.asInstanceOf[CastableExpression].allowEmpty
   }
@@ -74,15 +74,15 @@ class CastableExpression(source: Expression, var targetType: AtomicType, var all
   /**
    * Determine the data type of the result of the Castable expression
    */
-  def getItemType(): ItemType = AtomicType.BOOLEAN
+  override def getItemType(): ItemType = AtomicType.BOOLEAN
 
-  def computeCardinality(): Int = StaticProperty.EXACTLY_ONE
+  override def computeCardinality(): Int = StaticProperty.EXACTLY_ONE
 
   /**
    * Determine the special properties of this expression
-   * @return {@link StaticProperty#NON_CREATIVE}.
+   * @return [[StaticProperty.NON_CREATIVE]].
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     val p = super.computeSpecialProperties()
     p | StaticProperty.NON_CREATIVE
   }
@@ -90,25 +90,29 @@ class CastableExpression(source: Expression, var targetType: AtomicType, var all
   /**
    * Evaluate the expression
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     BooleanValue.get(effectiveBooleanValue(context))
   }
 
-  def effectiveBooleanValue(context: XPathContext): Boolean = {
+  override def effectiveBooleanValue(context: XPathContext): Boolean = {
     var count = 0
     val iter = operand.iterate(context)
-    while (true) {
-      val item = iter.next()
-      if (item == null) {
-        //break
-      }
-      val av = item.getTypedValue
-      count += 1
-      if (count > 1) {
-        return false
-      }
-      if (!!(av.convert(targetType).isInstanceOf[ValidationFailure])) {
-        return false
+    import Breaks._
+    breakable {
+      while (true) {
+        val item = iter.next()
+        if (item == null) {
+          break()
+        }
+        val av = item.getTypedValue
+        count += 1
+        if (count > 1) {
+          return false
+        }
+        //ORBEON Saxon was !!, not sure why
+        if (av.convert(targetType).isInstanceOf[ValidationFailure]) {
+          return false
+        }
       }
     }
     count != 0 || allowEmpty

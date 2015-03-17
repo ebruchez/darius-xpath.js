@@ -1,19 +1,20 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
+import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.expr.sort.GenericAtomicComparer
+import client.net.sf.saxon.ce.functions.DeepEqual._
 import client.net.sf.saxon.ce.lib.NamespaceConstant
 import client.net.sf.saxon.ce.om._
 import client.net.sf.saxon.ce.pattern.AnyNodeTest
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
 import client.net.sf.saxon.ce.tree.util.Navigator
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.BooleanValue
-import DeepEqual._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{AtomicValue, BooleanValue}
+
+import scala.util.control.Breaks
 
 object DeepEqual {
 
@@ -28,38 +29,41 @@ object DeepEqual {
    */
   private def deepEquals(op1: SequenceIterator, op2: SequenceIterator, collator: GenericAtomicComparer): Boolean = {
     var result = true
+    import Breaks._
     try {
-      while (true) {
-        val item1 = op1.next()
-        val item2 = op2.next()
-        if (item1 == null && item2 == null) {
-          //break
-        }
-        if (item1 == null || item2 == null) {
-          result = false
-          //break
-        }
-        if (item1.isInstanceOf[NodeInfo]) {
-          if (item2.isInstanceOf[NodeInfo]) {
-            if (!deepEquals(item1.asInstanceOf[NodeInfo], item2.asInstanceOf[NodeInfo], collator)) {
+      breakable {
+        while (true) {
+          val item1 = op1.next()
+          val item2 = op2.next()
+          if (item1 == null && item2 == null) {
+            break()
+          }
+          if (item1 == null || item2 == null) {
+            result = false
+            break()
+          }
+          if (item1.isInstanceOf[NodeInfo]) {
+            if (item2.isInstanceOf[NodeInfo]) {
+              if (!deepEquals(item1.asInstanceOf[NodeInfo], item2.asInstanceOf[NodeInfo], collator)) {
+                result = false
+                break()
+              }
+            } else {
               result = false
-              //break
+              break()
             }
           } else {
-            result = false
-            //break
-          }
-        } else {
-          if (item2.isInstanceOf[NodeInfo]) {
-            result = false
-            //break
-          } else {
-            val av1 = item1.asInstanceOf[AtomicValue]
-            val av2 = item2.asInstanceOf[AtomicValue]
-            if (av1.isNaN && av2.isNaN) {
-            } else if (!collator.comparesEqual(av1, av2)) {
+            if (item2.isInstanceOf[NodeInfo]) {
               result = false
-              //break
+              break()
+            } else {
+              val av1 = item1.asInstanceOf[AtomicValue]
+              val av2 = item2.asInstanceOf[AtomicValue]
+              if (av1.isNaN && av2.isNaN) {
+              } else if (!collator.comparesEqual(av1, av2)) {
+                result = false
+                break()
+              }
             }
           }
         }
@@ -87,30 +91,54 @@ object DeepEqual {
     n1.getNodeKind match {
       case Type.ELEMENT => 
         if (n1.getNodeName != n2.getNodeName) {
-          false
+          return false
         }
-        var a1 = n1.iterateAxis(Axis.ATTRIBUTE, AnyNodeTest.getInstance)
-        var a2 = n2.iterateAxis(Axis.ATTRIBUTE, AnyNodeTest.getInstance)
+        val a1 = n1.iterateAxis(Axis.ATTRIBUTE, AnyNodeTest.getInstance)
+        val a2 = n2.iterateAxis(Axis.ATTRIBUTE, AnyNodeTest.getInstance)
         if (Count.count(a1.getAnother) != Count.count(a2)) {
-          false
+          return false
         }
-        while (true) {
-          val att1 = a1.next().asInstanceOf[NodeInfo]
-          if (att1 == null) {
-            //break
+        import Breaks._
+        breakable {
+          while (true) {
+            val att1 = a1.next().asInstanceOf[NodeInfo]
+            if (att1 == null) {
+              break()
+            }
+            val val2 = Navigator.getAttributeValue(n2, att1.getURI, att1.getLocalPart)
+            if (val2 == null) {
+              return false
+            }
+            if (!comparer.getCollator.comparesEqual(att1.getStringValue, val2)) {
+              return false
+            }
           }
-          val val2 = Navigator.getAttributeValue(n2, att1.getURI, att1.getLocalPart)
-          if (val2 == null) {
-            return false
+        }
+        locally { //ORBEON: coped from Type.DOCUMENT match below, which was a fall through
+          val c1 = n1.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
+          val c2 = n2.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
+          while (true) {
+            var d1 = c1.next().asInstanceOf[NodeInfo]
+            while (d1 != null && isIgnorable(d1)) {
+              d1 = c1.next().asInstanceOf[NodeInfo]
+            }
+            var d2 = c2.next().asInstanceOf[NodeInfo]
+            while (d2 != null && isIgnorable(d2)) {
+              d2 = c2.next().asInstanceOf[NodeInfo]
+            }
+            if (d1 == null || d2 == null) {
+              return (d1 == d2)
+            }
+            if (!deepEquals(d1, d2, comparer)) {
+              false
+            }
           }
-          if (!comparer.getCollator.comparesEqual(att1.getStringValue, val2)) {
-            false
-          }
+          throw new IllegalStateException
         }
 
       case Type.DOCUMENT => 
-        var c1 = n1.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
-        var c2 = n2.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
+        val c1 = n1.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
+        val c2 = n2.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
         while (true) {
           var d1 = c1.next().asInstanceOf[NodeInfo]
           while (d1 != null && isIgnorable(d1)) {
@@ -124,17 +152,19 @@ object DeepEqual {
             return (d1 == d2)
           }
           if (!deepEquals(d1, d2, comparer)) {
-            false
+            return false
           }
         }
+        throw new IllegalStateException
 
       case Type.ATTRIBUTE | Type.PROCESSING_INSTRUCTION | Type.NAMESPACE | Type.TEXT | Type.COMMENT => 
-        var s1 = n1.getNodeName
-        var s2 = n2.getNodeName
+        val s1 = n1.getNodeName
+        val s2 = n2.getNodeName
         ((if (s1 == null) s2 == null else s1 == s2) && 
           comparer.comparesEqual(n1.getTypedValue, n2.getTypedValue))
 
-      case _ => throw new IllegalArgumentException("Unknown node type")
+      case _ =>
+        throw new IllegalArgumentException("Unknown node type")
     }
   }
 
@@ -161,17 +191,16 @@ class DeepEqual extends CollatingFunction {
   /**
    * Evaluate the expression
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val collator = getAtomicComparer(2, context)
     val op1 = argument(0).iterate(context)
     val op2 = argument(1).iterate(context)
     try {
       BooleanValue.get(deepEquals(op1, op2, collator))
     } catch {
-      case e: XPathException => {
+      case e: XPathException =>
         e.maybeSetLocation(getSourceLocator)
         throw e
-      }
     }
   }
 }

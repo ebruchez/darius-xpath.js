@@ -1,12 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
 
+import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.expr._
 import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 /**
  * A DocumentSorter is an expression that sorts a sequence of nodes into
@@ -14,13 +15,14 @@ import scala.collection.JavaConversions._
  */
 class DocumentSorter(base: Expression) extends UnaryExpression(base) {
 
-  @BeanProperty
-  var comparer: NodeOrderComparer = if (((props & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 0) || 
-    (props & StaticProperty.SINGLE_DOCUMENT_NODESET) != 0) LocalOrderComparer.getInstance else GlobalOrderComparer.getInstance
-
   val props = base.getSpecialProperties
 
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  @BeanProperty
+  var comparer = if (((props & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 0) ||
+    (props & StaticProperty.SINGLE_DOCUMENT_NODESET) != 0) LocalOrderComparer.getInstance else GlobalOrderComparer.getInstance
+
+
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     operand = visitor.simplify(operand)
     if ((operand.getSpecialProperties & StaticProperty.ORDERED_NODESET) != 
       0) {
@@ -29,7 +31,7 @@ class DocumentSorter(base: Expression) extends UnaryExpression(base) {
     this
   }
 
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand = visitor.optimize(operand, contextItemType)
     if ((operand.getSpecialProperties & StaticProperty.ORDERED_NODESET) != 
       0) {
@@ -38,14 +40,14 @@ class DocumentSorter(base: Expression) extends UnaryExpression(base) {
     this
   }
 
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     operand.getSpecialProperties | StaticProperty.ORDERED_NODESET
   }
 
   /**
    * Promote this expression if possible
    */
-  def promote(offer: PromotionOffer, parent: Expression): Expression = {
+  override def promote(offer: PromotionOffer, parent: Expression): Expression = {
     val exp = offer.accept(parent, this)
     if (exp != null) {
       exp
@@ -55,9 +57,9 @@ class DocumentSorter(base: Expression) extends UnaryExpression(base) {
     }
   }
 
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     new DocumentOrderIterator(operand.iterate(context), comparer)
   }
 
-  def effectiveBooleanValue(context: XPathContext): Boolean = operand.effectiveBooleanValue(context)
+  override def effectiveBooleanValue(context: XPathContext): Boolean = operand.effectiveBooleanValue(context)
 }

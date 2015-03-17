@@ -1,21 +1,17 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
 import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import java.util.Arrays
-import Base64Encoder._
-import Base64Decoder._
-import Base64BinaryValue._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.Base64BinaryValue._
 
 object Base64BinaryValue {
 
-  protected def byteArrayHashCode(value: Array[Byte]): Int = {
+  protected[value] def byteArrayHashCode(value: Array[Byte]): Int = {
     var h = 0
     for (i <- 0 until Math.min(value.length, 64)) {
       h = (h << 1) ^ value(i)
@@ -23,28 +19,30 @@ object Base64BinaryValue {
     ((h >> 32) ^ h).toInt
   }
 
-  object Base64Encoder {
+  private object Base64Encoder {
 
-    private val map = Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/')
+    val map = Array[Char]('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/')
   }
 
   /**
    * Byte to text encoder using base 64 encoding. To create a base 64
-   * encoding of a byte stream call {@link #translate} for every
-   * sequence of bytes and {@link #getCharArray} to mark closure of
+   * encoding of a byte stream call [[translate]] for every
+   * sequence of bytes and [[getCharArray]] to mark closure of
    * the byte stream and retrieve the text presentation.
    *
    * @author Based on code from the Mozilla Directory SDK
    */
   private class Base64Encoder {
 
-    private var out: FastStringBuffer = new FastStringBuffer(FastStringBuffer.MEDIUM)
+    import Base64Encoder._
+
+    private val out: FastStringBuffer = new FastStringBuffer(FastStringBuffer.MEDIUM)
 
     private var buf: Int = 0
 
     private var buf_bytes: Int = 0
 
-    private var line: Char = new Char(74)
+    private val line  = Array.ofDim[Char](74)
 
     private var line_length: Int = 0
 
@@ -113,32 +111,34 @@ object Base64BinaryValue {
 
   object Base64Decoder {
 
-    private val NUL = 127
+    private val NUL: Byte = 127
 
-    private val EOF = 126
+    private val EOF: Byte = 126
 
-    private val SP = 125
+    private val SP: Byte = 125
 
-    private val map = Array(NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, SP, SP, NUL, NUL, SP, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, SP, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, 62, NUL, NUL, NUL, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, NUL, NUL, NUL, EOF, NUL, NUL, NUL, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, NUL, NUL, NUL, NUL, NUL, NUL, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL)
+    private val map = Array[Byte](NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, SP, SP, NUL, NUL, SP, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, SP, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, 62, NUL, NUL, NUL, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, NUL, NUL, NUL, EOF, NUL, NUL, NUL, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, NUL, NUL, NUL, NUL, NUL, NUL, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL, NUL)
   }
 
   /**
    * Base 64 text to byte decoder. To produce the binary  array from
-   * base 64 encoding call {@link #translate} for each sequence of
-   * characters and {@link #getByteArray} to mark closure of the
+   * base 64 encoding call [[translate]] for each sequence of
+   * characters and [[getByteArray]] to mark closure of the
    * character stream and retrieve the binary contents.
    *
    * @author Based on code from the Mozilla Directory SDK
    */
   private class Base64Decoder {
 
-    private var out: Array[Byte] = new Array[Byte](128)
+    import Base64Decoder._
+
+    private var out: Array[Byte] = Array.ofDim[Byte](128)
 
     private var used: Int = 0
 
-    private var token: Byte = new Byte(4)
+    private var token = Array.ofDim[Byte](4)
 
-    private var bytes: Byte = new Byte(3)
+    private var bytes = Array.ofDim[Byte](3)
 
     private var token_length: Int = 0
 
@@ -186,13 +186,16 @@ object Base64BinaryValue {
       }
       val num = ((b0 << 18) | (b1 << 12) | (b2 << 6) | (b3))
       ensureCapacity(1)
-      out(used += 1) = (num >> 16).toByte
+      out(used) = (num >> 16).toByte
+      used += 1
       if (eq_count <= 1) {
         ensureCapacity(1)
-        out(used += 1) = ((num >> 8) & 0xFF).toByte
+        out(used) = ((num >> 8) & 0xFF).toByte
+        used += 1
         if (eq_count == 0) {
           ensureCapacity(1)
-          out(used += 1) = (num & 0xFF).toByte
+          out(used) = (num & 0xFF).toByte
+          used += 1
         }
       }
     }
@@ -244,7 +247,8 @@ object Base64BinaryValue {
             token_length = (lengthAtEOF + 1) % 4
           }
         } else if (t != SP) {
-          token(token_length += 1) = t
+          token(token_length) = t
+          token_length += 1
           if (token_length == 4) {
             if (found_eq == 0) {
               decode_token()
@@ -261,7 +265,8 @@ object Base64BinaryValue {
     private def eof() {
       if (token != null && token_length != 0) {
         while (token_length < 4) {
-          token(token_length += 1) = EOF
+          token(token_length) = EOF
+          token_length += 1
         }
         decode_final_token()
       }
@@ -282,30 +287,23 @@ object Base64BinaryValue {
 /**
  * A value of type xs:base64Binary
  */
-class Base64BinaryValue(s: CharSequence) extends AtomicValue {
+class Base64BinaryValue(val binaryValue: Array[Byte]) extends AtomicValue {
 
-  private var binaryValue: Array[Byte] = decoder.getByteArray
-
-  val decoder = new Base64Decoder()
-
-  try {
-    decoder.translate(s)
-  } catch {
-    case e: IllegalArgumentException => {
-      val err = new XPathException(e.getMessage)
-      err.setErrorCode("FORG0001")
-      throw err
-    }
-  }
-
-  /**
-   * Constructor: create a base64Binary value from a given array of bytes
-   * @param value array of bytes holding the octet sequence
-   */
-  def this(value: Array[Byte]) {
-    this()
-    binaryValue = value
-  }
+  def this(s: CharSequence) =
+    this(
+      {
+        val decoder = new Base64Decoder()
+        try {
+          decoder.translate(s)
+        } catch {
+          case e: IllegalArgumentException =>
+            val err = new XPathException(e.getMessage)
+            err.setErrorCode("FORG0001")
+            throw err
+        }
+        decoder.getByteArray
+      }
+    )
 
   def getItemType(): AtomicType = AtomicType.BASE64_BINARY
 
@@ -362,7 +360,7 @@ class Base64BinaryValue(s: CharSequence) extends AtomicValue {
    * Test if the two base64Binary values are equal.
    */
   override def equals(other: Any): Boolean = other match {
-    case other: Base64BinaryValue => Arrays.==(binaryValue, other.binaryValue)
+    case other: Base64BinaryValue => binaryValue.sameElements(other.binaryValue)
     case _ => false
   }
 

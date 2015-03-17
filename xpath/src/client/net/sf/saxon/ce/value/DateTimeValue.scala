@@ -1,23 +1,20 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
-import client.net.sf.saxon.ce.Controller
+import java.math.BigDecimal
+import java.util.Date
+
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
 import client.net.sf.saxon.ce.expr.XPathContext
 import client.net.sf.saxon.ce.functions.Component
-import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
+import client.net.sf.saxon.ce.regex.RegExp
+import client.net.sf.saxon.ce.trans.{Err, XPathException}
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import com.google.gwt.regexp.shared.MatchResult
-import com.google.gwt.regexp.shared.RegExp
-import java.math.BigDecimal
-import java.math.BigInteger
-import java.util.Date
-import DateTimeValue._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.DateTimeValue._
+
+import scala.beans.BeanProperty
 
 object DateTimeValue {
 
@@ -31,11 +28,10 @@ object DateTimeValue {
    * @return the current xs:dateTime
    */
   def getCurrentDateTime(context: XPathContext): DateTimeValue = {
-    var c: Controller = null
-    if (context == null || (c = context.getController) == null) {
+    if (context == null || context.getController == null) {
       DateTimeValue.fromJavaDate(new Date())
     } else {
-      c.getCurrentDateTime
+      context.getController.getCurrentDateTime
     }
   }
 
@@ -74,7 +70,7 @@ object DateTimeValue {
     }
     val tz1 = date.getTimezoneInMinutes
     val tz2 = time.getTimezoneInMinutes
-    if (tz1 != NO_TIMEZONE && tz2 != NO_TIMEZONE && tz1 != tz2) {
+    if (tz1 != CalendarValue.NO_TIMEZONE && tz2 != CalendarValue.NO_TIMEZONE && tz1 != tz2) {
       throw new XPathException("Supplied date and time are in different timezones", "FORG0008")
     }
     val v = date.toDateTime()
@@ -86,7 +82,7 @@ object DateTimeValue {
     v
   }
 
-  private var dateTimePattern: RegExp = RegExp.compile("^\\-?([0-9][0-9][0-9][0-9][0-9]*)-([0-9][0-9])-([0-9][0-9])T([0-2][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]*)?([-+Z].*)?$")
+  private val dateTimePattern = RegExp.compile("^\\-?([0-9][0-9][0-9][0-9][0-9]*)-([0-9][0-9])-([0-9][0-9])T([0-2][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]*)?([-+Z].*)?$")
 
   def makeDateTimeValue(s: CharSequence): ConversionResult = {
     val str = s.toString
@@ -107,19 +103,19 @@ object DateTimeValue {
     dt.second = DurationValue.simpleInteger(`match`.getGroup(6))
     val frac = `match`.getGroup(7)
     if (frac != null && frac.length > 0) {
-      val fractionalSeconds = Double.parseDouble(frac)
+      val fractionalSeconds = frac.toDouble
       dt.microsecond = (Math.round(fractionalSeconds * 1000000)).toInt
     }
     val tz = `match`.getGroup(8)
-    val tzmin = parseTimezone(tz)
-    if (tzmin == BAD_TIMEZONE) {
+    val tzmin = CalendarValue.parseTimezone(tz)
+    if (tzmin == CalendarValue.BAD_TIMEZONE) {
       return badDate("Invalid timezone", str)
     }
     dt.setTimezoneInMinutes(tzmin)
     if (dt.year == 0) {
       return badDate("year zero", str)
     }
-    if (!DateValue.isValidDate(dt.year, dt.month, dt.day)) {
+    if (! GDateValue.isValidDate(dt.year, dt.month, dt.day)) {
       return badDate("Non-existent date", s)
     }
     if (dt.hour == 24) {
@@ -165,20 +161,26 @@ object DateTimeValue {
       0)
   }
 
-  def hashCode(year: Int, 
-      month: Int, 
-      day: Int, 
+  def hashCode(
+      _year: Int,
+      _month: Int,
+      _day: Int,
       hour: Int, 
       minute: Int, 
       second: Int, 
       microsecond: Int, 
       tzMinutes: Int): Int = {
+
+    var year = _year
+    var month = _month
+    var day = _day
+
     val tz = -tzMinutes
     var h = hour
     var mi = minute
     mi += tz
     if (mi < 0 || mi > 59) {
-      h += Math.floor(mi / 60.0)
+      h += Math.floor(mi / 60.0).toInt//ORBEON toInt
       mi = (mi + 60 * 24) % 60
     }
     while (h < 0) {
@@ -205,7 +207,7 @@ object DateTimeValue {
 /**
  * A value of type DateTime
  */
-class DateTimeValue private () extends CalendarValue with Comparable[_] {
+class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
 
   @BeanProperty
   var year: Int = _
@@ -240,7 +242,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    * @param second      the seconds value, 0-59
    * @param microsecond the number of microseconds, 0-999999
    * @param tz          the timezone displacement in minutes from UTC. Supply the value
-   *                    {@link CalendarValue#NO_TIMEZONE} if there is no timezone component.
+   *                    [[CalendarValue.NO_TIMEZONE]] if there is no timezone component.
    */
   def this(year: Int, 
       month: Int, 
@@ -272,7 +274,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
   /**
    * Convert the value to a DateTime, retaining all the components that are actually present, and
    * substituting conventional values for components that are missing. (This method does nothing in
-   * the case of xs:dateTime, but is there to implement a method in the {@link CalendarValue} interface).
+   * the case of xs:dateTime, but is there to implement a method in the [[CalendarValue]] interface).
    *
    * @return the value as an xs:dateTime
    */
@@ -365,17 +367,17 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
         sb.append('-')
       }
     }
-    appendString(sb, yr, (if (yr > 9999) (yr + "").length else 4))
+    CalendarValue.appendString(sb, yr, (if (yr > 9999) (yr + "").length else 4))
     sb.append('-')
-    appendTwoDigits(sb, month)
+    CalendarValue.appendTwoDigits(sb, month)
     sb.append('-')
-    appendTwoDigits(sb, day)
+    CalendarValue.appendTwoDigits(sb, day)
     sb.append('T')
-    appendTwoDigits(sb, hour)
+    CalendarValue.appendTwoDigits(sb, hour)
     sb.append(':')
-    appendTwoDigits(sb, minute)
+    CalendarValue.appendTwoDigits(sb, minute)
     sb.append(':')
-    appendTwoDigits(sb, second)
+    CalendarValue.appendTwoDigits(sb, second)
     if (microsecond != 0) {
       sb.append('.')
       var ms = microsecond
@@ -424,7 +426,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
     var mi = minute
     mi += tz
     if (mi < 0 || mi > 59) {
-      h += Math.floor(mi / 60.0)
+      h += Math.floor(mi / 60.0).toInt//ORBEON toInt
       mi = (mi + 60 * 24) % 60
     }
     if (h >= 0 && h < 24) {
@@ -455,7 +457,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    *          if the duration is an xs:duration, as distinct from
    *          a subclass thereof
    */
-  def add(duration: DurationValue): DateTimeValue = {
+  override def add(duration: DurationValue): DateTimeValue = {
     if (duration.isInstanceOf[DayTimeDurationValue]) {
       val microseconds = duration.asInstanceOf[DayTimeDurationValue].getLengthInMicroseconds
       val seconds = BigDecimal.valueOf(microseconds).divide(DecimalValue.BIG_DECIMAL_ONE_MILLION, 6, 
@@ -476,7 +478,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
       }
       m += 1
       var d = day
-      while (!DateValue.isValidDate(y, m, d)) {
+      while (! GDateValue.isValidDate(y, m, d)) {
         d -= 1
       }
       new DateTimeValue(y, m.toByte, d.toByte, hour, minute, second, microsecond, getTimezoneInMinutes)
@@ -494,7 +496,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    * @throws client.net.sf.saxon.ce.trans.XPathException
    *          for example if one value is a date and the other is a time
    */
-  def subtract(other: CalendarValue, context: XPathContext): DayTimeDurationValue = {
+  override def subtract(other: CalendarValue, context: XPathContext): DayTimeDurationValue = {
     if (!(other.isInstanceOf[DateTimeValue])) {
       throw new XPathException("First operand of '-' is a dateTime, but the second is not", "XPTY0004")
     }
@@ -505,9 +507,9 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    * Get a component of the value. Returns null if the timezone component is
    * requested and is not present.
    */
-  def getComponent(component: Int): AtomicValue = component match {
+  override def getComponent(component: Int): AtomicValue = component match {
     case Component.YEAR => 
-      var value = if (year > 0) year else year - 1
+      val value = if (year > 0) year else year - 1
       new IntegerValue(value)
 
     case Component.MONTH => new IntegerValue(month)
@@ -610,6 +612,6 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    * @return  a hash code
    */
   override def hashCode(): Int = {
-    hashCode(year, month, day, hour, minute, second, microsecond, getTimezoneInMinutes)
+    DateTimeValue.hashCode(year, month, day, hour, minute, second, microsecond, getTimezoneInMinutes)
   }
 }

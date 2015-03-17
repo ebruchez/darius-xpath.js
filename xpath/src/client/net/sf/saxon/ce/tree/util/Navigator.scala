@@ -1,23 +1,20 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.util
 
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.event.Receiver
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.ItemMappingFunction
-import client.net.sf.saxon.ce.expr.UnfailingItemMappingIterator
-import client.net.sf.saxon.ce.expr.XPathContext
+import java.net.{URI, URISyntaxException}
+
+import client.net.sf.saxon.ce.`type`.Type
+import client.net.sf.saxon.ce.expr.{ItemMappingFunction, UnfailingItemMappingIterator}
 import client.net.sf.saxon.ce.functions.Count
 import client.net.sf.saxon.ce.lib.NamespaceConstant
 import client.net.sf.saxon.ce.om._
 import client.net.sf.saxon.ce.pattern._
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.iter._
-import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.value.SequenceExtent
-import java.util.ArrayList
-import java.util.List
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.util.control.Breaks
 
 object Navigator {
 
@@ -49,7 +46,8 @@ object Navigator {
     if (xmlBase != null) {
       var baseURI: URI = null
       try {
-        baseURI = new URI(xmlBase, true)
+//        baseURI = new URI(xmlBase, true)
+        baseURI = new URI(xmlBase)//ORBEON java.net.URI
         if (!baseURI.isAbsolute) {
           val parent = node.getParent
           if (parent == null) {
@@ -63,7 +61,7 @@ object Navigator {
           baseURI = (if (xmlBase.length == 0) base else base.resolve(baseURI.toString))
         }
       } catch {
-        case e: URI.URISyntaxException => return xmlBase
+        case e: URISyntaxException => return xmlBase
       }
       return baseURI.toString
     }
@@ -106,14 +104,17 @@ object Navigator {
           var position = 1
           var count = 0
           val siblings = parent.iterateAxis(Axis.CHILD, new NameTest(node))
-          while (true) {
-            val sib = siblings.next().asInstanceOf[NodeInfo]
-            if (sib == null) {
-              //break
-            }
-            count += 1
-            if (sib.isSameNodeInfo(node)) {
-              position = count
+          import Breaks._
+          breakable {
+            while (true) {
+              val sib = siblings.next().asInstanceOf[NodeInfo]
+              if (sib == null) {
+                break()
+              }
+              count += 1
+              if (sib.isSameNodeInfo(node)) {
+                position = count
+              }
             }
           }
           try {
@@ -125,23 +126,23 @@ object Navigator {
         }
       }
       case Type.ATTRIBUTE => getPath(parent) + "/@" + node.getDisplayName
-      case Type.TEXT => 
+      case Type.TEXT =>
         pre = getPath(parent)
         (if (pre == "/") "" else pre) + "/text()[" + getNumberSimple(node) + 
           ']'
 
-      case Type.COMMENT => 
+      case Type.COMMENT =>
         pre = getPath(parent)
         (if (pre == "/") "" else pre) + "/comment()[" + getNumberSimple(node) + 
           ']'
 
-      case Type.PROCESSING_INSTRUCTION => 
+      case Type.PROCESSING_INSTRUCTION =>
         pre = getPath(parent)
         (if (pre == "/") "" else pre) + "/processing-instruction()[" + 
           getNumberSimple(node) + 
           ']'
 
-      case Type.NAMESPACE => 
+      case Type.NAMESPACE =>
         var test = node.getLocalPart
         if (test.length == 0) {
           test = "*[not(local-name()]"
@@ -167,274 +168,280 @@ object Navigator {
     Count.count(preceding) + 1
   }
 
-  /**
-   * Get node number (level="single"). If the current node matches the supplied pattern, the returned
-   * number is one plus the number of previous siblings that match the pattern. Otherwise,
-   * return the element number of the nearest ancestor that matches the supplied pattern.
-   *
-   * @param node    the current node, the one whose node number is required
-   * @param count   Pattern that identifies which nodes should be
-   *                counted. Default (null) is the element name if the current node is
-   *                an element, or "node()" otherwise.
-   * @param from    Pattern that specifies where counting starts from.
-   *                Default (null) is the root node. (This parameter does not seem
-   *                useful but is included for the sake of XSLT conformance.)
-   * @param context the dynamic context of the transformation, used if
-   *                the patterns reference context values (e.g. variables)
-   * @return the node number established as follows: go to the nearest
-   *         ancestor-or-self that matches the 'count' pattern and that is a
-   *         descendant of the nearest ancestor that matches the 'from' pattern.
-   *         Return one plus the nunber of preceding siblings of that ancestor
-   *         that match the 'count' pattern. If there is no such ancestor,
-   *         return 0.
-   * @throws XPathException when any error occurs in processing
-   */
-  def getNumberSingle(node: NodeInfo, 
-      count: Pattern, 
-      from: Pattern, 
-      context: XPathContext): Int = {
-    if (count == null && from == null) {
-      return getNumberSimple(node)
-    }
-    var knownToMatch = false
-    if (count == null) {
-      count = if (node.getNodeName == null) new NodeTestPattern(NodeKindTest.makeNodeKindTest(node.getNodeKind)) else new NodeTestPattern(new NameTest(node))
-      knownToMatch = true
-    }
-    var target = node
-    while (!(knownToMatch || count.matches(target, context))) {
-      target = target.getParent
-      if (target == null) {
-        return 0
-      }
-      if (from != null && from.matches(target, context)) {
-        return 0
-      }
-    }
-    val preceding = target.iterateAxis(Axis.PRECEDING_SIBLING, count.getNodeTest)
-    val alreadyChecked = (count.isInstanceOf[NodeTestPattern])
-    var i = 1
-    while (true) {
-      val p = preceding.next().asInstanceOf[NodeInfo]
-      if (p == null) {
-        return i
-      }
-      if (alreadyChecked || count.matches(p, context)) {
-        i += 1
-      }
-    }
-  }
+//ORBEON XSLT
+//  /**
+//   * Get node number (level="single"). If the current node matches the supplied pattern, the returned
+//   * number is one plus the number of previous siblings that match the pattern. Otherwise,
+//   * return the element number of the nearest ancestor that matches the supplied pattern.
+//   *
+//   * @param node    the current node, the one whose node number is required
+//   * @param _count  Pattern that identifies which nodes should be
+//   *                counted. Default (null) is the element name if the current node is
+//   *                an element, or "node()" otherwise.
+//   * @param from    Pattern that specifies where counting starts from.
+//   *                Default (null) is the root node. (This parameter does not seem
+//   *                useful but is included for the sake of XSLT conformance.)
+//   * @param context the dynamic context of the transformation, used if
+//   *                the patterns reference context values (e.g. variables)
+//   * @return the node number established as follows: go to the nearest
+//   *         ancestor-or-self that matches the 'count' pattern and that is a
+//   *         descendant of the nearest ancestor that matches the 'from' pattern.
+//   *         Return one plus the nunber of preceding siblings of that ancestor
+//   *         that match the 'count' pattern. If there is no such ancestor,
+//   *         return 0.
+//   * @throws XPathException when any error occurs in processing
+//   */
+//  def getNumberSingle(node: NodeInfo,
+//      _count: Pattern,
+//      from: Pattern,
+//      context: XPathContext): Int = {
+//    var count = _count
+//    if (count == null && from == null) {
+//      return getNumberSimple(node)
+//    }
+//    var knownToMatch = false
+//    if (count == null) {
+//      count = if (node.getNodeName == null) new NodeTestPattern(NodeKindTest.makeNodeKindTest(node.getNodeKind)) else new NodeTestPattern(new NameTest(node))
+//      knownToMatch = true
+//    }
+//    var target = node
+//    while (!(knownToMatch || count.matches(target, context))) {
+//      target = target.getParent
+//      if (target == null) {
+//        return 0
+//      }
+//      if (from != null && from.matches(target, context)) {
+//        return 0
+//      }
+//    }
+//    val preceding = target.iterateAxis(Axis.PRECEDING_SIBLING, count.getNodeTest)
+//    val alreadyChecked = (count.isInstanceOf[NodeTestPattern])
+//    var i = 1
+//    while (true) {
+//      val p = preceding.next().asInstanceOf[NodeInfo]
+//      if (p == null) {
+//        return i
+//      }
+//      if (alreadyChecked || count.matches(p, context)) {
+//        i += 1
+//      }
+//    }
+//  }
 
-  /**
-   * Get node number (level="any").
-   * Return one plus the number of previous nodes in the
-   * document that match the supplied pattern
-   *
-   * @param inst                   Identifies the xsl:number expression; this is relevant
-   *                               when the function is memoised to support repeated use of the same
-   *                               instruction to number multiple nodes
-   * @param node                   The node being numbered
-   * @param count                  Pattern that identifies which nodes should be
-   *                               counted. Default (null) is the element name if the current node is
-   *                               an element, or "node()" otherwise.
-   * @param from                   Pattern that specifies where counting starts from.
-   *                               Default (null) is the root node. Only nodes at or after the first (most
-   *                               recent) node that matches the 'from' pattern are counted.
-   * @param context                The dynamic context for the transformation
-   * @param hasVariablesInPatterns if the count or from patterns
-   *                               contain variables, then it's not safe to get the answer by adding
-   *                               one to the number of the most recent node that matches
-   * @return one plus the number of nodes that precede the current node,
-   *         that match the count pattern, and that follow the first node that
-   *         matches the from pattern if specified.
-   * @throws XPathException if an error occurs matching a pattern
-   *
-   */
-  def getNumberAny(inst: Expression, 
-      node: NodeInfo, 
-      count: Pattern, 
-      from: Pattern, 
-      context: XPathContext, 
-      hasVariablesInPatterns: Boolean): Int = {
-    var memoNode: NodeInfo = null
-    var memoNumber = 0
-    val controller = context.getController
-    val memoise = (!hasVariablesInPatterns) && from == null
-    if (memoise) {
-      val memo = controller.getUserData(inst, "xsl:number").asInstanceOf[Array[Any]]
-      if (memo != null) {
-        memoNode = memo(0).asInstanceOf[NodeInfo]
-        memoNumber = memo(1).asInstanceOf[java.lang.Integer]
-      }
-    }
-    var num = 0
-    if (count == null) {
-      count = if (node.getNodeName == null) new NodeTestPattern(NodeKindTest.makeNodeKindTest(node.getNodeKind)) else new NodeTestPattern(new NameTest(node))
-      num = 1
-    } else if (count.matches(node, context)) {
-      num = 1
-    }
-    var filter: NodeTest = null
-    filter = if (from == null) count.getNodeTest else if (from.getNodeKind == Type.ELEMENT && count.getNodeKind == Type.ELEMENT) NodeKindTest.ELEMENT else AnyNodeTest.getInstance
-    if (from != null && from.matches(node, context)) {
-      return num
-    }
-    var preceding = new PrecedingEnumeration(node, true)
-    if (filter != AnyNodeTest.getInstance) {
-      preceding = newAxisFilter(preceding, filter)
-    }
-    while (true) {
-      val prev = preceding.next().asInstanceOf[NodeInfo]
-      if (prev == null) {
-        //break
-      }
-      if (count.matches(prev, context)) {
-        if (num == 1 && memoNode != null && prev.isSameNodeInfo(memoNode)) {
-          num = memoNumber + 1
-          //break
-        }
-        num += 1
-      }
-      if (from != null && from.matches(prev, context)) {
-        //break
-      }
-    }
-    if (memoise) {
-      val memo = Array.ofDim[Any](2)
-      memo(0) = node
-      memo(1) = num
-      controller.setUserData(inst, "xsl:number", memo)
-    }
-    num
-  }
+//ORBEON XSLT
+//  /**
+//   * Get node number (level="any").
+//   * Return one plus the number of previous nodes in the
+//   * document that match the supplied pattern
+//   *
+//   * @param inst                   Identifies the xsl:number expression; this is relevant
+//   *                               when the function is memoised to support repeated use of the same
+//   *                               instruction to number multiple nodes
+//   * @param node                   The node being numbered
+//   * @param count                  Pattern that identifies which nodes should be
+//   *                               counted. Default (null) is the element name if the current node is
+//   *                               an element, or "node()" otherwise.
+//   * @param from                   Pattern that specifies where counting starts from.
+//   *                               Default (null) is the root node. Only nodes at or after the first (most
+//   *                               recent) node that matches the 'from' pattern are counted.
+//   * @param context                The dynamic context for the transformation
+//   * @param hasVariablesInPatterns if the count or from patterns
+//   *                               contain variables, then it's not safe to get the answer by adding
+//   *                               one to the number of the most recent node that matches
+//   * @return one plus the number of nodes that precede the current node,
+//   *         that match the count pattern, and that follow the first node that
+//   *         matches the from pattern if specified.
+//   * @throws XPathException if an error occurs matching a pattern
+//   *
+//   */
+//  def getNumberAny(inst: Expression,
+//      node: NodeInfo,
+//      count: Pattern,
+//      from: Pattern,
+//      context: XPathContext,
+//      hasVariablesInPatterns: Boolean): Int = {
+//    var memoNode: NodeInfo = null
+//    var memoNumber = 0
+//    val controller = context.getController
+//    val memoise = (!hasVariablesInPatterns) && from == null
+//    if (memoise) {
+//      val memo = controller.getUserData(inst, "xsl:number").asInstanceOf[Array[Any]]
+//      if (memo != null) {
+//        memoNode = memo(0).asInstanceOf[NodeInfo]
+//        memoNumber = memo(1).asInstanceOf[java.lang.Integer]
+//      }
+//    }
+//    var num = 0
+//    if (count == null) {
+//      count = if (node.getNodeName == null) new NodeTestPattern(NodeKindTest.makeNodeKindTest(node.getNodeKind)) else new NodeTestPattern(new NameTest(node))
+//      num = 1
+//    } else if (count.matches(node, context)) {
+//      num = 1
+//    }
+//    var filter: NodeTest = null
+//    filter = if (from == null) count.getNodeTest else if (from.getNodeKind == Type.ELEMENT && count.getNodeKind == Type.ELEMENT) NodeKindTest.ELEMENT else AnyNodeTest.getInstance
+//    if (from != null && from.matches(node, context)) {
+//      return num
+//    }
+//    var preceding = new PrecedingEnumeration(node, true)
+//    if (filter != AnyNodeTest.getInstance) {
+//      preceding = newAxisFilter(preceding, filter)
+//    }
+//    while (true) {
+//      val prev = preceding.next().asInstanceOf[NodeInfo]
+//      if (prev == null) {
+//        //break
+//      }
+//      if (count.matches(prev, context)) {
+//        if (num == 1 && memoNode != null && prev.isSameNodeInfo(memoNode)) {
+//          num = memoNumber + 1
+//          //break
+//        }
+//        num += 1
+//      }
+//      if (from != null && from.matches(prev, context)) {
+//        //break
+//      }
+//    }
+//    if (memoise) {
+//      val memo = Array.ofDim[Any](2)
+//      memo(0) = node
+//      memo(1) = num
+//      controller.setUserData(inst, "xsl:number", memo)
+//    }
+//    num
+//  }
 
-  /**
-   * Get node number (level="multiple").
-   * Return a vector giving the hierarchic position of this node. See the XSLT spec for details.
-   *
-   * @param node    The node to be numbered
-   * @param count   Pattern that identifies which nodes (ancestors and
-   *                their previous siblings) should be counted. Default (null) is the
-   *                element name if the current node is an element, or "node()"
-   *                otherwise.
-   * @param from    Pattern that specifies where counting starts from.
-   *                Default (null) is the root node. Only nodes below the first (most
-   *                recent) node that matches the 'from' pattern are counted.
-   * @param context The dynamic context for the transformation
-   * @return a list containing for each ancestor-or-self that matches the
-   *         count pattern and that is below the nearest node that matches the
-   *         from pattern, an Integer which is one greater than the number of
-   *         previous siblings that match the count pattern.
-   * @throws XPathException if an error occurs matching the pattern
-   */
-  def getNumberMulti(node: NodeInfo, 
-      count: Pattern, 
-      from: Pattern, 
-      context: XPathContext): List[Integer] = {
-    val v = new ArrayList[Integer](5)
-    if (count == null) {
-      count = if (node.getNodeName == null) new NodeTestPattern(NodeKindTest.makeNodeKindTest(node.getNodeKind)) else new NodeTestPattern(new NameTest(node))
-    }
-    var curr = node
-    while (true) {
-      if (count.matches(curr, context)) {
-        val num = getNumberSingle(curr, count, null, context)
-        v.add(0, num)
-      }
-      curr = curr.getParent
-      if (curr == null) {
-        //break
-      }
-      if (from != null && from.matches(curr, context)) {
-        //break
-      }
-    }
-    v
-  }
+//ORBEON XSLT
+//  /**
+//   * Get node number (level="multiple").
+//   * Return a vector giving the hierarchic position of this node. See the XSLT spec for details.
+//   *
+//   * @param node    The node to be numbered
+//   * @param count   Pattern that identifies which nodes (ancestors and
+//   *                their previous siblings) should be counted. Default (null) is the
+//   *                element name if the current node is an element, or "node()"
+//   *                otherwise.
+//   * @param from    Pattern that specifies where counting starts from.
+//   *                Default (null) is the root node. Only nodes below the first (most
+//   *                recent) node that matches the 'from' pattern are counted.
+//   * @param context The dynamic context for the transformation
+//   * @return a list containing for each ancestor-or-self that matches the
+//   *         count pattern and that is below the nearest node that matches the
+//   *         from pattern, an Integer which is one greater than the number of
+//   *         previous siblings that match the count pattern.
+//   * @throws XPathException if an error occurs matching the pattern
+//   */
+//  def getNumberMulti(node: NodeInfo,
+//      count: Pattern,
+//      from: Pattern,
+//      context: XPathContext): List[Int] = {
+//    val v = new ArrayList[Int](5)
+//    if (count == null) {
+//      count = if (node.getNodeName == null) new NodeTestPattern(NodeKindTest.makeNodeKindTest(node.getNodeKind)) else new NodeTestPattern(new NameTest(node))
+//    }
+//    var curr = node
+//    while (true) {
+//      if (count.matches(curr, context)) {
+//        val num = getNumberSingle(curr, count, null, context)
+//        v.add(0, num)
+//      }
+//      curr = curr.getParent
+//      if (curr == null) {
+//        //break
+//      }
+//      if (from != null && from.matches(curr, context)) {
+//        //break
+//      }
+//    }
+//    v
+//  }
 
-  /**
-   * Generic (model-independent) implementation of deep copy algorithm for nodes.
-   * This is available for use by any node implementations that choose to use it.
-   *
-   *
-   * @param node            The node to be copied
-   * @param out             The receiver to which events will be sent
-   * @param copyOptions     Options for copying namespaces, type annotations, etc,
-   *                        as defined in {@link client.net.sf.saxon.ce.om.CopyOptions}
-   * @throws XPathException on any failure reported by the Receiver
-   */
-  def copy(node: NodeInfo, out: Receiver, copyOptions: Int) node.getNodeKind match {
-    case Type.DOCUMENT => {
-      out.startDocument()
-      val children0 = node.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
-      while (true) {
-        val child = children0.next().asInstanceOf[NodeInfo]
-        if (child == null) {
-          //break
-        }
-        child.copy(out, copyOptions)
-      }
-      out.endDocument()
-      //break
-    }
-    case Type.ELEMENT => {
-      out.startElement(node.getNodeName, 0)
-      if ((copyOptions & CopyOptions.LOCAL_NAMESPACES) != 0) {
-        val localNamespaces = node.getDeclaredNamespaces(null)
-        for (i <- 0 until localNamespaces.length) {
-          val ns = localNamespaces(i)
-          if (ns == null) {
-            //break
-          }
-          out.namespace(ns, 0)
-        }
-      } else if ((copyOptions & CopyOptions.ALL_NAMESPACES) != 0) {
-        NamespaceIterator.sendNamespaces(node, out)
-      }
-      val attributes = node.iterateAxis(Axis.ATTRIBUTE, AnyNodeTest.getInstance)
-      while (true) {
-        val att = attributes.next().asInstanceOf[NodeInfo]
-        if (att == null) {
-          //break
-        }
-        att.copy(out, copyOptions)
-      }
-      out.startContent()
-      val children = node.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
-      while (true) {
-        val child = children.next().asInstanceOf[NodeInfo]
-        if (child == null) {
-          //break
-        }
-        child.copy(out, copyOptions)
-      }
-      out.endElement()
-      return
-    }
-    case Type.ATTRIBUTE => {
-      out.attribute(node.getNodeName, node.getStringValue)
-      return
-    }
-    case Type.TEXT => {
-      val value = node.getStringValue
-      if (value.length != 0) {
-        out.characters(value)
-      }
-      return
-    }
-    case Type.COMMENT => {
-      out.comment(node.getStringValue)
-      return
-    }
-    case Type.PROCESSING_INSTRUCTION => {
-      out.processingInstruction(node.getLocalPart, node.getStringValue)
-      return
-    }
-    case Type.NAMESPACE => {
-      out.namespace(new NamespaceBinding(node.getLocalPart, node.getStringValue), 0)
-      return
-    }
-    case _}
+//ORBEON unused
+//  /**
+//   * Generic (model-independent) implementation of deep copy algorithm for nodes.
+//   * This is available for use by any node implementations that choose to use it.
+//   *
+//   *
+//   * @param node            The node to be copied
+//   * @param out             The receiver to which events will be sent
+//   * @param copyOptions     Options for copying namespaces, type annotations, etc,
+//   *                        as defined in [[client.net.sf.saxon.ce.om.CopyOptions]]
+//   * @throws XPathException on any failure reported by the Receiver
+//   */
+//  def copy(node: NodeInfo, out: Receiver, copyOptions: Int) = node.getNodeKind match {
+//    case Type.DOCUMENT => {
+//      out.startDocument()
+//      val children0 = node.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
+//      while (true) {
+//        val child = children0.next().asInstanceOf[NodeInfo]
+//        if (child == null) {
+//          //break
+//        }
+//        child.copy(out, copyOptions)
+//      }
+//      out.endDocument()
+//      //break
+//    }
+//    case Type.ELEMENT => {
+//      out.startElement(node.getNodeName, 0)
+//      if ((copyOptions & CopyOptions.LOCAL_NAMESPACES) != 0) {
+//        val localNamespaces = node.getDeclaredNamespaces(null)
+//        for (i <- 0 until localNamespaces.length) {
+//          val ns = localNamespaces(i)
+//          if (ns == null) {
+//            //break
+//          }
+//          out.namespace(ns, 0)
+//        }
+//      } else if ((copyOptions & CopyOptions.ALL_NAMESPACES) != 0) {
+//        NamespaceIterator.sendNamespaces(node, out)
+//      }
+//      val attributes = node.iterateAxis(Axis.ATTRIBUTE, AnyNodeTest.getInstance)
+//      while (true) {
+//        val att = attributes.next().asInstanceOf[NodeInfo]
+//        if (att == null) {
+//          //break
+//        }
+//        att.copy(out, copyOptions)
+//      }
+//      out.startContent()
+//      val children = node.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
+//      while (true) {
+//        val child = children.next().asInstanceOf[NodeInfo]
+//        if (child == null) {
+//          //break
+//        }
+//        child.copy(out, copyOptions)
+//      }
+//      out.endElement()
+//      return
+//    }
+//    case Type.ATTRIBUTE => {
+//      out.attribute(node.getNodeName, node.getStringValue)
+//      return
+//    }
+//    case Type.TEXT => {
+//      val value = node.getStringValue
+//      if (value.length != 0) {
+//        out.characters(value)
+//      }
+//      return
+//    }
+//    case Type.COMMENT => {
+//      out.comment(node.getStringValue)
+//      return
+//    }
+//    case Type.PROCESSING_INSTRUCTION => {
+//      out.processingInstruction(node.getLocalPart, node.getStringValue)
+//      return
+//    }
+//    case Type.NAMESPACE => {
+//      out.namespace(new NamespaceBinding(node.getLocalPart, node.getStringValue), 0)
+//      return
+//    }
+//    case _ =>
+//  }
 
   /**
    * Generic (model-independent) method to determine the relative position of two
@@ -513,13 +520,14 @@ object Navigator {
       p1 = par1
       p2 = par2
     }
+    throw new IllegalStateException
   }
 
   /**
    * Classify node kinds into categories for sorting into document order:
    * 0 = document, 1 = namespace, 2 = attribute, 3 = (element, text, comment, pi)
    */
-  private var nodeCategories: Array[Int] = Array(-1, 3, 2, 3, -1, -1, -1, 3, 3, 0, -1, -1, -1, 1)
+  private val nodeCategories: Array[Int] = Array(-1, 3, 2, 3, -1, -1, -1, 3, 3, 0, -1, -1, -1, 1)
 
   /**
    * Get a character string that uniquely identifies this node and that collates nodes
@@ -531,7 +539,7 @@ object Navigator {
   def appendSequentialKey(node: NodeInfo, sb: FastStringBuffer, addDocNr: Boolean) {
     if (addDocNr) {
       sb.append('w')
-      sb.append(Long toString node.getDocumentNumber)
+      sb.append(node.getDocumentNumber.toLong.toString)
     }
     if (node.getNodeKind != Type.DOCUMENT) {
       val parent = node.getParent
@@ -546,7 +554,9 @@ object Navigator {
       case Type.TEXT => sb.append('T')
       case Type.COMMENT => sb.append('C')
       case Type.PROCESSING_INSTRUCTION => sb.append('P')
+      case other => //println(s" xxx $other")
     }
+    //println(s" xxx $sb")
   }
 
   /**
@@ -625,15 +635,20 @@ object Navigator {
 
   def newAxisFilter(base: UnfailingIterator, test: NodeTest): UnfailingIterator = {
     if (test == AnyNodeTest.getInstance) {
-      return base
-    }
-    val umf = new ItemMappingFunction() {
-
-      def mapItem(item: Item): Item = {
-        return (if (test.matchesItem(item)) item else null)
+      //println(s" return base")
+      base
+    } else {
+      val umf = new ItemMappingFunction() {
+        def mapItem(item: Item): Item = {
+          //println(s" mapItem $test $item")
+          if (test.matchesItem(item))
+            item
+          else
+            null
+        }
       }
+      new UnfailingItemMappingIterator(base, umf)
     }
-    new UnfailingItemMappingIterator(base, umf)
   }
 
   /**
@@ -684,37 +699,38 @@ object Navigator {
           descendants = null
         }
       }
+      val xxx =
       if (children != null) {
         val n = children.next().asInstanceOf[NodeInfo]
         if (n != null) {
           if (n.hasChildNodes()) {
             if (forwards) {
               descendants = new DescendantEnumeration(n, false, forwards)
-              n
+               n
             } else {
               descendants = new DescendantEnumeration(n, true, forwards)
-              next()
+               next()
             }
           } else {
-            n
+             n
           }
         } else {
           if (forwards || !includeSelf) {
-            null
+             null
           } else {
             atEnd = true
             children = null
-            start
+             start
           }
         }
       } else if (atEnd) {
-        null
+         null
       } else {
         if (start.hasChildNodes()) {
           children = start.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
           if (!forwards) {
             val forwards = start.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
-            var reversed: SequenceExtent = null
+            var reversed: SequenceExtent[Item] = null
             reversed = SequenceExtent.makeReversed(forwards)
             children = reversed.iterate()
           }
@@ -722,11 +738,12 @@ object Navigator {
           children = EmptyIterator.getInstance
         }
         if (forwards && includeSelf) {
-          start
+           start
         } else {
-          next()
+           next()
         }
       }
+      xxx
     }
 
     def getAnother(): UnfailingIterator = {
@@ -748,9 +765,9 @@ object Navigator {
     private var descendEnum: UnfailingIterator = null
 
     start.getNodeKind match {
-      case Type.ELEMENT | Type.TEXT | Type.COMMENT | Type.PROCESSING_INSTRUCTION => siblingEnum = start.iterateAxis(Axis.FOLLOWING_SIBLING, 
+      case Type.ELEMENT | Type.TEXT | Type.COMMENT | Type.PROCESSING_INSTRUCTION => siblingEnum = start.iterateAxis(Axis.FOLLOWING_SIBLING,
         AnyNodeTest.getInstance)
-      case Type.ATTRIBUTE | Type.NAMESPACE => 
+      case Type.ATTRIBUTE | Type.NAMESPACE =>
         var parent = start.getParent
         siblingEnum = if (parent == null) EmptyIterator.getInstance else parent.iterateAxis(Axis.CHILD, 
           AnyNodeTest.getInstance)
@@ -807,7 +824,7 @@ object Navigator {
     private var descendEnum: UnfailingIterator = null
 
     start.getNodeKind match {
-      case Type.ELEMENT | Type.TEXT | Type.COMMENT | Type.PROCESSING_INSTRUCTION => siblingEnum = start.iterateAxis(Axis.PRECEDING_SIBLING, 
+      case Type.ELEMENT | Type.TEXT | Type.COMMENT | Type.PROCESSING_INSTRUCTION => siblingEnum = start.iterateAxis(Axis.PRECEDING_SIBLING,
         AnyNodeTest.getInstance)
       case _ => siblingEnum = EmptyIterator.getInstance
     }

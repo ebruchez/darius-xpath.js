@@ -1,15 +1,16 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.`type`.ItemType
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.iter.OneItemGoneIterator
-import client.net.sf.saxon.ce.`type`.ItemType
 import client.net.sf.saxon.ce.value.Cardinality
-import CardinalityChecker._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
+import scala.util.control.Breaks
 
 object CardinalityChecker {
 
@@ -42,7 +43,7 @@ class CardinalityChecker private (sequence: Expression, @BeanProperty var requir
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand = visitor.typeCheck(operand, contextItemType)
     if (requiredCardinality == StaticProperty.ALLOWS_ZERO_OR_MORE || 
       Cardinality.subsumes(requiredCardinality, operand.getCardinality)) {
@@ -61,12 +62,12 @@ class CardinalityChecker private (sequence: Expression, @BeanProperty var requir
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand = visitor.optimize(operand, contextItemType)
     if (requiredCardinality == StaticProperty.ALLOWS_ZERO_OR_MORE || 
       Cardinality.subsumes(requiredCardinality, operand.getCardinality)) {
@@ -95,10 +96,10 @@ class CardinalityChecker private (sequence: Expression, @BeanProperty var requir
    * This method indicates which of these methods is provided. This implementation provides both iterate() and
    * process() methods natively.
    */
-  def getImplementationMethod(): Int = {
-    var m = ITERATE_METHOD
+  override def getImplementationMethod(): Int = {
+    var m = Expression.ITERATE_METHOD
     if (!Cardinality.allowsMany(requiredCardinality)) {
-      m |= EVALUATE_METHOD
+      m |= Expression.EVALUATE_METHOD
     }
     m
   }
@@ -106,7 +107,7 @@ class CardinalityChecker private (sequence: Expression, @BeanProperty var requir
   /**
    * Iterate over the sequence of values
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     var base = operand.iterate(context)
     if (!Cardinality.allowsZero(requiredCardinality)) {
       val first = base.next()
@@ -151,22 +152,26 @@ class CardinalityChecker private (sequence: Expression, @BeanProperty var requir
   /**
    * Evaluate as an Item.
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val iter = operand.iterate(context)
     var item: Item = null
-    while (true) {
-      val nextItem = iter.next()
-      if (nextItem == null) //break
-      if (requiredCardinality == StaticProperty.EMPTY) {
-        typeError("An empty sequence is required as the " + role.getMessage, role.getErrorCode)
-        return null
+    import Breaks._
+    breakable {
+      while (true) {
+        val nextItem = iter.next()
+        if (nextItem == null)
+          break()
+        if (requiredCardinality == StaticProperty.EMPTY) {
+          typeError("An empty sequence is required as the " + role.getMessage, role.getErrorCode)
+          return null
+        }
+        if (item != null) {
+          typeError("A sequence of more than one item is not allowed as the " +
+            role.getMessage, role.getErrorCode)
+          return null
+        }
+        item = nextItem
       }
-      if (item != null) {
-        typeError("A sequence of more than one item is not allowed as the " + 
-          role.getMessage, role.getErrorCode)
-        return null
-      }
-      item = nextItem
     }
     if (item == null && !Cardinality.allowsZero(requiredCardinality)) {
       typeError("An empty sequence is not allowed as the " + role.getMessage, role.getErrorCode)
@@ -180,25 +185,25 @@ class CardinalityChecker private (sequence: Expression, @BeanProperty var requir
    * @return a value such as Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.NODE,
    * or Type.ITEM (meaning not known in advance)
    */
-  def getItemType(): ItemType = operand.getItemType
+  override def getItemType(): ItemType = operand.getItemType
 
   /**
    * Determine the static cardinality of the expression
    */
-  def computeCardinality(): Int = requiredCardinality
+  override def computeCardinality(): Int = requiredCardinality
 
   /**
    * Get the static properties of this expression (other than its type). The result is
    * bit-signficant. These properties are used for optimizations. In general, if
    * property bit is set, it is true, but if it is unset, the value is unknown.
    */
-  def computeSpecialProperties(): Int = operand.getSpecialProperties
+  override def computeSpecialProperties(): Int = operand.getSpecialProperties
 
   /**
    * Is this expression the same as another expression?
    */
   override def equals(other: Any): Boolean = {
-    super == other && 
+    super.equals(other) &&
       requiredCardinality == 
       other.asInstanceOf[CardinalityChecker].requiredCardinality
   }

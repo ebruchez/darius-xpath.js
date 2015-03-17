@@ -1,26 +1,22 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.Configuration
+import java.math.BigDecimal
+
+import client.net.sf.saxon.ce.`type`.{AnyItemType, AtomicType, ItemType, TypeHierarchy}
+import client.net.sf.saxon.ce.expr.FilterExpression._
 import client.net.sf.saxon.ce.expr.instruct.Choose
 import client.net.sf.saxon.ce.functions._
 import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.om.Sequence
+import client.net.sf.saxon.ce.om.{Sequence, SequenceIterator, StructuredQName}
+import client.net.sf.saxon.ce.orbeon.Iterator
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.tree.iter.SingletonIterator
-import client.net.sf.saxon.ce.`type`.AnyItemType
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
 import client.net.sf.saxon.ce.value._
-import java.math.BigDecimal
-import java.util.Iterator
-import FilterExpression._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 object FilterExpression {
 
@@ -172,7 +168,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    * @return the simplified expression
    * @throws XPathException if any failure occurs
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     start = visitor.simplify(start)
     filter = visitor.simplify(filter)
     this
@@ -186,7 +182,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    * @return the expression after type-checking (potentially modified to add run-time
    *         checks and/or conversions)
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val th = TypeHierarchy.getInstance
     start = visitor.typeCheck(start, contextItemType)
     adoptChildExpression(start)
@@ -220,12 +216,12 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        {@link client.net.sf.saxon.ce.type.Type#ITEM_TYPE}
+   *                        [[client.net.sf.saxon.ce.type.Type.ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                        (typically a type error)
    */
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val config = visitor.getConfiguration
     val th = TypeHierarchy.getInstance
     val start2 = visitor.optimize(start, contextItemType)
@@ -380,7 +376,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    * @param parent
    * @return the promoted expression (or the original expression, unchanged)
    */
-  def promote(offer: PromotionOffer, parent: Expression): Expression = {
+  override def promote(offer: PromotionOffer, parent: Expression): Expression = {
     val exp = offer.accept(parent, this)
     if (exp != null) {
       exp
@@ -401,7 +397,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    *
    * @return the subexpressions, as an array
    */
-  def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(start, filter)
+  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(start, filter)
 
   /**
    * Given an expression that is an immediate child of this expression, test whether
@@ -411,7 +407,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    * @param child the immediate subexpression
    * @return true if the child expression is evaluated repeatedly
    */
-  def hasLoopingSubexpression(child: Expression): Boolean = child == filter
+  override def hasLoopingSubexpression(child: Expression): Boolean = child == filter
 
   /**
    * Get the static cardinality of this expression
@@ -447,7 +443,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    *
    * @return the static properties of the expression, as a bit-significant value
    */
-  def computeSpecialProperties(): Int = start.getSpecialProperties
+  override def computeSpecialProperties(): Int = start.getSpecialProperties
 
   /**
    * Is this expression the same as another expression?
@@ -479,7 +475,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    * @return an iterator over the expression results
    * @throws XPathException if any dynamic error occurs
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     var startExp = start
     var startValue: Sequence = null
     if (startExp.isInstanceOf[Literal]) {
@@ -497,24 +493,25 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
     } else if (filter.isInstanceOf[VariableReference]) {
       filterValue = filter.asInstanceOf[VariableReference].evaluateVariable(context)
     }
-    if (filterValue.isInstanceOf[SequenceTool]) {
-      if (filterValue.isInstanceOf[NumericValue]) {
-        if (filterValue.asInstanceOf[NumericValue].isWholeNumber) {
-          val pos = filterValue.asInstanceOf[NumericValue].intValue()
-          if (startValue != null) {
-            return SingletonIterator.makeIterator(startValue.itemAt(pos - 1))
-          }
-          if (pos >= 1) {
-            val base = startExp.iterate(context)
-            return Subsequence.makeIterator(base, pos, pos)
-          } else {
-            return EmptyIterator.getInstance
-          }
-        } else {
-          return EmptyIterator.getInstance
-        }
-      }
-    }
+//ORBEON unused? can't see how SequenceTool can be a NumericValue
+//    if (filterValue.isInstanceOf[SequenceTool]) {
+//      if (filterValue.isInstanceOf[NumericValue]) {
+//        if (filterValue.asInstanceOf[NumericValue].isWholeNumber) {
+//          val pos = filterValue.asInstanceOf[NumericValue].intValue()
+//          if (startValue != null) {
+//            return SingletonIterator.makeIterator(startValue.itemAt(pos - 1))
+//          }
+//          if (pos >= 1) {
+//            val base = startExp.iterate(context)
+//            return Subsequence.makeIterator(base, pos, pos)
+//          } else {
+//            return EmptyIterator.getInstance
+//          }
+//        } else {
+//          return EmptyIterator.getInstance
+//        }
+//      }
+//    }
     val base = startExp.iterate(context)
     new FilterIterator(base, filter, context)
   }
@@ -526,7 +523,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    *
    * @return the dependencies
    */
-  def computeDependencies(): Int = {
+  override def computeDependencies(): Int = {
     (start.getDependencies | 
       (filter.getDependencies & 
       (StaticProperty.DEPENDS_ON_XSLT_CONTEXT | StaticProperty.DEPENDS_ON_LOCAL_VARIABLES | 

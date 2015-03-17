@@ -1,18 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
-import client.net.sf.saxon.ce.event.SequenceReceiver
+import client.net.sf.saxon.ce.`type`.{AnyItemType, ItemType, Type}
 import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.js.JSObjectType
-import client.net.sf.saxon.ce.js.JSObjectValue
 import client.net.sf.saxon.ce.om._
 import client.net.sf.saxon.ce.pattern._
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
-import client.net.sf.saxon.ce.`type`.AnyItemType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.util.control.Breaks
 
 object SequenceTool {
 
@@ -58,11 +55,11 @@ object SequenceTool {
       }
       item = iter.next()
       if (item == null) {
-        //break
+        return `type`
       }
       `type` = Type.getCommonSuperType(`type`, getItemType(item))
     }
-    `type`
+    throw new IllegalStateException
   }
 
   def getItemType(item: Item): ItemType = {
@@ -70,23 +67,26 @@ object SequenceTool {
       val node = item.asInstanceOf[NodeInfo]
       node.getNodeKind match {
         case Type.DOCUMENT => 
-          var iter = node.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
+          val iter = node.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
           var elementType: ItemType = null
-          while (true) {
-            val n = iter.next().asInstanceOf[NodeInfo]
-            if (n == null) {
-              //break
-            }
-            val kind = n.getNodeKind
-            if (kind == Type.TEXT) {
-              elementType = null
-              //break
-            } else if (kind == Type.ELEMENT) {
-              if (elementType != null) {
-                elementType = null
-                //break
+          import Breaks._
+          breakable {
+            while (true) {
+              val n = iter.next().asInstanceOf[NodeInfo]
+              if (n == null) {
+                break()
               }
-              elementType = getItemType(n)
+              val kind = n.getNodeKind
+              if (kind == Type.TEXT) {
+                elementType = null
+                break()
+              } else if (kind == Type.ELEMENT) {
+                if (elementType != null) {
+                  elementType = null
+                  break()
+                }
+                elementType = getItemType(n)
+              }
             }
           }
           if (elementType == null) {
@@ -103,8 +103,9 @@ object SequenceTool {
         case Type.NAMESPACE => NodeKindTest.NAMESPACE
         case _ => throw new IllegalArgumentException("Unknown node kind " + node.getNodeKind)
       }
-    } else if (item.isInstanceOf[JSObjectValue]) {
-      new JSObjectType()
+//ORBEON unused
+//    } else if (item.isInstanceOf[JSObjectValue]) {
+//      new JSObjectType()
     } else {
       item.asInstanceOf[AtomicValue].getItemType
     }
@@ -120,7 +121,8 @@ object SequenceTool {
     val out = context.getReceiver
     while (true) {
       val it = iterator.next()
-      if (it == null) //break
+      if (it == null)
+        return
       out.append(it, NodeInfo.ALL_NAMESPACES)
     }
   }

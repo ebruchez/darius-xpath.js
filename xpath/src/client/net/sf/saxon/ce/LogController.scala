@@ -1,20 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce
 
-import client.net.sf.saxon.ce.lib.GenericLogHandler
-import client.net.sf.saxon.ce.lib.JsLogHandler
-import client.net.sf.saxon.ce.lib.ListenerLogHandler
+import java.util.logging.{Level, LogRecord, Logger}
+
 import client.net.sf.saxon.ce.lib.TraceListener
-import client.net.sf.saxon.ce.trace.XSLTTraceListener
-import com.google.gwt.logging.client.HasWidgetsLogHandler
-import com.google.gwt.logging.client.LoggingPopup
-import com.google.gwt.user.client.Window
-import com.google.gwt.user.client.ui.HasWidgets
-import java.util.logging.Level
-import java.util.logging.LogRecord
-import java.util.logging.Logger
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 object LogController {
 
@@ -54,9 +47,10 @@ object LogController {
   private var initLogLevel: Level = _
 
   def initLogger() {
-    mainLogger = Logger.getLogger("")
-    val logLevel = Window.Location.getParameter("logLevel")
-    initLogLevel = if ((logLevel == null)) null else Level.parse(logLevel)
+//    mainLogger = Logger.getLogger("")
+//    val logLevel = Window.Location.getParameter("logLevel")
+//    initLogLevel = if ((logLevel == null)) null else Level.parse(logLevel)
+    ???
   }
 
   def LoggingIsDisabledByURI(): Boolean = mainLogger.getLevel == Level.OFF
@@ -67,7 +61,8 @@ object LogController {
   def InitializeTraceListener() {
     checkTraceIsEnabled()
     if (isTraceEnabled) {
-      traceListener = new XSLTTraceListener()
+      ???
+//      traceListener = new XSLTTraceListener()
     }
   }
 
@@ -84,7 +79,8 @@ object LogController {
           traceListener.close()
         }
       } else {
-        traceListener.asInstanceOf[XSLTTraceListener].terminate()
+        ???
+//        traceListener.asInstanceOf[XSLTTraceListener].terminate()
       }
     }
   }
@@ -96,14 +92,14 @@ object LogController {
     isTraceEnabled
   }
 
-  def addJavaScriptLogHandler() {
-    if (!LoggingIsDisabledByURI()) {
-      Logger.getLogger("").addHandler(new ListenerLogHandler())
-    }
-  }
+//  def addJavaScriptLogHandler() {
+//    if (!LoggingIsDisabledByURI()) {
+//      Logger.getLogger("").addHandler(new ListenerLogHandler())
+//    }
+//  }
 
-  @BeanProperty
-  var jsLogHandler: JsLogHandler = null
+//  @BeanProperty
+//  var jsLogHandler: JsLogHandler = null
 
   def setLogLevel(newLevel: String) {
     if (initLogLevel == null) {
@@ -118,18 +114,19 @@ object LogController {
   def getLogLevel(): String = mainLogger.getLevel.getName
 
   def addRequiredLogHanders(record: LogRecord) {
-    jsLogHandler = new JsLogHandler()
-    mainLogger.addHandler(jsLogHandler)
-    jsLogHandler.publish(record)
-    val gHandler = new GenericLogHandler()
-    if (gHandler.isSupported) {
-      mainLogger.addHandler(gHandler)
-      gHandler.publish(record)
-    } else if (!SaxonceApi.isLogHandlerExternal) {
-      val loggingWidget = new LoggingPopup()
-      val hw = new HasWidgetsLogHandler(loggingWidget)
-      mainLogger.addHandler(hw)
-      hw.publish(record)
-    }
+    ???
+//    jsLogHandler = new JsLogHandler()
+//    mainLogger.addHandler(jsLogHandler)
+//    jsLogHandler.publish(record)
+//    val gHandler = new GenericLogHandler()
+//    if (gHandler.isSupported) {
+//      mainLogger.addHandler(gHandler)
+//      gHandler.publish(record)
+//    } else if (!SaxonceApi.isLogHandlerExternal) {
+//      val loggingWidget = new LoggingPopup()
+//      val hw = new HasWidgetsLogHandler(loggingWidget)
+//      mainLogger.addHandler(hw)
+//      hw.publish(record)
+//    }
   }
 }

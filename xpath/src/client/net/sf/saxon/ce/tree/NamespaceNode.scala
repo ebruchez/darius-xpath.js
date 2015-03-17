@@ -1,24 +1,16 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree
 
-import client.net.sf.saxon.ce.event.Receiver
-import client.net.sf.saxon.ce.event.ReceiverOptions
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.pattern.NodeTest
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter._
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.tree.util.NamespaceIterator
-import client.net.sf.saxon.ce.tree.util.Navigator
 import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.AbstractNode
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.StringValue
-import java.util.ArrayList
-import java.util.Iterator
-import java.util.List
-import NamespaceNode._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.event.{Receiver, ReceiverOptions}
+import client.net.sf.saxon.ce.om._
+import client.net.sf.saxon.ce.orbeon.ArrayList
+import client.net.sf.saxon.ce.pattern.NodeTest
+import client.net.sf.saxon.ce.tree.iter._
+import client.net.sf.saxon.ce.tree.util.{FastStringBuffer, NamespaceIterator, Navigator}
+import client.net.sf.saxon.ce.value.{AbstractNode, AtomicValue, StringValue}
 
 object NamespaceNode {
 
@@ -32,9 +24,10 @@ object NamespaceNode {
   def makeIterator(element: NodeInfo, test: NodeTest): UnfailingIterator = {
     val nodes = new ArrayList[NamespaceNode]()
     val bindings = NamespaceIterator.iterateNamespaces(element)
-    val position = 0
+    var position = 0
     while (bindings.hasNext) {
-      val node = new NamespaceNode(element, bindings.next(), position += 1)
+      val node = new NamespaceNode(element, bindings.next(), position)
+      position += 1
       if (test.matchesItem(node)) {
         nodes.add(node)
       }

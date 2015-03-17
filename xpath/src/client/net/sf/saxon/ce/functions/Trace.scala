@@ -1,26 +1,22 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.LogController
+import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.lib.TraceListener
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.functions.Trace._
+import client.net.sf.saxon.ce.om.{Item, NodeInfo, Sequence, SequenceIterator}
+import client.net.sf.saxon.ce.orbeon.Logger
 import client.net.sf.saxon.ce.trace.Location
 import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.Navigator
-import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.value.SequenceExtent
-import com.google.gwt.logging.client.LogConfiguration
-import java.util.logging.Logger
-import Trace._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.{LogConfiguration, LogController}
 
 object Trace {
 
-  private var logger: Logger = Logger.getLogger("Trace")
+  private val logger: Logger = Logger.getLogger("Trace")
 
   def traceItem(`val`: Item, label: String) {
     if (`val` == null) {
@@ -46,24 +42,24 @@ class Trace extends SystemFunction {
    * preEvaluate: this method suppresses compile-time evaluation by doing nothing
    * @param visitor an expression visitor
    */
-  def preEvaluate(visitor: ExpressionVisitor): Expression = this
+  override def preEvaluate(visitor: ExpressionVisitor): Expression = this
 
   /**
    * Get the static properties of this expression (other than its type). The result is
    * bit-significant. These properties are used for optimizations. In general, if
    * property bit is set, it is true, but if it is unset, the value is unknown.
    */
-  def computeSpecialProperties(): Int = argument(0).getSpecialProperties
+  override def computeSpecialProperties(): Int = argument(0).getSpecialProperties
 
   /**
    * Get the static cardinality
    */
-  def computeCardinality(): Int = argument(0).getCardinality
+  override def computeCardinality(): Int = argument(0).getCardinality
 
   /**
    * Evaluate the function
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val `val` = argument(0).evaluateItem(context)
     if (LogConfiguration.loggingIsEnabled()) {
       val label = argument(1).evaluateAsString(context).toString
@@ -87,7 +83,7 @@ class Trace extends SystemFunction {
     listener.leave(info)
   }
 
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     if (LogConfiguration.loggingIsEnabled() && LogController.traceIsEnabled()) {
       val label = argument(1).evaluateAsString(context).toString
       val evalMode = ExpressionTool.eagerEvaluationMode(argument(0))

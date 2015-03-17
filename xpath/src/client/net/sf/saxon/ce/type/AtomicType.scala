@@ -1,15 +1,16 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.`type`
 
+import client.net.sf.saxon.ce.`type`.AtomicType._
 import client.net.sf.saxon.ce.om._
+import client.net.sf.saxon.ce.orbeon.HashMap
 import client.net.sf.saxon.ce.value._
-import java.util.HashMap
-import AtomicType._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object AtomicType {
 
-  private var lookup: HashMap[String, AtomicType] = new HashMap[String, AtomicType](20)
+  private val lookup: HashMap[String, AtomicType] = new HashMap[String, AtomicType](20)
 
   /**
    * Internal factory method to create a BuiltInAtomicType. There is one instance for each of the
@@ -148,7 +149,7 @@ class AtomicType private (var localName: String) extends ItemType {
    */
   def matchesItem(item: Item): Boolean = {
     if (item.isInstanceOf[AtomicValue]) {
-      var `type` = item.asInstanceOf[AtomicValue].getItemType
+      var `type`: ItemType = item.asInstanceOf[AtomicValue].getItemType
       do {
         if (`type` == this) {
           return true

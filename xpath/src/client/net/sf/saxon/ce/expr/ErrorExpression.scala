@@ -1,13 +1,13 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
+import client.net.sf.saxon.ce.`type`.{AnyItemType, ItemType}
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AnyItemType
-import client.net.sf.saxon.ce.`type`.ItemType
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 /**
  * Error expression: this expression is generated when the supplied expression cannot be
@@ -21,15 +21,15 @@ class ErrorExpression(@BeanProperty var exception: XPathException) extends Expre
   /**
    * Type-check the expression.
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
 
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
 
   /**
    * Evaluate the expression. This always throws the exception registered when the expression
    * was first parsed.
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val err = new XPathException(exception.getMessage)
     err.setLocator(getSourceLocator)
     err.setErrorCodeQName(exception.getErrorCodeQName)
@@ -40,7 +40,7 @@ class ErrorExpression(@BeanProperty var exception: XPathException) extends Expre
    * Iterate over the expression. This always throws the exception registered when the expression
    * was first parsed.
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     evaluateItem(context)
     null
   }

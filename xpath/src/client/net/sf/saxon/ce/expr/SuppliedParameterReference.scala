@@ -1,15 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.om.Sequence
+import client.net.sf.saxon.ce.`type`.{AnyItemType, ItemType}
+import client.net.sf.saxon.ce.om.{Item, Sequence, SequenceIterator}
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AnyItemType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value.SequenceType
-import client.net.sf.saxon.ce.value.SequenceTool
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{SequenceTool, SequenceType}
 
 /**
  * Supplied parameter reference: this is an internal expression used to refer to
@@ -31,9 +28,9 @@ class SuppliedParameterReference(var slotNumber: Int) extends Expression {
     this.`type` = `type`
   }
 
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
 
-  def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
+  override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = this
 
   /**
    * Determine the data type of the expression, if possible.
@@ -56,7 +53,7 @@ class SuppliedParameterReference(var slotNumber: Int) extends Expression {
    * @return a set of bit-significant flags identifying the "intrinsic"
    *         dependencies. The flags are documented in class client.net.sf.saxon.ce.value.StaticProperty
    */
-  def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies(): Int = {
     StaticProperty.DEPENDS_ON_LOCAL_VARIABLES
   }
 
@@ -87,7 +84,7 @@ class SuppliedParameterReference(var slotNumber: Int) extends Expression {
    * @return the value of the variable, if it is defined
    * @throws XPathException if the variable is undefined
    */
-  def iterate(context: XPathContext): SequenceIterator = evaluateVariable(context).iterate()
+  override def iterate(context: XPathContext): SequenceIterator = evaluateVariable(context).iterate()
 
   /**
    * Evaluate an expression as a single item. This always returns either a single Item or
@@ -97,13 +94,13 @@ class SuppliedParameterReference(var slotNumber: Int) extends Expression {
    * this condition will be detected.
    *
    * @param context The context in which the expression is to be evaluated
-   * @exception client.net.sf.saxon.ce.trans.XPathException if any dynamic error occurs evaluating the
+   * @throws client.net.sf.saxon.ce.trans.XPathException if any dynamic error occurs evaluating the
    *     expression
    * @return the node or atomic value that results from evaluating the
    *     expression; or null to indicate that the result is an empty
    *     sequence
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     SequenceTool.asItem(evaluateVariable(context))
   }
 

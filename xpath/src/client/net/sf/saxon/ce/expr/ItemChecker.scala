@@ -1,12 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`._
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
 import client.net.sf.saxon.ce.value._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * A ItemChecker implements the item type checking of "treat as": that is,
@@ -27,7 +26,7 @@ class ItemChecker(sequence: Expression, var requiredItemType: ItemType, var role
    * Simplify an expression
    * @param visitor an expression visitor
    */
-  def simplify(visitor: ExpressionVisitor): Expression = {
+  override def simplify(visitor: ExpressionVisitor): Expression = {
     operand = visitor.simplify(operand)
     if (requiredItemType.isInstanceOf[AnyItemType]) {
       return operand
@@ -38,7 +37,7 @@ class ItemChecker(sequence: Expression, var requiredItemType: ItemType, var role
   /**
    * Type-check the expression
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     operand = visitor.typeCheck(operand, contextItemType)
     val th = TypeHierarchy.getInstance
     val card = operand.getCardinality
@@ -66,10 +65,10 @@ class ItemChecker(sequence: Expression, var requiredItemType: ItemType, var role
    * This method indicates which of these methods is provided. This implementation provides both iterate() and
    * process() methods natively.
    */
-  def getImplementationMethod(): Int = {
-    var m = ITERATE_METHOD
+  override def getImplementationMethod(): Int = {
+    var m = Expression.ITERATE_METHOD
     if (!Cardinality.allowsMany(getCardinality)) {
-      m |= EVALUATE_METHOD
+      m |= Expression.EVALUATE_METHOD
     }
     m
   }
@@ -77,7 +76,7 @@ class ItemChecker(sequence: Expression, var requiredItemType: ItemType, var role
   /**
    * Iterate over the sequence of values
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val base = operand.iterate(context)
     new ItemMappingIterator(base, getMappingFunction(context), true)
   }
@@ -112,14 +111,15 @@ class ItemChecker(sequence: Expression, var requiredItemType: ItemType, var role
   /**
    * Evaluate as an Item.
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val item = operand.evaluateItem(context)
     if (item == null) return null
     testConformance(item, context)
     item
   }
 
-  private def testConformance(item: Item, context: XPathContext) {
+  private def testConformance(_item: Item, context: XPathContext) {
+    var item = _item
     if (item.isInstanceOf[AnyURIValue]) {
       item = StringValue.EMPTY_STRING
     }
@@ -140,13 +140,13 @@ class ItemChecker(sequence: Expression, var requiredItemType: ItemType, var role
   /**
    * Determine the data type of the items returned by the expression
    */
-  def getItemType(): ItemType = requiredItemType
+  override def getItemType(): ItemType = requiredItemType
 
   /**
    * Is this expression the same as another expression?
    */
   override def equals(other: Any): Boolean = {
-    super == other && 
+    super.equals(other) &&
       requiredItemType == other.asInstanceOf[ItemChecker].requiredItemType
   }
 

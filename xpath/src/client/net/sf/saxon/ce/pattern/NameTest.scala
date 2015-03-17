@@ -1,11 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.pattern
 
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.`type`.{ItemType, Type}
+import client.net.sf.saxon.ce.om.{NodeInfo, StructuredQName}
 
 /**
  * NodeTest is an interface that enables a test of whether a node has a particular
@@ -14,30 +13,17 @@ import scala.collection.JavaConversions._
  *
  * @author Michael H. Kay
  */
-class NameTest(var nodeKind: Int, uri: String, localName: String) extends NodeTest {
+class NameTest(var nodeKind: Int, var qName: StructuredQName) extends NodeTest {
 
-  private var qName: StructuredQName = new StructuredQName("", uri, localName)
-
-  /**
-   * Create a NameTest to match nodes by their nameCode allocated from the NamePool
-   * @param nodeKind the kind of node, for example {@link Type#ELEMENT}
-   * @param qName the required name of the node
-   */
-  def this(nodeKind: Int, qName: StructuredQName) {
-    this()
-    this.nodeKind = nodeKind
-    this.qName = qName
-  }
+  def this(nodeKind: Int, uri: String, localName: String) =
+    this(nodeKind, new StructuredQName("", uri, localName))
 
   /**
    * Create a NameTest for nodes of the same type and name as a given node
    * @param node the node whose node kind and node name will form the basis of the NameTest
    */
-  def this(node: NodeInfo) {
-    this()
-    this.nodeKind = node.getNodeKind
-    this.qName = node.getNodeName
-  }
+  def this(node: NodeInfo) =
+    this(node.getNodeKind, node.getNodeName)
 
   /**
    * Test whether this node test is satisfied by a given node
@@ -54,7 +40,7 @@ class NameTest(var nodeKind: Int, uri: String, localName: String) extends NodeTe
    * for example DOM or JDOM nodes.
    * @param node the node to be matched
    */
-  def matches(node: NodeInfo): Boolean = {
+  override def matches(node: NodeInfo): Boolean = {
     if (node.getNodeKind != nodeKind) {
       return false
     }
@@ -86,7 +72,7 @@ class NameTest(var nodeKind: Int, uri: String, localName: String) extends NodeTe
    * For patterns that match nodes of several types, return Type.NODE
    * @return the type of node matched by this pattern. e.g. Type.ELEMENT or Type.TEXT
    */
-  def getRequiredNodeKind(): Int = nodeKind
+  override def getRequiredNodeKind(): Int = nodeKind
 
   /**
    * Get the type from which this item type is derived by restriction. This
@@ -100,13 +86,13 @@ class NameTest(var nodeKind: Int, uri: String, localName: String) extends NodeTe
    * as possible.
    * @return the supertype, or null if this type is item()
    */
-  def getSuperType(): ItemType = NodeKindTest.makeNodeKindTest(nodeKind)
+  override def getSuperType(): ItemType = NodeKindTest.makeNodeKindTest(nodeKind)
 
   /**
    * Get a mask indicating which kinds of nodes this NodeTest can match. This is a combination
    * of bits: 1<<Type.ELEMENT for element nodes, 1<<Type.TEXT for text nodes, and so on.
    */
-  def getNodeKindMask(): Int = 1 << nodeKind
+  override def getNodeKindMask(): Int = 1 << nodeKind
 
   override def toString(): String = nodeKind match {
     case Type.ELEMENT => "element(" + qName.getClarkName + ")"

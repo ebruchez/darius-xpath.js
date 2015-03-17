@@ -1,8 +1,9 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.om
 
 import client.net.sf.saxon.ce.trans.XPathException
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * A SequenceIterator is used to iterate over any XPath 2 sequence (of values or nodes).
@@ -50,7 +51,7 @@ trait SequenceIterator {
    * <p>
    * This method does not change the state of the iterator.
    *
-   * @exception XPathException if any error occurs
+   * @throws XPathException if any error occurs
    * @return a SequenceIterator that iterates over the same items,
    *     positioned before the first item
    * @since 8.4

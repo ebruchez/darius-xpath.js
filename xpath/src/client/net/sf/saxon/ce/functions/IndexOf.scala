@@ -1,21 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.ItemMappingFunction
-import client.net.sf.saxon.ce.expr.ItemMappingIterator
-import client.net.sf.saxon.ce.expr.StatefulMappingFunction
-import client.net.sf.saxon.ce.expr.XPathContext
+import client.net.sf.saxon.ce.`type`.{AtomicType, Type}
 import client.net.sf.saxon.ce.expr.sort.AtomicComparer
-import client.net.sf.saxon.ce.expr.sort.GenericAtomicComparer
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.IntegerValue
-import IndexOf._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.expr.{ItemMappingFunction, ItemMappingIterator, StatefulMappingFunction, XPathContext}
+import client.net.sf.saxon.ce.functions.IndexOf._
+import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
+import client.net.sf.saxon.ce.value.{AtomicValue, IntegerValue}
 
 object IndexOf {
 
@@ -57,7 +50,7 @@ class IndexOf extends CollatingFunction {
   /**
    * Evaluate the function to return an iteration of selected items.
    */
-  def iterate(context: XPathContext): SequenceIterator = {
+  override def iterate(context: XPathContext): SequenceIterator = {
     val comparer = getAtomicComparer(2, context)
     val seq = argument(0).iterate(context)
     val `val` = argument(1).evaluateItem(context).asInstanceOf[AtomicValue]

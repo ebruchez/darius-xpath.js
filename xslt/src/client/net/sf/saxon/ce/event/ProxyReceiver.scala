@@ -1,9 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.event
 
-import client.net.sf.saxon.ce.Configuration
 import client.net.sf.saxon.ce.om.Item
 import client.net.sf.saxon.ce.om.NamespaceBinding
 import client.net.sf.saxon.ce.om.StructuredQName
+import client.net.sf.saxon.ce.orbeon.Configuration
 import client.net.sf.saxon.ce.trans.XPathException
 //remove if not needed
 import scala.collection.JavaConversions._
@@ -170,8 +173,8 @@ abstract class ProxyReceiver extends SequenceReceiver {
    *
    * @param item           the item to be appended
    * @param copyNamespaces if the item is an element node, this indicates whether its namespaces
-   *                       need to be copied. Values are {@link client.net.sf.saxon.ce.om.NodeInfo#ALL_NAMESPACES},
-   *                       {@link client.net.sf.saxon.ce.om.NodeInfo#LOCAL_NAMESPACES}, {@link client.net.sf.saxon.ce.om.NodeInfo#NO_NAMESPACES}
+   *                       need to be copied. Values are [[client.net.sf.saxon.ce.om.NodeInfo#ALL_NAMESPACES]],
+   *                       [[client.net.sf.saxon.ce.om.NodeInfo#LOCAL_NAMESPACES]], [[client.net.sf.saxon.ce.om.NodeInfo#NO_NAMESPACES]]
    */
   def append(item: Item, copyNamespaces: Int) {
     if (nextReceiver.isInstanceOf[SequenceReceiver]) {

@@ -1,14 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import java.math.{BigDecimal, BigInteger}
+
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
 import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import java.math.BigDecimal
-import java.math.BigInteger
-import IntegerValue._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object IntegerValue {
 
@@ -30,7 +28,7 @@ object IntegerValue {
   /**
    * IntegerValue representing the maximum value for a long
    */
-  val MAX_LONG = new IntegerValue(new BigDecimal(Long.MAX_VALUE))
+  val MAX_LONG = new IntegerValue(new BigDecimal(Long.MaxValue))
 
   def decimalToInteger(value: BigDecimal): ConversionResult = {
     val setScaleValue = value.setScale(0, BigDecimal.ROUND_DOWN).intValue()
@@ -61,7 +59,7 @@ object IntegerValue {
    * @param i the int
    * @return -1 if the integer is negative, 0 if it is zero, +1 if it is positive
    */
-  protected def signum(i: Int): Int = (i >> 31) | (-i >>> 31)
+  protected[value] def signum(i: Int): Int = (i >> 31) | (-i >>> 31)
 }
 
 /**
@@ -71,16 +69,15 @@ object IntegerValue {
  * no point in the optimisation whereby small integers are mapped to long, since GWT
  * emulates long using two doubles.
  */
-class IntegerValue(value: Int) extends DecimalValue(value) {
+class IntegerValue(bigDecimalValue: BigDecimal) extends DecimalValue(Left(bigDecimalValue)) {
 
-  def this(value: BigDecimal) {
-    super(value)
-    if (value.scale() != 0 && 
-      value.compareTo(value.setScale(0, BigDecimal.ROUND_DOWN)) != 
-      0) {
-      throw new IllegalArgumentException("Non-integral value " + value)
-    }
+  if (bigDecimalValue.scale() != 0 &&
+    bigDecimalValue.compareTo(bigDecimalValue.setScale(0, BigDecimal.ROUND_DOWN)) != 0) {
+    throw new IllegalArgumentException("Non-integral value " + bigDecimalValue)
   }
+
+  def this(in: Int) =
+    this(BigDecimal.valueOf(in))
 
   /**
    * Determine the primitive type of the value. This delivers the same answer as
@@ -88,7 +85,7 @@ class IntegerValue(value: Int) extends DecimalValue(value) {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.INTEGER
+  override def getItemType(): AtomicType = AtomicType.INTEGER
 
   /**
    * Determine whether the value is a whole number, that is, whether it compares
@@ -96,7 +93,7 @@ class IntegerValue(value: Int) extends DecimalValue(value) {
    *
    * @return always true for this implementation
    */
-  def isWholeNumber(): Boolean = true
+  override def isWholeNumber(): Boolean = true
 
   /**
    * Take modulo another integer
@@ -118,7 +115,7 @@ class IntegerValue(value: Int) extends DecimalValue(value) {
   }
 
   override def intValue(): Int = {
-    if (getDecimalValue.compareTo(BIG_DECIMAL_MIN_INT) < 0 || getDecimalValue.compareTo(BIG_DECIMAL_MAX_INT) > 0) {
+    if (getDecimalValue.compareTo(DecimalValue.BIG_DECIMAL_MIN_INT) < 0 || getDecimalValue.compareTo(DecimalValue.BIG_DECIMAL_MAX_INT) > 0) {
       throw new XPathException("int out of range")
     } else {
       getDecimalValue.intValue()
@@ -130,7 +127,7 @@ class IntegerValue(value: Int) extends DecimalValue(value) {
    * @return the absolute value
    * @since 9.2
    */
-  def abs(): NumericValue = {
+  override def abs(): NumericValue = {
     if (getDecimalValue.signum() > 0) {
       this
     } else {
@@ -141,17 +138,17 @@ class IntegerValue(value: Int) extends DecimalValue(value) {
   /**
    * Negate the value
    */
-  def negate(): NumericValue = {
+  override def negate(): NumericValue = {
     new IntegerValue(getDecimalValue.negate())
   }
 
   /**
    * Implement the XPath floor() function
    */
-  def floor(): NumericValue = this
+  override def floor(): NumericValue = this
 
   /**
    * Implement the XPath ceiling() function
    */
-  def ceiling(): NumericValue = this
+  override def ceiling(): NumericValue = this
 }

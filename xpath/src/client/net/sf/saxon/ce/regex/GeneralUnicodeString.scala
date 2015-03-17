@@ -1,9 +1,9 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.regex
 
 import client.net.sf.saxon.ce.value._
-import GeneralUnicodeString._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object GeneralUnicodeString {
 
@@ -24,10 +24,15 @@ object GeneralUnicodeString {
    */
   def makeUnicodeString(in: CharSequence): UnicodeString = {
     if (containsSurrogatePairs(in)) {
-      new GeneralUnicodeString(in)
+      GeneralUnicodeString(in)
     } else {
       new BMPString(in)
     }
+  }
+
+  def apply(in: CharSequence): GeneralUnicodeString = {
+    val chars = StringValue.expand(in)
+    new GeneralUnicodeString(chars, 0, chars.length)
   }
 }
 
@@ -35,20 +40,7 @@ object GeneralUnicodeString {
  * A Unicode string which, in general, may contain non-BMP characters (that is, codepoints
  * outside the range 0-65535)
  */
-class GeneralUnicodeString(in: CharSequence) extends UnicodeString {
-
-  private var chars: Array[Int] = StringValue.expand(in)
-
-  private var start: Int = 0
-
-  private var end: Int = chars.length
-
-  private def this(chars: Array[Int], start: Int, end: Int) {
-    this()
-    this.chars = chars
-    this.start = start
-    this.end = end
-  }
+class GeneralUnicodeString private (val chars: Array[Int], val start: Int, val end: Int) extends UnicodeString {
 
   def substring(beginIndex: Int, endIndex: Int): UnicodeString = {
     if (endIndex > chars.length) {
@@ -63,7 +55,7 @@ class GeneralUnicodeString(in: CharSequence) extends UnicodeString {
   def charAt(pos: Int): Int = chars(start + pos)
 
   def indexOf(search: Int, pos: Int): Int = {
-    (pos until length).find(chars(start + _) == search)
+    (pos until length).find(x => chars(start + x) == search)
       .getOrElse(-1)
   }
 

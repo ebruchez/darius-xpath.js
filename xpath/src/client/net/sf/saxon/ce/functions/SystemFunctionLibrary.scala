@@ -1,26 +1,24 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
 import client.net.sf.saxon.ce.expr._
+import client.net.sf.saxon.ce.functions.SystemFunctionLibrary._
 import client.net.sf.saxon.ce.lib.NamespaceConstant
 import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.value.AnyURIValue
-import client.net.sf.saxon.ce.value.BooleanValue
-import client.net.sf.saxon.ce.value.EmptySequence
-import java.util.HashMap
-import SystemFunctionLibrary._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.orbeon.HashMap
+import client.net.sf.saxon.ce.trans.{Err, XPathException}
+import client.net.sf.saxon.ce.value.{AnyURIValue, BooleanValue, EmptySequence}
 
 object SystemFunctionLibrary {
 
-  private var THE_INSTANCES: HashMap[Integer, SystemFunctionLibrary] = new HashMap[Integer, SystemFunctionLibrary](3)
+  private val THE_INSTANCES: HashMap[Int, SystemFunctionLibrary] = new HashMap[Int, SystemFunctionLibrary](3)
 
   /**
    * Factory method to create or get a SystemFunctionLibrary
    * @param functionSet determines the set of functions allowed. One or more of the bit settings
-   * {@link StandardFunction#CORE}, {@link StandardFunction#XSLT}, etc
+   * [[StandardFunction.CORE]], [[StandardFunction.XSLT]], etc
    * @return the appropriate SystemFunctionLibrary
    */
   def getSystemFunctionLibrary(functionSet: Int): SystemFunctionLibrary = {
@@ -104,7 +102,7 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
       val local = functionName.getLocalName
       val entry = StandardFunction.getFunction(local, staticArgs.length)
       if (entry != null && entry.contextItemAsFirstArgument && staticArgs.length == 0) {
-        val newArgs = Array(new ContextItemExpression())
+        val newArgs: Array[Expression] = Array(new ContextItemExpression())
         return bind(functionName, newArgs, env, container)
       }
       if (entry == null) {

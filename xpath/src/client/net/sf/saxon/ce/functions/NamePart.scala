@@ -1,32 +1,22 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.om.DocumentPool
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.AnyURIValue
-import client.net.sf.saxon.ce.value.QNameValue
-import client.net.sf.saxon.ce.value.StringValue
-import NamePart._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.expr._
+import client.net.sf.saxon.ce.functions.NamePart._
+import client.net.sf.saxon.ce.om.{Item, NodeInfo}
+import client.net.sf.saxon.ce.tree.util.FastStringBuffer
+import client.net.sf.saxon.ce.value.{AnyURIValue, QNameValue, StringValue}
 
 object NamePart {
 
   val NAME = 0
-
   val LOCAL_NAME = 1
-
   val NAMESPACE_URI = 2
-
   val GENERATE_ID = 3
-
   val DOCUMENT_URI = 4
-
   val NODE_NAME = 6
 
   def getDocumentURI(node: NodeInfo, c: XPathContext): AnyURIValue = {
@@ -63,9 +53,9 @@ object NamePart {
  * This class supports the name(), local-name(), and namespace-uri() functions
  * from XPath 1.0, and also the XSLT generate-id() function
  */
-class NamePart(operation: Int) extends SystemFunction {
+class NamePart(_operation: Int) extends SystemFunction {
 
-  this.operation = operation
+  this.operation = _operation
 
   def newInstance(): NamePart = new NamePart(operation)
 
@@ -74,7 +64,7 @@ class NamePart(operation: Int) extends SystemFunction {
    * function is a special case: it is considered creative if its operand
    * is creative, so that generate-id(f()) is not taken out of a loop
    */
-  def computeSpecialProperties(): Int = {
+  override def computeSpecialProperties(): Int = {
     val p = super.computeSpecialProperties()
     if (operation == GENERATE_ID) {
       p & ~StaticProperty.NON_CREATIVE
@@ -88,7 +78,7 @@ class NamePart(operation: Int) extends SystemFunction {
   /**
    * Evaluate the function in a string context
    */
-  def evaluateItem(c: XPathContext): Item = {
+  override def evaluateItem(c: XPathContext): Item = {
     val node = argument(0).evaluateItem(c).asInstanceOf[NodeInfo]
     if (node == null) {
       if (operation == NODE_NAME || operation == DOCUMENT_URI) {

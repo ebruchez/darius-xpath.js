@@ -1,19 +1,15 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, ValidationFailure}
 import client.net.sf.saxon.ce.functions.FormatDate
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
-import com.google.gwt.regexp.shared.MatchResult
-import com.google.gwt.regexp.shared.RegExp
-import GMonthDayValue._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.regex.RegExp
 
 object GMonthDayValue {
 
-  private var regex: RegExp = RegExp.compile("--([0-9][0-9]-[0-9][0-9])(Z|[+-][0-9][0-9]:[0-9][0-9])?")
+  private val regex: RegExp = RegExp.compile("--([0-9][0-9]-[0-9][0-9])(Z|[+-][0-9][0-9]:[0-9][0-9])?")
 
   def makeGMonthDayValue(value: CharSequence): ConversionResult = {
     val m = regex.exec(Whitespace.trimWhitespace(value).toString)
@@ -24,7 +20,7 @@ object GMonthDayValue {
     val base = m.getGroup(1)
     val tz = m.getGroup(2)
     val date = "2000-" + (if (base == null) "" else base) + (if (tz == null) "" else tz)
-    setLexicalValue(g, date)
+    GDateValue.setLexicalValue(g, date)
   }
 }
 

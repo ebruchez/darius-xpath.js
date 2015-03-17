@@ -1,10 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.value
 
+import client.net.sf.saxon.ce.orbeon.{ArrayList, List}
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import java.util.ArrayList
-import java.util.List
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.util.control.Breaks
 
 object Whitespace {
 
@@ -101,7 +103,8 @@ object Whitespace {
     val len = value.length
     var i = 0
     while (i < len) {
-      val c = value.charAt(i += 1)
+      val c = value.charAt(i)
+      i += 1
       if (c <= 32 && C0WHITE(c)) {
         return true
       }
@@ -120,7 +123,8 @@ object Whitespace {
     val len = content.length
     var i = 0
     while (i < len) {
-      val c = content.charAt(i += 1)
+      val c = content.charAt(i)
+      i += 1
       if (c > 32 || !C0WHITE(c)) {
         return false
       }
@@ -153,7 +157,7 @@ object Whitespace {
           sb.append(' ')
           inWhitespace = true
         }
-        case _ => 
+        case _ =>
           sb.append(c)
           inWhitespace = false
 
@@ -179,21 +183,27 @@ object Whitespace {
     }
     var first = 0
     var last = in.length - 1
-    while (true) {
-      val x = in.charAt(first)
-      if (x > 32 || !C0WHITE(x)) {
-        //break
-      }
-      if (first += 1 >= last) {
-        return ""
+    import Breaks._
+    breakable {
+      while (true) {
+        val x = in.charAt(first)
+        if (x > 32 || !C0WHITE(x)) {
+          break()
+        }
+        if (first >= last) {
+          return ""
+        }
+        first += 1
       }
     }
-    while (true) {
-      val x = in.charAt(last)
-      if (x > 32 || !C0WHITE(x)) {
-        //break
+    breakable {
+      while (true) {
+        val x = in.charAt(last)
+        if (x > 32 || !C0WHITE(x)) {
+          break()
+        }
+        last -= 1
       }
-      last -= 1
     }
     if (first == 0 && last == in.length - 1) {
       in

@@ -1,16 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.functions
 
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.ExpressionVisitor
-import client.net.sf.saxon.ce.expr.StaticProperty
-import client.net.sf.saxon.ce.expr.XPathContext
+import client.net.sf.saxon.ce.`type`.{AtomicType, TypeHierarchy}
+import client.net.sf.saxon.ce.expr.{Expression, ExpressionVisitor, StaticProperty, XPathContext}
 import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
 import client.net.sf.saxon.ce.value.DateTimeValue
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * This class implements the XPath 2.0 functions
@@ -27,19 +23,19 @@ class CurrentDateTime extends SystemFunction {
    * (because the value of the expression depends on the runtime context)
    * @param visitor an expression visitor
    */
-  def preEvaluate(visitor: ExpressionVisitor): Expression = this
+  override def preEvaluate(visitor: ExpressionVisitor): Expression = this
 
   /**
    * Determine the dependencies
    */
-  def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies(): Int = {
     StaticProperty.DEPENDS_ON_RUNTIME_ENVIRONMENT
   }
 
   /**
    * Evaluate in a general context
    */
-  def evaluateItem(context: XPathContext): Item = {
+  override def evaluateItem(context: XPathContext): Item = {
     val dt = DateTimeValue.getCurrentDateTime(context)
     val th = TypeHierarchy.getInstance
     val targetType = getItemType.asInstanceOf[AtomicType]

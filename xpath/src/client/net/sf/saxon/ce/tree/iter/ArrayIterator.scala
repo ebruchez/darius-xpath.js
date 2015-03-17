@@ -1,10 +1,10 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.iter
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.Sequence
+import client.net.sf.saxon.ce.om.{Item, Sequence}
 import client.net.sf.saxon.ce.value.SequenceExtent
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * ArrayIterator is used to enumerate items held in an array.
@@ -12,7 +12,7 @@ import scala.collection.JavaConversions._
  *
  * @author Michael H. Kay
  */
-class ArrayIterator(protected var items: Array[Item]) extends UnfailingIterator with GroundedIterator {
+class ArrayIterator[T <: Item](protected var items: Array[T]) extends UnfailingIterator with GroundedIterator {
 
   private var index: Int = 0
 
@@ -25,7 +25,9 @@ class ArrayIterator(protected var items: Array[Item]) extends UnfailingIterator 
       index = items.length + 1
       return null
     }
-    items(index += 1)
+    val result = items(index)
+    index += 1
+    result
   }
 
   /**

@@ -1,15 +1,12 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.sort
-
-import GenericSorter._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object GenericSorter {
 
   private val SMALL = 7
-
   private val MEDIUM = 7
-
   private val LARGE = 40
 
   /**
@@ -43,10 +40,12 @@ object GenericSorter {
    */
   private def quickSort1(off: Int, len: Int, comp: Sortable) {
     if (len < SMALL) {
-      for (i <- off until len + off) var j = i
-      while (j > off && (comp.compare(j - 1, j) > 0)) {
-        comp.swap(j, j - 1)
-        j -= 1
+      for (i <- off until len + off) {
+        var j = i
+        while (j > off && (comp.compare(j - 1, j) > 0)) {
+          comp.swap(j, j - 1)
+          j -= 1
+        }
       }
       return
     }
@@ -61,44 +60,68 @@ object GenericSorter {
         n = med3(n - 2 * s, n - s, n, comp)
       }
       val c = comp.compare(m, n)
-      m = (if (comp.compare(l, m) < 0) (if (c < 0) m else if (comp.compare(l, n) < 0) n else l) else (if (c > 0) m else if (comp.compare(l, 
+      m = (if (comp.compare(l, m) < 0) (if (c < 0) m else if (comp.compare(l, n) < 0) n else l) else (if (c > 0) m else if (comp.compare(l,
         n) > 0) n else l))
     }
     var a = off
     var b = a
     var c = off + len - 1
     var d = c
-    while (true) {
-      var comparison: Int = 0
-      while (b <= c && ((comparison = comp.compare(b, m)) <= 0)) {
-        if (comparison == 0) {
-          if (a == m) m = b else if (b == m) m = a
-          comp.swap(a += 1, b)
+    import scala.util.control.Breaks._
+    breakable {
+      while (true) {
+        var comparison: Int = 0
+        while (b <= c && {comparison = comp.compare(b, m); comparison} <= 0) {
+          if (comparison == 0) {
+            if (a == m) m = b else if (b == m) m = a
+            comp.swap(a, b)
+            a += 1
+          }
+          b += 1
         }
+        while (c >= b && {comparison = comp.compare(c, m); comparison} >= 0) {
+          if (comparison == 0) {
+            if (c == m) m = d else if (d == m) m = c
+            comp.swap(c, d)
+            d -= 1
+          }
+          c -= 1
+        }
+        if (b > c)
+            break()
+        if (b == m) m = d else if (c == m) m = c
+        comp.swap(b, c)
         b += 1
-      }
-      while (c >= b && ((comparison = comp.compare(c, m)) >= 0)) {
-        if (comparison == 0) {
-          if (c == m) m = d else if (d == m) m = c
-          comp.swap(c, d -= 1)
-        }
         c -= 1
       }
-      if (b > c) //break
-      if (b == m) m = d else if (c == m) m = c
-      comp.swap(b += 1, c -= 1)
     }
     var s = Math.min(a - off, b - a)
     var aa = off
     var bb = b - s
-    while (s >= 0) comp.swap(aa += 1, bb += 1)
+    s -= 1
+    while (s >= 0) {
+      comp.swap(aa, bb)
+      aa += 1
+      bb += 1
+      s -= 1
+    }
     val n = off + len
     s = Math.min(d - c, n - d - 1)
     aa = b
     bb = n - s
-    while (s >= 0) comp.swap(aa += 1, bb += 1)
-    if ((s = b - a) > 1) quickSort1(off, s, comp)
-    if ((s = d - c) > 1) quickSort1(n - s, s, comp)
+    s -= 1
+    while (s >= 0) {
+      comp.swap(aa, bb)
+      aa += 1
+      bb += 1
+      s -= 1
+    }
+    s = b - a
+    if (s > 1)
+      quickSort1(off, s, comp)
+    s = d - c
+    if (s > 1)
+      quickSort1(n - s, s, comp)
   }
 
   /**
@@ -109,7 +132,7 @@ object GenericSorter {
       c: Int, 
       comp: Sortable): Int = {
     val bc = comp.compare(b, c)
-    (if (comp.compare(a, b) < 0) (if (bc < 0) b else if (comp.compare(a, c) < 0) c else a) else (if (bc > 0) b else if (comp.compare(a, 
+    (if (comp.compare(a, b) < 0) (if (bc < 0) b else if (comp.compare(a, c) < 0) c else a) else (if (bc > 0) b else if (comp.compare(a,
       c) > 0) c else a))
   }
 }
@@ -150,10 +173,10 @@ object GenericSorter {
  job.
  <p> Lets call the generic data <tt>g</tt> (it may be one array, three linked lists
  or whatever). This class takes a user comparison function operating on two indexes
- <tt>(a,b)</tt>, namely an {@link Sortable}. The comparison function determines
+ <tt>(a,b)</tt>, namely an [[Sortable]]. The comparison function determines
  whether <tt>g[a]</tt> is equal, less or greater than <tt>g[b]</tt>. The sort,
  depending on its implementation, can decide to swap the data at index <tt>a</tt>
- with the data at index <tt>b</tt>. It calls a user provided {@link Sortable}
+ with the data at index <tt>b</tt>. It calls a user provided [[Sortable]]
  object that knows how to swap the data of these indexes.
  <p>The following snippet shows how to solve the problem.
  <table>
@@ -225,7 +248,7 @@ object GenericSorter {
  <h4>Notes</h4>
  <p></p>
  <p> Sorts involving floating point data and not involving comparators, like, for
- example provided in the JDK {@link java.util.Arrays} and in the Colt
+ example provided in the JDK [[java.util.Arrays]] and in the Colt
  (cern.colt.Sorting) handle floating point numbers in special ways to guarantee
  that NaN's are swapped to the end and -0.0 comes before 0.0. Methods delegating
  to comparators cannot do this. They rely on the comparator. Thus, if such boundary

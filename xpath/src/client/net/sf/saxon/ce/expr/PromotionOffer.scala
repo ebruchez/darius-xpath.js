@@ -1,16 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr
 
+import client.net.sf.saxon.ce.expr.PromotionOffer._
 import client.net.sf.saxon.ce.expr.sort.DocumentSorter
-import client.net.sf.saxon.ce.functions.Current
 import client.net.sf.saxon.ce.functions.Reverse
 import client.net.sf.saxon.ce.lib.NamespaceConstant
 import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.value.Cardinality
-import client.net.sf.saxon.ce.value.SequenceType
-import PromotionOffer._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.value.{Cardinality, SequenceType}
 
 object PromotionOffer {
 
@@ -122,60 +120,55 @@ class PromotionOffer {
    * unchanged
    */
   def accept(parent: Expression, child: Expression): Expression = action match {
-    case RANGE_INDEPENDENT => {
+    case RANGE_INDEPENDENT =>
       val properties = child.getSpecialProperties
       if (((properties & StaticProperty.NON_CREATIVE) != 0) && 
         !ExpressionTool.dependsOnVariable(child, bindingList) && 
-        (child.getDependencies & (StaticProperty.HAS_SIDE_EFFECTS)) == 
+        (child.getDependencies & StaticProperty.HAS_SIDE_EFFECTS) ==
         0) {
-        return promote(parent, child)
-      }
-      //break
-    }
-    case FOCUS_INDEPENDENT => {
+        promote(parent, child)
+      } else
+        null
+    case FOCUS_INDEPENDENT =>
       val dependencies = child.getDependencies
       val properties = child.getSpecialProperties
       if (!promoteXSLTFunctions && 
-        ((dependencies & StaticProperty.DEPENDS_ON_XSLT_CONTEXT) != 
-        0)) {
-        //break
+        ((dependencies & StaticProperty.DEPENDS_ON_XSLT_CONTEXT) != 0)) {
+        return null
       }
       if (ExpressionTool.dependsOnVariable(child, bindingList)) {
-        //break
+        return null
       }
-      if ((dependencies & (StaticProperty.HAS_SIDE_EFFECTS)) != 0) {
-        //break
+      if ((dependencies & StaticProperty.HAS_SIDE_EFFECTS) != 0) {
+        return null
       }
-      if ((dependencies & StaticProperty.DEPENDS_ON_FOCUS) == 0 && 
-        (properties & StaticProperty.NON_CREATIVE) != 0) {
-        return promote(parent, child)
-      } else if (promoteDocumentDependent && 
-        (dependencies & StaticProperty.DEPENDS_ON_NON_DOCUMENT_FOCUS) == 
-        0 && 
-        (properties & StaticProperty.NON_CREATIVE) != 0) {
-        return promote(parent, child)
-      }
-      //break
-    }
-    case REPLACE_CURRENT => {
-      if (child.isInstanceOf[Current]) {
-        val `var` = new LocalVariableReference(containingExpression.asInstanceOf[Assignation])
-        ExpressionTool.copyLocationInfo(child, `var`)
-        return `var`
-      } else if (!ExpressionTool.callsFunction(child, Current.FN_CURRENT)) {
-        return child
-      }
-      //break
-    }
-    case UNORDERED => {
+      if ((dependencies & StaticProperty.DEPENDS_ON_FOCUS) == 0 && (properties & StaticProperty.NON_CREATIVE) != 0) {
+        promote(parent, child)
+      } else if (promoteDocumentDependent &&
+          (dependencies & StaticProperty.DEPENDS_ON_NON_DOCUMENT_FOCUS) == 0 &&
+          (properties & StaticProperty.NON_CREATIVE) != 0) {
+        promote(parent, child)
+      } else
+        null
+    case REPLACE_CURRENT =>
+      null
+//ORBEON XSLT
+//      if (child.isInstanceOf[Current]) {
+//        val `var` = new LocalVariableReference(containingExpression.asInstanceOf[Assignation])
+//        ExpressionTool.copyLocationInfo(child, `var`)
+//        return `var`
+//      } else if (!ExpressionTool.callsFunction(child, Current.FN_CURRENT)) {
+//        return child
+//      }
+    case UNORDERED =>
       if (child.isInstanceOf[Reverse]) {
-        return child.asInstanceOf[Reverse].getArguments()(0)
+        child.asInstanceOf[Reverse].getArguments()(0)
       } else if (child.isInstanceOf[DocumentSorter] && !retainAllNodes) {
-        return child.asInstanceOf[DocumentSorter].getBaseExpression
-      }
-      //break
-    }
-    case _ => throw new UnsupportedOperationException("Unknown promotion action " + action)
+        child.asInstanceOf[DocumentSorter].getBaseExpression
+      } else
+        null
+    case _ =>
+        throw new UnsupportedOperationException("Unknown promotion action " + action)
   }
 
   /**
