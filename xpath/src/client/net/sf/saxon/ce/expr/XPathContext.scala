@@ -121,7 +121,7 @@ class XPathContext(var controller: Controller) {
           size + 
           ")")
       }
-      stackFrame = Array.ofDim[Sequence](size)
+      stackFrame = new Array[Sequence](size)
       System.arraycopy(variables, 0, stackFrame, 0, variables.length)
     }
   }
@@ -134,7 +134,7 @@ class XPathContext(var controller: Controller) {
    */
   def resetStackFrameMap(numberOfSlots: Int, numberOfParams: Int) {
     if (stackFrame.length != numberOfSlots) {
-      val v2 = Array.ofDim[Sequence](numberOfSlots)
+      val v2 = new Array[Sequence](numberOfSlots)
       System.arraycopy(stackFrame, 0, v2, 0, numberOfParams)
       stackFrame = v2
     } else {
@@ -154,7 +154,7 @@ class XPathContext(var controller: Controller) {
 //   */
 //  def requestTailCall(fn: UserFunction, variables: Array[Sequence]) {
 //    if (variables.length > stackFrame.length) {
-//      val v2 = Array.ofDim[Sequence](fn.getNumberOfSlots)
+//      val v2 = new Array[Sequence](fn.getNumberOfSlots)
 //      System.arraycopy(variables, 0, v2, 0, variables.length)
 //      stackFrame = v2
 //    } else {
@@ -180,7 +180,7 @@ class XPathContext(var controller: Controller) {
    * @param numberOfSlots the number of slots needed in the stack frame
    */
   def openStackFrame(numberOfSlots: Int) {
-    stackFrame = if (numberOfSlots == 0) EMPTY_STACKFRAME else Array.ofDim[Sequence](numberOfSlots)
+    stackFrame = if (numberOfSlots == 0) EMPTY_STACKFRAME else new Array[Sequence](numberOfSlots)
   }
 
 //ORBEON XSLT

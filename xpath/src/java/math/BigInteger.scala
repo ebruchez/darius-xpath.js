@@ -99,7 +99,7 @@ object BigInteger {
     }
     val intCount = exp >> 5
     val bitN = exp & 31
-    val resDigits = Array.ofDim[Int](intCount + 1)
+    val resDigits = new Array[Int](intCount + 1)
     resDigits(intCount) = 1 << bitN
     new BigInteger(1, intCount + 1, resDigits)
   }
@@ -258,7 +258,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     } else {
       sign = 1
       numberLength = (numBits + 31) >> 5
-      digits = Array.ofDim[Int](numberLength)
+      digits = new Array[Int](numberLength)
       for (i <- 0 until numberLength) {
         digits(i) = rnd.nextInt()
       }
@@ -536,7 +536,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
       return ZERO
     }
     val resLength = thisLen - divisorLen + 1
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
     val resSign = (if ((thisSign == divisorSign)) 1 else -1)
     if (divisorLen == 1) {
       Division.divideArrayByInt(resDigits, digits, thisLen, divisor.digits(0))
@@ -582,7 +582,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     val quotientLength = thisLen - divisorLen + 1
     val remainderLength = divisorLen
     val quotientSign = (if ((thisSign == divisorSign)) 1 else -1)
-    val quotientDigits = Array.ofDim[Int](quotientLength)
+    val quotientDigits = new Array[Int](quotientLength)
     val remainderDigits = Division.divide(quotientDigits, quotientLength, thisDigits, thisLen, divisorDigits,
       divisorLen)
     val result0 = new BigInteger(quotientSign, quotientLength, quotientDigits)
@@ -991,7 +991,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
       return this
     }
     val resLength = divisorLen
-    var resDigits = Array.ofDim[Int](resLength)
+    var resDigits = new Array[Int](resLength)
     if (resLength == 1) {
       resDigits(0) = Division.remainderArrayByInt(digits, thisLen, divisor.digits(0))
     } else {
@@ -1130,7 +1130,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
      * Puts the little-endian int array representing the magnitude of this
      * BigInteger into the big-endian byte array.
      */
-    val bytes = Array.ofDim[Byte](bytesLen)
+    val bytes = new Array[Byte](bytesLen)
     var firstByteNumber = 0
     var highBytes: Int = 0
     var digitIndex = 0
@@ -1233,7 +1233,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
    * Returns a copy of the current instance to achieve immutability
    */
   def copy(): BigInteger = {
-    val copyDigits = Array.ofDim[Int](numberLength)
+    val copyDigits = new Array[Int](numberLength)
     System.arraycopy(digits, 0, copyDigits, 0, numberLength)
     new BigInteger(sign, numberLength, copyDigits)
   }
@@ -1295,7 +1295,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     var bytesLen = byteValues.length
     val highBytes = bytesLen & 3
     numberLength = (bytesLen >> 2) + (if ((highBytes == 0)) 0 else 1)
-    digits = Array.ofDim[Int](numberLength)
+    digits = new Array[Int](numberLength)
     var i = 0
     // Setting the sign
     digits(numberLength - 1) = -1
@@ -1349,7 +1349,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     var bytesLen = byteValues.length
     val highBytes = bytesLen & 3
     numberLength = (bytesLen >> 2) + (if ((highBytes == 0)) 0 else 1)
-    digits = Array.ofDim[Int](numberLength)
+    digits = new Array[Int](numberLength)
 
     // Put bytes to the int array starting from the end of the byte array
     var i = 0
@@ -1399,7 +1399,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     if (topChars != 0) {
       bigRadixDigitsLength += 1
     }
-    _digits = Array.ofDim[Int](bigRadixDigitsLength)
+    _digits = new Array[Int](bigRadixDigitsLength)
     val bigRadix = Conversion.bigRadices(radix - 2)
     var digitIndex = 0
     var substrEnd = startChar + (if ((topChars == 0)) charsPerInt else topChars)

@@ -61,9 +61,9 @@ class ParameterSet(capacity: Int) {
     }
     if (used + 1 > keys.length) {
       val newlength = (if (used <= 5) 10 else used * 2)
-      val newkeys = Array.ofDim[Int](newlength)
-      val newChecked = Array.ofDim[Boolean](newlength)
-      val newvalues = Array.ofDim[Sequence](newlength)
+      val newkeys = new Array[Int](newlength)
+      val newChecked = new Array[Boolean](newlength)
+      val newvalues = new Array[Sequence](newlength)
       System.arraycopy(values, 0, newvalues, 0, used)
       System.arraycopy(keys, 0, newkeys, 0, used)
       System.arraycopy(typeChecked, 0, newChecked, 0, used)

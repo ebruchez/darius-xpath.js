@@ -110,11 +110,11 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
     if (allocated == -1) {
       allocated = 100
     }
-    nodeKeys = Array.ofDim[Any](allocated * recordSize)
+    nodeKeys = new Array[Any](allocated * recordSize)
     count = 0
     allocated = populateArray(allocated)
     if (allocated * 2 < count || (allocated - count) > 2000) {
-      val nk2 = Array.ofDim[Any](count * recordSize)
+      val nk2 = new Array[Any](count * recordSize)
       System.arraycopy(nodeKeys, 0, nk2, 0, count * recordSize)
       nodeKeys = nk2
     }
@@ -129,7 +129,7 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
       }
       if (count == allocated) {
         allocated *= 2
-        val nk2 = Array.ofDim[Any](allocated * recordSize)
+        val nk2 = new Array[Any](allocated * recordSize)
         System.arraycopy(nodeKeys, 0, nk2, 0, count * recordSize)
         nodeKeys = nk2
       }

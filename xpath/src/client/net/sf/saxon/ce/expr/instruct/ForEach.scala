@@ -112,7 +112,7 @@ class ForEach extends Instruction with ContextMappingFunction {
       0
     offer.promoteXSLTFunctions = false
     offer.containingExpression = this
-    offer.bindingList = Array.ofDim[Binding](0)
+    offer.bindingList = new Array[Binding](0)
     action = doPromotion(action, offer)
     if (offer.containingExpression.isInstanceOf[LetExpression]) {
       offer.containingExpression = visitor.optimize(offer.containingExpression, contextItemType)

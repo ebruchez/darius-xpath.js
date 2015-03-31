@@ -481,7 +481,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
         nodeNames.add(name)
       }
     }
-    val nodes = Array.ofDim[HTMLAttributeNode](nodeAtts.size)
+    val nodes = new Array[HTMLAttributeNode](nodeAtts.size)
     nodeAtts.toArray(nodes)
     attributeList = nodes
     attributeNames = nodeNames
@@ -511,7 +511,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
       if (namespaceBindings == null) {
         this.getAltAttributes
       }
-      val bindings = Array.ofDim[NamespaceBinding](namespaceBindings.size)
+      val bindings = new Array[NamespaceBinding](namespaceBindings.size)
       namespaceBindings.toArray(bindings)
       bindings
     } else {

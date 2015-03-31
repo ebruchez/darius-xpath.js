@@ -1100,7 +1100,7 @@ class ExpressionParser {
       expect(Token.RPAR)
     }
     nextToken()
-    val arguments = Array.ofDim[Expression](args.size)
+    val arguments = new Array[Expression](args.size)
     args.toArray(arguments)
     var fcall: Expression = null
     try {

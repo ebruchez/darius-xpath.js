@@ -66,7 +66,7 @@ class GeneralUnicodeString private (val chars: Array[Int], val start: Int, val e
   override def toString(): String = {
     var c = chars
     if (start != 0) {
-      c = Array.ofDim[Int](end - start)
+      c = new Array[Int](end - start)
       System.arraycopy(chars, start, c, 0, end - start)
     }
     StringValue.contract(c, end - start).toString

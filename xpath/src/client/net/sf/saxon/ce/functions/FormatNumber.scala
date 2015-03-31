@@ -25,7 +25,7 @@ object FormatNumber {
    */
   private def getSubPictures(picture: String, dfs: DecimalSymbols): Array[SubPicture] = {
     val picture4 = StringValue.expand(picture)
-    val pics = Array.ofDim[SubPicture](2)
+    val pics = new Array[SubPicture](2)
     if (picture4.length == 0) {
       val err = new XPathException("format-number() picture is zero-length")
       err.setErrorCode("XTDE1310")
@@ -46,9 +46,9 @@ object FormatNumber {
       pics(0) = new SubPicture(picture4, dfs)
       pics(1) = null
     } else {
-      val pic0 = Array.ofDim[Int](sep)
+      val pic0 = new Array[Int](sep)
       System.arraycopy(picture4, 0, pic0, 0, sep)
-      val pic1 = Array.ofDim[Int](picture4.length - sep - 1)
+      val pic1 = new Array[Int](picture4.length - sep - 1)
       System.arraycopy(picture4, sep + 1, pic1, 0, picture4.length - sep - 1)
       pics(0) = new SubPicture(pic0, dfs)
       pics(1) = new SubPicture(pic1, dfs)
@@ -296,7 +296,7 @@ object FormatNumber {
 
     if (wholePartPositions != null) {
       val n = wholePartPositions.size
-      wholePartGroupingPositions = Array.ofDim[Int](n)
+      wholePartGroupingPositions = new Array[Int](n)
       for (i <- 0 until n) {
         wholePartGroupingPositions(i) = maxWholePartSize -
           wholePartPositions.get(n - i - 1).asInstanceOf[java.lang.Integer]
@@ -309,7 +309,7 @@ object FormatNumber {
           //break
         }
         if (regular) {
-          wholePartGroupingPositions = Array.ofDim[Int](1)
+          wholePartGroupingPositions = new Array[Int](1)
           wholePartGroupingPositions(0) = first
         }
       }
@@ -320,7 +320,7 @@ object FormatNumber {
 
     if (fractionalPartPositions != null) {
       val n = fractionalPartPositions.size
-      fractionalPartGroupingPositions = Array.ofDim[Int](n)
+      fractionalPartGroupingPositions = new Array[Int](n)
       for (i <- 0 until n) {
         fractionalPartGroupingPositions(i) = fractionalPartPositions.get(i).intValue()
       }
@@ -511,7 +511,7 @@ object FormatNumber {
       position: Int): Array[Int] = {
     var array = _array
     if (used + 1 > array.length) {
-      val a2 = Array.ofDim[Int](used + 10)
+      val a2 = new Array[Int](used + 10)
       System.arraycopy(array, 0, a2, 0, used)
       array = a2
     }

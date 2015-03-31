@@ -20,7 +20,7 @@ object FastStringBuffer {
  */
 class FastStringBuffer(initialSize: Int) extends CharSequence {
 
-  private var array: Array[Char] = Array.ofDim[Char](initialSize)
+  private var array: Array[Char] = new Array[Char](initialSize)
 
   private var used: Int = 0
 
@@ -364,7 +364,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * @param ch the character to insert
    */
   def prepend(ch: Char) {
-    val a2 = Array.ofDim[Char](array.length + 1)
+    val a2 = new Array[Char](array.length + 1)
     System.arraycopy(array, 0, a2, 1, used)
     a2(0) = ch
     used += 1
@@ -379,7 +379,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    */
   def prependRepeated(ch: Char, repeat: Int) {
     if (repeat > 0) {
-      val a2 = Array.ofDim[Char](array.length + repeat)
+      val a2 = new Array[Char](array.length + repeat)
       System.arraycopy(array, 0, a2, repeat, used)
       Arrays.fill(a2, 0, repeat, ch)
       used += repeat
@@ -410,7 +410,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
       if (newlen < used + extra) {
         newlen = used + extra * 2
       }
-      val array2 = Array.ofDim[Char](newlen)
+      val array2 = new Array[Char](newlen)
       System.arraycopy(array, 0, array2, 0, used)
       array = array2
     }
@@ -426,7 +426,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
   def condense(): CharSequence = {
     if (array.length - used > 256 || 
       (array.length > used * 2 && array.length - used > 20)) {
-      val array2 = Array.ofDim[Char](used)
+      val array2 = new Array[Char](used)
       System.arraycopy(array, 0, array2, 0, used)
       array = array2
     }

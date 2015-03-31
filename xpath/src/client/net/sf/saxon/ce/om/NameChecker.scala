@@ -22,7 +22,7 @@ object NameChecker {
    * @throws QNameException if not a valid QName.
    */
   def getQNameParts(qname: CharSequence): Array[String] = {
-    val parts = Array.ofDim[String](2)
+    val parts = new Array[String](2)
     var colon = -1
     val len = qname.length
     for (i <- 0 until len if qname.charAt(i) == ':') {

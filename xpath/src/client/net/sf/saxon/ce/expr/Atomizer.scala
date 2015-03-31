@@ -156,7 +156,7 @@ class Atomizer(sequence: Expression) extends UnaryExpression(sequence) {
       }
       if (operand.isInstanceOf[Block]) {
         val children = operand.asInstanceOf[Block].getChildren
-        val atomizedChildren = Array.ofDim[Expression](children.length)
+        val atomizedChildren = new Array[Expression](children.length)
         for (i <- 0 until children.length) {
           atomizedChildren(i) = new Atomizer(children(i))
         }

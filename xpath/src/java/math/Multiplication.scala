@@ -85,7 +85,7 @@ object Multiplication {
       return (if ((resHi == 0)) new BigInteger(resSign, resLo) else new BigInteger(resSign, 2, Array(resLo, resHi)))
     }
     val resLength = aNumberLength + 1
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
     resDigits(aNumberLength) = multiplyByInt(resDigits, aDigits, aNumberLength, factor)
     val result = new BigInteger(resSign, resLength, resDigits)
     result.cutOffLeadingZeroes()
@@ -112,7 +112,7 @@ object Multiplication {
    * @param aLen The length of the number to square.
    */
   def square(a: Array[Int], aLen: Int, res: Array[Int]): Array[Int]  = {
-   // val res: Array[Int] =  Array.ofDim[Int]( resLen)
+   // val res: Array[Int] =  new Array[Int]( resLen)
     var carry: Long = 0l
 
     for (i <- 0 until aLen) {
@@ -329,7 +329,7 @@ object Multiplication {
     }
     val aDigits = a.digits
     val bDigits = b.digits
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
     multArraysPAP(aDigits, aLen, bDigits, bLen, resDigits)
     val result = new BigInteger(resSign, resLength, resDigits)
     result.cutOffLeadingZeroes()
@@ -347,7 +347,7 @@ object Multiplication {
         res = res.multiply(acc)
       }
       acc = if (acc.numberLength == 1) acc.multiply(acc) else new BigInteger(1, square(acc.digits, acc.numberLength,
-        Array.ofDim[Int](acc.numberLength << 1)))
+        new Array[Int](acc.numberLength << 1)))
       _exponent >>= 1
     }
     res = res.multiply(acc)
@@ -418,7 +418,7 @@ object Multiplication {
               t: Array[Int],
               aLen: Int,
               bLen: Int): Unit = {
-    //val resDigits = Array.ofDim[Int](resLen)
+    //val resDigits = new Array[Int](resLen)
     if (a == b && aLen == bLen) {
       square(a, aLen, t)
       return

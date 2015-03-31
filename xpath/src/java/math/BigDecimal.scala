@@ -1502,7 +1502,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     val diffScale = this._scale.toLong - divisor._scale
     var newScale = diffScale
     val quotPrecision = diffPrecision - diffScale + 1
-    var quotAndRem = Array.ofDim[BigInteger](2)
+    var quotAndRem = new Array[BigInteger](2)
     // In special cases it call the dual method
     if ((mcPrecision == 0) || (this.isZero) || (divisor.isZero)) {
       return this.divideToIntegralValue(divisor)
@@ -1633,7 +1633,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    * @see #remainder
    */
   def divideAndRemainder(divisor: BigDecimal): Array[BigDecimal] = {
-    val quotAndRem = Array.ofDim[BigDecimal](2)
+    val quotAndRem = new Array[BigDecimal](2)
     quotAndRem(0) = this.divideToIntegralValue(divisor)
     quotAndRem(1) = this.subtract(quotAndRem(0).multiply(divisor))
     quotAndRem
@@ -1662,7 +1662,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    * @see #remainder
    */
   def divideAndRemainder(divisor: BigDecimal, mc: MathContext): Array[BigDecimal] = {
-    val quotAndRem = Array.ofDim[BigDecimal](2)
+    val quotAndRem = new Array[BigDecimal](2)
     quotAndRem(0) = this.divideToIntegralValue(divisor, mc)
     quotAndRem(1) = this.subtract(quotAndRem(0).multiply(divisor))
     quotAndRem

@@ -144,7 +144,7 @@ abstract class SystemFunction extends FunctionCall {
    */
   protected def useContextItemAsDefault() {
     if (argument.length == 0) {
-      argument = Array.ofDim[Expression](1)
+      argument = new Array[Expression](1)
       argument(0) = new ContextItemExpression()
       ExpressionTool.copyLocationInfo(this, argument(0))
       resetLocalStaticProperties()
@@ -168,7 +168,7 @@ abstract class SystemFunction extends FunctionCall {
     if (argument.length != pos) {
       throw new XPathException("Too few arguments in call to " + augmentedName + "() function")
     }
-    val newArgs = Array.ofDim[Expression](pos + 1)
+    val newArgs = new Array[Expression](pos + 1)
     System.arraycopy(argument, 0, newArgs, 0, argument.length)
     val rootExpression = new RootExpression()
     ExpressionTool.copyLocationInfo(this, rootExpression)

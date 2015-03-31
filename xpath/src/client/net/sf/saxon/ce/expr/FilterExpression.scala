@@ -33,7 +33,7 @@ object FilterExpression {
         }
       }
       case Token.FLT => {
-        val args = Array.ofDim[Expression](3)
+        val args = new Array[Expression](3)
         args(0) = start
         args(1) = new Literal(new IntegerValue(1))
         if (Literal.isAtomic(comparand)) {
@@ -46,7 +46,7 @@ object FilterExpression {
         SystemFunction.makeSystemFunction("subsequence", args)
       }
       case Token.FLE => {
-        val args = Array.ofDim[Expression](3)
+        val args = new Array[Expression](3)
         args(0) = start
         args(1) = new Literal(new IntegerValue(1))
         args(2) = comparand
@@ -56,7 +56,7 @@ object FilterExpression {
         SystemFunction.makeSystemFunction("remove", Array(start, comparand))
       }
       case Token.FGT => {
-        val args = Array.ofDim[Expression](2)
+        val args = new Array[Expression](2)
         args(0) = start
         if (Literal.isAtomic(comparand)) {
           val n = comparand.asInstanceOf[Literal].getValue.asInstanceOf[NumericValue]

@@ -46,7 +46,7 @@ class ExpressionVisitor {
 
   private def getLastLocator(): SourceLocator = {
     val stackSize = stack.size
-    val expr = Array.ofDim[Expression](stackSize)
+    val expr = new Array[Expression](stackSize)
     stack.toArray(expr)
     val result: SourceLocator = null
     var i = stackSize - 1

@@ -21,7 +21,7 @@ class StringToCodepoints extends SystemFunction {
       return EmptyIterator.getInstance
     }
     val chars = item.asInstanceOf[StringValue].expand()
-    val codes = Array.ofDim[Item](chars.length)
+    val codes = new Array[Item](chars.length)
     for (i <- 0 until chars.length) {
       codes(i) = new IntegerValue(chars(i))
     }

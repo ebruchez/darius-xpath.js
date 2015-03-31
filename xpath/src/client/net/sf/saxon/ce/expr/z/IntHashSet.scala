@@ -91,7 +91,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
       s._nhi = _nhi
       s._shift = _shift
       s._size = _size
-      s._values = Array.ofDim[Int](_values.length)
+      s._values = new Array[Int](_values.length)
       System.arraycopy(_values, 0, s._values, 0, _values.length)
       s
     }
@@ -112,7 +112,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
 
   def getValues(): Array[Int] = {
     var index = 0
-    val values = Array.ofDim[Int](_size)
+    val values = new Array[Int](_size)
     for (_value <- _values if _value != ndv) {
       values(index) = _value
       index += 1
@@ -206,7 +206,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
     _mask = nmax - 1
     _size = 0
     val values = _values
-    _values = Array.ofDim[Int](nmax)
+    _values = new Array[Int](nmax)
     java.util.Arrays.fill(_values, ndv)
     if (values != null) {
       for (i <- 0 until nold) {

@@ -134,7 +134,7 @@ object StringValue {
    * @return an array of integers representing the Unicode code points
    */
   def expand(s: CharSequence): Array[Int] = {
-    val array = Array.ofDim[Int](getStringLength(s))
+    val array = new Array[Int](getStringLength(s))
     var o = 0
     var i = 0
     while (i < s.length) {

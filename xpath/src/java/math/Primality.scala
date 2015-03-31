@@ -71,7 +71,7 @@ object Primality {
     }
     val shiftCount = (-bitLength) & 31
     var last = (bitLength + 31) >> 5
-    val n = new BigInteger(1, last, Array.ofDim[Int](last))
+    val n = new BigInteger(1, last, new Array[Int](last))
     last -= 1
     do {
       // To fill the array with random integers
@@ -140,8 +140,8 @@ object Primality {
     var j: Int = 0
     var certainty: Int = 0
     val gapSize = 1024  // for searching of the next probable prime number
-    val modules = Array.ofDim[Int](primes.length)
-    val isDivisible = Array.ofDim[Boolean](gapSize)
+    val modules = new Array[Int](primes.length)
+    val isDivisible = new Array[Boolean](gapSize)
 
     // If n < "last prime of table" searches next prime in the table
     if ((n.numberLength == 1) && (n.digits(0) >= 0) && (n.digits(0) < primes(primes.length - 1))) {
@@ -156,7 +156,7 @@ object Primality {
      * Creates a "N" enough big to hold the next probable prime Note that: N <
      * "next prime" < 2*N
      */
-    val startPoint: BigInteger =  new BigInteger(1, n.numberLength, Array.ofDim[Int](n.numberLength + 1))
+    val startPoint: BigInteger =  new BigInteger(1, n.numberLength, new Array[Int](n.numberLength + 1))
     System.arraycopy(n.digits, 0, startPoint.digits, 0, n.numberLength)
     // To fix N to the "next odd number"
     if (n.testBit(0)) {

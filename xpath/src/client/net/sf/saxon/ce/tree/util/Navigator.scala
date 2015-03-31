@@ -304,7 +304,7 @@ object Navigator {
 //      }
 //    }
 //    if (memoise) {
-//      val memo = Array.ofDim[Any](2)
+//      val memo = new Array[Any](2)
 //      memo(0) = node
 //      memo(1) = num
 //      controller.setUserData(inst, "xsl:number", memo)

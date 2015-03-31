@@ -98,7 +98,7 @@ object EscapeURI {
    * @param sb the buffer to contain the escaped result
    */
   private def escapeChar(c: Char, c2: Char, sb: FastStringBuffer) {
-    val array = Array.ofDim[Byte](4)
+    val array = new Array[Byte](4)
     val used = UTF8CharacterSet.getUTF8Encoding(c, c2, array)
     for (b <- 0 until used) {
       val v = array(b).toInt & 0xff

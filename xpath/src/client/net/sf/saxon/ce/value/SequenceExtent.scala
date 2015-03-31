@@ -111,10 +111,10 @@ object SequenceExtent {
             list.add(it)
           }
         }
-        val array = Array.ofDim[Item](list.size)
+        val array = new Array[Item](list.size)
         list.toArray(array)
       } else {
-        val result = Array.ofDim[Item](allocated)
+        val result = new Array[Item](allocated)
         var i = 0
         breakable {
           while (true) {
@@ -133,7 +133,7 @@ object SequenceExtent {
   }
 
   def apply[T  <: Item](list: List[T]): SequenceExtent[Item] =
-    new SequenceExtent(list.toArray(Array.ofDim[Item](list.size)))
+    new SequenceExtent(list.toArray(new Array[Item](list.size)))
 }
 
 /**

@@ -39,8 +39,8 @@ object Division {
              aLength: Int,
              b: Array[Int],
              bLength: Int): Array[Int] = {
-    val normA = Array.ofDim[Int](aLength + 1) // the normalized dividend an extra byte is needed for correct shift
-    val normB = Array.ofDim[Int](bLength + 1) // the normalized divisor
+    val normA = new Array[Int](aLength + 1) // the normalized dividend an extra byte is needed for correct shift
+    val normB = new Array[Int](bLength + 1) // the normalized divisor
     val normBLength = bLength
     /*
      * Step D1: normalize a and b and put the results to a1 and b1 the
@@ -166,7 +166,7 @@ object Division {
     }
     val quotientLength = valLen
     val quotientSign = (if ((valSign == divisorSign)) 1 else -1)
-    val quotientDigits = Array.ofDim[Int](quotientLength)
+    val quotientDigits = new Array[Int](quotientLength)
     var remainderDigits: Array[Int] = Array()
     remainderDigits = Array(Division.divideArrayByInt(quotientDigits, valDigits, valLen, divisor))
     val result0 = new BigInteger(quotientSign, quotientLength, quotientDigits)
@@ -466,14 +466,14 @@ object Division {
    */
   def modInverseLorencz(a: BigInteger, modulo: BigInteger): BigInteger = {
     val max = Math.max(a.numberLength, modulo.numberLength)
-    val uDigits = Array.ofDim[Int](max + 1) // enough place to make all the inplace operation
-    val vDigits = Array.ofDim[Int](max + 1)
+    val uDigits = new Array[Int](max + 1) // enough place to make all the inplace operation
+    val vDigits = new Array[Int](max + 1)
     System.arraycopy(modulo.digits, 0, uDigits, 0, modulo.numberLength)
     System.arraycopy(a.digits, 0, vDigits, 0, a.numberLength)
     var u = new BigInteger(modulo.sign, modulo.numberLength, uDigits)
     val v = new BigInteger(a.sign, a.numberLength, vDigits)
-    var r = new BigInteger(0, 1, Array.ofDim[Int](max + 1))
-    val s = new BigInteger(1, 1, Array.ofDim[Int](max + 1))
+    var r = new BigInteger(0, 1, new Array[Int](max + 1))
+    val s = new BigInteger(1, 1, new Array[Int](max + 1))
 
     s.digits(0) = 1
     var coefU = 0
@@ -570,8 +570,8 @@ object Division {
     u = p.copy()
     v = a.copy()
     val max = Math.max(v.numberLength, u.numberLength)
-    r = new BigInteger(1, 1, Array.ofDim[Int](max + 1))
-    s = new BigInteger(1, 1, Array.ofDim[Int](max + 1))
+    r = new BigInteger(1, 1, new Array[Int](max + 1))
+    s = new BigInteger(1, 1, new Array[Int](max + 1))
     s.digits(0) = 1
     var k = 0
     val lsbu = u.getLowestSetBit
@@ -640,7 +640,7 @@ object Division {
    * @return {@code x<sup>-1</sup> (mod 2<sup>n</sup>)}.
    */
   def modPow2Inverse(x: BigInteger, n: Int): BigInteger = {
-    val y = new BigInteger(1, Array.ofDim[Int](1 << n))
+    val y = new BigInteger(1, new Array[Int](1 << n))
     y.numberLength = 1
     y.digits(0) = 1
     y.sign = 1
@@ -669,7 +669,7 @@ object Division {
              modulus: BigInteger,
              n2: Int): BigInteger = {
     val modulusLen = modulus.numberLength
-    val res = Array.ofDim[Int]((modulusLen << 1) + 1)
+    val res = new Array[Int]((modulusLen << 1) + 1)
     Multiplication.multArraysPAP(a.digits, Math.min(modulusLen, a.numberLength), b.digits, Math.min(modulusLen,
       b.numberLength), res)
     monReduction(res, modulus, n2)
@@ -815,7 +815,7 @@ object Division {
                     modulus: BigInteger,
                     n2: Int): BigInteger = {
     // fill odd low pows of a2
-    val pows = Array.ofDim[BigInteger](8)
+    val pows = new Array[BigInteger](8)
     var res: BigInteger = x2
     var lowexp: Int = 0
     var x3: BigInteger = null

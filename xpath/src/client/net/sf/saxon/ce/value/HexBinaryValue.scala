@@ -39,7 +39,7 @@ class HexBinaryValue(private val binaryValue: Array[Byte]) extends AtomicValue {
     this(
       {
         val s = Whitespace.trimWhitespace(in)
-        val binaryValue = Array.ofDim[Byte](s.length / 2)
+        val binaryValue = new Array[Byte](s.length / 2)
 
         if ((s.length & 1) != 0) {
           val err = new XPathException("A hexBinary value must contain an even number of characters")

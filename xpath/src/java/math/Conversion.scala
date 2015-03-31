@@ -61,11 +61,11 @@ object Conversion {
     bitsForRadixDigit = Math.log(radix) / Math.log(2)
     val resLengthInChars = (bi.abs().bitLength() / bitsForRadixDigit + (if ((sign < 0)) 1 else 0)).toInt +
       1
-    val result = Array.ofDim[Char](resLengthInChars)
+    val result = new Array[Char](resLengthInChars)
     var currentChar = resLengthInChars
     var resDigit: Int = 0
     if (radix != 16) {
-      val temp = Array.ofDim[Int](numberLength)
+      val temp = new Array[Int](numberLength)
       System.arraycopy(digits, 0, temp, 0, numberLength)
       var tempLen = numberLength
       val charsPerInt = digitFitInInt(radix)
@@ -162,7 +162,7 @@ object Conversion {
     // +1 - one char for sign if needed.
     // +7 - For "special case 2" (see below) we have 7 free chars for
     // inserting necessary scaled digits.
-    val result: Array[Char] = Array.ofDim[Char](resLengthInChars + 1)
+    val result: Array[Char] = new Array[Char](resLengthInChars + 1)
     // allocated [resLengthInChars+1] characters.
     // a free latest character may be used for "special case 1" (see below)
     currentChar = resLengthInChars
@@ -186,7 +186,7 @@ object Conversion {
         } while (v != 0)
       }
     } else {
-      val temp = Array.ofDim[Int](numberLength)
+      val temp = new Array[Int](numberLength)
       var tempLen = numberLength
       System.arraycopy(digits, 0, temp, 0, tempLen)
 
@@ -328,7 +328,7 @@ object Conversion {
     // +1 - one char for sign if needed.
     // +7 - For "special case 2" (see below) we have 7 free chars for
     //  inserting necessary scaled digits.
-    result = Array.ofDim[Char](resLengthInChars + 1)
+    result = new Array[Char](resLengthInChars + 1)
     //  Allocated [resLengthInChars+1] characters.
     // a free latest character may be used for "special case 1" (see below)
     currentChar = resLengthInChars

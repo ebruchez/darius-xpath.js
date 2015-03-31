@@ -291,7 +291,7 @@ object FormatDate {
     if (min > max && max != -1) {
       throw new XPathException("Minimum width in date/time picture exceeds maximum width", "XTDE1340")
     }
-    val result = Array.ofDim[Int](2)
+    val result = new Array[Int](2)
     result(0) = min
     result(1) = max
     result

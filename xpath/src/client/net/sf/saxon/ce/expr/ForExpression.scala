@@ -45,7 +45,7 @@ object ForExpression {
     def getAnother(newBaseIterator: SequenceIterator): StatefulMappingFunction = {
       val c2 = context.newContext()
       val vars = context.getStackFrame
-      val newvars = Array.ofDim[Sequence](vars.length)
+      val newvars = new Array[Sequence](vars.length)
       System.arraycopy(vars, 0, newvars, 0, vars.length)
       c2.setStackFrame(newvars.length, newvars)
       new MappingAction(c2, slotNumber, pslot, action)

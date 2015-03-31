@@ -42,7 +42,7 @@ object Base64BinaryValue {
 
     private var buf_bytes: Int = 0
 
-    private val line  = Array.ofDim[Char](74)
+    private val line  = new Array[Char](74)
 
     private var line_length: Int = 0
 
@@ -103,7 +103,7 @@ object Base64BinaryValue {
       if (buf_bytes != 0) encode_partial_token()
       flush_line()
       for (i <- 0 until line.length) line(i) = 0
-      ch = Array.ofDim[Char](out.length)
+      ch = new Array[Char](out.length)
       if (out.length > 0) out.getChars(0, out.length, ch, 0)
       ch
     }
@@ -132,13 +132,13 @@ object Base64BinaryValue {
 
     import Base64Decoder._
 
-    private var out: Array[Byte] = Array.ofDim[Byte](128)
+    private var out: Array[Byte] = new Array[Byte](128)
 
     private var used: Int = 0
 
-    private var token = Array.ofDim[Byte](4)
+    private var token = new Array[Byte](4)
 
-    private var bytes = Array.ofDim[Byte](3)
+    private var bytes = new Array[Byte](3)
 
     private var token_length: Int = 0
 
@@ -202,7 +202,7 @@ object Base64BinaryValue {
 
     private def ensureCapacity(size: Int) {
       if (used + size >= out.length) {
-        val o2 = Array.ofDim[Byte](out.length * 2)
+        val o2 = new Array[Byte](out.length * 2)
         System.arraycopy(out, 0, o2, 0, used)
         out = o2
       }
@@ -271,13 +271,13 @@ object Base64BinaryValue {
         decode_final_token()
       }
       token_length = 0
-      token = Array.ofDim[Byte](4)
-      bytes = Array.ofDim[Byte](3)
+      token = new Array[Byte](4)
+      bytes = new Array[Byte](3)
     }
 
     def getByteArray(): Array[Byte] = {
       eof()
-      val result = Array.ofDim[Byte](used)
+      val result = new Array[Byte](used)
       System.arraycopy(out, 0, result, 0, used)
       result
     }

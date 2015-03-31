@@ -143,7 +143,7 @@ object XPathProcessor {
     val controller = new Controller(config, expr.getExecutable())
 
     val xpc = new XPathContext(controller)
-    xpc.setStackFrame(slots, Array.ofDim[Sequence](slots))
+    xpc.setStackFrame(slots, new Array[Sequence](slots))
 
     xpc.setSingletonFocus(contextItem)
 

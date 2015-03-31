@@ -156,9 +156,9 @@ abstract class Assignation extends Expression with Binding {
   def extendBindingList(in: Array[Binding]): Array[Binding] = {
     var newBindingList: Array[Binding] = null
     if (in == null) {
-      newBindingList = Array.ofDim[Binding](1)
+      newBindingList = new Array[Binding](1)
     } else {
-      newBindingList = Array.ofDim[Binding](in.length + 1)
+      newBindingList = new Array[Binding](in.length + 1)
       System.arraycopy(in, 0, newBindingList, 0, in.length)
     }
     newBindingList(newBindingList.length - 1) = this

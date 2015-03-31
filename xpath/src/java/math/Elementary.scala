@@ -265,7 +265,7 @@ object Elementary {
                   aSize: Int,
                   b: Array[Int],
                   bSize: Int): Array[Int] = {
-    val res = Array.ofDim[Int](aSize + 1)
+    val res = new Array[Int](aSize + 1)
     add(res, a, aSize, b, bSize)
     res
   }
@@ -368,7 +368,7 @@ object Elementary {
                        aSize: Int,
                        b: Array[Int],
                        bSize: Int): Array[Int] = {
-    val res = Array.ofDim[Int](aSize)
+    val res = new Array[Int](aSize)
     subtract(res, a, aSize, b, bSize)
     res
   }

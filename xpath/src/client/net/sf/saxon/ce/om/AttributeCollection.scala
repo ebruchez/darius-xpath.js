@@ -32,14 +32,14 @@ class AttributeCollection {
    */
   def addAttribute(nameCode: StructuredQName, value: String) {
     if (values == null) {
-      values = Array.ofDim[String](5)
-      names = Array.ofDim[StructuredQName](5)
+      values = new Array[String](5)
+      names = new Array[StructuredQName](5)
       used = 0
     }
     if (values.length == used) {
       val newsize = (if (used == 0) 5 else used * 2)
-      val v2 = Array.ofDim[String](newsize)
-      val c2 = Array.ofDim[StructuredQName](newsize)
+      val v2 = new Array[String](newsize)
+      val c2 = new Array[StructuredQName](newsize)
       System.arraycopy(values, 0, v2, 0, used)
       System.arraycopy(names, 0, c2, 0, used)
       values = v2
@@ -66,8 +66,8 @@ class AttributeCollection {
       names = null
       values = null
     } else if (values.length > used) {
-      val v2 = Array.ofDim[String](used)
-      val c2 = Array.ofDim[StructuredQName](used)
+      val v2 = new Array[String](used)
+      val c2 = new Array[StructuredQName](used)
       System.arraycopy(values, 0, v2, 0, used)
       System.arraycopy(names, 0, c2, 0, used)
       values = v2

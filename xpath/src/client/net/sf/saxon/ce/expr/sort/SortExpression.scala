@@ -93,7 +93,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
       //break
     }
     if (allKeysFixed) {
-      comparators = Array.ofDim[AtomicComparer](sortKeyDefinitions.length)
+      comparators = new Array[AtomicComparer](sortKeyDefinitions.length)
     }
     for (i <- 0 until sortKeyDefinitions.length) {
       var sortKey = sortKeyDefinitions(i).getSortKey
@@ -251,7 +251,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
     val xpc = context.newMinorContext()
     var comps = comparators
     if (comparators == null) {
-      comps = Array.ofDim[AtomicComparer](sortKeyDefinitions.length)
+      comps = new Array[AtomicComparer](sortKeyDefinitions.length)
       for (s <- 0 until sortKeyDefinitions.length) {
         var comp = sortKeyDefinitions(s).getFinalComparator
         if (comp == null) {

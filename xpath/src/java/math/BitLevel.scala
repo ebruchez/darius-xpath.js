@@ -82,7 +82,7 @@ object BitLevel {
     val intCount = n >> 5
     val bitN = n & 31
     val resLength = Math.max(intCount + 1, bi.numberLength) + 1
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
     var i: Int = 0
     val bitNumber = 1 << bitN
     System.arraycopy(bi.digits, 0, resDigits, 0, bi.numberLength)
@@ -191,7 +191,7 @@ object BitLevel {
     val intCount: Int = count >> 5
     val andCount: Int = count & 31
     val resLength: Int = source.numberLength + intCount + (if ((andCount == 0)) 0 else 1)
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
     shiftLeft(resDigits, source.digits, intCount, andCount)
     val result = new BigInteger(source.sign, resLength, resDigits)
     result.cutOffLeadingZeroes()
@@ -231,7 +231,7 @@ object BitLevel {
   def shiftLeftOneBit(source: BigInteger): BigInteger = {
     val srcLen = source.numberLength
     val resLen = srcLen + 1
-    val resDigits = Array.ofDim[Int](resLen)
+    val resDigits = new Array[Int](resLen)
     shiftLeftOneBit(resDigits, source.digits, srcLen)
     val result = new BigInteger(source.sign, resLen, resDigits)
     result.cutOffLeadingZeroes()
@@ -276,7 +276,7 @@ object BitLevel {
     }
     var i: Int = 0
     var resLength:Int = source.numberLength - intCount
-    val resDigits = Array.ofDim[Int](resLength + 1)
+    val resDigits = new Array[Int](resLength + 1)
 
     shiftRight(resDigits, resLength, source.digits, intCount, andCount)
     if (source.sign < 0) {

@@ -284,7 +284,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    * as distinct from the child instructions in a sequence construction)
    */
   override def iterateSubExpressions(): Iterator[Expression] = {
-    val all = Array.ofDim[Expression](conditions.length * 2)
+    val all = new Array[Expression](conditions.length * 2)
     System.arraycopy(conditions, 0, all, 0, conditions.length)
     System.arraycopy(actions, 0, all, conditions.length, conditions.length)
     Iterator(all.iterator)

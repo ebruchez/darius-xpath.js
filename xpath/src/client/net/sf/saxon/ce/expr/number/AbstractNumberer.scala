@@ -178,7 +178,7 @@ abstract class AbstractNumberer extends Numberer {
         var digitValue = Alphanumeric.getDigitValue(formchar)
         if (digitValue >= 0) {
           val zero = formchar - digitValue
-          val digits = Array.ofDim[Int](10)
+          val digits = new Array[Int](10)
           var z = 0
           while (z <= 9) {
             digits(z) = zero + z

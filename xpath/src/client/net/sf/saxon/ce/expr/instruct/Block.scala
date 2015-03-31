@@ -51,7 +51,7 @@ object Block {
       } else {
         list.add(e2)
       }
-      var exps = Array.ofDim[Expression](list.size)
+      var exps = new Array[Expression](list.size)
       exps = list.toArray(exps)
       val b = new Block()
       b.setChildren(exps)
@@ -77,7 +77,7 @@ object Block {
     } else if (list.size == 1) {
       list.get(0)
     } else {
-      var exps = Array.ofDim[Expression](list.size)
+      var exps = new Array[Expression](list.size)
       exps = list.toArray(exps)
       val b = new Block()
       b.setChildren(exps)
@@ -158,7 +158,7 @@ class Block extends Instruction {
    * @return the expression after merging literal text instructions
    */
   def mergeAdjacentTextInstructions(): Expression = {
-    val isLiteralText = Array.ofDim[Boolean](_children.length)
+    val isLiteralText = new Array[Boolean](_children.length)
     var hasAdjacentTextNodes = false
     for (i <- 0 until _children.length) {
       isLiteralText(i) = _children(i).isInstanceOf[ValueOf] &&
@@ -290,14 +290,14 @@ class Block extends Instruction {
     if (nested) {
       val list = new ArrayList[Expression](_children.length * 2)
       flatten(list)
-      _children = Array.ofDim[Expression](list.size)
+      _children = new Array[Expression](list.size)
       for (i <- 0 until _children.length) {
         _children(i) = list.get(i)
         adoptChildExpression(_children(i))
       }
     }
     if (allAtomic) {
-      val values = Array.ofDim[Item](_children.length)
+      val values = new Array[Item](_children.length)
       for (c <- 0 until _children.length) {
         values(c) = _children(c).asInstanceOf[Literal].getValue.asInstanceOf[AtomicValue]
       }
@@ -390,7 +390,7 @@ class Block extends Instruction {
     if (canSimplify) {
       val list = new ArrayList[Expression](_children.length * 2)
       flatten(list)
-      _children = Array.ofDim[Expression](list.size)
+      _children = new Array[Expression](list.size)
       for (i <- 0 until _children.length) {
         _children(i) = list.get(i)
         adoptChildExpression(_children(i))

@@ -154,7 +154,7 @@ object StandardFunction {
     e.minArguments = 0
     e.maxArguments = 0
     e.applicability = CORE
-    e.argumentTypes = Array.ofDim[SequenceType](0)
+    e.argumentTypes = new Array[SequenceType](0)
     e.sameItemTypeAsFirstArgument = false
     e
   }
@@ -480,7 +480,7 @@ object StandardFunction {
       e.minArguments += 1
       e.maxArguments += 1
       val argNr = e.argumentTypes.length
-      val st2 = Array.ofDim[SequenceType](e.argumentTypes.length + 1)
+      val st2 = new Array[SequenceType](e.argumentTypes.length + 1)
       System.arraycopy(e.argumentTypes, 0, st2, 0, e.argumentTypes.length)
       e.argumentTypes = st2
       e.argumentTypes(argNr) = `type`
@@ -490,7 +490,7 @@ object StandardFunction {
       val e = this
       e.maxArguments += 1
       val argNr = e.argumentTypes.length
-      val st2 = Array.ofDim[SequenceType](e.argumentTypes.length + 1)
+      val st2 = new Array[SequenceType](e.argumentTypes.length + 1)
       System.arraycopy(e.argumentTypes, 0, st2, 0, e.argumentTypes.length)
       e.argumentTypes = st2
       e.argumentTypes(argNr) = `type`

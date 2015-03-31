@@ -25,7 +25,7 @@ object Logical {
     if (bi == BigInteger.MINUS_ONE) {
       return BigInteger.ZERO
     }
-    val resDigits = Array.ofDim[Int](bi.numberLength + 1)
+    val resDigits = new Array[Int](bi.numberLength + 1)
     var i: Int = 0
     if (bi.sign > 0) {
       if (bi.digits(bi.numberLength - 1) != -1) {
@@ -100,7 +100,7 @@ object Logical {
     if (i >= resLength) {
       return BigInteger.ZERO
     }
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
     while (i < resLength) {
       resDigits(i) = bi.digits(i) & that.digits(i)
       i += 1
@@ -123,7 +123,7 @@ object Logical {
       return BigInteger.ZERO
     }
     val resLength = positive.numberLength
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
 
     // Must start from max(iPos, iNeg)
     var i = Math.max(iPos, iNeg)
@@ -179,14 +179,14 @@ object Logical {
         }
         if (digit == 0) {
           resLength = longer.numberLength + 1
-          resDigits = Array.ofDim[Int](resLength)
+          resDigits = new Array[Int](resLength)
           resDigits(resLength - 1) = 1
           return new BigInteger(-1, resLength, resDigits)
         }
       }
     }
     resLength = longer.numberLength
-    resDigits = Array.ofDim[Int](resLength)
+    resDigits = new Array[Int](resLength)
     resDigits(i) = -digit
     i += 1
     while (i < shorter.numberLength) {
@@ -233,7 +233,7 @@ object Logical {
   /** @return sign = 1, magnitude = val.magnitude & ~that.magnitude*/
   def andNotPositive(bi: BigInteger, that: BigInteger): BigInteger = {
     // PRE: both arguments are positive
-    val resDigits = Array.ofDim[Int](bi.numberLength)
+    val resDigits = new Array[Int](bi.numberLength)
     val limit = Math.min(bi.numberLength, that.numberLength)
     var i: Int = 0
     i = bi.getFirstNonzeroDigit
@@ -260,7 +260,7 @@ object Logical {
       return positive
     }
     val resLength = Math.min(positive.numberLength, negative.numberLength)
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
 
     // Always start from first non zero of positive
     var i = iPos
@@ -297,7 +297,7 @@ object Logical {
     resLength = Math.max(negative.numberLength, positive.numberLength)
     var i = iNeg
     if (iPos > iNeg) {
-      resDigits = Array.ofDim[Int](resLength)
+      resDigits = new Array[Int](resLength)
       limit = Math.min(negative.numberLength, iPos)
       while (i < limit) {
         resDigits(i) = negative.digits(i)
@@ -326,13 +326,13 @@ object Logical {
           }
           if (digit == 0) {
             resLength += 1
-            resDigits = Array.ofDim[Int](resLength)
+            resDigits = new Array[Int](resLength)
             resDigits(resLength - 1) = 1
             return new BigInteger(-1, resLength, resDigits)
           }
         }
       }
-      resDigits = Array.ofDim[Int](resLength)
+      resDigits = new Array[Int](resLength)
       resDigits(i) = -digit
       i += 1
     }
@@ -362,7 +362,7 @@ object Logical {
       return BigInteger.ZERO
     }
     val resLength = that.numberLength
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
     var limit: Int = 0
     var i = iVal
     if (iVal < iThat) {
@@ -436,7 +436,7 @@ object Logical {
     // PRE: longer and shorter are positive;
     // PRE: longer has at least as many digits as shorter
     val resLength = longer.numberLength
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
     var i: Int = 0
     i = 0
     while (i < shorter.numberLength) {
@@ -463,7 +463,7 @@ object Logical {
       return bi
     }
     val resLength = Math.min(bi.numberLength, that.numberLength)
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
 
     //Looking for the first non-zero digit of the result
     if (iThat == iVal) {
@@ -501,7 +501,7 @@ object Logical {
       return negative
     }
     val resLength = negative.numberLength
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
     if (iNeg < iPos) {
       // We know for sure that this will be the first non zero digit in the result
       i = iNeg
@@ -590,7 +590,7 @@ object Logical {
     // PRE: longer and shorter are positive;
     // PRE: longer has at least as many digits as shorter
     val resLength = longer.numberLength
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
     var i = Math.min(longer.getFirstNonzeroDigit, shorter.getFirstNonzeroDigit)
     while (i < shorter.numberLength) {
       resDigits(i) = longer.digits(i) ^ shorter.digits(i)
@@ -610,7 +610,7 @@ object Logical {
     // PRE: val and that are negative
     // PRE: val has at least as many trailing zero digits as that
     val resLength = Math.max(bi.numberLength, that.numberLength)
-    val resDigits = Array.ofDim[Int](resLength)
+    val resDigits = new Array[Int](resLength)
     val iVal = bi.getFirstNonzeroDigit
     val iThat = that.getFirstNonzeroDigit
     var i = iThat
@@ -669,7 +669,7 @@ object Logical {
 
     //The first
     if (iNeg < iPos) {
-      resDigits = Array.ofDim[Int](resLength)
+      resDigits = new Array[Int](resLength)
       i = iNeg
       resDigits(i) = negative.digits(i)
       limit = Math.min(negative.numberLength, iPos)
@@ -689,7 +689,7 @@ object Logical {
         }
       }
     } else if (iPos < iNeg) {
-      resDigits = Array.ofDim[Int](resLength)
+      resDigits = new Array[Int](resLength)
       i = iPos
       //Applying two complement to the first non-zero digit of the result
       resDigits(i) = -positive.digits(i)
@@ -735,13 +735,13 @@ object Logical {
           }
           if (digit == 0) {
             resLength = resLength + 1
-            resDigits = Array.ofDim[Int](resLength)
+            resDigits = new Array[Int](resLength)
             resDigits(resLength - 1) = 1
             return new BigInteger(-1, resLength, resDigits)
           }
         }
       }
-      resDigits = Array.ofDim[Int](resLength)
+      resDigits = new Array[Int](resLength)
       resDigits(i) = -digit
       i += 1
     }

@@ -35,8 +35,8 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
    */
   def this(input: IntRangeSet) {
     this()
-    startPoints = Array.ofDim[Int](input.used)
-    endPoints = Array.ofDim[Int](input.used)
+    startPoints = new Array[Int](input.used)
+    endPoints = new Array[Int](input.used)
     used = input.used
     System.arraycopy(input.startPoints, 0, startPoints, 0, used)
     System.arraycopy(input.endPoints, 0, endPoints, 0, used)
@@ -66,17 +66,17 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
   }
 
   def clear() {
-    startPoints = Array.ofDim[Int](4)
-    endPoints = Array.ofDim[Int](4)
+    startPoints = new Array[Int](4)
+    endPoints = new Array[Int](4)
     used = 0
     _hashCode = -1
   }
 
   def copy(): IntSet = {
     val s = new IntRangeSet()
-    s.startPoints = Array.ofDim[Int](startPoints.length)
+    s.startPoints = new Array[Int](startPoints.length)
     System.arraycopy(startPoints, 0, s.startPoints, 0, startPoints.length)
-    s.endPoints = Array.ofDim[Int](endPoints.length)
+    s.endPoints = new Array[Int](endPoints.length)
     System.arraycopy(endPoints, 0, s.endPoints, 0, endPoints.length)
     s.used = used
     s.size = size
@@ -213,8 +213,8 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
 
   private def ensureCapacity(n: Int) {
     if (startPoints.length < n) {
-      val s = Array.ofDim[Int](startPoints.length * 2)
-      val e = Array.ofDim[Int](startPoints.length * 2)
+      val s = new Array[Int](startPoints.length * 2)
+      val e = new Array[Int](startPoints.length * 2)
       System.arraycopy(startPoints, 0, s, 0, used)
       System.arraycopy(endPoints, 0, e, 0, used)
       startPoints = s
