@@ -151,7 +151,7 @@ class ComputedAttribute(var attributeName: Expression, var namespace: Expression
         prefix = parts(0)
         localName = parts(1)
       } catch {
-        case err: QNameException => dynamicError("Invalid attribute name: " + rawName, "XTDE0850")
+        case err: QNameException ⇒ dynamicError("Invalid attribute name: " + rawName, "XTDE0850")
       }
       if (rawName.toString == "xmlns") {
         if (namespace == null) {

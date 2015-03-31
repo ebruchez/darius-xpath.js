@@ -46,7 +46,7 @@ object Err {
     }
     val sb = new FastStringBuffer(FastStringBuffer.SMALL)
     val len = cs.length
-    for (i <- 0 until len) {
+    for (i ← 0 until len) {
       val c = cs.charAt(i)
       if (c < 32 || c > 255) {
         sb.append("\\u")
@@ -70,12 +70,12 @@ object Err {
       s = sb.toString
     }
     valueType match {
-      case ELEMENT => "<" + s + ">"
-      case ATTRIBUTE => "@" + s
-      case FUNCTION => s + "()"
-      case VARIABLE => "$" + s
-      case VALUE => "\"" + s + "\""
-      case _ => "{" + s + "}"
+      case ELEMENT ⇒ "<" + s + ">"
+      case ATTRIBUTE ⇒ "@" + s
+      case FUNCTION ⇒ s + "()"
+      case VARIABLE ⇒ "$" + s
+      case VALUE ⇒ "\"" + s + "\""
+      case _ ⇒ "{" + s + "}"
     }
   }
 }

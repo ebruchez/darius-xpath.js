@@ -19,7 +19,7 @@ object Replace {
    * @return null if the string is OK, or an error message if not
    */
   def checkReplacement(rep: CharSequence): String = {
-    for (i <- 0 until rep.length) {
+    for (i ← 0 until rep.length) {
       val c = rep.charAt(i)
       if (c == '$') {
         if (i + 1 < rep.length) {
@@ -85,7 +85,7 @@ class Replace extends SystemFunction {
       val res = re.replace(input, replacement)
       StringValue.makeStringValue(res)
     } catch {
-      case err: XPathException =>
+      case err: XPathException ⇒
         val de = new XPathException(err)
         de.setErrorCode("FORX0002")
         de.maybeSetLocation(getSourceLocator)

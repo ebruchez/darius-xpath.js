@@ -61,12 +61,12 @@ class IdentityComparison(p1: Expression, op: Int, p2: Expression) extends Binary
   }
 
   private def compareIdentity(node1: NodeInfo, node2: NodeInfo): Boolean = operator match {
-    case Token.IS => node1.isSameNodeInfo(node2)
-    case Token.PRECEDES => GlobalOrderComparer.getInstance.compare(node1, node2) < 
+    case Token.IS ⇒ node1.isSameNodeInfo(node2)
+    case Token.PRECEDES ⇒ GlobalOrderComparer.getInstance.compare(node1, node2) <
       0
-    case Token.FOLLOWS => GlobalOrderComparer.getInstance.compare(node1, node2) > 
+    case Token.FOLLOWS ⇒ GlobalOrderComparer.getInstance.compare(node1, node2) >
       0
-    case _ => throw new UnsupportedOperationException("Unknown node identity test")
+    case _ ⇒ throw new UnsupportedOperationException("Unknown node identity test")
   }
 
   /**

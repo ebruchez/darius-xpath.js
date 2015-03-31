@@ -64,7 +64,7 @@ abstract class UnaryExpression protected () extends Expression {
         return Literal.makeLiteral(SequenceExtent.makeSequenceExtent(iterate(new EarlyEvaluationContext(visitor.getConfiguration))))
       }
     } catch {
-      case err: XPathException => 
+      case err: XPathException ⇒
     }
     this
   }

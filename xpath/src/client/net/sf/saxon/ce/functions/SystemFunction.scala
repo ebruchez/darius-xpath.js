@@ -49,7 +49,7 @@ abstract class SystemFunction extends FunctionCall {
    */
   def checkArguments(visitor: ExpressionVisitor): Unit = {
     checkArgumentCount(details.minArguments, details.maxArguments, visitor)
-    for (i <- 0 until argument.length) {
+    for (i ← 0 until argument.length) {
       checkArgument(i, visitor)
     }
   }
@@ -132,7 +132,7 @@ abstract class SystemFunction extends FunctionCall {
     if (details.resultType.getPrimaryType.isInstanceOf[AtomicType]) {
       return p | StaticProperty.NON_CREATIVE
     }
-    for (arg <- argument if (arg.getSpecialProperties & StaticProperty.NON_CREATIVE) ==
+    for (arg ← argument if (arg.getSpecialProperties & StaticProperty.NON_CREATIVE) ==
       0) {
       return p
     }

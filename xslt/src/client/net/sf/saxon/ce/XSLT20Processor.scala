@@ -66,7 +66,7 @@ class XSLT20Processor extends Exportable {
       val vr = controller.getParameter(qn)
       return IXSLFunction.convertToJavaScript(vr)
     } catch {
-      case e: Exception => Xslt20ProcessorImpl.handleException(e, "getParameter")
+      case e: Exception ⇒ Xslt20ProcessorImpl.handleException(e, "getParameter")
     }
     null
   }
@@ -98,7 +98,7 @@ class XSLT20Processor extends Exportable {
       val qn = new StructuredQName("", ns, localName)
       controller.removeParameter(qn)
     } catch {
-      case e: Exception => Xslt20ProcessorImpl.handleException(e, "getParameter")
+      case e: Exception ⇒ Xslt20ProcessorImpl.handleException(e, "getParameter")
     }
   }
 
@@ -116,7 +116,7 @@ class XSLT20Processor extends Exportable {
       val qn = new StructuredQName("", ns, localName)
       controller.setParameter(qn, getValue(value))
     } catch {
-      case e: Exception => Xslt20ProcessorImpl.handleException(e, "setParameter")
+      case e: Exception ⇒ Xslt20ProcessorImpl.handleException(e, "setParameter")
     }
   }
 
@@ -153,7 +153,7 @@ class XSLT20Processor extends Exportable {
     try {
       controller.setInitialMode(mode)
     } catch {
-      case e: Exception => Xslt20ProcessorImpl.handleException(e, "setInitialMode")
+      case e: Exception ⇒ Xslt20ProcessorImpl.handleException(e, "setInitialMode")
     }
   }
 
@@ -161,7 +161,7 @@ class XSLT20Processor extends Exportable {
     try {
       controller.setInitialTemplate(template)
     } catch {
-      case e: Exception => Xslt20ProcessorImpl.handleException(e, "setInitialTemplate")
+      case e: Exception ⇒ Xslt20ProcessorImpl.handleException(e, "setInitialTemplate")
     }
   }
 

@@ -110,7 +110,7 @@ class NumberInstruction(config: Configuration,
   }
 
   def simplify(visitor: ExpressionVisitor): Expression = {
-    for (i <- 0 until ARGS) {
+    for (i ← 0 until ARGS) {
       arguments(i) = visitor.simplify(arguments(i))
     }
     if (count != null) {
@@ -160,7 +160,7 @@ class NumberInstruction(config: Configuration,
         throw err
       }
     }
-    for (i <- 0 until ARGS) {
+    for (i ← 0 until ARGS) {
       arguments(i) = visitor.typeCheck(arguments(i), contextItemType)
     }
     if (count != null) {
@@ -188,7 +188,7 @@ class NumberInstruction(config: Configuration,
    *                                        (typically a type error)
    */
   def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
-    for (i <- 0 until ARGS) {
+    for (i ← 0 until ARGS) {
       arguments(i) = visitor.optimize(arguments(i), contextItemType)
     }
     this
@@ -202,7 +202,7 @@ class NumberInstruction(config: Configuration,
    */
   def iterateSubExpressions(): Iterator[Expression] = {
     val sub = new ArrayList[Expression](9)
-    for (i <- 0 until ARGS if arguments(i) != null) {
+    for (i ← 0 until ARGS if arguments(i) != null) {
       sub.add(arguments(i))
     }
     if (count != null) {
@@ -253,7 +253,7 @@ class NumberInstruction(config: Configuration,
     if (exp != null) {
       exp
     } else {
-      for (i <- 0 until ARGS if arguments(i) != null) {
+      for (i ← 0 until ARGS if arguments(i) != null) {
         arguments(i) = doPromotion(arguments(i), offer)
       }
       if (count != null) {
@@ -300,7 +300,7 @@ class NumberInstruction(config: Configuration,
             vec.add(i)
           }
         } catch {
-          case err: XPathException => if (backwardsCompatible) {
+          case err: XPathException ⇒ if (backwardsCompatible) {
             vec.add("NaN")
           } else {
             vec.add(`val`.getStringValue)

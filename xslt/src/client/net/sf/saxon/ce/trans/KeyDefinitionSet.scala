@@ -37,7 +37,7 @@ class KeyDefinitionSet(var keyName: StructuredQName, var keySetNumber: Int) {
         throw err
       }
       val v = getKeyDefinitions
-      for (i <- 0 until v.size) {
+      for (i ← 0 until v.size) {
         val other = v.get(i).asInstanceOf[KeyDefinition]
         if (keyDef.getMatch == other.getMatch && keyDef.getBody == other.getBody) {
           return

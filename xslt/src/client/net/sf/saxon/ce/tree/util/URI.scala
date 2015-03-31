@@ -128,13 +128,13 @@ object URI {
 
   val reserved = ";/?:@&=+$,[]"
 
-  for (i <- 0 until reserved.length) {
+  for (i ← 0 until reserved.length) {
     fgLookupTable(reserved.charAt(i)) |= RESERVED_CHARACTERS
   }
 
   val mark = "-_.!~*'()"
 
-  for (i <- 0 until mark.length) {
+  for (i ← 0 until mark.length) {
     fgLookupTable(mark.charAt(i)) |= MARK_CHARACTERS
   }
 
@@ -146,13 +146,13 @@ object URI {
 
   val userinfo = ";:&=+$,"
 
-  for (i <- 0 until userinfo.length) {
+  for (i ← 0 until userinfo.length) {
     fgLookupTable(userinfo.charAt(i)) |= USERINFO_CHARACTERS
   }
 
   val path = ";/:@&=+$,"
 
-  for (i <- 0 until path.length) {
+  for (i ← 0 until path.length) {
     fgLookupTable(path.charAt(i)) |= PATH_CHARACTERS
   }
 
@@ -174,7 +174,7 @@ object URI {
     }
     var testChar: Char = 0
     val schemeLength = p_scheme.length
-    for (i <- 1 until schemeLength) {
+    for (i ← 1 until schemeLength) {
       testChar = p_scheme.charAt(i)
       if (!isSchemeCharacter(testChar)) {
         return false
@@ -221,7 +221,7 @@ object URI {
       }
       var testChar: Char = 0
       var labelCharCount = 0
-      for (i <- 0 until addrLength) {
+      for (i ← 0 until addrLength) {
         testChar = address.charAt(i)
         if (testChar == '.') {
           if (!isAlphanum(address.charAt(i - 1))) {
@@ -257,7 +257,7 @@ object URI {
     var testChar: Char = 0
     var numDots = 0
     var numDigits = 0
-    for (i <- 0 until addrLength) {
+    for (i ← 0 until addrLength) {
       testChar = address.charAt(i)
       if (testChar == '.') {
         if ((i > 0 && !isDigit(address.charAt(i - 1))) || 
@@ -492,7 +492,7 @@ object URI {
     }
     val end = p_uric.length
     var testChar = '\0'
-    for (i <- 0 until end) {
+    for (i ← 0 until end) {
       testChar = p_uric.charAt(i)
       if (testChar == '%') {
         if (i + 2 >= end || !isHex(p_uric.charAt(i + 1)) || !isHex(p_uric.charAt(i + 2))) {
@@ -1027,7 +1027,7 @@ class URI extends Serializable {
             port = Integer.parseInt(portStr)
             if (port == -1) port
           } catch {
-            case nfe: NumberFormatException => port = -2
+            case nfe: NumberFormatException ⇒ port = -2
           }
         }
       }

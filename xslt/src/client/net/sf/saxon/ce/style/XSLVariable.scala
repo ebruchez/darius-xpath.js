@@ -57,7 +57,7 @@ class XSLVariable extends XSLVariableDeclaration {
         try {
           SequenceType.makeSequenceType(select.getItemType, select.getCardinality)
         } catch {
-          case err: Exception => defaultType
+          case err: Exception ⇒ defaultType
         }
       }
     } else if (hasChildNodes()) {

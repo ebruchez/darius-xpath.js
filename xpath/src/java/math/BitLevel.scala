@@ -223,7 +223,7 @@ object BitLevel {
         i -= 1
       }
     }
-    for (i <- 0 until intCount) {
+    for (i ← 0 until intCount) {
       result(i) = 0
     }
   }
@@ -252,7 +252,7 @@ object BitLevel {
    */
   def shiftLeftOneBit(result: Array[Int], source: Array[Int], srcLen: Int): Unit = {
     var carry = 0
-    for (i <- 0 until srcLen) {
+    for (i ← 0 until srcLen) {
       val iVal = source(i)
       result(i) = (iVal << 1) | carry
       carry = iVal >>> 31

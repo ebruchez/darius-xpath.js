@@ -9,7 +9,7 @@ import client.net.sf.saxon.ce.lib.NamespaceConstant
 import client.net.sf.saxon.ce.om.{Axis, DocumentInfo, NodeInfo}
 import client.net.sf.saxon.ce.orbeon.{Configuration, HashMap}
 import client.net.sf.saxon.ce.pattern.NodeKindTest
-import org.scalajs.dom.{raw => dom}
+import org.scalajs.dom.{raw ⇒ dom}
 
 import scala.util.control.Breaks
 
@@ -55,11 +55,11 @@ class HTMLDocumentWrapper(
 
     _baseURI =
       nonEmptyOrNone(baseURI) match {
-        case None if doc.nodeType == Type.DOCUMENT => // ORBEON: Q: In which case would it not be a document node?
+        case None if doc.nodeType == Type.DOCUMENT ⇒ // ORBEON: Q: In which case would it not be a document node?
           // MDN: "HTML documents have a document.URL property which returns the same value. Unlike URL, documentURI i
           // available on all types of documents." -> should we use document.URL when available?
           doc.asInstanceOf[dom.Document].documentURI
-        case _ =>
+        case _ ⇒
           baseURI
       }
 
@@ -80,7 +80,7 @@ class HTMLDocumentWrapper(
           val rawLocal = elem.asInstanceOf[HTMLNodeWrapper].getRawLocalName.toLowerCase()
           if (rawLocal == "html") {
             val nb = elem.getDeclaredNamespaces(null)
-            for (nBinding <- nb if nBinding.getURI == NamespaceConstant.XHTML) {
+            for (nBinding ← nb if nBinding.getURI == NamespaceConstant.XHTML) {
               return DocTypeXHTML
             }
             return DocTypeHTML
@@ -90,7 +90,7 @@ class HTMLDocumentWrapper(
         }
       }
     } catch {
-      case e: Exception => //ORBEON: Q: NOP? What could it be?
+      case e: Exception ⇒ //ORBEON: Q: NOP? What could it be?
     }
     null
   }

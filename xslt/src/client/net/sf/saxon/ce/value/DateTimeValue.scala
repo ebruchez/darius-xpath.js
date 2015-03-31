@@ -54,7 +54,7 @@ object DateTimeValue {
       val millis = suppliedDate.getTime
       EPOCH.add(DayTimeDurationValue.fromMilliseconds(millis))
     } catch {
-      case e: XPathException => EPOCH
+      case e: XPathException ⇒ EPOCH
     }
   }
 
@@ -509,28 +509,28 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    * requested and is not present.
    */
   def getComponent(component: Int): AtomicValue = component match {
-    case Component.YEAR => 
+    case Component.YEAR ⇒
       var value = if (year > 0) year else year - 1
       new IntegerValue(value)
 
-    case Component.MONTH => new IntegerValue(month)
-    case Component.DAY => new IntegerValue(day)
-    case Component.HOURS => new IntegerValue(hour)
-    case Component.MINUTES => new IntegerValue(minute)
-    case Component.SECONDS => 
+    case Component.MONTH ⇒ new IntegerValue(month)
+    case Component.DAY ⇒ new IntegerValue(day)
+    case Component.HOURS ⇒ new IntegerValue(hour)
+    case Component.MINUTES ⇒ new IntegerValue(minute)
+    case Component.SECONDS ⇒
       var d = BigDecimal.valueOf(microsecond)
       d = d.divide(DecimalValue.BIG_DECIMAL_ONE_MILLION, 6, BigDecimal.ROUND_HALF_UP)
       d = d.add(BigDecimal.valueOf(second))
       new DecimalValue(d)
 
-    case Component.WHOLE_SECONDS => new IntegerValue(second)
-    case Component.MICROSECONDS => new IntegerValue(microsecond)
-    case Component.TIMEZONE => if (hasTimezone()) {
+    case Component.WHOLE_SECONDS ⇒ new IntegerValue(second)
+    case Component.MICROSECONDS ⇒ new IntegerValue(microsecond)
+    case Component.TIMEZONE ⇒ if (hasTimezone()) {
       DayTimeDurationValue.fromMilliseconds(60000L * getTimezoneInMinutes)
     } else {
       null
     }
-    case _ => throw new IllegalArgumentException("Unknown component for dateTime: " + component)
+    case _ ⇒ throw new IllegalArgumentException("Unknown component for dateTime: " + component)
   }
 
   /**
@@ -603,8 +603,8 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    * @throws ClassCastException if one of the values has a timezone and the other does not
    */
   override def equals(o: Any): Boolean = o match {
-    case o: DateTimeValue => compareTo(o) == 0
-    case _ => false
+    case o: DateTimeValue ⇒ compareTo(o) == 0
+    case _ ⇒ false
   }
 
   /**

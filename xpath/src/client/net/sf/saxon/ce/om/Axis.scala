@@ -108,7 +108,7 @@ object Axis {
    * @return integer value representing the named axis
    */
   def getAxisNumber(name: String): Byte = {
-    for (i <- 0 until 13 if axisName(i) == name) {
+    for (i ← 0 until 13 if axisName(i) == name) {
       return i.toByte
     }
     throw new XPathException("Unknown axis name: " + name)

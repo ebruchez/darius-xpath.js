@@ -84,7 +84,7 @@ class UseWhenFilter(var startTag: StartTagBuffer, resolver: NamespaceResolver)
             }
           }
         } catch {
-          case e: XPathException => {
+          case e: XPathException ⇒ {
             val err = new XPathException("Error in use-when expression. " + e.getMessage)
             err.setLocator(expr.getSourceLocator)
             err.setErrorCodeQName(e.getErrorCodeQName)

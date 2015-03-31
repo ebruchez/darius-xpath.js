@@ -116,16 +116,16 @@ object Type {
     if (item.isInstanceOf[NodeInfo]) {
       val node = item.asInstanceOf[NodeInfo]
       node.getNodeKind match {
-        case DOCUMENT => "document-node()"
-        case ELEMENT => "element(" + item.asInstanceOf[NodeInfo].getDisplayName + 
+        case DOCUMENT ⇒ "document-node()"
+        case ELEMENT ⇒ "element(" + item.asInstanceOf[NodeInfo].getDisplayName +
           ')'
-        case ATTRIBUTE => "attribute(" + item.asInstanceOf[NodeInfo].getDisplayName + 
+        case ATTRIBUTE ⇒ "attribute(" + item.asInstanceOf[NodeInfo].getDisplayName +
           ')'
-        case TEXT => "text()"
-        case COMMENT => "comment()"
-        case PROCESSING_INSTRUCTION => "processing-instruction()"
-        case NAMESPACE => "namespace()"
-        case _ => ""
+        case TEXT ⇒ "text()"
+        case COMMENT ⇒ "comment()"
+        case PROCESSING_INSTRUCTION ⇒ "processing-instruction()"
+        case NAMESPACE ⇒ "namespace()"
+        case _ ⇒ ""
       }
     } else {
       item.asInstanceOf[AtomicValue].getItemType.toString

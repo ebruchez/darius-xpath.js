@@ -42,7 +42,7 @@ class TraceCodeInjector extends CodeInjector {
     trace.setObjectName(qName)
     val properties = exp.getTraceProperties
     if (properties != null) {
-      for (property <- properties) {
+      for (property ← properties) {
         trace.setProperty(property(0), property(1))
       }
     }

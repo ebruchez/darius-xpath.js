@@ -47,7 +47,7 @@ class FixedElement(var nameCode: StructuredQName, protected var namespaceCodes: 
       nameCode: StructuredQName, 
       copiedNode: NodeInfo): Unit = {
     if (namespaceCodes != null) {
-      for (namespaceCode <- namespaceCodes) {
+      for (namespaceCode ← namespaceCodes) {
         out.namespace(namespaceCode, 0)
       }
     }

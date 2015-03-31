@@ -43,17 +43,17 @@ object StandardFunction {
     if (signature != "") {
       val args = signature.split("\\s")
       var first = true
-      for (_arg <- args) {
+      for (_arg ← args) {
         var arg = _arg
         if (arg.startsWith("$")) {
-          for (i <- 1 until arg.length) {
+          for (i ← 1 until arg.length) {
             val c = arg.charAt(i)
             c match {
-              case 'f' => e.contextItemAsFirstArgument = true
-              case 's' => e.sameItemTypeAsFirstArgument = true
-              case 't' => e.applicability = XSLT
-              case 'u' => e.applicability = XSLT | USE_WHEN
-              case 'x' => e.maxArguments = Integer.MAX_VALUE
+              case 'f' ⇒ e.contextItemAsFirstArgument = true
+              case 's' ⇒ e.sameItemTypeAsFirstArgument = true
+              case 't' ⇒ e.applicability = XSLT
+              case 'u' ⇒ e.applicability = XSLT | USE_WHEN
+              case 'x' ⇒ e.maxArguments = Integer.MAX_VALUE
             }
           }
         } else if (arg == "*") {

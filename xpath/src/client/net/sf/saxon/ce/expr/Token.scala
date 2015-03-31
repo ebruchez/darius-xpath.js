@@ -519,15 +519,15 @@ object Token {
    * rewritten as "b inverse(op) a"
    */
   def inverse(operator: Int): Int = operator match {
-    case LT => GT
-    case LE => GE
-    case GT => LT
-    case GE => LE
-    case FLT => FGT
-    case FLE => FGE
-    case FGT => FLT
-    case FGE => FLE
-    case _ => operator
+    case LT ⇒ GT
+    case LE ⇒ GE
+    case GT ⇒ LT
+    case GE ⇒ LE
+    case FLT ⇒ FGT
+    case FLE ⇒ FGE
+    case FGT ⇒ FLT
+    case FGE ⇒ FLE
+    case _ ⇒ operator
   }
 
   /**
@@ -535,13 +535,13 @@ object Token {
    * rewritten as not(b op' a)
    */
   def negate(operator: Int): Int = operator match {
-    case FEQ => FNE
-    case FNE => FEQ
-    case FLT => FGE
-    case FLE => FGT
-    case FGT => FLE
-    case FGE => FLT
-    case _ => throw new IllegalArgumentException("Invalid operator for negate()")
+    case FEQ ⇒ FNE
+    case FNE ⇒ FEQ
+    case FLT ⇒ FGE
+    case FLE ⇒ FGT
+    case FGT ⇒ FLE
+    case FGE ⇒ FLT
+    case _ ⇒ throw new IllegalArgumentException("Invalid operator for negate()")
   }
 
   def isOrderedOperator(operator: Int): Boolean = operator != FEQ && operator != FNE

@@ -132,7 +132,7 @@ class KeyManager {
     val backwardsCompatible = keySet.isBackwardsCompatible
     if (backwardsCompatible) {
       val v = keySet.getKeyDefinitions
-      for (i <- 0 until v.size) {
+      for (i ← 0 until v.size) {
         val kd = v.get(i).asInstanceOf[KeyDefinition]
         kd.setBackwardsCompatible(true)
         if (kd.getBody.getItemType != AtomicType.STRING) {
@@ -168,7 +168,7 @@ class KeyManager {
     synchronized {
       val definitions = keySet.getKeyDefinitions
       val index = new HashMap[Any, List[NodeInfo]](100)
-      for (k <- 0 until definitions.size) {
+      for (k ← 0 until definitions.size) {
         constructIndex(doc, index, definitions.get(k), itemType, foundItemTypes, context, k == 0)
       }
       index
@@ -257,7 +257,7 @@ class KeyManager {
           val av = item.convert(soughtItemType).asAtomic()
           `val` = av.getXPathComparable(false, collation, tz)
         } catch {
-          case err: XPathException => //break
+          case err: XPathException ⇒ //break
         }
       }
       var nodes = index.get(`val`)
@@ -273,7 +273,7 @@ class KeyManager {
         } else {
           val comparer = LocalOrderComparer.getInstance
           var found = false
-          for (i <- 0 until nodes.size) {
+          for (i ← 0 until nodes.size) {
             val d = comparer.compare(curr, nodes.get(i))
             if (d <= 0) {
               if (d == 0) {
@@ -359,7 +359,7 @@ class KeyManager {
       var result: SequenceIterator = null
       val docIndex = docIndexes.get(doc)
       if (docIndex != null) {
-        for (indexId <- index.keySet.asInstanceOf[java.lang.Iterable[IndexId]] if indexId.keyName == keyName) {
+        for (indexId ← index.keySet.asInstanceOf[java.lang.Iterable[IndexId]] if indexId.keyName == keyName) {
           val indexObject2 = getIndex(doc, indexId.keyName, indexId.primitiveType)
           if (indexObject2.isInstanceOf[String]) {
             val de = new XPathException("Key definition is circular")

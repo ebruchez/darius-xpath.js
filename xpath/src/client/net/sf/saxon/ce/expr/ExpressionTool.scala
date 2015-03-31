@@ -158,24 +158,24 @@ object ExpressionTool {
    *     evaluate it later
    */
   def evaluate(exp: Expression, evaluationMode: Int, context: XPathContext): Sequence = evaluationMode match {
-    case NO_EVALUATION_NEEDED =>
+    case NO_EVALUATION_NEEDED ⇒
       exp.asInstanceOf[Literal].getValue
-    case EVALUATE_VARIABLE =>
+    case EVALUATE_VARIABLE ⇒
       exp.asInstanceOf[VariableReference].evaluateVariable(context)
-    case EVALUATE_SUPPLIED_PARAMETER =>
+    case EVALUATE_SUPPLIED_PARAMETER ⇒
       exp.asInstanceOf[SuppliedParameterReference].evaluateVariable(context)
-    case RETURN_EMPTY_SEQUENCE =>
+    case RETURN_EMPTY_SEQUENCE ⇒
       EmptySequence.getInstance
-    case CALL_EVALUATE_ITEM => 
+    case CALL_EVALUATE_ITEM ⇒
       val item = exp.evaluateItem(context)
       if (item == null) {
         EmptySequence.getInstance
       } else {
         item
       }
-    case UNDECIDED | ITERATE_AND_MATERIALIZE =>
+    case UNDECIDED | ITERATE_AND_MATERIALIZE ⇒
       SequenceExtent.makeSequenceExtent(exp.iterate(context))
-    case PROCESS =>
+    case PROCESS ⇒
       ??? //ORBEON
       /*
       val controller = context.getController
@@ -190,7 +190,7 @@ object ExpressionTool {
       val `val` = seq.getSequence
       seq.reset()
       `val`*/
-    case _ =>
+    case _ ⇒
       throw new IllegalArgumentException("Unknown evaluation mode " + evaluationMode)
   }
 
@@ -304,7 +304,7 @@ object ExpressionTool {
     }
     if (e.isInstanceOf[VariableReference]) {
       (0 until bindingList.length).find(e.asInstanceOf[VariableReference].getBinding == bindingList(_))
-        .map(_ => true)
+        .map(_ ⇒ true)
         .getOrElse(false)
     } else {
       val children = e.iterateSubExpressions()

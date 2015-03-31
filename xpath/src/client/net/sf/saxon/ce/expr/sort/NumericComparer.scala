@@ -69,7 +69,7 @@ class NumericComparer protected () extends AtomicComparer {
       try {
         d1 = StringToDouble.stringToNumber(a.getStringValue)
       } catch {
-        case err: NumberFormatException => d1 = Double.NaN
+        case err: NumberFormatException ⇒ d1 = Double.NaN
       }
     }
     d1

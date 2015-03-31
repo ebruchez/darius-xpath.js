@@ -26,26 +26,26 @@ object NodeKindTest {
    * Make a test for a given kind of node
    */
   def makeNodeKindTest(kind: Int): NodeTest = kind match {
-    case Type.DOCUMENT => DOCUMENT
-    case Type.ELEMENT => ELEMENT
-    case Type.ATTRIBUTE => ATTRIBUTE
-    case Type.COMMENT => COMMENT
-    case Type.TEXT => TEXT
-    case Type.PROCESSING_INSTRUCTION => PROCESSING_INSTRUCTION
-    case Type.NAMESPACE => NAMESPACE
-    case Type.NODE => AnyNodeTest.getInstance
-    case _ => throw new IllegalArgumentException("Unknown node kind in NodeKindTest")
+    case Type.DOCUMENT ⇒ DOCUMENT
+    case Type.ELEMENT ⇒ ELEMENT
+    case Type.ATTRIBUTE ⇒ ATTRIBUTE
+    case Type.COMMENT ⇒ COMMENT
+    case Type.TEXT ⇒ TEXT
+    case Type.PROCESSING_INSTRUCTION ⇒ PROCESSING_INSTRUCTION
+    case Type.NAMESPACE ⇒ NAMESPACE
+    case Type.NODE ⇒ AnyNodeTest.getInstance
+    case _ ⇒ throw new IllegalArgumentException("Unknown node kind in NodeKindTest")
   }
 
   def toString(kind: Int): String = kind match {
-    case Type.DOCUMENT => "document-node()"
-    case Type.ELEMENT => "element()"
-    case Type.ATTRIBUTE => "attribute()"
-    case Type.COMMENT => "comment()"
-    case Type.TEXT => "text()"
-    case Type.PROCESSING_INSTRUCTION => "processing-instruction()"
-    case Type.NAMESPACE => "namespace()"
-    case _ => "** error **"
+    case Type.DOCUMENT ⇒ "document-node()"
+    case Type.ELEMENT ⇒ "element()"
+    case Type.ATTRIBUTE ⇒ "attribute()"
+    case Type.COMMENT ⇒ "comment()"
+    case Type.TEXT ⇒ "text()"
+    case Type.PROCESSING_INSTRUCTION ⇒ "processing-instruction()"
+    case Type.NAMESPACE ⇒ "namespace()"
+    case _ ⇒ "** error **"
   }
 
   /**
@@ -54,14 +54,14 @@ object NodeKindTest {
    * @return the name of the node kind, for example "element" or "attribute"
    */
   def nodeKindName(kind: Int): String = kind match {
-    case Type.DOCUMENT => "document"
-    case Type.ELEMENT => "element"
-    case Type.ATTRIBUTE => "attribute"
-    case Type.COMMENT => "comment"
-    case Type.TEXT => "text"
-    case Type.PROCESSING_INSTRUCTION => "processing-instruction"
-    case Type.NAMESPACE => "namespace"
-    case _ => "** error **"
+    case Type.DOCUMENT ⇒ "document"
+    case Type.ELEMENT ⇒ "element"
+    case Type.ATTRIBUTE ⇒ "attribute"
+    case Type.COMMENT ⇒ "comment"
+    case Type.TEXT ⇒ "text"
+    case Type.PROCESSING_INSTRUCTION ⇒ "processing-instruction"
+    case Type.NAMESPACE ⇒ "namespace"
+    case _ ⇒ "** error **"
   }
 }
 
@@ -110,14 +110,14 @@ class NodeKindTest private (var kind: Int) extends NodeTest {
    * Return AnyType if there are no restrictions. The default implementation returns AnyType.
    */
   override def getAtomizedItemType(): AtomicType = kind match {
-    case Type.DOCUMENT => AtomicType.UNTYPED_ATOMIC
-    case Type.ELEMENT => AtomicType.ANY_ATOMIC
-    case Type.ATTRIBUTE => AtomicType.ANY_ATOMIC
-    case Type.COMMENT => AtomicType.STRING
-    case Type.TEXT => AtomicType.UNTYPED_ATOMIC
-    case Type.PROCESSING_INSTRUCTION => AtomicType.STRING
-    case Type.NAMESPACE => AtomicType.STRING
-    case _ => throw new AssertionError("Unknown node kind")
+    case Type.DOCUMENT ⇒ AtomicType.UNTYPED_ATOMIC
+    case Type.ELEMENT ⇒ AtomicType.ANY_ATOMIC
+    case Type.ATTRIBUTE ⇒ AtomicType.ANY_ATOMIC
+    case Type.COMMENT ⇒ AtomicType.STRING
+    case Type.TEXT ⇒ AtomicType.UNTYPED_ATOMIC
+    case Type.PROCESSING_INSTRUCTION ⇒ AtomicType.STRING
+    case Type.NAMESPACE ⇒ AtomicType.STRING
+    case _ ⇒ throw new AssertionError("Unknown node kind")
   }
 
   override def toString(): String = NodeKindTest.toString(kind)
@@ -131,7 +131,7 @@ class NodeKindTest private (var kind: Int) extends NodeTest {
    * Indicates whether some other object is "equal to" this one.
    */
   override def equals(other: Any): Boolean = other match {
-    case other: NodeKindTest => other.kind == kind
-    case _ => false
+    case other: NodeKindTest ⇒ other.kind == kind
+    case _ ⇒ false
   }
 }

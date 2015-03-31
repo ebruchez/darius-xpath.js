@@ -34,7 +34,7 @@ class InsertAction(var content: Node, @BeanProperty var targetNode: Node, var po
    * @param context the XPath evaluation context
    */
   def apply(context: XPathContext) position match {
-    case FIRST => {
+    case FIRST ⇒ {
       val list = content.getChildNodes
       val count = list.getLength
       var i = count - 1
@@ -44,22 +44,22 @@ class InsertAction(var content: Node, @BeanProperty var targetNode: Node, var po
       }
       //break
     }
-    case LAST => {
+    case LAST ⇒ {
       while (content.hasChildNodes()) {
         targetNode.appendChild(content.getFirstChild)
       }
       //break
     }
-    case BEFORE => {
+    case BEFORE ⇒ {
       val refNode = targetNode.getChild(position)
       val list = content.getChildNodes
       val count = list.getLength
-      for (i <- 0 until count) {
+      for (i ← 0 until count) {
         targetNode.insertBefore(list.getItem(i), refNode)
       }
       //break
     }
-    case AFTER => {
+    case AFTER ⇒ {
       val refNode = targetNode.getChild(position)
       val list = content.getChildNodes
       val count = list.getLength
@@ -70,6 +70,6 @@ class InsertAction(var content: Node, @BeanProperty var targetNode: Node, var po
       }
       //break
     }
-    case _ => throw new UnsupportedOperationException("Unknown insert position " + position)
+    case _ ⇒ throw new UnsupportedOperationException("Unknown insert position " + position)
   }
 }

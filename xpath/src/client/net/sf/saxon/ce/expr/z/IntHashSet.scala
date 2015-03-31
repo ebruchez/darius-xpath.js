@@ -19,7 +19,7 @@ object IntHashSet {
 
   def fromArray(members: Array[Int]): IntHashSet = {
     val ihs = new IntHashSet(members.length)
-    for (m <- members) {
+    for (m ← members) {
       ihs.add(m)
     }
     ihs
@@ -101,7 +101,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
 
   def clear(): Unit = {
     _size = 0
-    for (i <- 0 until _nmax) {
+    for (i ← 0 until _nmax) {
       _values(i) = ndv
     }
   }
@@ -113,7 +113,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
   def getValues(): Array[Int] = {
     var index = 0
     val values = new Array[Int](_size)
-    for (_value <- _values if _value != ndv) {
+    for (_value ← _values if _value != ndv) {
       values(index) = _value
       index += 1
     }
@@ -209,7 +209,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
     _values = new Array[Int](nmax)
     java.util.Arrays.fill(_values, ndv)
     if (values != null) {
-      for (i <- 0 until nold) {
+      for (i ← 0 until nold) {
         val value = values(i)
         if (value != ndv) {
           _size += 1
@@ -228,10 +228,10 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
    * Test whether this set has exactly the same members as another set
    */
   override def equals(other: Any): Boolean = other match {
-    case other: IntSet =>
+    case other: IntSet ⇒
       val s = other
       size == s.size && containsAll(s)
-    case _ => false
+    case _ ⇒ false
   }
 
   /**
@@ -252,7 +252,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
   def diagnosticDump(): Unit = {
     System.err.println("Contents of IntHashSet")
     val sb = new FastStringBuffer(100)
-    for (i <- 0 until _values.length) {
+    for (i ← 0 until _values.length) {
       if (i % 10 == 0) {
         System.err.println(sb.toString)
         sb.setLength(0)

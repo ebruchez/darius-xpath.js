@@ -45,11 +45,11 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
   private def iterateSubExpressions(includeSortKey: Boolean): Iterator[Expression] = {
     val list = new ArrayList[Expression](8)
     list.add(select)
-    for (skd <- sortKeyDefinitions) {
+    for (skd ← sortKeyDefinitions) {
       if (includeSortKey) {
         list.add(skd.getSortKey)
       }
-      for (i <- 0 until SortKeyDefinition.N) {
+      for (i ← 0 until SortKeyDefinition.N) {
         val e = skd.getSortProperty(i)
         if (e != null) {
           list.add(e)
@@ -88,14 +88,14 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
     }
     val sortedItemType = select.getItemType
     var allKeysFixed = true
-    for (sortKeyDefinition <- sortKeyDefinitions if ! sortKeyDefinition.isFixed) {
+    for (sortKeyDefinition ← sortKeyDefinitions if ! sortKeyDefinition.isFixed) {
       allKeysFixed = false
       //break
     }
     if (allKeysFixed) {
       comparators = new Array[AtomicComparer](sortKeyDefinitions.length)
     }
-    for (i <- 0 until sortKeyDefinitions.length) {
+    for (i ← 0 until sortKeyDefinitions.length) {
       var sortKey = sortKeyDefinitions(i).getSortKey
       sortKey = visitor.typeCheck(sortKey, sortedItemType)
       if (visitor.getStaticContext.isInBackwardsCompatibleMode) {
@@ -141,7 +141,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
       select = select2
     }
     val sortedItemType = select.getItemType
-    for (sortKeyDefinition <- sortKeyDefinitions) {
+    for (sortKeyDefinition ← sortKeyDefinitions) {
       var sortKey = sortKeyDefinition.getSortKey
       sortKey = visitor.optimize(sortKey, sortedItemType)
       sortKeyDefinition.setSortKey(sortKey)
@@ -176,10 +176,10 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
       exp
     } else {
       select = doPromotion(select, offer)
-      for (skd <- sortKeyDefinitions) {
+      for (skd ← sortKeyDefinitions) {
         val sk2 = skd.getSortKey.promote(offer, parent)
         skd.setSortKey(sk2)
-        for (i <- 0 until SortKeyDefinition.N) {
+        for (i ← 0 until SortKeyDefinition.N) {
           val e = skd.getSortProperty(i)
           if (e != null) {
             skd.setSortProperty(i, e.promote(offer, parent))
@@ -196,7 +196,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
    * @return true if the given expression is one of the sort keys
    */
   def isSortKey(child: Expression): Boolean = {
-    for (skd <- sortKeyDefinitions) {
+    for (skd ← sortKeyDefinitions) {
       val exp = skd.getSortKey
       if (exp == child) {
         return true
@@ -252,7 +252,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
     var comps = comparators
     if (comparators == null) {
       comps = new Array[AtomicComparer](sortKeyDefinitions.length)
-      for (s <- 0 until sortKeyDefinitions.length) {
+      for (s ← 0 until sortKeyDefinitions.length) {
         var comp = sortKeyDefinitions(s).getFinalComparator
         if (comp == null) {
           comp = sortKeyDefinitions(s).makeComparator(xpc)

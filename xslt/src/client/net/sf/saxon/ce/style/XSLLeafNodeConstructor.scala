@@ -87,7 +87,7 @@ abstract class XSLLeafNodeConstructor extends StyleElement {
       select = makeSimpleContentConstructor(select, separator)
       inst.setSelect(select, exec.getConfiguration)
     } catch {
-      case err: XPathException => compileError(err)
+      case err: XPathException ⇒ compileError(err)
     }
   }
 }

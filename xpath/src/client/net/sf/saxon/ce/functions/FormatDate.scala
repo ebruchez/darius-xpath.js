@@ -88,11 +88,11 @@ object FormatDate {
       defaultFormat = true
       var use: String = null
       component match {
-        case 'F' => use = "Nn"
-        case 'P' => use = "n"
-        case 'C' | 'E' => use = "N"
-        case 'm' | 's' => use = "01"
-        case _ => use = "1"
+        case 'F' ⇒ use = "Nn"
+        case 'P' ⇒ use = "n"
+        case 'C' | 'E' ⇒ use = "N"
+        case 'm' | 's' ⇒ use = "01"
+        case _ ⇒ use = "1"
       }
       format = use + format
     }
@@ -105,20 +105,20 @@ object FormatDate {
     }
     var componentValue: Int = 0
     component match {
-      case 'Y' =>
+      case 'Y' ⇒
         componentValue = dtvalue.getYear
         if (componentValue < 0) {
           componentValue = 1 - componentValue
         }
 
-      case 'M' => componentValue = dtvalue.getMonth
-      case 'D' => componentValue = dtvalue.getDay
-      case 'd' => componentValue = DateValue.getDayWithinYear(dtvalue.getYear, dtvalue.getMonth, dtvalue.getDay)
-      case 'W' => componentValue = DateValue.getWeekNumber(dtvalue.getYear, dtvalue.getMonth, dtvalue.getDay)
-      case 'w' => componentValue = DateValue.getWeekNumberWithinMonth(dtvalue.getYear, dtvalue.getMonth,
+      case 'M' ⇒ componentValue = dtvalue.getMonth
+      case 'D' ⇒ componentValue = dtvalue.getDay
+      case 'd' ⇒ componentValue = DateValue.getDayWithinYear(dtvalue.getYear, dtvalue.getMonth, dtvalue.getDay)
+      case 'W' ⇒ componentValue = DateValue.getWeekNumber(dtvalue.getYear, dtvalue.getMonth, dtvalue.getDay)
+      case 'w' ⇒ componentValue = DateValue.getWeekNumberWithinMonth(dtvalue.getYear, dtvalue.getMonth,
         dtvalue.getDay)
-      case 'H' => componentValue = dtvalue.getHour
-      case 'h' =>
+      case 'H' ⇒ componentValue = dtvalue.getHour
+      case 'h' ⇒
         componentValue = dtvalue.getHour
         if (componentValue > 12) {
           componentValue = componentValue - 12
@@ -127,10 +127,10 @@ object FormatDate {
           componentValue = 12
         }
 
-      case 'm' => componentValue = dtvalue.getMinute
-      case 's' => componentValue = dtvalue.getSecond
-      case 'f' => componentValue = dtvalue.getMicrosecond
-      case 'Z' | 'z' =>
+      case 'm' ⇒ componentValue = dtvalue.getMinute
+      case 's' ⇒ componentValue = dtvalue.getSecond
+      case 'f' ⇒ componentValue = dtvalue.getMicrosecond
+      case 'Z' | 'z' ⇒
         var sbz = new FastStringBuffer(8)
         if (component == 'z') {
           sbz.append("GMT")
@@ -138,11 +138,11 @@ object FormatDate {
         dtvalue.appendTimezone(sbz)
         return sbz.toString
 
-      case 'F' => componentValue = DateValue.getDayOfWeek(dtvalue.getYear, dtvalue.getMonth, dtvalue.getDay)
-      case 'P' => componentValue = dtvalue.getHour * 60 + dtvalue.getMinute
-      case 'C' => return numberer.getCalendarName("AD")
-      case 'E' => return numberer.getEraName(dtvalue.getYear)
-      case _ => throw new XPathException("Unknown formatDate/time component specifier '" + format.charAt(0) +
+      case 'F' ⇒ componentValue = DateValue.getDayOfWeek(dtvalue.getYear, dtvalue.getMonth, dtvalue.getDay)
+      case 'P' ⇒ componentValue = dtvalue.getHour * 60 + dtvalue.getMinute
+      case 'C' ⇒ return numberer.getCalendarName("AD")
+      case 'E' ⇒ return numberer.getEraName(dtvalue.getYear)
+      case _ ⇒ throw new XPathException("Unknown formatDate/time component specifier '" + format.charAt(0) +
         '\'', "XTDE1340")
     }
     formatNumber(component, componentValue, format, defaultFormat, numberer)
@@ -205,7 +205,7 @@ object FormatDate {
       if (defaultFormat) {
         if (primary.endsWith("1") && min != primary.length) {
           val sb = new FastStringBuffer(min + 1)
-          for (i <- 1 until min) {
+          for (i ← 1 until min) {
             sb.append('0')
           }
           sb.append('1')

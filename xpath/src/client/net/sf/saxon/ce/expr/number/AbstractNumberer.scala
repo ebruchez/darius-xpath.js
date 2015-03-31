@@ -121,25 +121,25 @@ abstract class AbstractNumberer extends Numberer {
       formchar = UTF16CharacterSet.combinePair(formchar.toChar, picture.charAt(1))
     }
     formchar match {
-      case '0' | '1' =>
+      case '0' | '1' ⇒
         sb.append(toRadical(number, westernDigits, pictureLength, numGroupFormatter))
         if (ordinal != null && ordinal.length > 0) {
           sb.append(ordinalSuffix(ordinal, number))
         }
 
-      case 'A' =>
+      case 'A' ⇒
         if (number == 0) {
           return "0"
         }
         return toAlphaSequence(number, latinUpper)
 
-      case 'a' =>
+      case 'a' ⇒
         if (number == 0) {
           return "0"
         }
         return toAlphaSequence(number, latinLower)
 
-      case 'w' | 'W' =>
+      case 'w' | 'W' ⇒
         var wordCase: Int = 0
         wordCase = if (picture == "W") UPPER_CASE else if (picture == "w") LOWER_CASE else TITLE_CASE
         if (ordinal != null && ordinal.length > 0) {
@@ -148,33 +148,33 @@ abstract class AbstractNumberer extends Numberer {
           return toWords(number, wordCase)
         }
 
-      case 'i' => if (letterValue == null || letterValue.length == 0 || letterValue == "traditional") {
+      case 'i' ⇒ if (letterValue == null || letterValue.length == 0 || letterValue == "traditional") {
         return toRoman(number)
       }
-      case 'I' => if (letterValue == null || letterValue.length == 0 || letterValue == "traditional") {
+      case 'I' ⇒ if (letterValue == null || letterValue.length == 0 || letterValue == "traditional") {
         return toRoman(number).toUpperCase()
       }
-      case '①' =>
+      case '①' ⇒
         if (number == 0 || number > 20) {
           return "" + number
         }
         return "" + (0x2460 + number - 1).toChar
 
-      case '⑴' =>
+      case '⑴' ⇒
         if (number == 0 || number > 20) {
           return "" + number
         }
         return "" + (0x2474 + number - 1).toChar
 
-      case '⒈' =>
+      case '⒈' ⇒
         if (number == 0 || number > 20) {
           return "" + number
         }
         return "" + (0x2488 + number - 1).toChar
 
-      case 'Α' => return toAlphaSequence(number, greekUpper)
-      case 'α' => return toAlphaSequence(number, greekLower)
-      case _ =>
+      case 'Α' ⇒ return toAlphaSequence(number, greekUpper)
+      case 'α' ⇒ return toAlphaSequence(number, greekLower)
+      case _ ⇒
         var digitValue = Alphanumeric.getDigitValue(formchar)
         if (digitValue >= 0) {
           val zero = formchar - digitValue
@@ -278,7 +278,7 @@ abstract class AbstractNumberer extends Numberer {
       count += 1
       n = n / base
     }
-    for (i <- 0 until (pictureLength - count)) {
+    for (i ← 0 until (pictureLength - count)) {
       temp.appendWideChar(digits(0))
     }
     temp.append(s)
@@ -361,15 +361,15 @@ abstract class AbstractNumberer extends Numberer {
     if (minutes == 0 && maxWidth >= 8) {
       s = "Midnight"
     } else if (minutes < 12 * 60) maxWidth match {
-      case 1 => s = "A"
-      case 2 | 3 => s = "Am"
-      case _ => s = "A.M."
+      case 1 ⇒ s = "A"
+      case 2 | 3 ⇒ s = "Am"
+      case _ ⇒ s = "A.M."
     } else if (minutes == 12 * 60 && maxWidth >= 8) {
       s = "Noon"
     } else maxWidth match {
-      case 1 => s = "P"
-      case 2 | 3 => s = "Pm"
-      case _ => s = "P.M."
+      case 1 ⇒ s = "P"
+      case 2 | 3 ⇒ s = "Pm"
+      case _ ⇒ s = "P.M."
     }
     s
   }

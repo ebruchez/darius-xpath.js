@@ -60,7 +60,7 @@ object UnicodeDataParserFromXML {
    * Reads exclusion list and stores the data
    */
   private def readExclusionList(s: String, isExcluded: BitSet): Unit = {
-    for (tok <- Whitespace.tokenize(s)) {
+    for (tok ← Whitespace.tokenize(s)) {
       val value = Integer.parseInt(tok, 32)
       isExcluded.set(value)
     }
@@ -70,7 +70,7 @@ object UnicodeDataParserFromXML {
    * Reads compatibility list and stores the data
    */
   private def readCompatibilityList(s: String, isCompatible: BitSet): Unit = {
-    for (tok <- Whitespace.tokenize(s)) {
+    for (tok ← Whitespace.tokenize(s)) {
       val value = Integer.parseInt(tok, 32)
       isCompatible.set(value)
     }
@@ -81,12 +81,12 @@ object UnicodeDataParserFromXML {
    */
   private def readCanonicalClassTable(keyString: String, valueString: String, canonicalClasses: Map[Int, Integer]): Unit = {
     val keys = new ArrayList[Int](5000)
-    for (tok <- Whitespace.tokenize(keyString)) {
+    for (tok ← Whitespace.tokenize(keyString)) {
       val value = Integer.parseInt(tok, 32)
       keys.add(value)//ORBEON was Integer.valueOf
     }
     var k = 0
-    for (tok <- Whitespace.tokenize(valueString)) {
+    for (tok ← Whitespace.tokenize(valueString)) {
       var clss: Int = 0
       var repeat = 1
       val star = tok.indexOf('*')
@@ -96,7 +96,7 @@ object UnicodeDataParserFromXML {
         repeat = Integer.parseInt(tok.substring(0, star))
         clss = Integer.parseInt(tok.substring(star + 1), 32)
       }
-      for (i <- 0 until repeat) {
+      for (i ← 0 until repeat) {
         canonicalClasses.put(keys.get(k).intValue(), clss)
         k += 1
       }
@@ -114,7 +114,7 @@ object UnicodeDataParserFromXML {
       isCompatibility: BitSet): Unit = {
     var k = 0
     val values = new ArrayList[String](1000)
-    for (tok <- Whitespace.tokenize(decompositionValuesString)) {
+    for (tok ← Whitespace.tokenize(decompositionValuesString)) {
       var value = ""
       var c = 0
       while (c < tok.length) {
@@ -133,7 +133,7 @@ object UnicodeDataParserFromXML {
       }
       values.add(value)
     }
-    for (tok <- Whitespace.tokenize(decompositionKeyString)) {
+    for (tok ← Whitespace.tokenize(decompositionKeyString)) {
       val key = Integer.parseInt(tok, 32)
       val value = values.get(k)
       k += 1
@@ -149,7 +149,7 @@ object UnicodeDataParserFromXML {
         compose.put(pair, key)
       }
     }
-    for (sIndex <- 0 until SCount) {
+    for (sIndex ← 0 until SCount) {
       val TIndex = sIndex % TCount
       var first: Char = 0
       var second: Char = 0

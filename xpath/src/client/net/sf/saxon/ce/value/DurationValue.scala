@@ -50,16 +50,16 @@ object DurationValue {
     var second = 0
     var micro = 0
     var part = 0
-    for (i <- 0 until s.length) {
+    for (i ← 0 until s.length) {
       val c = s.charAt(i)
       c match {
-        case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => part = part * 10 + (c - '0')
-        case 'T' => inTimePart = true
-        case 'Y' =>
+        case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ⇒ part = part * 10 + (c - '0')
+        case 'T' ⇒ inTimePart = true
+        case 'Y' ⇒
           year = part
           part = 0
 
-        case 'M' =>
+        case 'M' ⇒
           if (inTimePart) {
             minute = part
           } else {
@@ -67,15 +67,15 @@ object DurationValue {
           }
           part = 0
 
-        case 'D' =>
+        case 'D' ⇒
           day = part
           part = 0
 
-        case 'H' =>
+        case 'H' ⇒
           hour = part
           part = 0
 
-        case 'S' =>
+        case 'S' ⇒
           if (positionOfDot >= 0) {
             val fraction = (s.subSequence(positionOfDot + 1, i).toString + "000000")
               .substring(0, 6)
@@ -85,18 +85,18 @@ object DurationValue {
           }
           part = 0
 
-        case '.' =>
+        case '.' ⇒
           second = part
           part = 0
           positionOfDot = i
 
-        case _ =>
+        case _ ⇒
       }
     }
     try {
       new DurationValue(!negative, year, month, day, hour, minute, second, micro)
     } catch {
-      case err: IllegalArgumentException => new ValidationFailure(err.getMessage)
+      case err: IllegalArgumentException ⇒ new ValidationFailure(err.getMessage)
     }
   }
 
@@ -119,7 +119,7 @@ object DurationValue {
     if (len == 0) {
       return -1
     }
-    for (i <- 0 until len) {
+    for (i ← 0 until len) {
       val c = s.charAt(i)
       if (c >= '0' && c <= '9') {
         result = result * 10 + (c - '0')
@@ -374,39 +374,39 @@ class DurationValue protected () extends AtomicValue {
    * Get a component of the normalized value
    */
   override def getComponent(component: Int): AtomicValue = component match {
-    case Component.YEAR =>
+    case Component.YEAR ⇒
       var value5 = if (negative) -getYears else getYears
       new IntegerValue(value5)
 
-    case Component.MONTH =>
+    case Component.MONTH ⇒
       var value4 = if (negative) -getMonths else getMonths
       new IntegerValue(value4)
 
-    case Component.DAY =>
+    case Component.DAY ⇒
       var value3 = if (negative) -getDays else getDays
       new IntegerValue(value3)
 
-    case Component.HOURS =>
+    case Component.HOURS ⇒
       var value2 = if (negative) -getHours else getHours
       new IntegerValue(value2)
 
-    case Component.MINUTES =>
+    case Component.MINUTES ⇒
       var value1 = if (negative) -getMinutes else getMinutes
       new IntegerValue(value1)
 
-    case Component.SECONDS =>
+    case Component.SECONDS ⇒
       var sb = new FastStringBuffer(FastStringBuffer.TINY)
       var ms = "000000" + microseconds
       ms = ms.substring(ms.length - 6)
       sb.append((if (negative) "-" else "") + getSeconds + '.' + ms)
       DecimalValue.makeDecimalValue(sb).asInstanceOf[AtomicValue]
 
-    case Component.WHOLE_SECONDS => new IntegerValue(new BigDecimal(if (negative) -seconds else seconds))
-    case Component.MICROSECONDS =>
+    case Component.WHOLE_SECONDS ⇒ new IntegerValue(new BigDecimal(if (negative) -seconds else seconds))
+    case Component.MICROSECONDS ⇒
       var value = if (negative) -microseconds else microseconds
       new IntegerValue(value)
 
-    case _ => throw new IllegalArgumentException("Unknown component for duration: " + component)
+    case _ ⇒ throw new IllegalArgumentException("Unknown component for duration: " + component)
   }
 
   /**
@@ -434,14 +434,14 @@ class DurationValue protected () extends AtomicValue {
    * @throws ClassCastException if the other value is not an xs:duration or subtype thereof
    */
   override def equals(other: Any): Boolean = other match {
-    case other: DurationValue => {
+    case other: DurationValue ⇒ {
       val d1 = this
       val d2 = other
       d1.negative == d2.negative && d1.months == d2.months && 
         d1.seconds == d2.seconds && 
         d1.microseconds == d2.microseconds
     }
-    case _ => false
+    case _ ⇒ false
   }
 
   override def hashCode(): Int = {

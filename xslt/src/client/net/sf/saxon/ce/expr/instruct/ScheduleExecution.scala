@@ -158,7 +158,7 @@ class ScheduleExecution(var call: CallTemplate, var wait: Expression, var href: 
               try {
                 responseNode = XMLDOM.parseXML(response.getText).asInstanceOf[Node]
               } catch {
-                case e: Exception => {
+                case e: Exception ⇒ {
                   logger.log(Level.SEVERE, "Failed to parse XML: " + e.getMessage)
                   if (SaxonceApi.doThrowJsExceptions()) {
                     throw new RuntimeException(e.getMessage)
@@ -184,7 +184,7 @@ class ScheduleExecution(var call: CallTemplate, var wait: Expression, var href: 
                 }
                 context.getController.getPendingUpdateList.apply(context)
               } catch {
-                case e: XPathException => {
+                case e: XPathException ⇒ {
                   logger.log(Level.SEVERE, "In async document processing: " + e.getMessage)
                   if (SaxonceApi.doThrowJsExceptions()) {
                     throw new RuntimeException(e.getMessage)
@@ -218,7 +218,7 @@ class ScheduleExecution(var call: CallTemplate, var wait: Expression, var href: 
             context.getController.getPendingUpdateList.apply(context)
             success = true
           } catch {
-            case err: Exception => {
+            case err: Exception ⇒ {
               logger.log(Level.SEVERE, "In delayed event: " + err.getMessage)
               if (SaxonceApi.doThrowJsExceptions()) {
                 throw new RuntimeException(err.getMessage)

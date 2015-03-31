@@ -34,11 +34,11 @@ class Translate extends SystemFunction {
     val length2 = a2.length
     val sb = new FastStringBuffer(length1)
 
-    for (i <- 0 until length1) {
+    for (i ← 0 until length1) {
       val ch = a1(i)
       import Breaks._
       breakable {
-        for (j <- 0 until length2) {
+        for (j ← 0 until length2) {
           if (a2(j) == ch) {
             if (j < a3.length) {
               sb.appendWideChar(a3(j))

@@ -112,7 +112,7 @@ class XSLDecimalFormat extends StyleElement {
     try {
       d.checkDistinctRoles()
     } catch {
-      case err: XPathException => compileError(err.getMessage, "XTSE1300")
+      case err: XPathException ⇒ compileError(err.getMessage, "XTSE1300")
     }
     d
   }
@@ -131,7 +131,7 @@ class XSLDecimalFormat extends StyleElement {
       try {
         dfm.setDefaultDecimalFormat(d, decl.getPrecedence)
       } catch {
-        case err: XPathException => compileError(err.getMessage, err.getErrorCodeQName)
+        case err: XPathException ⇒ compileError(err.getMessage, err.getErrorCodeQName)
       }
     } else {
       try {
@@ -139,11 +139,11 @@ class XSLDecimalFormat extends StyleElement {
         try {
           dfm.setNamedDecimalFormat(formatName, d, decl.getPrecedence)
         } catch {
-          case err: XPathException => compileError(err.getMessage, err.getErrorCodeQName)
+          case err: XPathException ⇒ compileError(err.getMessage, err.getErrorCodeQName)
         }
       } catch {
-        case err: XPathException => compileError("Invalid decimal format name. " + err.getMessage, "XTSE0020")
-        case err: NamespaceException => compileError("Invalid decimal format name. " + err.getMessage, 
+        case err: XPathException ⇒ compileError("Invalid decimal format name. " + err.getMessage, "XTSE0020")
+        case err: NamespaceException ⇒ compileError("Invalid decimal format name. " + err.getMessage,
           "XTSE0280")
       }
     }

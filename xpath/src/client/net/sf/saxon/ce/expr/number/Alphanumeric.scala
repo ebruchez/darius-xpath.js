@@ -36,7 +36,7 @@ object Alphanumeric {
    * @return -1 if it's not a decimal digit, otherwise the digit value.
    */
   def getDigitValue(in: Int): Int = {
-    for (z <- 0 until zeroDigits.length if in <= zeroDigits(z) + 9) {
+    for (z ← 0 until zeroDigits.length if in <= zeroDigits(z) + 9) {
       if (in >= zeroDigits(z)) {
         return in - zeroDigits(z)
       } else {
@@ -53,7 +53,7 @@ object Alphanumeric {
    * family. Otherwise, return -1.
    */
   def getDigitFamily(in: Int): Int = {
-    for (z <- 0 until zeroDigits.length if in <= zeroDigits(z) + 9) {
+    for (z ← 0 until zeroDigits.length if in <= zeroDigits(z) + 9) {
       if (in >= zeroDigits(z)) {
         return zeroDigits(z)
       } else {

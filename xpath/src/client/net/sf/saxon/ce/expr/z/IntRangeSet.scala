@@ -60,7 +60,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
     this.startPoints = startPoints
     this.endPoints = endPoints
     used = startPoints.length
-    for (i <- 0 until used) {
+    for (i ← 0 until used) {
       size += (endPoints(i) - startPoints(i) + 1)
     }
   }
@@ -202,7 +202,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
         System.arraycopy(startPoints, i, startPoints, i + 1, used - i - 1)
         System.arraycopy(endPoints, i, endPoints, i + 1, used - i - 1)
       } catch {
-        case err: Exception => err.printStackTrace()
+        case err: Exception ⇒ err.printStackTrace()
       }
       startPoints(i) = value
       endPoints(i) = value
@@ -230,7 +230,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
 
   override def toString(): String = {
     val sb = new FastStringBuffer(used * 8)
-    for (i <- 0 until used) {
+    for (i ← 0 until used) {
       sb.append(startPoints(i) + "-" + endPoints(i) + ",")
     }
     sb.toString
@@ -241,11 +241,11 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
    * IntRangeSet values are <b>NOT</b> comparable with other implementations of IntSet
    */
   override def equals(other: Any): Boolean = other match {
-    case other: IntRangeSet =>
+    case other: IntRangeSet ⇒
       used == other.used && startPoints.sameElements(other.startPoints) && endPoints.sameElements(other.endPoints)
-    case other: IntSet =>
+    case other: IntSet ⇒
       containsAll(other)
-    case _ => false
+    case _ ⇒ false
   }
 
   /**
@@ -254,7 +254,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
   override def hashCode(): Int = {
     if (_hashCode == -1) {
       var h = 0x836a89f1
-      for (i <- 0 until used) {
+      for (i ← 0 until used) {
         h ^= startPoints(i) + (endPoints(i) << 3)
       }
       _hashCode = h
@@ -296,7 +296,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
       startPoints(0) = low
       endPoints(0) = high
     } else {
-      for (i <- 1 until used if startPoints(i) > high && endPoints(i - 1) < low) {
+      for (i ← 1 until used if startPoints(i) > high && endPoints(i - 1) < low) {
         ensureCapacity(used + 1)
         System.arraycopy(startPoints, i, startPoints, i + 1, used - i - 1)
         System.arraycopy(endPoints, i, endPoints, i + 1, used - i - 1)

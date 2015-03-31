@@ -40,7 +40,7 @@ object GenericSorter {
    */
   private def quickSort1(off: Int, len: Int, comp: Sortable): Unit = {
     if (len < SMALL) {
-      for (i <- off until len + off) {
+      for (i ← off until len + off) {
         var j = i
         while (j > off && (comp.compare(j - 1, j) > 0)) {
           comp.swap(j, j - 1)

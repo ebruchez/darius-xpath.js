@@ -51,7 +51,7 @@ class Copy(var select: Expression, var copyNamespaces: Boolean, inheritNamespace
       select = visitor.typeCheck(select, contextItemType)
       adoptChildExpression(select)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         if (err.getErrorCodeLocalPart == "XPDY0002") {
           err.setErrorCode("XTTE0945")
           err.maybeSetLocation(getSourceLocator)
@@ -62,10 +62,10 @@ class Copy(var select: Expression, var copyNamespaces: Boolean, inheritNamespace
     }
     val selectItemType = select.getItemType
     if (selectItemType.isInstanceOf[NodeTest]) selectItemType.asInstanceOf[NodeTest].getRequiredNodeKind match {
-      case Type.ELEMENT => this.resultItemType = NodeKindTest.ELEMENT
-      case Type.ATTRIBUTE => this.resultItemType = NodeKindTest.ATTRIBUTE
-      case Type.DOCUMENT => this.resultItemType = NodeKindTest.DOCUMENT
-      case _ => this.resultItemType = selectItemType
+      case Type.ELEMENT ⇒ this.resultItemType = NodeKindTest.ELEMENT
+      case Type.ATTRIBUTE ⇒ this.resultItemType = NodeKindTest.ATTRIBUTE
+      case Type.DOCUMENT ⇒ this.resultItemType = NodeKindTest.DOCUMENT
+      case _ ⇒ this.resultItemType = selectItemType
     } else {
       this.resultItemType = selectItemType
     }
@@ -186,22 +186,22 @@ class Copy(var select: Expression, var copyNamespaces: Boolean, inheritNamespace
     }
     val source = item.asInstanceOf[NodeInfo]
     source.getNodeKind match {
-      case Type.ELEMENT => return super.processLeavingTail(context, item.asInstanceOf[NodeInfo])
-      case Type.ATTRIBUTE => context.getReceiver.attribute(source.getNodeName, source.getStringValue)
-      case Type.TEXT => out.characters(source.getStringValue)
-      case Type.PROCESSING_INSTRUCTION => out.processingInstruction(source.getDisplayName, source.getStringValue)
-      case Type.COMMENT => out.comment(source.getStringValue)
-      case Type.NAMESPACE => try {
+      case Type.ELEMENT ⇒ return super.processLeavingTail(context, item.asInstanceOf[NodeInfo])
+      case Type.ATTRIBUTE ⇒ context.getReceiver.attribute(source.getNodeName, source.getStringValue)
+      case Type.TEXT ⇒ out.characters(source.getStringValue)
+      case Type.PROCESSING_INSTRUCTION ⇒ out.processingInstruction(source.getDisplayName, source.getStringValue)
+      case Type.COMMENT ⇒ out.comment(source.getStringValue)
+      case Type.NAMESPACE ⇒ try {
         source.copy(out, 0)
       } catch {
-        case err: NoOpenStartTagException => dynamicError(err.getMessage, err.getErrorCodeLocalPart)
+        case err: NoOpenStartTagException ⇒ dynamicError(err.getMessage, err.getErrorCodeLocalPart)
       }
-      case Type.DOCUMENT => 
+      case Type.DOCUMENT ⇒
         out.startDocument()
         content.process(context)
         out.endDocument()
 
-      case _ => throw new IllegalArgumentException("Unknown node kind " + source.getNodeKind)
+      case _ ⇒ throw new IllegalArgumentException("Unknown node kind " + source.getNodeKind)
     }
     null
   }

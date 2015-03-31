@@ -72,7 +72,7 @@ class StringFn extends SystemFunction {
         StringValue.makeStringValue(arg.getStringValue)
       }
     } catch {
-      case e: UnsupportedOperationException => {
+      case e: UnsupportedOperationException ⇒ {
         typeError(e.getMessage, "FOTY0014")
         null
       }

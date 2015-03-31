@@ -248,7 +248,7 @@ class IXSLFunction(var localName: String, arguments: Array[Expression]) extends 
             method = method.substring(lastDot + 1)
           }
           val jsArgs = jsArray(argument.length - 2)
-          for (i <- 2 until argument.length) {
+          for (i ← 2 until argument.length) {
             val `val` = SequenceExtent.makeSequenceExtent(argument(i).iterate(context))
             jsSetArrayItem(jsArgs, i - 2, convertToJavaScript(`val`))
           }
@@ -257,9 +257,9 @@ class IXSLFunction(var localName: String, arguments: Array[Expression]) extends 
             val result = getValueFromTypeValuePair(jsObj)
             convertFromJavaScript(result, context.getConfiguration)
           } catch {
-            case e: Exception => {
+            case e: Exception ⇒ {
               var doRetry = false
-              for (i <- 0 until argument.length - 2 if jsGetArrayItem(jsArgs, i) == null) {
+              for (i ← 0 until argument.length - 2 if jsGetArrayItem(jsArgs, i) == null) {
                 jsSetArrayItem(jsArgs, i, jsArray(0))
                 doRetry = true
               }
@@ -268,7 +268,7 @@ class IXSLFunction(var localName: String, arguments: Array[Expression]) extends 
                   val result = getValueFromTypeValuePair(jsCall(target, method, jsArgs))
                   return convertFromJavaScript(result, context.getConfiguration)
                 } catch {
-                  case e2: Exception => 
+                  case e2: Exception ⇒
                 }
               }
               throw new XPathException("JavaScriptException in ixsl:call(): Object does not support property or method '" +
@@ -328,11 +328,11 @@ class IXSLFunction(var localName: String, arguments: Array[Expression]) extends 
         EmptyIterator.getInstance
       }
     } catch {
-      case e: XPathException => {
+      case e: XPathException ⇒ {
         e.maybeSetLocation(this.getSourceLocator)
         throw e
       }
-      case e: Exception => {
+      case e: Exception ⇒ {
         val xe = new XPathException("Exception in ixsl:" + localName + "() " + e.getMessage)
         xe.maybeSetLocation(this.getSourceLocator)
         throw xe

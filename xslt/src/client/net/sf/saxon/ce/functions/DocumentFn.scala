@@ -98,7 +98,7 @@ object DocumentFn {
       controller.addUnavailableOutputDestination(documentKey)
       getFragment(newdoc, fragmentId, c)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         pool.markUnavailable(documentKey)
         null
       }
@@ -116,7 +116,7 @@ object DocumentFn {
     try {
       documentKey = ResolveURI.makeAbsolute(href, baseURI).toString
     } catch {
-      case e: URI.URISyntaxException => documentKey = baseURI + "/../" + href
+      case e: URI.URISyntaxException ⇒ documentKey = baseURI + "/../" + href
     }
     new DocumentURI(documentKey)
   }

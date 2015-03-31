@@ -135,7 +135,7 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
       }
       val k = count * recordSize
       nodeKeys(k) = item
-      for (n <- 0 until comparators.length) {
+      for (n ← 0 until comparators.length) {
         nodeKeys(k + n + 1) = sortKeyEvaluator.evaluateSortKey(n, context)
       }
       nodeKeys(k + comparators.length + 1) = count
@@ -150,7 +150,7 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
     try {
       GenericSorter.quickSort(0, count, this)
     } catch {
-      case e: ClassCastException =>
+      case e: ClassCastException ⇒
         val err = new XPathException("Non-comparable types found while sorting: " + e.getMessage)
         err.setErrorCode("XTDE1030")
         throw err
@@ -165,7 +165,7 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
   def compare(a: Int, b: Int): Int = {
     val a1 = a * recordSize + 1
     val b1 = b * recordSize + 1
-    for (i <- 0 until comparators.length) {
+    for (i ← 0 until comparators.length) {
       val comp = comparators(i).compareAtomicValues(nodeKeys(a1 + i).asInstanceOf[AtomicValue], nodeKeys(b1 + i).asInstanceOf[AtomicValue])
       if (comp != 0) {
         return comp
@@ -183,7 +183,7 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
   def swap(a: Int, b: Int): Unit = {
     val a1 = a * recordSize
     val b1 = b * recordSize
-    for (i <- 0 until recordSize) {
+    for (i ← 0 until recordSize) {
       val temp = nodeKeys(a1 + i)
       nodeKeys(a1 + i) = nodeKeys(b1 + i)
       nodeKeys(b1 + i) = temp

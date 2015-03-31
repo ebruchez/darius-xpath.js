@@ -266,8 +266,8 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * Compare equality
    */
   override def equals(other: Any): Boolean = other match {
-    case other: CharSequence => toString == other.toString
-    case _ => false
+    case other: CharSequence ⇒ toString == other.toString
+    case _ ⇒ false
   }
 
   /**
@@ -275,7 +275,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    */
   override def hashCode(): Int = {
     var h = 0
-    for (i <- 0 until used) {
+    for (i ← 0 until used) {
       h = 31 * h + array(i)
     }
     h

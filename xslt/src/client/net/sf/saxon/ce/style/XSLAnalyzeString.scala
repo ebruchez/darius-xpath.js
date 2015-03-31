@@ -55,7 +55,7 @@ class XSLAnalyzeString extends StyleElement {
 
   def validate(decl: Declaration): Unit = {
     var state = 0
-    for (child <- allChildren()) {
+    for (child ← allChildren()) {
       if (child.isInstanceOf[XSLFallback]) {
         state = 3
       } else if (child.isInstanceOf[XSLMatchingSubstring]) {
@@ -104,7 +104,7 @@ class XSLAnalyzeString extends StyleElement {
       new AnalyzeString(select, regex, flags, if (matchingBlock == null) null else matchingBlock.simplify(visitor),
         if (nonMatchingBlock == null) null else nonMatchingBlock.simplify(visitor))
     } catch {
-      case e: XPathException => {
+      case e: XPathException ⇒ {
         compileError(e)
         null
       }

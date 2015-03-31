@@ -39,21 +39,21 @@ class PendingUpdateList(config: Configuration) {
       var state = ""
       try {
         state = "delete"
-        for (i <- 0 until list.size) {
+        for (i ← 0 until list.size) {
           val action = list.get(i)
           if (action.isInstanceOf[DeleteAction]) {
             action.apply(context)
           }
         }
         state = "insert"
-        for (i <- 0 until list.size) {
+        for (i ← 0 until list.size) {
           val action = list.get(i)
           if (action.isInstanceOf[InsertAction]) {
             action.apply(context)
           }
         }
         state = "set-attribute"
-        for (i <- 0 until list.size) {
+        for (i ← 0 until list.size) {
           val action = list.get(i)
           if (action.isInstanceOf[SetAttributeAction]) {
             action.apply(context)
@@ -61,7 +61,7 @@ class PendingUpdateList(config: Configuration) {
         }
         list = new ArrayList[PendingUpdateAction]()
       } catch {
-        case e: Exception => {
+        case e: Exception ⇒ {
           logger.severe("Error on DOM write action: " + state + " " + e.getMessage)
           throw new XPathException(e)
         }

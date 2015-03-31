@@ -49,7 +49,7 @@ object IntegerValue {
       }
       new IntegerValue(new BigDecimal(t))
     } catch {
-      case err: NumberFormatException => new ValidationFailure("Cannot convert string '" + s + "' to an integer", 
+      case err: NumberFormatException ⇒ new ValidationFailure("Cannot convert string '" + s + "' to an integer",
         "FORG0001")
     }
   }
@@ -105,7 +105,7 @@ class IntegerValue(bigDecimalValue: BigDecimal) extends DecimalValue(Left(bigDec
     try {
       new IntegerValue(getDecimalValue.remainder(other.getDecimalValue))
     } catch {
-      case err: ArithmeticException => {
+      case err: ArithmeticException ⇒ {
         var e: XPathException = null
         e = if (BigInteger.valueOf(other.intValue()).signum() == 0) new XPathException("Integer modulo zero", 
           "FOAR0001") else new XPathException("Integer mod operation failure", err)

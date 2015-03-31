@@ -21,7 +21,7 @@ object AttributeSet {
    * @throws XPathException if a dynamic error occurs
    */
   protected def expand(asets: Array[AttributeSet], context: XPathContext): Unit = {
-    for (aset <- asets) {
+    for (aset ← asets) {
       aset.expand(context)
     }
   }
@@ -59,7 +59,7 @@ class AttributeSet extends Procedure {
       d |= body.getDependencies & StaticProperty.DEPENDS_ON_FOCUS
     }
     if (useAttributeSets != null) {
-      for (useAttributeSet <- useAttributeSets) {
+      for (useAttributeSet ← useAttributeSets) {
         d |= useAttributeSet.getFocusDependencies
       }
     }

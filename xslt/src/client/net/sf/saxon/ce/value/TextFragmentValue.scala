@@ -96,10 +96,10 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
    * @see client.net.sf.saxon.ce.om.Axis
    */
   def iterateAxis(axisNumber: Byte, nodeTest: NodeTest): UnfailingIterator = axisNumber match {
-    case Axis.ANCESTOR | Axis.ATTRIBUTE | Axis.FOLLOWING | Axis.FOLLOWING_SIBLING | Axis.NAMESPACE | Axis.PARENT | Axis.PRECEDING | Axis.PRECEDING_SIBLING => EmptyIterator.getInstance
-    case Axis.SELF | Axis.ANCESTOR_OR_SELF => Navigator.filteredSingleton(this, nodeTest)
-    case Axis.CHILD | Axis.DESCENDANT => Navigator.filteredSingleton(getTextNode, nodeTest)
-    case Axis.DESCENDANT_OR_SELF => 
+    case Axis.ANCESTOR | Axis.ATTRIBUTE | Axis.FOLLOWING | Axis.FOLLOWING_SIBLING | Axis.NAMESPACE | Axis.PARENT | Axis.PRECEDING | Axis.PRECEDING_SIBLING ⇒ EmptyIterator.getInstance
+    case Axis.SELF | Axis.ANCESTOR_OR_SELF ⇒ Navigator.filteredSingleton(this, nodeTest)
+    case Axis.CHILD | Axis.DESCENDANT ⇒ Navigator.filteredSingleton(getTextNode, nodeTest)
+    case Axis.DESCENDANT_OR_SELF ⇒
       var b1 = nodeTest.matchesItem(this)
       var textNode2 = getTextNode
       var b2 = nodeTest.matchesItem(textNode2)
@@ -118,7 +118,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
         }
       }
 
-    case _ => throw new IllegalArgumentException("Unknown axis number " + axisNumber)
+    case _ ⇒ throw new IllegalArgumentException("Unknown axis number " + axisNumber)
   }
 
   /**
@@ -188,8 +188,8 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
      * @return a AxisIterator that scans the nodes reached by the axis in turn.
      */
     def iterateAxis(axisNumber: Byte, nodeTest: NodeTest): UnfailingIterator = axisNumber match {
-      case Axis.ANCESTOR | Axis.PARENT => Navigator.filteredSingleton(TextFragmentValue.this, nodeTest)
-      case Axis.ANCESTOR_OR_SELF => 
+      case Axis.ANCESTOR | Axis.PARENT ⇒ Navigator.filteredSingleton(TextFragmentValue.this, nodeTest)
+      case Axis.ANCESTOR_OR_SELF ⇒
         var matchesDoc = nodeTest.matchesItem(TextFragmentValue.this)
         var matchesText = nodeTest.matchesItem(this)
         if (matchesDoc && matchesText) {
@@ -203,9 +203,9 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
           EmptyIterator.getInstance
         }
 
-      case Axis.ATTRIBUTE | Axis.CHILD | Axis.DESCENDANT | Axis.FOLLOWING | Axis.FOLLOWING_SIBLING | Axis.NAMESPACE | Axis.PRECEDING | Axis.PRECEDING_SIBLING => EmptyIterator.getInstance
-      case Axis.SELF | Axis.DESCENDANT_OR_SELF => Navigator.filteredSingleton(this, nodeTest)
-      case _ => throw new IllegalArgumentException("Unknown axis number " + axisNumber)
+      case Axis.ATTRIBUTE | Axis.CHILD | Axis.DESCENDANT | Axis.FOLLOWING | Axis.FOLLOWING_SIBLING | Axis.NAMESPACE | Axis.PRECEDING | Axis.PRECEDING_SIBLING ⇒ EmptyIterator.getInstance
+      case Axis.SELF | Axis.DESCENDANT_OR_SELF ⇒ Navigator.filteredSingleton(this, nodeTest)
+      case _ ⇒ throw new IllegalArgumentException("Unknown axis number " + axisNumber)
     }
 
     /**

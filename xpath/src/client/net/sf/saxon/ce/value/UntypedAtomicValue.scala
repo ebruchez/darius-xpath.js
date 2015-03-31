@@ -47,7 +47,7 @@ class UntypedAtomicValue(_value: CharSequence) extends StringValue {
       try {
         toDouble()
       } catch {
-        case e: XPathException => new ValidationFailure(e.getMessage)
+        case e: XPathException ⇒ new ValidationFailure(e.getMessage)
       }
     } else {
       super.convert(requiredType)

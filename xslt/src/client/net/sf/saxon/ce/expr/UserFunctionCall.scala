@@ -53,7 +53,7 @@ class UserFunctionCall extends FunctionCall {
    */
   def checkFunctionCall(compiledFunction: UserFunction, visitor: ExpressionVisitor): Unit = {
     val n = compiledFunction.getNumberOfArguments
-    for (i <- 0 until n) {
+    for (i ← 0 until n) {
       val role = new RoleLocator(RoleLocator.FUNCTION, compiledFunction.getFunctionName, i)
       role.setErrorCode("XTTE0790")
       argument(i) = TypeChecker.staticTypeCheck(argument(i), compiledFunction.getArgumentType(i), false, 
@@ -136,7 +136,7 @@ class UserFunctionCall extends FunctionCall {
       exp
     } else {
       if (offer.action != PromotionOffer.UNORDERED) {
-        for (i <- 0 until argument.length) {
+        for (i ← 0 until argument.length) {
           argument(i) = doPromotion(argument(i), offer)
         }
       }
@@ -217,7 +217,7 @@ class UserFunctionCall extends FunctionCall {
   private def evaluateArguments(c: XPathContext): Array[Sequence] = {
     val numArgs = argument.length
     val actualArgs = Array.ofDim[Sequence](numArgs)
-    for (i <- 0 until numArgs) {
+    for (i ← 0 until numArgs) {
       actualArgs(i) = SequenceExtent.makeSequenceExtent(argument(i).iterate(c))
     }
     actualArgs

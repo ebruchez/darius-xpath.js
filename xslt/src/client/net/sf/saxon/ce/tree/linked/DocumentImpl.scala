@@ -219,7 +219,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
       if (curr.getNodeKind == Type.ELEMENT) {
         val e = curr.asInstanceOf[ElementImpl]
         val atts = e.getAttributeList
-        for (i <- 0 until atts.getLength if atts.isId(i) && 
+        for (i ← 0 until atts.getLength if atts.isId(i) &&
           NameChecker.isValidNCName(Whitespace.trim(atts.getValue(i)))) {
           registerID(e, Whitespace.trim(atts.getValue(i)))
         }

@@ -32,17 +32,17 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
     val c1 = operand0.getCardinality
     val c2 = operand1.getCardinality
     operator match {
-      case Token.UNION => 
+      case Token.UNION ⇒
         if (Literal.isEmptySequence(operand0)) return c2
         if (Literal.isEmptySequence(operand1)) return c1
         return c1 | c2 | StaticProperty.ALLOWS_ONE | StaticProperty.ALLOWS_MANY
 
-      case Token.INTERSECT => 
+      case Token.INTERSECT ⇒
         if (Literal.isEmptySequence(operand0)) return StaticProperty.EMPTY
         if (Literal.isEmptySequence(operand1)) return StaticProperty.EMPTY
         return (c1 & c2) | StaticProperty.ALLOWS_ZERO | StaticProperty.ALLOWS_ONE
 
-      case Token.EXCEPT => 
+      case Token.EXCEPT ⇒
         if (Literal.isEmptySequence(operand0)) return StaticProperty.EMPTY
         if (Literal.isEmptySequence(operand1)) return c1
         return c1 | StaticProperty.ALLOWS_ZERO | StaticProperty.ALLOWS_ONE
@@ -80,11 +80,11 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
    * @return true if all the nodes come from the context document
    */
   private def testContextDocumentNodeSet(prop0: Int, prop1: Int): Boolean = operator match {
-    case Token.UNION => (prop0 & prop1 & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 
+    case Token.UNION ⇒ (prop0 & prop1 & StaticProperty.CONTEXT_DOCUMENT_NODESET) !=
       0
-    case Token.INTERSECT => ((prop0 | prop1) & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 
+    case Token.INTERSECT ⇒ ((prop0 | prop1) & StaticProperty.CONTEXT_DOCUMENT_NODESET) !=
       0
-    case Token.EXCEPT => (prop0 & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 0
+    case Token.EXCEPT ⇒ (prop0 & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 0
   }
 
   /**
@@ -95,9 +95,9 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
    * @return true if all the nodes come from the tree rooted at the context node
    */
   private def testSubTree(prop0: Int, prop1: Int): Boolean = operator match {
-    case Token.UNION => (prop0 & prop1 & StaticProperty.SUBTREE_NODESET) != 0
-    case Token.INTERSECT => ((prop0 | prop1) & StaticProperty.SUBTREE_NODESET) != 0
-    case Token.EXCEPT => (prop0 & StaticProperty.SUBTREE_NODESET) != 0
+    case Token.UNION ⇒ (prop0 & prop1 & StaticProperty.SUBTREE_NODESET) != 0
+    case Token.INTERSECT ⇒ ((prop0 | prop1) & StaticProperty.SUBTREE_NODESET) != 0
+    case Token.EXCEPT ⇒ (prop0 & StaticProperty.SUBTREE_NODESET) != 0
   }
 
   /**
@@ -118,7 +118,7 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
     operand0 = visitor.simplify(operand0)
     operand1 = visitor.simplify(operand1)
     operator match {
-      case Token.UNION => 
+      case Token.UNION ⇒
         if (Literal.isEmptySequence(operand0) && 
           (operand1.getSpecialProperties & StaticProperty.ORDERED_NODESET) != 
           0) return operand1
@@ -126,11 +126,11 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
           (operand0.getSpecialProperties & StaticProperty.ORDERED_NODESET) != 
           0) return operand0
 
-      case Token.INTERSECT => 
+      case Token.INTERSECT ⇒
         if (Literal.isEmptySequence(operand0)) return operand0
         if (Literal.isEmptySequence(operand1)) return operand1
 
-      case Token.EXCEPT => 
+      case Token.EXCEPT ⇒
         if (Literal.isEmptySequence(operand0)) return operand0
         if (Literal.isEmptySequence(operand1) && 
           (operand0.getSpecialProperties & StaticProperty.ORDERED_NODESET) != 

@@ -24,7 +24,7 @@ object NumericValue {
       try {
         new DoubleValue(in.toDouble)
       } catch {
-        case e: NumberFormatException => DoubleValue.NaN
+        case e: NumberFormatException ⇒ DoubleValue.NaN
       }
     } else if (in.indexOf('.') >= 0) {
       val v = DecimalValue.makeDecimalValue(in)
@@ -61,7 +61,7 @@ abstract class NumericValue extends AtomicValue with Comparable[AnyRef] {
       convert(AtomicType.DOUBLE).asAtomic().asInstanceOf[DoubleValue]
         .getDoubleValue
     } catch {
-      case err: XPathException => Double.NaN
+      case err: XPathException ⇒ Double.NaN
     }
   }
 
@@ -74,7 +74,7 @@ abstract class NumericValue extends AtomicValue with Comparable[AnyRef] {
       convert(AtomicType.FLOAT).asAtomic().asInstanceOf[FloatValue]
         .getFloatValue
     } catch {
-      case err: XPathException => Float.NaN
+      case err: XPathException ⇒ Float.NaN
     }
   }
 
@@ -199,8 +199,8 @@ abstract class NumericValue extends AtomicValue with Comparable[AnyRef] {
    * @return true if the two values are numerically equal
    */
   override def equals(other: Any): Boolean = other match {
-    case other: NumericValue => compareTo(other) == 0
-    case _ => false
+    case other: NumericValue ⇒ compareTo(other) == 0
+    case _ ⇒ false
   }
 
   /**

@@ -59,17 +59,17 @@ class StyleNodeFactory(protected var config: Configuration) extends NodeFactory 
       try {
         e.processExtensionElementAttribute("")
       } catch {
-        case err: XPathException => e.setValidationError(err, StyleElement.REPORT_ALWAYS)
+        case err: XPathException ⇒ e.setValidationError(err, StyleElement.REPORT_ALWAYS)
       }
       try {
         e.processExcludedNamespaces("")
       } catch {
-        case err: XPathException => e.setValidationError(err, StyleElement.REPORT_ALWAYS)
+        case err: XPathException ⇒ e.setValidationError(err, StyleElement.REPORT_ALWAYS)
       }
       try {
         e.processVersionAttribute("")
       } catch {
-        case err: XPathException => e.setValidationError(err, StyleElement.REPORT_ALWAYS)
+        case err: XPathException ⇒ e.setValidationError(err, StyleElement.REPORT_ALWAYS)
       }
       e.processDefaultXPathNamespaceAttribute("")
       return e
@@ -102,7 +102,7 @@ class StyleNodeFactory(protected var config: Configuration) extends NodeFactory 
         temp.setLocation(baseURI)
         temp.processStandardAttributes(NamespaceConstant.XSLT)
       } catch {
-        case err: XPathException => temp.setValidationError(err, StyleElement.REPORT_ALWAYS)
+        case err: XPathException ⇒ temp.setValidationError(err, StyleElement.REPORT_ALWAYS)
       }
       var reason: XPathException = null
       var actualElement: StyleElement = null
@@ -164,7 +164,7 @@ class StyleNodeFactory(protected var config: Configuration) extends NodeFactory 
    * @return the constructed element node
    */
   def makeXSLElement(localName: String): StyleElement = localName.charAt(0) match {
-    case 'a' => if (localName == "analyze-string") {
+    case 'a' ⇒ if (localName == "analyze-string") {
       new XSLAnalyzeString()
     } else if (localName == "apply-imports") {
       new XSLApplyImports()
@@ -175,7 +175,7 @@ class StyleNodeFactory(protected var config: Configuration) extends NodeFactory 
     } else if (localName == "attribute-set") {
       new XSLAttributeSet()
     }
-    case 'c' => if (localName == "call-template") {
+    case 'c' ⇒ if (localName == "call-template") {
       new XSLCallTemplate()
     } else if (localName == "character-map") {
       new XSLCharacterMap()
@@ -188,15 +188,15 @@ class StyleNodeFactory(protected var config: Configuration) extends NodeFactory 
     } else if (localName == "copy-of") {
       new XSLCopyOf()
     }
-    case 'd' => if (localName == "decimal-format") {
+    case 'd' ⇒ if (localName == "decimal-format") {
       new XSLDecimalFormat()
     } else if (localName == "document") {
       new XSLDocument()
     }
-    case 'e' => if (localName == "element") {
+    case 'e' ⇒ if (localName == "element") {
       new XSLElement()
     }
-    case 'f' => if (localName == "fallback") {
+    case 'f' ⇒ if (localName == "fallback") {
       new XSLFallback()
     } else if (localName == "for-each") {
       new XSLForEach()
@@ -205,7 +205,7 @@ class StyleNodeFactory(protected var config: Configuration) extends NodeFactory 
     } else if (localName == "function") {
       new XSLFunction()
     }
-    case 'i' => if (localName == "if") {
+    case 'i' ⇒ if (localName == "if") {
       new XSLIf()
     } else if (localName == "import") {
       new XSLGeneralIncorporate()
@@ -215,15 +215,15 @@ class StyleNodeFactory(protected var config: Configuration) extends NodeFactory 
       new XSLGeneralIncorporate() {
       }
     }
-    case 'k' => if (localName == "key") {
+    case 'k' ⇒ if (localName == "key") {
       new XSLKey()
     }
-    case 'm' => if (localName == "matching-substring") {
+    case 'm' ⇒ if (localName == "matching-substring") {
       new XSLMatchingSubstring()
     } else if (localName == "message") {
       new XSLMessage()
     }
-    case 'n' => if (localName == "next-match") {
+    case 'n' ⇒ if (localName == "next-match") {
       new XSLNextMatch()
     } else if (localName == "non-matching-substring") {
       new XSLMatchingSubstring()
@@ -234,14 +234,14 @@ class StyleNodeFactory(protected var config: Configuration) extends NodeFactory 
     } else if (localName == "namespace-alias") {
       new XSLNamespaceAlias()
     }
-    case 'o' => if (localName == "otherwise") {
+    case 'o' ⇒ if (localName == "otherwise") {
       new XSLOtherwise()
     } else if (localName == "output") {
       new XSLOutput()
     } else if (localName == "output-character") {
       new XSLOutputCharacter()
     }
-    case 'p' => if (localName == "param") {
+    case 'p' ⇒ if (localName == "param") {
       new XSLParam()
     } else if (localName == "perform-sort") {
       new XSLPerformSort()
@@ -250,10 +250,10 @@ class StyleNodeFactory(protected var config: Configuration) extends NodeFactory 
     } else if (localName == "processing-instruction") {
       new XSLMinorNodeConstructor()
     }
-    case 'r' => if (localName == "result-document") {
+    case 'r' ⇒ if (localName == "result-document") {
       new XSLResultDocument()
     }
-    case 's' => if (localName == "sequence") {
+    case 's' ⇒ if (localName == "sequence") {
       new XSLSequence()
     } else if (localName == "sort") {
       new XSLSort()
@@ -262,24 +262,24 @@ class StyleNodeFactory(protected var config: Configuration) extends NodeFactory 
     } else if (localName == "stylesheet") {
       new XSLStylesheet()
     }
-    case 't' => if (localName == "template") {
+    case 't' ⇒ if (localName == "template") {
       new XSLTemplate()
     } else if (localName == "text") {
       new XSLText()
     } else if (localName == "transform") {
       new XSLStylesheet()
     }
-    case 'v' => if (localName == "value-of") {
+    case 'v' ⇒ if (localName == "value-of") {
       new XSLValueOf()
     } else if (localName == "variable") {
       new XSLVariable()
     }
-    case 'w' => if (localName == "with-param") {
+    case 'w' ⇒ if (localName == "with-param") {
       new XSLWithParam()
     } else if (localName == "when") {
       new XSLWhen()
     }
-    case _ => null
+    case _ ⇒ null
   }
 
   /**

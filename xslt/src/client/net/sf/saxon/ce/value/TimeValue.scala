@@ -203,22 +203,22 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    * requested and is not present.
    */
   def getComponent(component: Int): AtomicValue = component match {
-    case Component.HOURS => new IntegerValue(hour)
-    case Component.MINUTES => new IntegerValue(minute)
-    case Component.SECONDS => 
+    case Component.HOURS ⇒ new IntegerValue(hour)
+    case Component.MINUTES ⇒ new IntegerValue(minute)
+    case Component.SECONDS ⇒
       var d = BigDecimal.valueOf(microsecond)
       d = d.divide(DecimalValue.BIG_DECIMAL_ONE_MILLION, 6, BigDecimal.ROUND_HALF_UP)
       d = d.add(BigDecimal.valueOf(second))
       new DecimalValue(d)
 
-    case Component.WHOLE_SECONDS => new IntegerValue(second)
-    case Component.MICROSECONDS => new IntegerValue(microsecond)
-    case Component.TIMEZONE => if (hasTimezone()) {
+    case Component.WHOLE_SECONDS ⇒ new IntegerValue(second)
+    case Component.MICROSECONDS ⇒ new IntegerValue(microsecond)
+    case Component.TIMEZONE ⇒ if (hasTimezone()) {
       DayTimeDurationValue.fromMilliseconds(60000L * getTimezoneInMinutes)
     } else {
       null
     }
-    case _ => throw new IllegalArgumentException("Unknown component for time: " + component)
+    case _ ⇒ throw new IllegalArgumentException("Unknown component for time: " + component)
   }
 
   /**
@@ -253,8 +253,8 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
   }
 
   override def equals(other: Any): Boolean = other match {
-    case other: TimeValue => compareTo(other) == 0
-    case _ => false
+    case other: TimeValue ⇒ compareTo(other) == 0
+    case _ ⇒ false
   }
 
   override def hashCode(): Int = {

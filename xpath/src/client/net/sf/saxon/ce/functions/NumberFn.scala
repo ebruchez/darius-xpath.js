@@ -35,7 +35,7 @@ object NumberFn {
       }
       DoubleValue.NaN
     } catch {
-      case e: NumberFormatException => DoubleValue.NaN
+      case e: NumberFormatException ⇒ DoubleValue.NaN
     }
   }
 }
@@ -94,7 +94,7 @@ class NumberFn extends SystemFunction {
       try {
         return new DoubleValue(StringToDouble.stringToNumber(s))
       } catch {
-        case e: NumberFormatException => return DoubleValue.NaN
+        case e: NumberFormatException ⇒ return DoubleValue.NaN
       }
     }
     DoubleValue.NaN

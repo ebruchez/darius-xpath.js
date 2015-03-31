@@ -60,7 +60,7 @@ class Bindery {
     val n = numberOfGlobals + 1
     globals = Array.ofDim[Sequence](n)
     busy = Array.ofDim[Boolean](n)
-    for (i <- 0 until n) {
+    for (i ← 0 until n) {
       globals(i) = null
       busy(i) = false
     }
@@ -108,7 +108,7 @@ class Bindery {
           }
         }
       } catch {
-        case err: URI.URISyntaxException => 
+        case err: URI.URISyntaxException ⇒
       }
     }
     var `val`: Sequence = null

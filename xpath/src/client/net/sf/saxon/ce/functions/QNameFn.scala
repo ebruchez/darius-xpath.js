@@ -36,11 +36,11 @@ class QNameFn extends SystemFunction {
       }
       Literal.makeLiteral(new QNameValue(parts(0), uri, parts(1), true))
     } catch {
-      case e: QNameException => {
+      case e: QNameException ⇒ {
         dynamicError(e.getMessage, "FOCA0002")
         null
       }
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.maybeSetLocation(getSourceLocator)
         throw err
       }
@@ -64,11 +64,11 @@ class QNameFn extends SystemFunction {
       }
       new QNameValue(parts(0), uri, parts(1), true)
     } catch {
-      case e: QNameException => {
+      case e: QNameException ⇒ {
         dynamicError(e.getMessage, "FOCA0002")
         null
       }
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.maybeSetLocation(getSourceLocator)
         throw err
       }

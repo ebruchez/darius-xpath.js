@@ -38,9 +38,9 @@ class Contains(op: Int) extends CollatingFunction {
         val s1 = arg1.getStringValue
         val collator = getCollator(2, context)
         if (collator.isInstanceOf[CodepointCollator]) operation match {
-          case CONTAINS => result = s0.indexOf(s1, 0) >= 0
-          case STARTS_WITH => result = s0.startsWith(s1, 0)
-          case ENDS_WITH => result = s0.endsWith(s1)
+          case CONTAINS ⇒ result = s0.indexOf(s1, 0) >= 0
+          case STARTS_WITH ⇒ result = s0.startsWith(s1, 0)
+          case ENDS_WITH ⇒ result = s0.endsWith(s1)
         } else {
           doesNotSupportSubstringMatching(context)
           result = false

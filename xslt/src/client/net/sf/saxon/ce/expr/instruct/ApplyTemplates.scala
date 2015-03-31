@@ -39,7 +39,7 @@ object ApplyTemplates {
       tunnelParams: ParameterSet, 
       context: XPathContext, 
       sourceLocator: SourceLocator) node.getNodeKind match {
-    case Type.DOCUMENT | Type.ELEMENT => 
+    case Type.DOCUMENT | Type.ELEMENT ⇒
       var iter = node.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
       var c2 = context.newContext()
       var tc = applyTemplates(iter, context.getCurrentMode, parameters, tunnelParams, c2, sourceLocator)
@@ -48,7 +48,7 @@ object ApplyTemplates {
       }
       return
 
-    case Type.TEXT | Type.ATTRIBUTE => 
+    case Type.TEXT | Type.ATTRIBUTE ⇒
       context.getReceiver.characters(node.getStringValue)
       return
 
@@ -220,7 +220,7 @@ class ApplyTemplates protected () extends Instruction {
     try {
       select = visitor.typeCheck(select, contextItemType)
     } catch {
-      case e: XPathException => {
+      case e: XPathException ⇒ {
         if (implicitSelect) {
           val code = e.getErrorCodeLocalPart
           if ("XPTY0020" == code) {

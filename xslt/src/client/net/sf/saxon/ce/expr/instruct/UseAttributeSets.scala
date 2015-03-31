@@ -99,7 +99,7 @@ class UseAttributeSets(var attributeSets: Array[AttributeSet]) extends Instructi
    */
   def getIntrinsicDependencies(): Int = {
     var d = 0
-    for (i <- 0 until attributeSets.length) {
+    for (i ← 0 until attributeSets.length) {
       val as = attributeSets(i)
       d |= as.getFocusDependencies
     }
@@ -134,7 +134,7 @@ class UseAttributeSets(var attributeSets: Array[AttributeSet]) extends Instructi
       obj.asInstanceOf[UseAttributeSets].attributeSets.length) {
       return false
     }
-    for (i <- 0 until attributeSets.length) {
+    for (i ← 0 until attributeSets.length) {
       val as0 = attributeSets(i)
       val as1 = obj.asInstanceOf[UseAttributeSets].attributeSets(i)
       if (as0.getObjectName != as1.getObjectName) {
@@ -149,7 +149,7 @@ class UseAttributeSets(var attributeSets: Array[AttributeSet]) extends Instructi
    */
   override def hashCode(): Int = {
     var h = 0x86423719
-    for (i <- 0 until attributeSets.length) {
+    for (i ← 0 until attributeSets.length) {
       h ^= attributeSets(i).getObjectName.hashCode
     }
     h

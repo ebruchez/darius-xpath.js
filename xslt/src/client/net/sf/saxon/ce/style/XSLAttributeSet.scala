@@ -71,7 +71,7 @@ class XSLAttributeSet extends StyleElement with StylesheetProcedure {
         prepareAttributes()
         o = getObjectName
       } catch {
-        case err: XPathException => {
+        case err: XPathException ⇒ {
           o = new StructuredQName("saxon", NamespaceConstant.SAXON, "badly-named-attribute-set")
           setObjectName(o)
         }
@@ -146,7 +146,7 @@ class XSLAttributeSet extends StyleElement with StylesheetProcedure {
       }
       procedure.allocateSlots(0)
     } catch {
-      case e: XPathException => compileError(e)
+      case e: XPathException ⇒ compileError(e)
     }
     null
   }

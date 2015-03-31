@@ -114,7 +114,7 @@ class ValueOf(select: Expression, var noNodeIfEmpty: Boolean) extends SimpleNode
       o.setStringValue(`val`)
       o
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.maybeSetLocation(getSourceLocator)
         throw err
       }

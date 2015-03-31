@@ -63,7 +63,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
     throw new IllegalArgumentException("Choose: unequal length arguments")
   }
 
-  for (i <- 0 until conditions.length) {
+  for (i ← 0 until conditions.length) {
     adoptChildExpression(conditions(i))
     adoptChildExpression(actions(i))
   }
@@ -84,12 +84,12 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    *                        rewriting
    */
   override def simplify(visitor: ExpressionVisitor): Expression = {
-    for (i <- 0 until conditions.length) {
+    for (i ← 0 until conditions.length) {
       conditions(i) = visitor.simplify(conditions(i))
       try {
         actions(i) = visitor.simplify(actions(i))
       } catch {
-        case err: XPathException => if (err.isTypeError) {
+        case err: XPathException ⇒ if (err.isTypeError) {
           throw err
         } else {
           actions(i) = new ErrorExpression(err)
@@ -100,7 +100,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
   }
 
   override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
-    for (i <- 0 until conditions.length) {
+    for (i ← 0 until conditions.length) {
       conditions(i) = visitor.typeCheck(conditions(i), contextItemType)
       val err = TypeChecker.ebvError(conditions(i))
       if (err != null) {
@@ -108,11 +108,11 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
         throw err
       }
     }
-    for (i <- 0 until actions.length) {
+    for (i ← 0 until actions.length) {
       try {
         actions(i) = visitor.typeCheck(actions(i), contextItemType)
       } catch {
-        case err: XPathException => if (err.isStaticError) {
+        case err: XPathException ⇒ if (err.isStaticError) {
           throw err
         } else if (err.isTypeError) {
           if (Literal.isEmptySequence(actions(i))) {
@@ -153,7 +153,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    *                        is incompatible with the required type
    */
   override def staticTypeCheck(req: SequenceType, backwardsCompatible: Boolean, role: RoleLocator): Expression = {
-    for (i <- 0 until actions.length) {
+    for (i ← 0 until actions.length) {
       actions(i) = TypeChecker.staticTypeCheck(actions(i), req, backwardsCompatible, role)
     }
     if (!Literal.isConstantBoolean(conditions(conditions.length - 1), true) && 
@@ -170,7 +170,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
   }
 
   override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
-    for (i <- 0 until conditions.length) {
+    for (i ← 0 until conditions.length) {
       conditions(i) = visitor.optimize(conditions(i), contextItemType)
       val ebv = BooleanFn.rewriteEffectiveBooleanValue(conditions(i), visitor, contextItemType)
       if (ebv != null && ebv != conditions(i)) {
@@ -178,11 +178,11 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
         adoptChildExpression(ebv)
       }
     }
-    for (i <- 0 until actions.length) {
+    for (i ← 0 until actions.length) {
       try {
         actions(i) = visitor.optimize(actions(i), contextItemType)
       } catch {
-        case err: XPathException => if (err.isTypeError) {
+        case err: XPathException ⇒ if (err.isTypeError) {
           throw err
         } else {
           actions(i) = new ErrorExpression(err)
@@ -215,7 +215,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    */
   override def markTailFunctionCalls(qName: StructuredQName, arity: Int): Int = {
     var result = 0
-    for (action <- actions) {
+    for (action ← actions) {
       result = Math.max(result, action.markTailFunctionCalls(qName, arity))
     }
     result
@@ -228,7 +228,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    */
   override def getItemType(): ItemType = {
     var `type` = actions(0).getItemType
-    for (i <- 1 until actions.length) {
+    for (i ← 1 until actions.length) {
       `type` = Type.getCommonSuperType(`type`, actions(i).getItemType)
     }
     `type`
@@ -242,7 +242,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
   override def computeCardinality(): Int = {
     var card = 0
     var includesTrue = false
-    for (i <- 0 until actions.length) {
+    for (i ← 0 until actions.length) {
       card = Cardinality.union(card, actions(i).getCardinality)
       if (Literal.isConstantBoolean(conditions(i), true)) {
         includesTrue = true
@@ -263,7 +263,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    */
   override def computeSpecialProperties(): Int = {
     var props = actions(0).getSpecialProperties
-    for (i <- 1 until actions.length) {
+    for (i ← 1 until actions.length) {
       props &= actions(i).getSpecialProperties
     }
     props
@@ -275,7 +275,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    * (Nodes created by the conditions can't contribute to the result).
    */
   override def createsNewNodes(): Boolean = {
-    actions.exists(e => (e.getSpecialProperties & StaticProperty.NON_CREATIVE) == 0)
+    actions.exists(e ⇒ (e.getSpecialProperties & StaticProperty.NON_CREATIVE) == 0)
   }
 
   /**
@@ -298,10 +298,10 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    */
   override protected def promoteInst(offer: PromotionOffer): Unit = {
     if (offer.action == PromotionOffer.UNORDERED || offer.action == PromotionOffer.REPLACE_CURRENT) {
-      for (i <- 0 until conditions.length) {
+      for (i ← 0 until conditions.length) {
         conditions(i) = doPromotion(conditions(i), offer)
       }
-      for (i <- 0 until actions.length) {
+      for (i ← 0 until actions.length) {
         actions(i) = doPromotion(actions(i), offer)
       }
     } else {
@@ -319,7 +319,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
   override def toString(): String = {
     val sb = new FastStringBuffer(FastStringBuffer.SMALL)
     sb.append("if (")
-    for (i <- 0 until conditions.length) {
+    for (i ← 0 until conditions.length) {
       sb.append(conditions(i).toString)
       sb.append(") then (")
       sb.append(actions(i).toString)
@@ -368,12 +368,12 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    * @throws XPathException if evaluating a condition fails
    */
   private def choose(context: XPathContext): Int = {
-    for (i <- 0 until conditions.length) {
+    for (i ← 0 until conditions.length) {
       var b: Boolean = false
       try {
         b = conditions(i).effectiveBooleanValue(context)
       } catch {
-        case e: XPathException => {
+        case e: XPathException ⇒ {
           e.maybeSetLocation(conditions(i).getSourceLocator)
           throw e
         }

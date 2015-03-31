@@ -258,11 +258,11 @@ class VariableReference extends Expression {
     try {
       evaluateVariable(c).iterate()
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.maybeSetLocation(getSourceLocator)
         throw err
       }
-      case err: AssertionError => {
+      case err: AssertionError ⇒ {
         val msg = err.getMessage + ". Variable reference $" + getDisplayName + 
           (if (getSystemId == null) "" else " of " + getSystemId)
         val logger = Logger.getLogger("VariableReference")
@@ -276,7 +276,7 @@ class VariableReference extends Expression {
     try {
       SequenceTool.asItem(evaluateVariable(c))
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.maybeSetLocation(getSourceLocator)
         throw err
       }
@@ -288,7 +288,7 @@ class VariableReference extends Expression {
       val actual = evaluateVariable(c)
       SequenceTool.process(actual.iterate(), c)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.maybeSetLocation(getSourceLocator)
         throw err
       }
@@ -305,7 +305,7 @@ class VariableReference extends Expression {
     try {
       binding.evaluateVariable(c)
     } catch {
-      case err: NullPointerException => if (binding == null) {
+      case err: NullPointerException ⇒ if (binding == null) {
         throw new IllegalStateException("Variable $" + displayName + " has not been fixed up")
       } else {
         throw err

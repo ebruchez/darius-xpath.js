@@ -111,32 +111,32 @@ class CopyOf(var select: Expression, var copyNamespaces: Boolean) extends Instru
         val source = item.asInstanceOf[NodeInfo]
         val kind = source.getNodeKind
         kind match {
-          case Type.ELEMENT => {
+          case Type.ELEMENT ⇒ {
             if (copyBaseURI) {
               out.setSystemId(computeNewBaseUri(source))
             }
             source.copy(out, copyOptions)
             //break
           }
-          case Type.ATTRIBUTE => try {
+          case Type.ATTRIBUTE ⇒ try {
             context.getReceiver.attribute(source.getNodeName, source.getStringValue)
           } catch {
-            case err: NoOpenStartTagException => dynamicError(err.getMessage, err.getErrorCodeLocalPart)
+            case err: NoOpenStartTagException ⇒ dynamicError(err.getMessage, err.getErrorCodeLocalPart)
           }
-          case Type.TEXT => out.characters(source.getStringValue)
-          case Type.PROCESSING_INSTRUCTION => 
+          case Type.TEXT ⇒ out.characters(source.getStringValue)
+          case Type.PROCESSING_INSTRUCTION ⇒
             if (copyBaseURI) {
               out.setSystemId(source.getBaseURI)
             }
             out.processingInstruction(source.getDisplayName, source.getStringValue)
 
-          case Type.COMMENT => out.comment(source.getStringValue)
-          case Type.NAMESPACE => try {
+          case Type.COMMENT ⇒ out.comment(source.getStringValue)
+          case Type.NAMESPACE ⇒ try {
             source.copy(out, 0)
           } catch {
-            case err: NoOpenStartTagException => dynamicError(err.getMessage, err.getErrorCodeLocalPart)
+            case err: NoOpenStartTagException ⇒ dynamicError(err.getMessage, err.getErrorCodeLocalPart)
           }
-          case Type.DOCUMENT => {
+          case Type.DOCUMENT ⇒ {
             out.setPipelineConfiguration(out.getPipelineConfiguration)
             if (copyBaseURI) {
               out.setSystemId(source.getBaseURI)
@@ -144,7 +144,7 @@ class CopyOf(var select: Expression, var copyNamespaces: Boolean) extends Instru
             source.copy(out, copyOptions)
             //break
           }
-          case _ => throw new IllegalArgumentException("Unknown node kind " + source.getNodeKind)
+          case _ ⇒ throw new IllegalArgumentException("Unknown node kind " + source.getNodeKind)
         }
       } else {
         out.append(item, NodeInfo.ALL_NAMESPACES)
@@ -169,7 +169,7 @@ class CopyOf(var select: Expression, var copyNamespaces: Boolean) extends Instru
           newBaseUri = source.getBaseURI
         }
       } catch {
-        case err: URI.URISyntaxException => newBaseUri = source.getBaseURI
+        case err: URI.URISyntaxException ⇒ newBaseUri = source.getBaseURI
       }
     } else {
       newBaseUri = source.getBaseURI

@@ -117,7 +117,7 @@ object Minimax {
             min = test2
           }
         } catch {
-          case err: ClassCastException => {
+          case err: ClassCastException ⇒ {
             val de = new XPathException("Cannot compare " + min.getItemType + " with " + test2.getItemType, 
               "FORG0006")
             de.setIsTypeError(true)
@@ -230,7 +230,7 @@ class Minimax(_operation: Int) extends CollatingFunction {
     try {
       minimax(iter, operation, comparer, ignoreNaN, context)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.maybeSetLocation(getSourceLocator)
         throw err
       }

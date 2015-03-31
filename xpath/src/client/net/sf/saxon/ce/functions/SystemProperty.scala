@@ -72,7 +72,7 @@ class SystemProperty extends SystemFunction {
     try {
       qName = StructuredQName.fromLexicalQName(name, "", staticContext.getNamespaceResolver)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         dynamicError("Invalid system property name. " + err.getMessage, "XTDE1390")
         return null
       }

@@ -22,7 +22,7 @@ class StringToCodepoints extends SystemFunction {
     }
     val chars = item.asInstanceOf[StringValue].expand()
     val codes = new Array[Item](chars.length)
-    for (i <- 0 until chars.length) {
+    for (i ← 0 until chars.length) {
       codes(i) = new IntegerValue(chars(i))
     }
     new ArrayIterator(codes)

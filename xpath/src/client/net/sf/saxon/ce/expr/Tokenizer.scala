@@ -30,7 +30,7 @@ object Tokenizer {
    *     known operator
    */
   private def getBinaryOp(s: String): Int = s.length match {
-    case 2 => 
+    case 2 ⇒
       if (s == "or") Token.OR
       else if (s == "is") Token.IS
       else if (s == "to") Token.TO
@@ -43,28 +43,28 @@ object Tokenizer {
       else if (s == "le") Token.FLE
       else if (s == "as") Token.AS
       else Token.UNKNOWN
-    case 3 => 
+    case 3 ⇒
       if (s == "and") Token.AND
       else if (s == "div") Token.DIV
       else if (s == "mod") Token.MOD
       else Token.UNKNOWN
-    case 4 => 
+    case 4 ⇒
       if (s == "idiv") Token.IDIV
       else if (s == "then") Token.THEN
       else if (s == "else") Token.ELSE
       else Token.UNKNOWN
-    case 5 =>
+    case 5 ⇒
       if (s == "union") Token.UNION
       else Token.UNKNOWN
-    case 6 => 
+    case 6 ⇒
       if (s == "except") Token.EXCEPT
       else if (s == "return") Token.RETURN
       else Token.UNKNOWN
-    case 9 => 
+    case 9 ⇒
       if (s == "intersect") Token.INTERSECT
       else if (s == "satisfies") Token.SATISFIES
       else Token.UNKNOWN
-    case _ =>
+    case _ ⇒
       Token.UNKNOWN
   }
 
@@ -76,22 +76,22 @@ object Tokenizer {
    * @return the token number
    */
   private def getFunctionType(s: String): Int = s.length match {
-    case 2 =>
+    case 2 ⇒
       if (s == "if") Token.IF
       else Token.FUNCTION
-    case 4 => 
+    case 4 ⇒
       if (s == "node") Token.NODEKIND
       else if (s == "item") Token.NODEKIND
       else if (s == "text") Token.NODEKIND
       else Token.FUNCTION
-    case 7 => 
+    case 7 ⇒
       if (s == "element") Token.NODEKIND
       else if (s == "comment") Token.NODEKIND
       else Token.FUNCTION
-    case 9 =>
+    case 9 ⇒
       if (s == "attribute") Token.NODEKIND
       else Token.FUNCTION
-    case _ => 
+    case _ ⇒
       if (s == "document-node") Token.NODEKIND
       else if (s == "empty-sequence") Token.NODEKIND
       else if (s == "schema-element") Token.NODEKIND
@@ -197,16 +197,16 @@ class Tokenizer {
     }
     currentTokenStartOffset = nextTokenStartOffset
     currentToken match {
-      case Token.NAME => 
+      case Token.NAME ⇒
         val optype = getBinaryOp(currentTokenValue)
         if (optype != Token.UNKNOWN && !followsOperator(precedingToken)) {
           currentToken = optype
         }
 
-      case Token.STAR => if (!followsOperator(precedingToken)) {
+      case Token.STAR ⇒ if (!followsOperator(precedingToken)) {
         currentToken = Token.MULT
       }
-      case _ => //ORBEON
+      case _ ⇒ //ORBEON
     }
     if (currentToken == Token.RCURLY) {
       return
@@ -221,7 +221,7 @@ class Tokenizer {
         return
       }
       nextToken match {
-        case Token.LPAR => 
+        case Token.LPAR ⇒
           val op = getBinaryOp(currentTokenValue)
           if (op == Token.UNKNOWN || followsOperator(oldPrecedingToken)) {
             currentToken = getFunctionType(currentTokenValue)
@@ -230,22 +230,22 @@ class Tokenizer {
             currentToken = op
           }
 
-        case Token.COLONCOLON => 
+        case Token.COLONCOLON ⇒
           lookAhead()
           currentToken = Token.AXIS
 
-        case Token.COLONSTAR => 
+        case Token.COLONSTAR ⇒
           lookAhead()
           currentToken = Token.PREFIX
 
-        case Token.DOLLAR => if (currentTokenValue == "for") {
+        case Token.DOLLAR ⇒ if (currentTokenValue == "for") {
           currentToken = Token.FOR
         } else if (currentTokenValue == "some") {
           currentToken = Token.SOME
         } else if (currentTokenValue == "every") {
           currentToken = Token.EVERY
         }
-        case Token.NAME => 
+        case Token.NAME ⇒
           val composite = currentTokenValue + ' ' + nextTokenValue
           val `val` = Token.doubleKeywords.get(composite)
           if (`val` != null) {
@@ -255,7 +255,7 @@ class Tokenizer {
             return
           }
 
-        case _ =>
+        case _ ⇒
       }
     }
   }
@@ -279,7 +279,7 @@ class Tokenizer {
       var c = input.charAt(inputOffset)
       inputOffset += 1
       c match {
-        case '/' => 
+        case '/' ⇒
           if (inputOffset < inputLength && input.charAt(inputOffset) == '/') {
             inputOffset += 1
             nextToken = Token.SLSL
@@ -288,7 +288,7 @@ class Tokenizer {
           nextToken = Token.SLASH
           return
 
-        case ':' => 
+        case ':' ⇒
           if (inputOffset < inputLength) {
             if (input.charAt(inputOffset) == ':') {
               inputOffset += 1
@@ -298,27 +298,27 @@ class Tokenizer {
           }
           throw new XPathException("Unexpected colon at start of token")
 
-        case '@' => 
+        case '@' ⇒
           nextToken = Token.AT
           return
 
-        case '?' => 
+        case '?' ⇒
           nextToken = Token.QMARK
           return
 
-        case '[' => 
+        case '[' ⇒
           nextToken = Token.LSQB
           return
 
-        case ']' => 
+        case ']' ⇒
           nextToken = Token.RSQB
           return
 
-        case '}' => 
+        case '}' ⇒
           nextToken = Token.RCURLY
           return
 
-        case '(' => 
+        case '(' ⇒
           if (inputOffset < inputLength && input.charAt(inputOffset) == ':') {
             inputOffset += 1
             var nestingDepth = 1
@@ -341,23 +341,23 @@ class Tokenizer {
           }
           return
 
-        case ')' => 
+        case ')' ⇒
           nextToken = Token.RPAR
           return
 
-        case '+' => 
+        case '+' ⇒
           nextToken = Token.PLUS
           return
 
-        case '-' => 
+        case '-' ⇒
           nextToken = Token.MINUS
           return
 
-        case '=' => 
+        case '=' ⇒
           nextToken = Token.EQUALS
           return
 
-        case '!' => 
+        case '!' ⇒
           if (inputOffset < inputLength && input.charAt(inputOffset) == '=') {
             inputOffset += 1
             nextToken = Token.NE
@@ -365,7 +365,7 @@ class Tokenizer {
           }
           throw new XPathException("'!' without '='")
 
-        case '*' => 
+        case '*' ⇒
           if (inputOffset < inputLength && input.charAt(inputOffset) == ':') {
             inputOffset += 1
             nextToken = Token.SUFFIX
@@ -380,23 +380,23 @@ class Tokenizer {
           nextToken = Token.STAR
           return
 
-        case ',' => 
+        case ',' ⇒
           nextToken = Token.COMMA
           return
 
-        case '$' => 
+        case '$' ⇒
           nextToken = Token.DOLLAR
           return
 
-        case '|' => 
+        case '|' ⇒
           nextToken = Token.UNION
           return
 
-        case '#' => 
+        case '#' ⇒
           nextToken = Token.HASH
           return
 
-        case '<' => 
+        case '<' ⇒
           if (inputOffset < inputLength && input.charAt(inputOffset) == '=') {
             inputOffset += 1
             nextToken = Token.LE
@@ -410,7 +410,7 @@ class Tokenizer {
           nextToken = Token.LT
           return
 
-        case '>' => 
+        case '>' ⇒
           if (inputOffset < inputLength && input.charAt(inputOffset) == '=') {
             inputOffset += 1
             nextToken = Token.GE
@@ -424,7 +424,7 @@ class Tokenizer {
           nextToken = Token.GT
           return
 
-        case '.' => 
+        case '.' ⇒
           if (inputOffset < inputLength && input.charAt(inputOffset) == '.') {
             inputOffset += 1
             nextToken = Token.DOTDOT
@@ -436,7 +436,7 @@ class Tokenizer {
             return
           }
 
-        case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => 
+        case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ⇒
           var allowE = true
           var allowSign = false
           var allowDot = true
@@ -445,29 +445,29 @@ class Tokenizer {
           breakable {
             while (!endOfNum) {
               c match {
-                case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' =>
+                case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ⇒
                   allowSign = false
-                case '.' => if (allowDot) {
+                case '.' ⇒ if (allowDot) {
                   allowDot = false
                   allowSign = false
                 } else {
                   inputOffset -= 1
                   break()
                 }
-                case 'E' | 'e' => if (allowE) {
+                case 'E' | 'e' ⇒ if (allowE) {
                   allowSign = true
                   allowE = false
                 } else {
                   inputOffset -= 1
                   break()
                 }
-                case '+' | '-' => if (allowSign) {
+                case '+' | '-' ⇒ if (allowSign) {
                   allowSign = false
                 } else {
                   inputOffset -= 1
                   break()
                 }
-                case _ =>
+                case _ ⇒
                   if (('a' <= c && c <= 'z') || c > 127) {
                     throw new XPathException("Separator needed after numeric literal")
                   }
@@ -484,7 +484,7 @@ class Tokenizer {
           nextToken = Token.NUMBER
           return
 
-        case '"' | '\'' => 
+        case '"' | '\'' ⇒
           nextTokenValue = ""
           breakable {
             while (true) {
@@ -512,8 +512,8 @@ class Tokenizer {
           nextToken = Token.STRING_LITERAL
           return
 
-        case '\n' | ' ' | '\t' | '\r' => nextTokenStartOffset = inputOffset
-        case other =>
+        case '\n' | ' ' | '\t' | '\r' ⇒ nextTokenStartOffset = inputOffset
+        case other ⇒
 
           if (other != '_' && other < 0x80 && ! Util.isLetter(other)) {
             throw new XPathException("Invalid character '" + other + "' in expression")
@@ -523,7 +523,7 @@ class Tokenizer {
             while (inputOffset < inputLength) {
               c = input.charAt(inputOffset)
               c match {
-                case ':' => if (inputOffset + 1 < inputLength) {
+                case ':' ⇒ if (inputOffset + 1 < inputLength) {
                   val nc = input.charAt(inputOffset + 1)
                   if (nc == ':') {
                     nextTokenValue = input.substring(nextTokenStartOffset, inputOffset)
@@ -541,8 +541,8 @@ class Tokenizer {
                     return
                   }
                 }
-                case '.' | '-' | '_' =>
-                case _ =>
+                case '.' | '-' | '_' ⇒
+                case _ ⇒
                   if (c < 0x80 && ! Util.isLetterOrDigit(c))
                     break()
               }

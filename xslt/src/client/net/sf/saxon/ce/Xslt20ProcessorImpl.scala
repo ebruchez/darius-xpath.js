@@ -107,7 +107,7 @@ object Xslt20ProcessorImpl {
       return true
     }
     var matches = false
-    for (i <- 1 until all.length if eventPropertyValue == all(i)) {
+    for (i ← 1 until all.length if eventPropertyValue == all(i)) {
       matches = true
       //break
     }
@@ -157,8 +157,8 @@ class Xslt20ProcessorImpl extends EntryPoint {
       try {
         executeCallback(saxonceLoadCallback)
       } catch {
-        case jse: JavaScriptException => handleException(jse, "onModuleLoad")
-        case je: Exception => handleException(je, "onModuleLoad")
+        case jse: JavaScriptException ⇒ handleException(jse, "onModuleLoad")
+        case je: Exception ⇒ handleException(je, "onModuleLoad")
       }
     }
     doTransformation()
@@ -190,7 +190,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
       var initialMode: String = null
       var initialTemplate: String = null
       var styleElementExists = false
-      for (i <- 0 until scripts.getLength) {
+      for (i ← 0 until scripts.getLength) {
         val `type` = scripts.getItem(i).getAttribute("type")
         if (`type` == "application/xslt+xml") {
           styleElementExists = true
@@ -225,7 +225,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
       try {
         styleDoc = config.buildDocument(absStyleURI)
       } catch {
-        case e: XPathException => {
+        case e: XPathException ⇒ {
           val reportURI = if (absSourceURI != null) absSourceURI else styleURI
           throw new XPathException("Failed to load XSLT stylesheet " + reportURI + ": " + 
             e.getMessage)
@@ -239,7 +239,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
       localController.setTargetNode(Document.get)
       renderXML(sourceDoc, styleDoc, body)
     } catch {
-      case err: Exception => logger.log(Level.SEVERE, err.getMessage)
+      case err: Exception ⇒ logger.log(Level.SEVERE, err.getMessage)
     }
   }
 
@@ -290,7 +290,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
     try {
       importedStylesheet = SaxonceApi.getDocSynchronously(doc, config)
     } catch {
-      case e: XPathException => handleException(e, "importStylesheet")
+      case e: XPathException ⇒ handleException(e, "importStylesheet")
     }
   }
 
@@ -338,7 +338,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
               try {
                 responseNode = XMLDOM.parseXML(response.getText).asInstanceOf[Node]
               } catch {
-                case e: Exception => {
+                case e: Exception ⇒ {
                   handleException(new RuntimeException(e.getMessage), "onResponseReceived")
                   return
                 }
@@ -382,7 +382,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
       }
       invokeTransform(fetchedSourceDoc, target)
     } catch {
-      case e: Exception => {
+      case e: Exception ⇒ {
         handleException(e, "renderXML")
         null
       }
@@ -394,7 +394,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
   private var registeredProcessorForNonDomEvents: Boolean = false
 
   private def registerNonDOMevents(controller: Controller): Unit = {
-    for (eventMode <- registeredEventModes) {
+    for (eventMode ← registeredEventModes) {
       val nonDomRules = eventMode.getVirtualRuleSet
       if (nonDomRules != null) {
         if (!registeredProcessorForNonDomEvents) {
@@ -402,7 +402,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
           Controller.addNonDomEventProcessor(this)
         }
         val eventName = eventMode.getModeName.getLocalName
-        for (r <- nonDomRules) {
+        for (r ← nonDomRules) {
           var eventTarget: JavaScriptObject = null
           eventTarget = r.getPattern.asInstanceOf[JSObjectPattern].evaluate(controller.newXPathContext())
           bindTemplateToWindowEvent(eventName, eventTarget)
@@ -443,7 +443,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
         Controller.addEventProcessor(this)
       }
     }
-    for (eventMode <- registeredEventModes) {
+    for (eventMode ← registeredEventModes) {
       var eventName = eventMode.getModeName.getLocalName
       if (!eventName.startsWith("on")) {
         logger.warning("Event name: '" + eventName + "' is invalid - names should begin with 'on'")
@@ -494,7 +494,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
       }
       outResult
     } catch {
-      case e: Exception => {
+      case e: Exception ⇒ {
         handleException(e, "invokeTransform")
         null
       }
@@ -504,7 +504,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
   private def getModeFromEvent(event: Event): Mode = {
     var result: Mode = null
     val mode = "on" + event.getType
-    for (m <- registeredEventModes if m.getModeName.getLocalName == mode) {
+    for (m ← registeredEventModes if m.getModeName.getLocalName == mode) {
       result = m
       //break
     }
@@ -542,7 +542,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
         element = bubbleElements.next().asInstanceOf[NodeInfo]
       }
     } catch {
-      case e: Exception => handleException(e, "bubbleApplyTemplates")
+      case e: Exception ⇒ handleException(e, "bubbleApplyTemplates")
     }
   }
 
@@ -564,7 +564,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
       controller.setUserData("Saxon-CE", "current-object", `object`)
       controller.transform(start, controller.getTargetNode)
     } catch {
-      case err: Exception => handleException(err, "mode: '" + mode + "' event: '" + event.toString)
+      case err: Exception ⇒ handleException(err, "mode: '" + mode + "' event: '" + event.toString)
     }
   }
 

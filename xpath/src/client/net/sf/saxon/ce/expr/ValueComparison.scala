@@ -41,15 +41,15 @@ object ValueComparison {
       return op == Token.FNE
     }
     try op match {
-      case Token.FEQ => comparer.comparesEqual(v0, v1)
-      case Token.FNE => !comparer.comparesEqual(v0, v1)
-      case Token.FGT => comparer.compareAtomicValues(v0, v1) > 0
-      case Token.FLT => comparer.compareAtomicValues(v0, v1) < 0
-      case Token.FGE => comparer.compareAtomicValues(v0, v1) >= 0
-      case Token.FLE => comparer.compareAtomicValues(v0, v1) <= 0
-      case _ => throw new UnsupportedOperationException("Unknown operator " + op)
+      case Token.FEQ ⇒ comparer.comparesEqual(v0, v1)
+      case Token.FNE ⇒ !comparer.comparesEqual(v0, v1)
+      case Token.FGT ⇒ comparer.compareAtomicValues(v0, v1) > 0
+      case Token.FLT ⇒ comparer.compareAtomicValues(v0, v1) < 0
+      case Token.FGE ⇒ comparer.compareAtomicValues(v0, v1) >= 0
+      case Token.FLE ⇒ comparer.compareAtomicValues(v0, v1) <= 0
+      case _ ⇒ throw new UnsupportedOperationException("Unknown operator " + op)
     } catch {
-      case err: ClassCastException => {
+      case err: ClassCastException ⇒ {
         val e2 = new XPathException("Cannot compare " + Type.displayTypeName(v0) + " to " + 
           Type.displayTypeName(v1))
         e2.setErrorCode("XPTY0004")
@@ -216,7 +216,7 @@ class ValueComparison(p1: Expression, op: Int, p2: Expression) extends BinaryExp
       }
       compare(v0, operator, v1, comparer, needsRuntimeCheck)
     } catch {
-      case e: XPathException => {
+      case e: XPathException ⇒ {
         e.maybeSetLocation(getSourceLocator)
         throw e
       }
@@ -242,7 +242,7 @@ class ValueComparison(p1: Expression, op: Int, p2: Expression) extends BinaryExp
       }
       BooleanValue.get(compare(v0, operator, v1, comparer, needsRuntimeCheck))
     } catch {
-      case e: XPathException => {
+      case e: XPathException ⇒ {
         e.maybeSetLocation(getSourceLocator)
         throw e
       }

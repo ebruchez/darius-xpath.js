@@ -71,7 +71,7 @@ class UnparsedText(operation: Int) extends SystemFunction {
       content = readFile(href, expressionBaseURI, encoding, context)
       result = new StringValue(content)
     } catch {
-      case err: XPathException => if (operation == UNPARSED_TEXT_AVAILABLE) {
+      case err: XPathException ⇒ if (operation == UNPARSED_TEXT_AVAILABLE) {
         return BooleanValue.FALSE
       } else {
         err.maybeSetErrorCode("XTDE1170")
@@ -79,9 +79,9 @@ class UnparsedText(operation: Int) extends SystemFunction {
       }
     }
     operation match {
-      case UNPARSED_TEXT_AVAILABLE => BooleanValue.TRUE
-      case UNPARSED_TEXT => result
-      case _ => throw new UnsupportedOperationException(operation + "")
+      case UNPARSED_TEXT_AVAILABLE ⇒ BooleanValue.TRUE
+      case UNPARSED_TEXT ⇒ result
+      case _ ⇒ throw new UnsupportedOperationException(operation + "")
     }
   }
 

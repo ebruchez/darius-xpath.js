@@ -45,7 +45,7 @@ class XSLPreserveSpace extends StyleElement {
     val preserve = if (getLocalPart == "preserve-space") StripSpaceRules.PRESERVE else StripSpaceRules.STRIP
     val stripperRules = getExecutable.getStripperRules
     val resolver = new InscopeNamespaceResolver(this)
-    for (s <- Whitespace.tokenize(elements)) {
+    for (s ← Whitespace.tokenize(elements)) {
       var nt: NodeTest = null
       if (s == "*") {
         nt = NodeKindTest.ELEMENT
@@ -70,7 +70,7 @@ class XSLPreserveSpace extends StyleElement {
         try {
           qn = StructuredQName.fromLexicalQName(s, getDefaultXPathNamespace, resolver)
         } catch {
-          case err: XPathException => {
+          case err: XPathException ⇒ {
             compileError("Element name " + s + " is not a valid QName", "XTSE0280")
             return null
           }

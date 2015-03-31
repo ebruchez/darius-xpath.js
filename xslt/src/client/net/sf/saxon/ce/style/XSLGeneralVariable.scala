@@ -207,7 +207,7 @@ abstract class XSLGeneralVariable extends StyleElement {
         }
       }
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.setLocator(this)
         compileError(err)
         select = new ErrorExpression(err)
@@ -254,7 +254,7 @@ abstract class XSLGeneralVariable extends StyleElement {
             select = TypeChecker.staticTypeCheck(select, requiredType, false, role)
           }
         } catch {
-          case err: XPathException => {
+          case err: XPathException ⇒ {
             err.setLocator(this)
             compileError(err)
             select = new ErrorExpression(err)
@@ -273,7 +273,7 @@ abstract class XSLGeneralVariable extends StyleElement {
           exp2.setContainer(gvar)
           exp2 = visitor.typeCheck(visitor.simplify(select), Type.NODE_TYPE)
         } catch {
-          case err: XPathException => compileError(err)
+          case err: XPathException ⇒ compileError(err)
         }
         if (LogConfiguration.loggingIsEnabled() && LogController.traceIsEnabled()) {
           exp2 = makeTraceInstruction(this, exp2)

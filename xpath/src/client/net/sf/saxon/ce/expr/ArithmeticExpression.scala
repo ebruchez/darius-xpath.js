@@ -56,12 +56,12 @@ object ArithmeticExpression {
         val d1 = n1.getDoubleValue
         var result: Double = 0.0
         operator match {
-          case Token.PLUS  => result = d0 + d1
-          case Token.MINUS => result = d0 - d1
-          case Token.MULT => result = d0 * d1
-          case Token.DIV => result = d0 / d1
-          case Token.MOD => result = d0 % d1
-          case Token.IDIV => 
+          case Token.PLUS  ⇒ result = d0 + d1
+          case Token.MINUS ⇒ result = d0 - d1
+          case Token.MULT ⇒ result = d0 * d1
+          case Token.DIV ⇒ result = d0 / d1
+          case Token.MOD ⇒ result = d0 % d1
+          case Token.IDIV ⇒
             if (d1 == 0.0) {
               throw new XPathException("Integer division by zero", "FOAR0001")
             }
@@ -81,12 +81,12 @@ object ArithmeticExpression {
         val f1 = n1.getFloatValue
         var result: Float = 0.0f
         operator match {
-          case Token.PLUS  => result = f0 + f1
-          case Token.MINUS => result = f0 - f1
-          case Token.MULT => result = f0 * f1
-          case Token.DIV => result = f0 / f1
-          case Token.MOD => result = f0 % f1
-          case Token.IDIV => 
+          case Token.PLUS  ⇒ result = f0 + f1
+          case Token.MINUS ⇒ result = f0 - f1
+          case Token.MULT ⇒ result = f0 * f1
+          case Token.DIV ⇒ result = f0 / f1
+          case Token.MOD ⇒ result = f0 % f1
+          case Token.IDIV ⇒
             if (f1 == 0.0) {
               throw new XPathException("Integer division by zero", "FOAR0001")
             }
@@ -106,16 +106,16 @@ object ArithmeticExpression {
         val d1 = n1.getDecimalValue
         var result: BigDecimal = null
         operator match {
-          case Token.PLUS  => result = d0.add(d1)
-          case Token.MINUS => result = d0.subtract(d1)
-          case Token.MULT => result = d0.multiply(d1)
-          case Token.DIV => 
+          case Token.PLUS  ⇒ result = d0.add(d1)
+          case Token.MINUS ⇒ result = d0.subtract(d1)
+          case Token.MULT ⇒ result = d0.multiply(d1)
+          case Token.DIV ⇒
             var result1: BigDecimal = null
             val scale = Math.max(DecimalValue.DIVIDE_PRECISION, Math.max(d0.scale(), d1.scale()))
             try {
               result1 = d0.divide(d1, scale, BigDecimal.ROUND_HALF_DOWN)
             } catch {
-              case err1: ArithmeticException => if (d1.signum() == 0) {
+              case err1: ArithmeticException ⇒ if (d1.signum() == 0) {
                 throw new XPathException("Decimal divide by zero", "FOAR0001")
               } else {
                 throw err1
@@ -123,16 +123,16 @@ object ArithmeticExpression {
             }
             return new DecimalValue(result1)
 
-          case Token.MOD => try {
+          case Token.MOD ⇒ try {
             result = d0.remainder(d1)
           } catch {
-            case err: ArithmeticException => if (n1.compareTo(0) == 0) {
+            case err: ArithmeticException ⇒ if (n1.compareTo(0) == 0) {
               throw new XPathException("Decimal modulo zero", "FOAR0001")
             } else {
               throw err
             }
           }
-          case Token.IDIV => 
+          case Token.IDIV ⇒
             if (d1.signum() == 0) {
               throw new XPathException("Integer division by zero", "FOAR0001")
             }
@@ -163,9 +163,9 @@ object ArithmeticExpression {
           val d0 = value1.asInstanceOf[DurationValue]
           val d1 = value1.asInstanceOf[DurationValue]
           operator match {
-            case Token.PLUS => return d0.add(d1)
-            case Token.MINUS => return d0.add(d1.negate())
-            case Token.DIV => return d0.divide(d1)
+            case Token.PLUS ⇒ return d0.add(d1)
+            case Token.MINUS ⇒ return d0.add(d1.negate())
+            case Token.DIV ⇒ return d0.divide(d1)
           }
         } else if (p1 == AtomicType.DATE_TIME && operator == Token.PLUS) {
           return value1.asInstanceOf[CalendarValue].add(value0.asInstanceOf[DurationValue])
@@ -281,7 +281,7 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
         return new Literal(evaluateItem(new EarlyEvaluationContext(visitor.getConfiguration)))
       }
     } catch {
-      case err: XPathException => 
+      case err: XPathException ⇒
     }
     this
   }
@@ -322,7 +322,7 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
     try {
       compute(v0, operator, v1, context)
     } catch {
-      case e: XPathException => {
+      case e: XPathException ⇒ {
         e.maybeSetLocation(getSourceLocator)
         throw e
       }

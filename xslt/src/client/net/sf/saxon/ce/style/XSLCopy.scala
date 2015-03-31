@@ -70,7 +70,7 @@ class XSLCopy extends StyleElement {
       role.setErrorCode("XTTE2170")
       select = TypeChecker.staticTypeCheck(select, SequenceType.OPTIONAL_ITEM, false, role)
     } catch {
-      case err: XPathException => compileError(err)
+      case err: XPathException ⇒ compileError(err)
     }
     val inst = new Copy(select, copyNamespaces, inheritNamespaces)
     var content = compileSequenceConstructor(exec, decl)

@@ -72,10 +72,10 @@ class XSLCallTemplate extends StyleElement {
 
   def postValidate(): Unit = {
     if (template != null) {
-      for (param <- template.allChildren() if param.isInstanceOf[XSLParam] && param.asInstanceOf[XSLParam].isRequiredParam && 
+      for (param ← template.allChildren() if param.isInstanceOf[XSLParam] && param.asInstanceOf[XSLParam].isRequiredParam &&
         !param.asInstanceOf[XSLParam].isTunnelParam) {
         var ok = false
-        for (child <- allChildren() if child.isInstanceOf[XSLWithParam] && 
+        for (child ← allChildren() if child.isInstanceOf[XSLWithParam] &&
           child.asInstanceOf[XSLWithParam].getVariableQName == param.asInstanceOf[XSLParam].getVariableQName) {
           ok = true
           //break
@@ -85,10 +85,10 @@ class XSLCallTemplate extends StyleElement {
             Err.wrap(param.asInstanceOf[XSLParam].getVariableDisplayName, Err.VARIABLE), "XTSE0690")
         }
       }
-      for (w <- allChildren() if w.isInstanceOf[XSLWithParam] && !w.asInstanceOf[XSLWithParam].isTunnelParam) {
+      for (w ← allChildren() if w.isInstanceOf[XSLWithParam] && !w.asInstanceOf[XSLWithParam].isTunnelParam) {
         val withParam = w.asInstanceOf[XSLWithParam]
         var ok = false
-        for (param <- template.allChildren() if param.isInstanceOf[XSLParam] && 
+        for (param ← template.allChildren() if param.isInstanceOf[XSLParam] &&
           param.asInstanceOf[XSLParam].getVariableQName == withParam.getVariableQName) {
           ok = true
           val required = param.asInstanceOf[XSLParam].getRequiredType

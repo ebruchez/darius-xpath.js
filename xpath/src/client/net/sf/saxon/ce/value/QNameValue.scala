@@ -182,7 +182,7 @@ class QNameValue(protected var qName: StructuredQName) extends AtomicValue {
    * @throws ClassCastException if they are not comparable
    */
   override def equals(other: Any): Boolean = other match {
-    case other: QNameValue => qName == other.qName
-    case _ => false
+    case other: QNameValue ⇒ qName == other.qName
+    case _ ⇒ false
   }
 }

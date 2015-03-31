@@ -165,7 +165,7 @@ class XSLNumber extends StyleElement {
         role.setErrorCode("XTTE1000")
         select = TypeChecker.staticTypeCheck(select, SequenceType.SINGLE_NODE, false, role)
       } catch {
-        case err: XPathException => compileError(err)
+        case err: XPathException ⇒ compileError(err)
       }
     }
   }

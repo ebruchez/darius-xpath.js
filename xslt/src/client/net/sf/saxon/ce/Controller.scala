@@ -55,7 +55,7 @@ object Controller {
 
   def relayEvent(node: Node, event: Event): Unit = {
     if (eventProcessors != null) {
-      for (p <- eventProcessors if p != null) {
+      for (p ← eventProcessors if p != null) {
         p.bubbleApplyTemplates(node, event)
       }
     }
@@ -75,7 +75,7 @@ object Controller {
 
   def relayNonDomEvent(name: String, target: JavaScriptObject, event: JavaScriptObject): Unit = {
     if (nonDomEventProcessors != null) {
-      for (p <- nonDomEventProcessors if p != null) {
+      for (p ← nonDomEventProcessors if p != null) {
         val sqn = new StructuredQName("", NamespaceConstant.IXSL, name)
         p.applyEventTemplates(sqn.getClarkName, null, event, target)
       }

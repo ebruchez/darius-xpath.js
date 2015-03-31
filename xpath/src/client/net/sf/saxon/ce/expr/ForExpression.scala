@@ -201,9 +201,9 @@ class ForExpression extends Assignation {
     val pslot = -1
     val map = new MappingAction(context, getLocalSlotNumber, pslot, action)
     actionCardinality match {
-      case StaticProperty.EXACTLY_ONE => new ItemMappingIterator(base, map, true)
-      case StaticProperty.ALLOWS_ZERO_OR_ONE => new ItemMappingIterator(base, map, false)
-      case _ => new MappingIterator(base, map)
+      case StaticProperty.EXACTLY_ONE ⇒ new ItemMappingIterator(base, map, true)
+      case StaticProperty.ALLOWS_ZERO_OR_ONE ⇒ new ItemMappingIterator(base, map, false)
+      case _ ⇒ new MappingIterator(base, map)
     }
   }
 

@@ -36,7 +36,7 @@ class XSLText extends XSLLeafNodeConstructor {
 
   def validate(decl: Declaration): Unit = {
     value = StringValue.EMPTY_STRING
-    for (child <- allChildren()) {
+    for (child ← allChildren()) {
       if (child.isInstanceOf[StyleElement]) {
         child.asInstanceOf[StyleElement].compileError("xsl:text must not contain child elements", "XTSE0010")
         return

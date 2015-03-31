@@ -175,7 +175,7 @@ class UserFunction extends Procedure {
     try {
       result = ExpressionTool.evaluate(getBody, evaluationMode, context)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.maybeSetLocation(getSourceLocator)
         throw err
       }

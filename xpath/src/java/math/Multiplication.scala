@@ -115,9 +115,9 @@ object Multiplication {
    // val res: Array[Int] =  new Array[Int]( resLen)
     var carry: Long = 0l
 
-    for (i <- 0 until aLen) {
+    for (i ← 0 until aLen) {
       carry = 0
-      for (j <- i + 1 until aLen) {
+      for (j ← i + 1 until aLen) {
         carry = unsignedMultAddAdd(a(i), a(j), res(i + j), carry.toInt)
         res(i + j) = carry.toInt
         carry >>>= 32
@@ -405,7 +405,7 @@ object Multiplication {
                             aSize: Int,
                             factor: Int): Int = {
     var carry:Long = 0
-    for (i <- 0 until aSize) {
+    for (i ← 0 until aSize) {
       carry = unsignedMultAddAdd(a(i), factor, carry.toInt, 0)
       res(i) = carry.toInt
       carry >>>= 32
@@ -424,10 +424,10 @@ object Multiplication {
       return
     }
 
-    for (i <- 0 until aLen) {
+    for (i ← 0 until aLen) {
       var carry: Long = 0
       val aI = a(i)
-      for (j <- 0 until bLen) {
+      for (j ← 0 until bLen) {
         carry = unsignedMultAddAdd(aI, b(j), t(i + j), carry.toInt)
         t(i + j) = carry.toInt
         carry >>>= 32

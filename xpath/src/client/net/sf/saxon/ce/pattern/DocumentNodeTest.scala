@@ -80,7 +80,7 @@ class DocumentNodeTest(@BeanProperty var elementTest: NodeTest) extends NodeTest
   override def hashCode(): Int = elementTest.hashCode ^ 12345
 
   override def equals(other: Any): Boolean = other match {
-    case other: DocumentNodeTest => other.elementTest == elementTest
-    case _ => false
+    case other: DocumentNodeTest ⇒ other.elementTest == elementTest
+    case _ ⇒ false
   }
 }

@@ -100,7 +100,7 @@ class Block extends Instruction {
    */
   def setChildren(children: Array[Expression]): Unit = {
     _children = children
-    for (c <- 0 until children.length) {
+    for (c ← 0 until children.length) {
       adoptChildExpression(children(c))
     }
   }
@@ -119,7 +119,7 @@ class Block extends Instruction {
     var allSubtreeAxis = true
     import Breaks._
       breakable {
-      for (i <- 0 until _children.length) {
+      for (i ← 0 until _children.length) {
         if (! _children(i).isInstanceOf[AxisExpression]) {
           allAxisExpressions = false
           allChildAxis = false
@@ -160,7 +160,7 @@ class Block extends Instruction {
   def mergeAdjacentTextInstructions(): Expression = {
     val isLiteralText = new Array[Boolean](_children.length)
     var hasAdjacentTextNodes = false
-    for (i <- 0 until _children.length) {
+    for (i ← 0 until _children.length) {
       isLiteralText(i) = _children(i).isInstanceOf[ValueOf] &&
         _children(i).asInstanceOf[ValueOf].getContentExpression.isInstanceOf[StringLiteral]
       if (i > 0 && isLiteralText(i) && isLiteralText(i - 1)) {
@@ -170,7 +170,7 @@ class Block extends Instruction {
     if (hasAdjacentTextNodes) {
       val content = new ArrayList[Expression](_children.length)
       var pendingText: String = null
-      for (i <- 0 until _children.length) {
+      for (i ← 0 until _children.length) {
         if (isLiteralText(i)) {
           pendingText = (if (pendingText == null) "" else pendingText) + 
             _children(i).asInstanceOf[ValueOf].getContentExpression.asInstanceOf[StringLiteral]
@@ -215,7 +215,7 @@ class Block extends Instruction {
       return EmptySequenceTest.getInstance
     }
     var t1 = _children(0).getItemType
-    for (i <- 1 until _children.length) {
+    for (i ← 1 until _children.length) {
       t1 = Type.getCommonSuperType(t1, _children(i).getItemType)
       if (t1.isInstanceOf[AnyItemType]) {
         return t1
@@ -232,7 +232,7 @@ class Block extends Instruction {
       return StaticProperty.EMPTY
     }
     var c1 = _children(0).getCardinality
-    for (i <- 1 until _children.length) {
+    for (i ← 1 until _children.length) {
       c1 = Cardinality.sum(c1, _children(i).getCardinality)
       if (c1 == StaticProperty.ALLOWS_ZERO_OR_MORE) {
         return c1
@@ -247,7 +247,7 @@ class Block extends Instruction {
    * returns true.
    */
   override def createsNewNodes(): Boolean = {
-    for (i <- 0 until _children.length) {
+    for (i ← 0 until _children.length) {
       val props = _children(i).getSpecialProperties
       if ((props & StaticProperty.NON_CREATIVE) == 0) {
         return true
@@ -268,7 +268,7 @@ class Block extends Instruction {
   override def simplify(visitor: ExpressionVisitor): Expression = {
     var allAtomic = true
     var nested = false
-    for (c <- 0 until _children.length) {
+    for (c ← 0 until _children.length) {
       _children(c) = visitor.simplify(_children(c))
       if (!Literal.isAtomic(_children(c))) {
         allAtomic = false
@@ -291,14 +291,14 @@ class Block extends Instruction {
       val list = new ArrayList[Expression](_children.length * 2)
       flatten(list)
       _children = new Array[Expression](list.size)
-      for (i <- 0 until _children.length) {
+      for (i ← 0 until _children.length) {
         _children(i) = list.get(i)
         adoptChildExpression(_children(i))
       }
     }
     if (allAtomic) {
       val values = new Array[Item](_children.length)
-      for (c <- 0 until _children.length) {
+      for (c ← 0 until _children.length) {
         values(c) = _children(c).asInstanceOf[Literal].getValue.asInstanceOf[AtomicValue]
       }
       val result = Literal.makeLiteral(new SequenceExtent(values))
@@ -317,7 +317,7 @@ class Block extends Instruction {
    */
   private def flatten(targetList: List[Expression]): Unit = {
     var currentLiteralList: List[Item] = null
-    for (i <- 0 until _children.length) {
+    for (i ← 0 until _children.length) {
       if (Literal.isEmptySequence(_children(i))) {
       } else if (_children(i).isInstanceOf[Block]) {
         flushCurrentLiteralList(currentLiteralList, targetList)
@@ -355,7 +355,7 @@ class Block extends Instruction {
   }
 
   override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
-    for (c <- 0 until _children.length) {
+    for (c ← 0 until _children.length) {
       _children(c) = visitor.typeCheck(_children(c), contextItemType)
       adoptChildExpression(_children(c))
     }
@@ -363,7 +363,7 @@ class Block extends Instruction {
   }
 
   override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
-    for (c <- 0 until _children.length) {
+    for (c ← 0 until _children.length) {
       _children(c) = visitor.optimize(_children(c), contextItemType)
       adoptChildExpression(_children(c))
     }
@@ -371,7 +371,7 @@ class Block extends Instruction {
     var prevLiteral = false
     import Breaks._
     breakable {
-      for (c <- 0 until _children.length) {
+      for (c ← 0 until _children.length) {
         if (_children(c).isInstanceOf[Block]) {
           canSimplify = true
           break()
@@ -391,7 +391,7 @@ class Block extends Instruction {
       val list = new ArrayList[Expression](_children.length * 2)
       flatten(list)
       _children = new Array[Expression](list.size)
-      for (i <- 0 until _children.length) {
+      for (i ← 0 until _children.length) {
         _children(i) = list.get(i)
         adoptChildExpression(_children(i))
       }
@@ -411,14 +411,14 @@ class Block extends Instruction {
    * @throws XPathException
    */
   override protected def promoteInst(offer: PromotionOffer): Unit = {
-    for (c <- 0 until _children.length) {
+    for (c ← 0 until _children.length) {
       _children(c) = doPromotion(_children(c), offer)
     }
   }
 
   def processLeavingTail(context: XPathContext): TailCall = {
     var tc: TailCall = null
-    for (i <- 0 until _children.length) {
+    for (i ← 0 until _children.length) {
       try {
         if (_children(i).isInstanceOf[TailCallReturner]) {
           tc = _children(i).asInstanceOf[TailCallReturner].processLeavingTail(context)
@@ -427,7 +427,7 @@ class Block extends Instruction {
           tc = null
         }
       } catch {
-        case e: XPathException =>
+        case e: XPathException ⇒
           e.maybeSetLocation(_children(i).getSourceLocator)
           throw e
       }

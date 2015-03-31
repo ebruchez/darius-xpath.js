@@ -82,7 +82,7 @@ class ExpressionParser {
     try {
       t.next()
     } catch {
-      case err: XPathException => grumble(err.getMessage)
+      case err: XPathException ⇒ grumble(err.getMessage)
     }
   }
 
@@ -150,8 +150,8 @@ class ExpressionParser {
    * @param language one of the constants [[XPATH]], [[XSLT_PATTERN]], [[SEQUENCE_TYPE]]
    */
   def setLanguage(language: Int) = language match {
-    case XPATH | XSLT_PATTERN | SEQUENCE_TYPE =>
-    case _ => throw new IllegalArgumentException("Unknown language " + language)
+    case XPATH | XSLT_PATTERN | SEQUENCE_TYPE ⇒
+    case _ ⇒ throw new IllegalArgumentException("Unknown language " + language)
   }
 
   /**
@@ -159,10 +159,10 @@ class ExpressionParser {
    * @return a string representation of the language being parsed, for use in error messages
    */
   protected def getLanguage(): String = language match {
-    case XPATH => "XPath"
-    case XSLT_PATTERN => "XSLT Pattern"
-    case SEQUENCE_TYPE => "SequenceType"
-    case _ => "XPath"
+    case XPATH ⇒ "XPath"
+    case XSLT_PATTERN ⇒ "XSLT Pattern"
+    case SEQUENCE_TYPE ⇒ "SequenceType"
+    case _ ⇒ "XPath"
   }
 
   /**
@@ -200,7 +200,7 @@ class ExpressionParser {
     try {
       t.tokenize(expression, start, -1)
     } catch {
-      case err: XPathException => grumble(err.getMessage)
+      case err: XPathException ⇒ grumble(err.getMessage)
     }
     val exp = parseExpression()
     if (t.currentToken != terminator) {
@@ -230,7 +230,7 @@ class ExpressionParser {
     try {
       t.tokenize(input, 0, -1)
     } catch {
-      case err: XPathException => grumble(err.getMessage)
+      case err: XPathException ⇒ grumble(err.getMessage)
     }
     val req = parseSequenceType()
     if (t.currentToken != Token.EOF) {
@@ -273,9 +273,9 @@ class ExpressionParser {
    * @return the resulting subexpression
    */
   def parseExprSingle(): Expression = t.currentToken match {
-    case Token.FOR | Token.SOME | Token.EVERY => parseMappingExpression()
-    case Token.IF => parseIfExpression()
-    case _ => parseBinaryExpression(parseUnaryExpression(), 4)
+    case Token.FOR | Token.SOME | Token.EVERY ⇒ parseMappingExpression()
+    case Token.IF ⇒ parseIfExpression()
+    case _ ⇒ parseBinaryExpression(parseUnaryExpression(), 4)
   }
 
   /**
@@ -293,7 +293,7 @@ class ExpressionParser {
       val operator = t.currentToken
       val prec = getCurrentOperatorPrecedence
       operator match {
-        case Token.INSTANCE_OF | Token.TREAT_AS =>
+        case Token.INSTANCE_OF | Token.TREAT_AS ⇒
           nextToken()
           val seq = parseSequenceType()
           lhs = makeSequenceTypeExpression(lhs, operator, seq)
@@ -302,7 +302,7 @@ class ExpressionParser {
             grumble("Left operand of '" + Token.tokens(t.currentToken) + "' needs parentheses")
           }
 
-        case Token.CAST_AS | Token.CASTABLE_AS =>
+        case Token.CAST_AS | Token.CASTABLE_AS ⇒
           nextToken()
           expect(Token.NAME)
           val at = getAtomicType(t.currentTokenValue)
@@ -320,7 +320,7 @@ class ExpressionParser {
             grumble("Left operand of '" + Token.tokens(t.currentToken) + "' needs parentheses")
           }
 
-        case _ =>
+        case _ ⇒
           nextToken()
           var rhs = parseUnaryExpression()
           while (getCurrentOperatorPrecedence > prec) {
@@ -335,44 +335,44 @@ class ExpressionParser {
   }
 
   private def getCurrentOperatorPrecedence(): Int = t.currentToken match {
-    case Token.OR => 4
-    case Token.AND => 5
-    case Token.FEQ | Token.FNE | Token.FLE | Token.FLT | Token.FGE | Token.FGT | Token.EQUALS | Token.NE | Token.LE | Token.LT | Token.GE | Token.GT | Token.IS | Token.PRECEDES | Token.FOLLOWS => 6
-    case Token.TO => 7
-    case Token.PLUS | Token.MINUS => 8
-    case Token.MULT | Token.DIV | Token.IDIV | Token.MOD => 9
-    case Token.UNION => 10
-    case Token.INTERSECT | Token.EXCEPT => 11
-    case Token.INSTANCE_OF => 12
-    case Token.TREAT_AS => 13
-    case Token.CASTABLE_AS => 14
-    case Token.CAST_AS => 15
-    case _ => -1
+    case Token.OR ⇒ 4
+    case Token.AND ⇒ 5
+    case Token.FEQ | Token.FNE | Token.FLE | Token.FLT | Token.FGE | Token.FGT | Token.EQUALS | Token.NE | Token.LE | Token.LT | Token.GE | Token.GT | Token.IS | Token.PRECEDES | Token.FOLLOWS ⇒ 6
+    case Token.TO ⇒ 7
+    case Token.PLUS | Token.MINUS ⇒ 8
+    case Token.MULT | Token.DIV | Token.IDIV | Token.MOD ⇒ 9
+    case Token.UNION ⇒ 10
+    case Token.INTERSECT | Token.EXCEPT ⇒ 11
+    case Token.INSTANCE_OF ⇒ 12
+    case Token.TREAT_AS ⇒ 13
+    case Token.CASTABLE_AS ⇒ 14
+    case Token.CAST_AS ⇒ 15
+    case _ ⇒ -1
   }
 
   private def makeBinaryExpression(lhs: Expression, operator: Int, rhs: Expression): Expression = operator match {
-    case Token.OR | Token.AND => new BooleanExpression(lhs, operator, rhs)
-    case Token.FEQ | Token.FNE | Token.FLE | Token.FLT | Token.FGE | Token.FGT => new ValueComparison(lhs,
+    case Token.OR | Token.AND ⇒ new BooleanExpression(lhs, operator, rhs)
+    case Token.FEQ | Token.FNE | Token.FLE | Token.FLT | Token.FGE | Token.FGT ⇒ new ValueComparison(lhs,
       operator, rhs)
-    case Token.EQUALS | Token.NE | Token.LE | Token.LT | Token.GE | Token.GT => new GeneralComparison(lhs,
+    case Token.EQUALS | Token.NE | Token.LE | Token.LT | Token.GE | Token.GT ⇒ new GeneralComparison(lhs,
       operator, rhs)
-    case Token.IS | Token.PRECEDES | Token.FOLLOWS => new IdentityComparison(lhs, operator, rhs)
-    case Token.TO => new RangeExpression(lhs, operator, rhs)
-    case Token.PLUS | Token.MINUS | Token.MULT | Token.DIV | Token.IDIV | Token.MOD => new ArithmeticExpression(lhs,
+    case Token.IS | Token.PRECEDES | Token.FOLLOWS ⇒ new IdentityComparison(lhs, operator, rhs)
+    case Token.TO ⇒ new RangeExpression(lhs, operator, rhs)
+    case Token.PLUS | Token.MINUS | Token.MULT | Token.DIV | Token.IDIV | Token.MOD ⇒ new ArithmeticExpression(lhs,
       operator, rhs)
-    case Token.UNION | Token.INTERSECT | Token.EXCEPT => new VennExpression(lhs, operator, rhs)
-    case _ => throw new IllegalArgumentException()
+    case Token.UNION | Token.INTERSECT | Token.EXCEPT ⇒ new VennExpression(lhs, operator, rhs)
+    case _ ⇒ throw new IllegalArgumentException()
   }
 
   private def makeSequenceTypeExpression(lhs: Expression, operator: Int, `type`: SequenceType): Expression = operator match {
-    case Token.INSTANCE_OF => new InstanceOfExpression(lhs, `type`)
-    case Token.TREAT_AS =>
+    case Token.INSTANCE_OF ⇒ new InstanceOfExpression(lhs, `type`)
+    case Token.TREAT_AS ⇒
       val role = new RoleLocator(RoleLocator.TYPE_OP, "treat as", 0)
       role.setErrorCode("XPDY0050")
       val e = CardinalityChecker.makeCardinalityChecker(lhs, `type`.getCardinality, role)
       new ItemChecker(e, `type`.getPrimaryType, role)
 
-    case _ => throw new IllegalArgumentException()
+    case _ ⇒ throw new IllegalArgumentException()
   }
 
   private def makeStructuredQName(lexicalName: String, defaultURI: String): StructuredQName = {
@@ -393,7 +393,7 @@ class ExpressionParser {
           return new Literal(CastExpression.castStringToQName(source, env))
         }
       } catch {
-        case e: XPathException => if (operator == Token.CASTABLE_AS) {
+        case e: XPathException ⇒ if (operator == Token.CASTABLE_AS) {
           return new Literal(BooleanValue.FALSE)
         } else {
           grumble(e.getMessage, e.getErrorCodeQName)
@@ -476,7 +476,7 @@ class ExpressionParser {
       var i = clauseList.size - 1
       while (i >= 0) {
         val clause = clauseList.get(i)
-        for (n <- 0 until clause.numberOfRangeVariables()) {
+        for (n ← 0 until clause.numberOfRangeVariables()) {
           undeclareRangeVariable()
         }
         i -= 1
@@ -539,10 +539,10 @@ class ExpressionParser {
     }
     var occurrenceFlag: Int = 0
     t.currentToken match {
-      case Token.STAR | Token.MULT => occurrenceFlag = StaticProperty.ALLOWS_ZERO_OR_MORE
-      case Token.PLUS => occurrenceFlag = StaticProperty.ALLOWS_ONE_OR_MORE
-      case Token.QMARK => occurrenceFlag = StaticProperty.ALLOWS_ZERO_OR_ONE
-      case _ => return SequenceType.makeSequenceType(primaryType, StaticProperty.EXACTLY_ONE)
+      case Token.STAR | Token.MULT ⇒ occurrenceFlag = StaticProperty.ALLOWS_ZERO_OR_MORE
+      case Token.PLUS ⇒ occurrenceFlag = StaticProperty.ALLOWS_ONE_OR_MORE
+      case Token.QMARK ⇒ occurrenceFlag = StaticProperty.ALLOWS_ZERO_OR_ONE
+      case _ ⇒ return SequenceType.makeSequenceType(primaryType, StaticProperty.EXACTLY_ONE)
     }
     t.currentToken = Token.RPAR
     nextToken()
@@ -589,15 +589,15 @@ class ExpressionParser {
   private def parseUnaryExpression(): Expression = {
     var exp: Expression = null
     t.currentToken match {
-      case Token.MINUS =>
+      case Token.MINUS ⇒
         nextToken()
         exp = new ArithmeticExpression(new Literal(IntegerValue.ZERO), Token.NEGATE, parseUnaryExpression())
 
-      case Token.PLUS =>
+      case Token.PLUS ⇒
         nextToken()
         exp = new ArithmeticExpression(new Literal(IntegerValue.ZERO), Token.PLUS, parseUnaryExpression())
 
-      case _ => exp = parsePathExpression()
+      case _ ⇒ exp = parsePathExpression()
     }
     setLocation(exp)
     exp
@@ -609,8 +609,8 @@ class ExpressionParser {
    * @return the resulting subexpression
    */
   protected def atStartOfRelativePath(): Boolean = t.currentToken match {
-    case Token.AXIS | Token.AT | Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR | Token.NODEKIND | Token.DOT | Token.DOTDOT | Token.FUNCTION | Token.STRING_LITERAL | Token.NUMBER | Token.LPAR | Token.DOLLAR => true
-    case _ => false
+    case Token.AXIS | Token.AT | Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR | Token.NODEKIND | Token.DOT | Token.DOTDOT | Token.FUNCTION | Token.STRING_LITERAL | Token.NUMBER | Token.LPAR | Token.DOLLAR ⇒ true
+    case _ ⇒ false
   }
 
   /**
@@ -621,8 +621,8 @@ class ExpressionParser {
    * @return the resulting subexpression
    */
   protected def disallowedAtStartOfRelativePath(): Boolean = t.currentToken match {
-    case Token.CAST_AS | Token.CASTABLE_AS | Token.INSTANCE_OF | Token.TREAT_AS => true
-    case _ => false
+    case Token.CAST_AS | Token.CASTABLE_AS | Token.INSTANCE_OF | Token.TREAT_AS ⇒ true
+    case _ ⇒ false
   }
 
   /**
@@ -634,7 +634,7 @@ class ExpressionParser {
    * @return the resulting subexpression
    */
   protected def parsePathExpression(): Expression = t.currentToken match {
-    case Token.SLASH =>
+    case Token.SLASH ⇒
       nextToken()
       val start = new RootExpression()
       setLocation(start)
@@ -649,7 +649,7 @@ class ExpressionParser {
         start
       }
 
-    case Token.SLSL =>
+    case Token.SLSL ⇒
       nextToken()
       val start2 = new RootExpression()
       setLocation(start2)
@@ -659,7 +659,7 @@ class ExpressionParser {
       setLocation(exp)
       exp
 
-    case _ => parseRelativePath()
+    case _ ⇒ parseRelativePath()
   }
 
   /**
@@ -768,8 +768,8 @@ class ExpressionParser {
    * RelativePathPattern in the XSLT Pattern syntax
    */
   protected def parseBasicStep(firstInPattern: Boolean): Expression = t.currentToken match {
-    case Token.DOLLAR => parseVariableReference()
-    case Token.LPAR =>
+    case Token.DOLLAR ⇒ parseVariableReference()
+    case Token.LPAR ⇒
       nextToken()
       if (t.currentToken == Token.RPAR) {
         nextToken()
@@ -779,22 +779,22 @@ class ExpressionParser {
       skipToken(Token.RPAR)
       seq
 
-    case Token.STRING_LITERAL => parseStringLiteral()
-    case Token.NUMBER => parseNumericLiteral()
-    case Token.FUNCTION => parseFunctionCall()
-    case Token.DOT =>
+    case Token.STRING_LITERAL ⇒ parseStringLiteral()
+    case Token.NUMBER ⇒ parseNumericLiteral()
+    case Token.FUNCTION ⇒ parseFunctionCall()
+    case Token.DOT ⇒
       nextToken()
       val cie = new ContextItemExpression()
       setLocation(cie)
       cie
 
-    case Token.DOTDOT =>
+    case Token.DOTDOT ⇒
       nextToken()
       val pne = new ParentNodeExpression()
       setLocation(pne)
       pne
 
-    case Token.NODEKIND | Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR =>
+    case Token.NODEKIND | Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR ⇒
       var defaultAxis = Axis.CHILD
       if (t.currentToken == Token.NODEKIND && 
         (t.currentTokenValue == "attribute" || t.currentTokenValue == "schema-attribute")) {
@@ -810,23 +810,23 @@ class ExpressionParser {
       setLocation(ae)
       ae
 
-    case Token.AT =>
+    case Token.AT ⇒
       nextToken()
       t.currentToken match {
-        case Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR | Token.NODEKIND =>
+        case Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR | Token.NODEKIND ⇒
           val ae2 = new AxisExpression(Axis.ATTRIBUTE, parseNodeTest(Type.ATTRIBUTE))
           setLocation(ae2)
           ae2
 
-        case _ => grumble("@ must be followed by a NodeTest")
+        case _ ⇒ grumble("@ must be followed by a NodeTest")
       }
 
-    case Token.AXIS =>
+    case Token.AXIS ⇒
       var axis: Byte = 0
       try {
         axis = Axis.getAxisNumber(t.currentTokenValue)
       } catch {
-        case err: XPathException => {
+        case err: XPathException ⇒ {
           grumble(err.getMessage)
           axis = Axis.CHILD
         }
@@ -834,15 +834,15 @@ class ExpressionParser {
       val principalNodeType = Axis.principalNodeType(axis)
       nextToken()
       t.currentToken match {
-        case Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR | Token.NODEKIND =>
+        case Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR | Token.NODEKIND ⇒
           val ax = new AxisExpression(axis, parseNodeTest(principalNodeType))
           setLocation(ax)
           ax
 
-        case _ => grumble("Unexpected token " + currentTokenDisplay() + " after axis name")
+        case _ ⇒ grumble("Unexpected token " + currentTokenDisplay() + " after axis name")
       }
 
-    case _ => grumble("Unexpected token " + currentTokenDisplay() + " in path expression")
+    case _ ⇒ grumble("Unexpected token " + currentTokenDisplay() + " in path expression")
   }
 
   protected def parseNumericLiteral(): Expression = {
@@ -875,7 +875,7 @@ class ExpressionParser {
       try {
         ref = env.bindVariable(vtest)
       } catch {
-        case err: XPathException => if ("XPST0008" == err.getErrorCodeLocalPart) {
+        case err: XPathException ⇒ if ("XPST0008" == err.getErrorCodeLocalPart) {
           grumble("Variable $" + `var` + " has not been declared", "XPST0008")
           return null
         } else {
@@ -914,27 +914,27 @@ class ExpressionParser {
     val tok = t.currentToken
     var tokv = t.currentTokenValue
     tok match {
-      case Token.NAME =>
+      case Token.NAME ⇒
         nextToken()
         val nameCode = makeStructuredQName(tokv, if (nodeType == Type.ELEMENT) env.getDefaultElementNamespace else "")
         new NameTest(nodeType, nameCode)
 
-      case Token.PREFIX =>
+      case Token.PREFIX ⇒
         nextToken()
         makeNamespaceTest(nodeType, tokv)
 
-      case Token.SUFFIX =>
+      case Token.SUFFIX ⇒
         nextToken()
         tokv = t.currentTokenValue
         skipToken(Token.NAME)
         makeLocalNameTest(nodeType, tokv)
 
-      case Token.STAR =>
+      case Token.STAR ⇒
         nextToken()
         NodeKindTest.makeNodeKindTest(nodeType)
 
-      case Token.NODEKIND => parseKindTest()
-      case _ =>
+      case Token.NODEKIND ⇒ parseKindTest()
+      case _ ⇒
         grumble("Unrecognized node test")
         null
 
@@ -960,14 +960,14 @@ class ExpressionParser {
     }
     var result: NodeTest = null
     primaryType match {
-      case Type.ITEM =>
+      case Type.ITEM ⇒
         grumble("item() is not allowed in a path expression")
         return null
 
-      case Type.NODE => result = AnyNodeTest.getInstance
-      case Type.TEXT => result = NodeKindTest.TEXT
-      case Type.COMMENT => result = NodeKindTest.COMMENT
-      case Type.DOCUMENT =>
+      case Type.NODE ⇒ result = AnyNodeTest.getInstance
+      case Type.TEXT ⇒ result = NodeKindTest.TEXT
+      case Type.COMMENT ⇒ result = NodeKindTest.COMMENT
+      case Type.DOCUMENT ⇒
         result = NodeKindTest.DOCUMENT
         if (!empty) {
           val innerType = getSystemType(t.currentTokenValue)
@@ -979,7 +979,7 @@ class ExpressionParser {
           return new DocumentNodeTest(inner)
         }
 
-      case Type.PROCESSING_INSTRUCTION =>
+      case Type.PROCESSING_INSTRUCTION ⇒
         result = NodeKindTest.PROCESSING_INSTRUCTION
         if (!empty) {
           var piName: StructuredQName = null
@@ -998,7 +998,7 @@ class ExpressionParser {
           return new NameTest(Type.PROCESSING_INSTRUCTION, piName)
         }
 
-      case Type.ATTRIBUTE | Type.ELEMENT =>
+      case Type.ATTRIBUTE | Type.ELEMENT ⇒
         result = NodeKindTest.makeNodeKindTest(primaryType)
         if (!empty) {
           if (t.currentToken == Token.STAR || t.currentToken == Token.MULT) {
@@ -1036,7 +1036,7 @@ class ExpressionParser {
           return result
         }
 
-      case _ =>
+      case _ ⇒
         grumble("Unknown node kind")
         return null
 
@@ -1106,7 +1106,7 @@ class ExpressionParser {
     try {
       fcall = env.getFunctionLibrary.bind(functionName, arguments, env, defaultContainer)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         if (err.getErrorCodeQName == null) {
           err.setErrorCode("XPST0017")
           err.setIsStaticError(true)
@@ -1135,7 +1135,7 @@ class ExpressionParser {
           env)
         return new Literal(av)
       } catch {
-        case e: XPathException =>
+        case e: XPathException ⇒
           grumble(e.getMessage, e.getErrorCodeQName)
           return null
       }
@@ -1153,7 +1153,7 @@ class ExpressionParser {
 //      }
 //    }
     setLocation(fcall)
-    for (argument <- arguments) {
+    for (argument ← arguments) {
       fcall.adoptChildExpression(argument)
     }
     fcall
@@ -1221,7 +1221,7 @@ class ExpressionParser {
       val qn = makeStructuredQName(prefix + ":a", "")
       uri = qn.getNamespaceURI
     } catch {
-      case e: XPathException =>
+      case e: XPathException ⇒
         grumble(e.getMessage, "XPST0081")
         return null
     }

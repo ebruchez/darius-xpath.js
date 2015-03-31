@@ -71,7 +71,7 @@ class XSLIf extends StyleElement {
           return null
         }
       } catch {
-        case err: XPathException => 
+        case err: XPathException ⇒
       }
     }
     val action = compileSequenceConstructor(exec, decl)

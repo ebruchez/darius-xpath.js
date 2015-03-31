@@ -41,7 +41,7 @@ class Matches extends SystemFunction {
       val re = new ARegularExpression(pat.getStringValue, flags.toString, "XP20", null)
       BooleanValue.get(re.containsMatch(sv0.getStringValue))
     } catch {
-      case err: XPathException =>
+      case err: XPathException ⇒
         val de = new XPathException(err)
         de.maybeSetErrorCode("FORX0002")
         throw de

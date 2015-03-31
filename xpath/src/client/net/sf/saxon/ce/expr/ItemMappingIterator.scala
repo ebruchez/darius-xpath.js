@@ -54,7 +54,7 @@ class ItemMappingIterator(var base: SequenceIterator, var action: ItemMappingFun
           return curr
         }
       } catch {
-        case e: EarlyExitException =>
+        case e: EarlyExitException ⇒
           return null
       }
     }

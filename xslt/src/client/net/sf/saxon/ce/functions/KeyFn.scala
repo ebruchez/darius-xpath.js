@@ -62,7 +62,7 @@ class KeyFn extends SystemFunction {
     try {
       super.typeCheck(visitor, contextItemType)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         if ("XPDY0002" == err.getErrorCodeLocalPart) {
           dynamicError("Cannot call the key() function when there is no context node", "XTDE1270")
         }
@@ -98,7 +98,7 @@ class KeyFn extends SystemFunction {
         keyName = StructuredQName.fromLexicalQName(argument(0).asInstanceOf[StringLiteral].getStringValue, 
           "", nsContext)
       } catch {
-        case e: XPathException => {
+        case e: XPathException ⇒ {
           val err = new XPathException("Error in key name " + 
             argument(0).asInstanceOf[StringLiteral].getStringValue + 
             ": " + 
@@ -153,7 +153,7 @@ class KeyFn extends SystemFunction {
     try {
       arg2 = argument(2).evaluateItem(context)
     } catch {
-      case e: XPathException => {
+      case e: XPathException ⇒ {
         val code = e.getErrorCodeLocalPart
         if ("XPDY0002" == code) {
           dynamicError("Cannot call the key() function when there is no context item", "XTDE1270")
@@ -187,7 +187,7 @@ class KeyFn extends SystemFunction {
       try {
         qName = StructuredQName.fromLexicalQName(givenkeyname, "", nsContext)
       } catch {
-        case err: XPathException => dynamicError("Invalid key name: " + err.getMessage, "XTDE1260")
+        case err: XPathException ⇒ dynamicError("Invalid key name: " + err.getMessage, "XTDE1260")
       }
       selectedKeySet = keyManager.getKeyDefinitionSet(qName)
       if (selectedKeySet == null) {
@@ -218,7 +218,7 @@ class KeyFn extends SystemFunction {
         }
         allResults = keyManager.selectByKey(selectedKeySet, doc, keyValue, context)
       } catch {
-        case e: XPathException => {
+        case e: XPathException ⇒ {
           e.maybeSetLocation(getSourceLocator)
           throw e
         }

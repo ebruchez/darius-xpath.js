@@ -102,7 +102,7 @@ object Conversion {
       loop
 
     } else {
-      for (i <- 0 until numberLength) {
+      for (i ← 0 until numberLength) {
         var j = 0
         while ((j < 8) && (currentChar > 0)) {
           resDigit = digits(i) >> (j << 2) & 0xf
@@ -139,14 +139,14 @@ object Conversion {
     var currentChar: Int = 0
 
     if (sign == 0) scale match {
-      case 0 => return "0"
-      case 1 => return "0.0"
-      case 2 => return "0.00"
-      case 3 => return "0.000"
-      case 4 => return "0.0000"
-      case 5 => return "0.00000"
-      case 6 => return "0.000000"
-      case _ =>
+      case 0 ⇒ return "0"
+      case 1 ⇒ return "0.0"
+      case 2 ⇒ return "0.00"
+      case 3 ⇒ return "0.000"
+      case 4 ⇒ return "0.0000"
+      case 5 ⇒ return "0.00000"
+      case 6 ⇒ return "0.000000"
+      case _ ⇒
         val result1 = new java.lang.StringBuilder()
         if (scale < 0) {
           result1.append("0E+")
@@ -260,7 +260,7 @@ object Conversion {
         return new String(result, currentChar, resLengthInChars - currentChar + 1)
       }
       // special case 2
-      for (j <- 2 until -exponent + 1) {
+      for (j ← 2 until -exponent + 1) {
         currentChar -= 1
         result(currentChar) = '0'
       }
@@ -306,14 +306,14 @@ object Conversion {
       _value = -_value
     }
     if (_value == 0) scale match {
-      case 0 => return "0"
-      case 1 => return "0.0"
-      case 2 => return "0.00"
-      case 3 => return "0.000"
-      case 4 => return "0.0000"
-      case 5 => return "0.00000"
-      case 6 => return "0.000000"
-      case _ =>
+      case 0 ⇒ return "0"
+      case 1 ⇒ return "0.0"
+      case 2 ⇒ return "0.00"
+      case 3 ⇒ return "0.000"
+      case 4 ⇒ return "0.0000"
+      case 5 ⇒ return "0.00000"
+      case 6 ⇒ return "0.000000"
+      case _ ⇒
         val result1 = new java.lang.StringBuilder()
         if (scale < 0) {
           result1.append("0E+")
@@ -370,7 +370,7 @@ object Conversion {
         return new String(result, currentChar, resLengthInChars - currentChar + 1)
       }
       // special case 2
-      for (j <- 2 until (-exponent + 1).toInt) {
+      for (j ← 2 until (-exponent + 1).toInt) {
         currentChar -= 1
         result(currentChar) = '0'
       }

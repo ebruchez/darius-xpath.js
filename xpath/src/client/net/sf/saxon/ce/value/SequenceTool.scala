@@ -66,7 +66,7 @@ object SequenceTool {
     if (item.isInstanceOf[NodeInfo]) {
       val node = item.asInstanceOf[NodeInfo]
       node.getNodeKind match {
-        case Type.DOCUMENT => 
+        case Type.DOCUMENT ⇒
           val iter = node.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
           var elementType: ItemType = null
           import Breaks._
@@ -95,13 +95,13 @@ object SequenceTool {
             new DocumentNodeTest(elementType.asInstanceOf[NodeTest])
           }
 
-        case Type.ELEMENT => new NameTest(Type.ELEMENT, node.getNodeName)
-        case Type.ATTRIBUTE => new NameTest(Type.ATTRIBUTE, node.getNodeName)
-        case Type.TEXT => NodeKindTest.TEXT
-        case Type.COMMENT => NodeKindTest.COMMENT
-        case Type.PROCESSING_INSTRUCTION => NodeKindTest.PROCESSING_INSTRUCTION
-        case Type.NAMESPACE => NodeKindTest.NAMESPACE
-        case _ => throw new IllegalArgumentException("Unknown node kind " + node.getNodeKind)
+        case Type.ELEMENT ⇒ new NameTest(Type.ELEMENT, node.getNodeName)
+        case Type.ATTRIBUTE ⇒ new NameTest(Type.ATTRIBUTE, node.getNodeName)
+        case Type.TEXT ⇒ NodeKindTest.TEXT
+        case Type.COMMENT ⇒ NodeKindTest.COMMENT
+        case Type.PROCESSING_INSTRUCTION ⇒ NodeKindTest.PROCESSING_INSTRUCTION
+        case Type.NAMESPACE ⇒ NodeKindTest.NAMESPACE
+        case _ ⇒ throw new IllegalArgumentException("Unknown node kind " + node.getNodeKind)
       }
 //ORBEON unused
 //    } else if (item.isInstanceOf[JSObjectValue]) {

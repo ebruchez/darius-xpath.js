@@ -32,7 +32,7 @@ object FormatNumber {
       throw err
     }
     var sep = -1
-    for (c <- 0 until picture4.length if picture4(c) == dfs.patternSeparator) {
+    for (c ← 0 until picture4.length if picture4(c) == dfs.patternSeparator) {
       if (c == 0) {
         grumble("first subpicture is zero-length")
       } else if (sep >= 0) {
@@ -112,7 +112,7 @@ object FormatNumber {
       if (p < 0 || i < p) {
         val sb = new FastStringBuffer(s.length)
         sb.append(s.substring(0, i))
-        for (n <- i until s.length) {
+        for (n ← i until s.length) {
           sb.append(if (s.charAt(n) == '.') '.' else '0')
         }
         trial = new BigDecimal(sb.toString)
@@ -128,7 +128,7 @@ object FormatNumber {
             sb.append('-')
           }
           sb.append('1')
-          for (n <- start until s.length) {
+          for (n ← start until s.length) {
             sb.append(if (s.charAt(n) == '.') '.' else '0')
           }
           trial = new BigDecimal(sb.toString)
@@ -142,7 +142,7 @@ object FormatNumber {
             val sb = new FastStringBuffer(s.length)
             sb.append(s.substring(0, i))
             sb.append((s.charAt(i).toInt + 1).toChar)
-            for (n <- i until s.length) {
+            for (n ← i until s.length) {
               sb.append(if (s.charAt(n) == '.') '.' else '0')
             }
             trial = new BigDecimal(sb.toString)
@@ -206,7 +206,7 @@ object FormatNumber {
 
     var foundDecimalSeparator = false
 
-    for (c <- pic if c == digitSign || c == zeroDigit) {
+    for (c ← pic if c == digitSign || c == zeroDigit) {
       foundDigit = true
       //break
     }
@@ -217,7 +217,7 @@ object FormatNumber {
 
     var phase = 0
 
-    for (c <- pic) {
+    for (c ← pic) {
       if (c == percentSign || c == perMilleSign) {
         if (isPercent || isPerMille) {
           grumble("Cannot have more than one percent or per-mille character in a sub-picture")
@@ -225,53 +225,53 @@ object FormatNumber {
         isPercent = c == percentSign
         isPerMille = c == perMilleSign
         phase match {
-          case 0 => prefix += unicodeChar(c)
-          case 1 | 2 | 3 | 4 | 5 =>
+          case 0 ⇒ prefix += unicodeChar(c)
+          case 1 | 2 | 3 | 4 | 5 ⇒
             phase = 5
             suffix += unicodeChar(c)
 
         }
       } else if (c == digitSign) phase match {
-        case 0 | 1 =>
+        case 0 | 1 ⇒
           phase = 1
           maxWholePartSize += 1
 
-        case 2 => grumble("Digit sign must not appear after a zero-digit sign in the integer part of a sub-picture")
-        case 3 | 4 =>
+        case 2 ⇒ grumble("Digit sign must not appear after a zero-digit sign in the integer part of a sub-picture")
+        case 3 | 4 ⇒
           phase = 4
           maxFractionPartSize += 1
 
-        case 5 => grumble("Passive character must not appear between active characters in a sub-picture")
+        case 5 ⇒ grumble("Passive character must not appear between active characters in a sub-picture")
       } else if (c == zeroDigit) phase match {
-        case 0 | 1 | 2 =>
+        case 0 | 1 | 2 ⇒
           phase = 2
           minWholePartSize += 1
           maxWholePartSize += 1
 
-        case 3 =>
+        case 3 ⇒
           minFractionPartSize += 1
           maxFractionPartSize += 1
 
-        case 4 => grumble("Zero digit sign must not appear after a digit sign in the fractional part of a sub-picture")
-        case 5 => grumble("Passive character must not appear between active characters in a sub-picture")
+        case 4 ⇒ grumble("Zero digit sign must not appear after a digit sign in the fractional part of a sub-picture")
+        case 5 ⇒ grumble("Passive character must not appear between active characters in a sub-picture")
       } else if (c == decimalSeparator) phase match {
-        case 0 | 1 | 2 =>
+        case 0 | 1 | 2 ⇒
           phase = 3
           foundDecimalSeparator = true
 
-        case 3 | 4 | 5 => if (foundDecimalSeparator) {
+        case 3 | 4 | 5 ⇒ if (foundDecimalSeparator) {
           grumble("There must only be one decimal separator in a sub-picture")
         } else {
           grumble("Decimal separator cannot come after a character in the suffix")
         }
       } else if (c == groupingSeparator) phase match {
-        case 0 | 1 | 2 =>
+        case 0 | 1 | 2 ⇒
           if (wholePartPositions == null) {
             wholePartPositions = new ArrayList[Int](3)
           }
           wholePartPositions.add(maxWholePartSize)
 
-        case 3 | 4 =>
+        case 3 | 4 ⇒
           if (maxFractionPartSize == 0) {
             grumble("Grouping separator cannot be adjacent to decimal separator")
           }
@@ -280,10 +280,10 @@ object FormatNumber {
           }
           fractionalPartPositions.add(maxFractionPartSize)
 
-        case 5 => grumble("Grouping separator found in suffix of sub-picture")
+        case 5 ⇒ grumble("Grouping separator found in suffix of sub-picture")
       } else phase match {
-        case 0 => prefix += unicodeChar(c)
-        case 1 | 2 | 3 | 4 | 5 =>
+        case 0 ⇒ prefix += unicodeChar(c)
+        case 1 | 2 | 3 | 4 | 5 ⇒
           phase = 5
           suffix += unicodeChar(c)
 
@@ -297,14 +297,14 @@ object FormatNumber {
     if (wholePartPositions != null) {
       val n = wholePartPositions.size
       wholePartGroupingPositions = new Array[Int](n)
-      for (i <- 0 until n) {
+      for (i ← 0 until n) {
         wholePartGroupingPositions(i) = maxWholePartSize -
           wholePartPositions.get(n - i - 1).asInstanceOf[java.lang.Integer]
       }
       if (n > 1) {
         var regular = true
         val first = wholePartGroupingPositions(0)
-        for (i <- 1 until n if wholePartGroupingPositions(i) != i * first) {
+        for (i ← 1 until n if wholePartGroupingPositions(i) != i * first) {
           regular = false
           //break
         }
@@ -321,7 +321,7 @@ object FormatNumber {
     if (fractionalPartPositions != null) {
       val n = fractionalPartPositions.size
       fractionalPartGroupingPositions = new Array[Int](n)
-      for (i <- 0 until n) {
+      for (i ← 0 until n) {
         fractionalPartGroupingPositions(i) = fractionalPartPositions.get(i).intValue()
       }
     }
@@ -352,7 +352,7 @@ object FormatNumber {
         try {
           value = ArithmeticExpression.compute(value, Token.MULT, new IntegerValue(multiplier), null).asInstanceOf[NumericValue]
         } catch {
-          case e: XPathException => value = new DoubleValue(value.getDoubleValue * multiplier)
+          case e: XPathException ⇒ value = new DoubleValue(value.getDoubleValue * multiplier)
         }
       }
       val sb = new FastStringBuffer(FastStringBuffer.TINY)
@@ -377,7 +377,7 @@ object FormatNumber {
       }
       if (dfs.zeroDigit != '0') {
         val newZero = dfs.zeroDigit
-        for (i <- 0 until ibused) {
+        for (i ← 0 until ibused) {
           val c = ib(i)
           if (c >= '0' && c <= '9') {
             ib(i) = c - '0' + newZero
@@ -394,7 +394,7 @@ object FormatNumber {
             p -= g
           }
         } else {
-          for (wholePartGroupingPosition <- wholePartGroupingPositions) {
+          for (wholePartGroupingPosition ← wholePartGroupingPositions) {
             val p = point - wholePartGroupingPosition
             if (p > 0) {
               ib = insert(ib, ibused, dfs.groupingSeparator, p)
@@ -404,7 +404,7 @@ object FormatNumber {
         }
       }
       if (fractionalPartGroupingPositions != null) {
-        for (i <- 0 until fractionalPartGroupingPositions.length) {
+        for (i ← 0 until fractionalPartGroupingPositions.length) {
           val p = point + 1 + fractionalPartGroupingPositions(i) + i
           if (p < ibused - 1) {
             ib = insert(ib, ibused, dfs.groupingSeparator, p)
@@ -451,7 +451,7 @@ object FormatNumber {
         intDigits = fsb.length
         if (minFractionPartSize > 0) {
           fsb.append('.')
-          for (i <- 0 until minFractionPartSize) {
+          for (i ← 0 until minFractionPartSize) {
             fsb.append('0')
           }
         }
@@ -475,7 +475,7 @@ object FormatNumber {
       fsb.prependRepeated('0', leadingZeroes)
       if (minFractionPartSize != 0) {
         fsb.append('.')
-        for (i <- 0 until minFractionPartSize) {
+        for (i ← 0 until minFractionPartSize) {
           fsb.append('0')
         }
       }
@@ -564,7 +564,7 @@ class FormatNumber extends SystemFunction {
       try {
         qName = StructuredQName.fromLexicalQName(lexicalName, "", staticContext.getNamespaceResolver)
       } catch {
-        case e: XPathException => dynamicError("Invalid decimal format name. " + e.getMessage, "XTDE1280")
+        case e: XPathException ⇒ dynamicError("Invalid decimal format name. " + e.getMessage, "XTDE1280")
       }
       dfs = dfm.getNamedDecimalFormat(qName)
       if (dfs == null) {

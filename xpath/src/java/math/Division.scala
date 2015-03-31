@@ -115,7 +115,7 @@ object Division {
           // Step D6: compensating addition
           guessDigit -= 1
           var carry: Long = 0
-          for (k <- 0 until normBLength) {
+          for (k ← 0 until normBLength) {
             carry += (normA(j - normBLength + k) & 0xffffffffL) + (normB(k) & 0xffffffffL)
             normA(j - normBLength + k) = carry.toInt
             carry >>>= 32
@@ -644,7 +644,7 @@ object Division {
     y.numberLength = 1
     y.digits(0) = 1
     y.sign = 1
-    for (i <- 1 until n) {
+    for (i ← 1 until n) {
       if (BitLevel.testBit(x.multiply(y), i)) {
         y.digits(i >> 5) |= (1 << (i & 31))
       }
@@ -694,7 +694,7 @@ object Division {
                           c: Int): Int = {
     var carry0:Long = 0
     var carry1:Long = 0
-    for (i <- 0 until bLen) {
+    for (i ← 0 until bLen) {
       carry0 = Multiplication.unsignedMultAddAdd(b(i), c, carry0.toInt, 0)
       carry1 = (a(start + i) & 0xffffffffL) - (carry0 & 0xffffffffL) + carry1
       a(start + i) = carry1.toInt
@@ -938,10 +938,10 @@ object Division {
     val modulusDigits = modulus.digits
     val modulusLen = modulus.numberLength
     var outerCarry:Long = 0
-    for (i <- 0 until modulusLen) {
+    for (i ← 0 until modulusLen) {
       var innnerCarry:Long = 0
       val m = Multiplication.unsignedMultAddAdd(res(i), n2, 0, 0).toInt
-      for (j <- 0 until modulusLen) {
+      for (j ← 0 until modulusLen) {
         innnerCarry = Multiplication.unsignedMultAddAdd(m, modulusDigits(j), res(i + j), innnerCarry.toInt)
         res(i + j) = innnerCarry.toInt
         innnerCarry >>>= 32
@@ -951,7 +951,7 @@ object Division {
       outerCarry >>>= 32
     }
     res(modulusLen << 1) = outerCarry.toInt
-    for (j <- 0 until modulusLen + 1) {
+    for (j ← 0 until modulusLen + 1) {
       res(j) = res(j + modulusLen)
     }
   }

@@ -156,8 +156,8 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
     }
     val p = Axis.principalNodeType(axis)
     p match {
-      case Type.ATTRIBUTE | Type.NAMESPACE => NodeKindTest.makeNodeKindTest(p)
-      case _ => if (test == null) {
+      case Type.ATTRIBUTE | Type.NAMESPACE ⇒ NodeKindTest.makeNodeKindTest(p)
+      case _ ⇒ if (test == null) {
         AnyNodeTest.getInstance
       } else {
         test

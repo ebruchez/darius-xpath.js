@@ -50,11 +50,11 @@ class Available(_operation: Int) extends SystemFunction {
     val lexicalQName = argument(0).evaluateAsString(context).toString
     operation match {
 //ORBEON XSLT
-//      case ELEMENT_AVAILABLE => {
+//      case ELEMENT_AVAILABLE ⇒ {
 //        val qName = StructuredQName.fromLexicalQName(lexicalQName, env.getDefaultElementNamespace, env.getNamespaceResolver)
 //        new StyleNodeFactory(context.getConfiguration).isElementAvailable(qName.getNamespaceURI, qName.getLocalName)
 //      }
-      case FUNCTION_AVAILABLE => {
+      case FUNCTION_AVAILABLE ⇒ {
         var arity = -1
         if (argument.length == 2) {
           arity = argument(1).evaluateItem(context).asInstanceOf[NumericValue]
@@ -65,25 +65,25 @@ class Available(_operation: Int) extends SystemFunction {
             env.getNamespaceResolver)
           env.getFunctionLibrary.hasFunctionSignature(qName, arity.toInt)
         } catch {
-          case e2: XPathException => {
+          case e2: XPathException ⇒ {
             e2.setErrorCode("XTDE1400")
             throw e2
           }
         }
       }
-      case TYPE_AVAILABLE => {
+      case TYPE_AVAILABLE ⇒ {
         try {
           val qName = StructuredQName.fromLexicalQName(lexicalQName, env.getDefaultElementNamespace, 
             env.getNamespaceResolver)
           qName.getNamespaceURI == NamespaceConstant.SCHEMA && AtomicType.isRecognizedName(qName.getLocalName)
         } catch {
-          case e: XPathException => {
+          case e: XPathException ⇒ {
             e.setErrorCode("XTDE1425")
             throw e
           }
         }
       }
-      case _ => false
+      case _ ⇒ false
     }
   }
 

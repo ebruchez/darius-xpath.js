@@ -80,7 +80,7 @@ class Remove extends SystemFunction {
           return t
         }
       } catch {
-        case err: XPathException => return this
+        case err: XPathException ⇒ return this
       }
     }
     this

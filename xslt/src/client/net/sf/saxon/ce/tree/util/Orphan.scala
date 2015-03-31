@@ -75,8 +75,8 @@ class Orphan extends AbstractNode with NodeInfo {
    * @return an iterator over the items making up the typed value
    */
   def getTypedValue(): AtomicValue = getNodeKind match {
-    case Type.COMMENT | Type.PROCESSING_INSTRUCTION => new StringValue(stringValue)
-    case _ => new UntypedAtomicValue(stringValue)
+    case Type.COMMENT | Type.PROCESSING_INSTRUCTION ⇒ new StringValue(stringValue)
+    case _ ⇒ new UntypedAtomicValue(stringValue)
   }
 
   /**
@@ -99,8 +99,8 @@ class Orphan extends AbstractNode with NodeInfo {
    * The equals() method has been defined because it is useful in contexts such as a Java Set or HashMap.
    */
   override def equals(other: Any): Boolean = other match {
-    case other: NodeInfo => isSameNodeInfo(other)
-    case _ => false
+    case other: NodeInfo ⇒ isSameNodeInfo(other)
+    case _ ⇒ false
   }
 
   /**
@@ -200,10 +200,10 @@ class Orphan extends AbstractNode with NodeInfo {
    * @return a SequenceIterator that scans the nodes reached by the axis in turn.
    */
   def iterateAxis(axisNumber: Byte, nodeTest: NodeTest): UnfailingIterator = axisNumber match {
-    case Axis.ANCESTOR_OR_SELF | Axis.DESCENDANT_OR_SELF | Axis.SELF => Navigator.filteredSingleton(this, 
+    case Axis.ANCESTOR_OR_SELF | Axis.DESCENDANT_OR_SELF | Axis.SELF ⇒ Navigator.filteredSingleton(this,
       nodeTest)
-    case Axis.ANCESTOR | Axis.ATTRIBUTE | Axis.CHILD | Axis.DESCENDANT | Axis.FOLLOWING | Axis.FOLLOWING_SIBLING | Axis.NAMESPACE | Axis.PARENT | Axis.PRECEDING | Axis.PRECEDING_SIBLING => EmptyIterator.getInstance
-    case _ => throw new IllegalArgumentException("Unknown axis number " + axisNumber)
+    case Axis.ANCESTOR | Axis.ATTRIBUTE | Axis.CHILD | Axis.DESCENDANT | Axis.FOLLOWING | Axis.FOLLOWING_SIBLING | Axis.NAMESPACE | Axis.PARENT | Axis.PRECEDING | Axis.PRECEDING_SIBLING ⇒ EmptyIterator.getInstance
+    case _ ⇒ throw new IllegalArgumentException("Unknown axis number " + axisNumber)
   }
 
   /**

@@ -161,7 +161,7 @@ class ElementImpl extends ParentNodeImpl {
     var childCopyOptions = copyOptions & ~CopyOptions.ALL_NAMESPACES
     if ((copyOptions & CopyOptions.LOCAL_NAMESPACES) != 0) {
       val localNamespaces = getDeclaredNamespaces(null)
-      for (i <- 0 until localNamespaces.length) {
+      for (i ← 0 until localNamespaces.length) {
         val ns = localNamespaces(i)
         if (ns == null) {
           //break
@@ -173,7 +173,7 @@ class ElementImpl extends ParentNodeImpl {
       childCopyOptions |= CopyOptions.LOCAL_NAMESPACES
     }
     if (attributeList != null) {
-      for (i <- 0 until attributeList.getLength) {
+      for (i ← 0 until attributeList.getLength) {
         val nc = attributeList.getStructuredQName(i)
         if (nc != null) {
           out.attribute(nc, attributeList.getValue(i))

@@ -123,8 +123,8 @@ class SortKeyDefinition {
    * @return true if all information needed to create a Comparator is known statically
    */
   def isFixed(): Boolean = {
-    (0 until N).find(x => sortProperties(x) != null && !sortProperties(x).isInstanceOf[Literal])
-      .map(_ => false)
+    (0 until N).find(x ⇒ sortProperties(x) != null && !sortProperties(x).isInstanceOf[Literal])
+      .map(_ ⇒ false)
       .getOrElse(true)
   }
 
@@ -136,7 +136,7 @@ class SortKeyDefinition {
    */
   def simplify(visitor: ExpressionVisitor): SortKeyDefinition = {
     sortKey = visitor.simplify(sortKey)
-    for (i <- 0 until N) {
+    for (i ← 0 until N) {
       sortProperties(i) = visitor.simplify(sortProperties(i))
     }
     this
@@ -150,7 +150,7 @@ class SortKeyDefinition {
    * @throws XPathException if any failure occurs
    */
   def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Unit = {
-    for (i <- 0 until N) {
+    for (i ← 0 until N) {
       sortProperties(i) = visitor.typeCheck(sortProperties(i), contextItemType)
     }
     val language = sortProperties(LANG)

@@ -114,7 +114,7 @@ class TailCallLoop(var containingFunction: UserFunction) extends UnaryExpression
     try {
       ExpressionTool.evaluate(fn.getBody, fn.getEvaluationMode, cm)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.maybeSetLocation(getSourceLocator)
         throw err
       }

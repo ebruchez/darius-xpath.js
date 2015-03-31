@@ -37,10 +37,10 @@ class Rounding(_operation: Int) extends SystemFunction {
     }
     val `val` = val0.asInstanceOf[NumericValue]
     operation match {
-      case FLOOR => `val`.floor()
-      case CEILING => `val`.ceiling()
-      case ROUND => `val`.round()
-      case HALF_EVEN => 
+      case FLOOR ⇒ `val`.floor()
+      case CEILING ⇒ `val`.ceiling()
+      case ROUND ⇒ `val`.round()
+      case HALF_EVEN ⇒
         var scale = 0
         if (argument.length == 2) {
           val scaleVal0 = argument(1).evaluateItem(context).asInstanceOf[AtomicValue]
@@ -49,8 +49,8 @@ class Rounding(_operation: Int) extends SystemFunction {
         }
         `val`.roundHalfToEven(scale)
 
-      case ABS => `val`.abs()
-      case _ => throw new UnsupportedOperationException("Unknown rounding function")
+      case ABS ⇒ `val`.abs()
+      case _ ⇒ throw new UnsupportedOperationException("Unknown rounding function")
     }
   }
 

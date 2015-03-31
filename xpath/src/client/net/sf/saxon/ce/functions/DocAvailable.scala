@@ -83,7 +83,7 @@ class DocAvailable extends SystemFunction {
 //        false
 //      }
 //    } catch {
-//      case e: XPathException => false
+//      case e: XPathException ⇒ false
 //    }
   }
 }

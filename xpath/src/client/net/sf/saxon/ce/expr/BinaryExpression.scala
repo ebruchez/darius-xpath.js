@@ -106,7 +106,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
         return Literal.makeLiteral(v)
       }
     } catch {
-      case err: XPathException =>
+      case err: XPathException ⇒
     }
     this
   }
@@ -254,7 +254,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
     if (a.size != b.size) {
       return false
     }
-    for (i <- 0 until a.size if a.get(i) != b.get(i)) {
+    for (i ← 0 until a.size if a.get(i) != b.get(i)) {
       return false
     }
     true

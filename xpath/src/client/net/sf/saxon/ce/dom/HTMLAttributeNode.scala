@@ -66,20 +66,20 @@ class HTMLAttributeNode(
   def getParent(): NodeInfo = element
 
   private def iterateAxis0(axisNumber: Byte): UnfailingIterator = axisNumber match {
-    case Axis.ANCESTOR => element.iterateAxis(Axis.ANCESTOR_OR_SELF, AnyNodeTest.getInstance)
-    case Axis.ANCESTOR_OR_SELF => new PrependIterator(this, element.iterateAxis(Axis.ANCESTOR_OR_SELF, AnyNodeTest.getInstance))
-    case Axis.ATTRIBUTE => EmptyIterator.getInstance
-    case Axis.CHILD => EmptyIterator.getInstance
-    case Axis.DESCENDANT => EmptyIterator.getInstance
-    case Axis.DESCENDANT_OR_SELF => SingletonIterator.makeIterator(this)
-    case Axis.FOLLOWING => new Navigator.FollowingEnumeration(this)
-    case Axis.FOLLOWING_SIBLING => EmptyIterator.getInstance
-    case Axis.NAMESPACE => EmptyIterator.getInstance
-    case Axis.PARENT => SingletonIterator.makeIterator(element)
-    case Axis.PRECEDING => new Navigator.PrecedingEnumeration(this, false)
-    case Axis.PRECEDING_SIBLING => EmptyIterator.getInstance
-    case Axis.SELF => SingletonIterator.makeIterator(this)
-    case _ => throw new IllegalArgumentException("Unknown axis number " + axisNumber)
+    case Axis.ANCESTOR ⇒ element.iterateAxis(Axis.ANCESTOR_OR_SELF, AnyNodeTest.getInstance)
+    case Axis.ANCESTOR_OR_SELF ⇒ new PrependIterator(this, element.iterateAxis(Axis.ANCESTOR_OR_SELF, AnyNodeTest.getInstance))
+    case Axis.ATTRIBUTE ⇒ EmptyIterator.getInstance
+    case Axis.CHILD ⇒ EmptyIterator.getInstance
+    case Axis.DESCENDANT ⇒ EmptyIterator.getInstance
+    case Axis.DESCENDANT_OR_SELF ⇒ SingletonIterator.makeIterator(this)
+    case Axis.FOLLOWING ⇒ new Navigator.FollowingEnumeration(this)
+    case Axis.FOLLOWING_SIBLING ⇒ EmptyIterator.getInstance
+    case Axis.NAMESPACE ⇒ EmptyIterator.getInstance
+    case Axis.PARENT ⇒ SingletonIterator.makeIterator(element)
+    case Axis.PRECEDING ⇒ new Navigator.PrecedingEnumeration(this, false)
+    case Axis.PRECEDING_SIBLING ⇒ EmptyIterator.getInstance
+    case Axis.SELF ⇒ SingletonIterator.makeIterator(this)
+    case _ ⇒ throw new IllegalArgumentException("Unknown axis number " + axisNumber)
   }
 
   def iterateAxis(axisNumber: Byte, nodeTest: NodeTest): UnfailingIterator = {

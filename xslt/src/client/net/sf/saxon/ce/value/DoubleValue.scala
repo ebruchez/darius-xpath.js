@@ -99,7 +99,7 @@ class DoubleValue(var value: Double) extends NumericValue {
       try {
         new DecimalValue(value)
       } catch {
-        case e: XPathException => new ValidationFailure(e.getMessage)
+        case e: XPathException ⇒ new ValidationFailure(e.getMessage)
       }
     } else if (requiredType == AtomicType.FLOAT) {
       new FloatValue(value.toFloat)

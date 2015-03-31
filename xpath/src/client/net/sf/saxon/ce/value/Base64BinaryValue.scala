@@ -13,7 +13,7 @@ object Base64BinaryValue {
 
   protected[value] def byteArrayHashCode(value: Array[Byte]): Int = {
     var h = 0
-    for (i <- 0 until Math.min(value.length, 64)) {
+    for (i ← 0 until Math.min(value.length, 64)) {
       h = (h << 1) ^ value(i)
     }
     ((h >> 32) ^ h).toInt
@@ -82,7 +82,7 @@ object Base64BinaryValue {
      */
     def translate(in: Array[Byte]): Unit = {
       val in_length = in.length
-      for (i <- 0 until in_length) {
+      for (i ← 0 until in_length) {
         buf = if (buf_bytes == 0) (buf & 0x00FFFF) | (in(i) << 16) else if (buf_bytes == 1) (buf & 0xFF00FF) | ((in(i) << 8) & 0x00FFFF) else (buf & 0xFFFF00) | (in(i) & 0x0000FF)
         if (buf_bytes == 3) {
           encode_token()
@@ -95,14 +95,14 @@ object Base64BinaryValue {
           if (line_length > 0) flush_line()
         }
       }
-      for (i <- 0 until line.length) line(i) = 0
+      for (i ← 0 until line.length) line(i) = 0
     }
 
     def getCharArray(): Array[Char] = {
       var ch: Array[Char] = null
       if (buf_bytes != 0) encode_partial_token()
       flush_line()
-      for (i <- 0 until line.length) line(i) = 0
+      for (i ← 0 until line.length) line(i) = 0
       ch = new Array[Char](out.length)
       if (out.length > 0) out.getChars(0, out.length, ch, 0)
       ch
@@ -218,7 +218,7 @@ object Base64BinaryValue {
       val length = str.length
       var lengthAtEOF: Int = 0
       var found_eq = 0
-      for (i <- 0 until length) {
+      for (i ← 0 until length) {
         val c = str.charAt(i)
         if (c > 127) {
           throw new IllegalArgumentException("non-ASCII character in Base64 value (at offset " + i + 
@@ -296,7 +296,7 @@ class Base64BinaryValue(val binaryValue: Array[Byte]) extends AtomicValue {
         try {
           decoder.translate(s)
         } catch {
-          case e: IllegalArgumentException =>
+          case e: IllegalArgumentException ⇒
             val err = new XPathException(e.getMessage)
             err.setErrorCode("FORG0001")
             throw err
@@ -360,8 +360,8 @@ class Base64BinaryValue(val binaryValue: Array[Byte]) extends AtomicValue {
    * Test if the two base64Binary values are equal.
    */
   override def equals(other: Any): Boolean = other match {
-    case other: Base64BinaryValue => binaryValue.sameElements(other.binaryValue)
-    case _ => false
+    case other: Base64BinaryValue ⇒ binaryValue.sameElements(other.binaryValue)
+    case _ ⇒ false
   }
 
   override def hashCode(): Int = byteArrayHashCode(binaryValue)

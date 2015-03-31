@@ -101,12 +101,12 @@ object Cardinality {
    *
    */
   def toString(cardinality: Int): String = cardinality match {
-    case StaticProperty.ALLOWS_ZERO_OR_ONE => "zero or one"
-    case StaticProperty.EXACTLY_ONE => "exactly one"
-    case StaticProperty.ALLOWS_ZERO_OR_MORE => "zero or more"
-    case StaticProperty.ALLOWS_ONE_OR_MORE => "one or more"
-    case StaticProperty.EMPTY => "exactly zero"
-    case StaticProperty.ALLOWS_MANY => "zero or more"
-    case _ => "code " + cardinality
+    case StaticProperty.ALLOWS_ZERO_OR_ONE ⇒ "zero or one"
+    case StaticProperty.EXACTLY_ONE ⇒ "exactly one"
+    case StaticProperty.ALLOWS_ZERO_OR_MORE ⇒ "zero or more"
+    case StaticProperty.ALLOWS_ONE_OR_MORE ⇒ "one or more"
+    case StaticProperty.EMPTY ⇒ "exactly zero"
+    case StaticProperty.ALLOWS_MANY ⇒ "zero or more"
+    case _ ⇒ "code " + cardinality
   }
 }

@@ -41,7 +41,7 @@ class ParameterSet(capacity: Int) {
    */
   def this(existing: ParameterSet, extra: Int) {
     this(existing.used + extra)
-    for (i <- 0 until existing.used) {
+    for (i ← 0 until existing.used) {
       put(existing.keys(i), existing.values(i), existing.typeChecked(i))
     }
   }
@@ -54,7 +54,7 @@ class ParameterSet(capacity: Int) {
    * @param checked True if the caller has done static type checking against the required type
    */
   def put(id: Int, value: Sequence, checked: Boolean): Unit = {
-    for (i <- 0 until used if keys(i) == id) {
+    for (i ← 0 until used if keys(i) == id) {
       values(i) = value
       typeChecked(i) = checked
       return

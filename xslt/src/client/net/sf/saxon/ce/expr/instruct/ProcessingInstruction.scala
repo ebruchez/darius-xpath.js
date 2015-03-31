@@ -118,7 +118,7 @@ class ProcessingInstruction(var name: Expression) extends SimpleNodeConstructor 
     try {
       expandedName = Whitespace.trim(name.evaluateAsString(context))
     } catch {
-      case err: ClassCastException => dynamicError("Processing instruction name is not a string", "XQDY0041")
+      case err: ClassCastException ⇒ dynamicError("Processing instruction name is not a string", "XQDY0041")
     }
     checkName(expandedName, context)
     expandedName

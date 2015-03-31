@@ -120,7 +120,7 @@ class PromotionOffer {
    * unchanged
    */
   def accept(parent: Expression, child: Expression): Expression = action match {
-    case RANGE_INDEPENDENT =>
+    case RANGE_INDEPENDENT ⇒
       val properties = child.getSpecialProperties
       if (((properties & StaticProperty.NON_CREATIVE) != 0) && 
         !ExpressionTool.dependsOnVariable(child, bindingList) && 
@@ -129,7 +129,7 @@ class PromotionOffer {
         promote(parent, child)
       } else
         null
-    case FOCUS_INDEPENDENT =>
+    case FOCUS_INDEPENDENT ⇒
       val dependencies = child.getDependencies
       val properties = child.getSpecialProperties
       if (!promoteXSLTFunctions && 
@@ -150,7 +150,7 @@ class PromotionOffer {
         promote(parent, child)
       } else
         null
-    case REPLACE_CURRENT =>
+    case REPLACE_CURRENT ⇒
       null
 //ORBEON XSLT
 //      if (child.isInstanceOf[Current]) {
@@ -160,14 +160,14 @@ class PromotionOffer {
 //      } else if (!ExpressionTool.callsFunction(child, Current.FN_CURRENT)) {
 //        return child
 //      }
-    case UNORDERED =>
+    case UNORDERED ⇒
       if (child.isInstanceOf[Reverse]) {
         child.asInstanceOf[Reverse].getArguments()(0)
       } else if (child.isInstanceOf[DocumentSorter] && !retainAllNodes) {
         child.asInstanceOf[DocumentSorter].getBaseExpression
       } else
         null
-    case _ =>
+    case _ ⇒
         throw new UnsupportedOperationException("Unknown promotion action " + action)
   }
 

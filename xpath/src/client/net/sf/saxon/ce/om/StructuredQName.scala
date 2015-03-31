@@ -63,7 +63,7 @@ object StructuredQName {
       }
       new StructuredQName(parts(0), uri, parts(1))
     } catch {
-      case e: QNameException => {
+      case e: QNameException ⇒ {
         val de = new XPathException(e.getMessage)
         de.setErrorCode("FOCA0002")
         throw de
@@ -169,7 +169,7 @@ class StructuredQName(prefix: String, var uri: String, localName: String) extend
    * excluding any prefix
    */
   override def equals(other: Any): Boolean = other match {
-    case other: StructuredQName => {
+    case other: StructuredQName ⇒ {
       val sq2 = other
       if (localNameStart != sq2.localNameStart || prefixStart != sq2.prefixStart) {
         return false
@@ -184,7 +184,7 @@ class StructuredQName(prefix: String, var uri: String, localName: String) extend
       }
       true
     }
-    case _ => false
+    case _ ⇒ false
   }
 
   /**
@@ -207,8 +207,8 @@ class StructuredQName(prefix: String, var uri: String, localName: String) extend
    * Compare QNames alphabetically. Used to establish document order for attribute nodes
    */
   def compareTo(other: StructuredQName): Int = {
-    (0 until prefixStart).find(i => content(i) != other.content(i))
-      .map(i => if (content(i) < other.content(i)) -1 else +1)
+    (0 until prefixStart).find(i ⇒ content(i) != other.content(i))
+      .map(i ⇒ if (content(i) < other.content(i)) -1 else +1)
       .getOrElse(0)
   }
 }

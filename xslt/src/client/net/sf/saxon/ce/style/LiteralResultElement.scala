@@ -68,7 +68,7 @@ class LiteralResultElement extends StyleElement {
       attributeNames = Array.ofDim[StructuredQName](num)
       attributeValues = Array.ofDim[Expression](num)
       numberOfAttributes = 0
-      for (i <- 0 until num) {
+      for (i ← 0 until num) {
         val qn = atts.getStructuredQName(i)
         val uri = qn.getNamespaceURI
         val local = qn.getLocalName
@@ -138,7 +138,7 @@ class LiteralResultElement extends StyleElement {
       }
       val sheet = getPrincipalStylesheetModule
       if (sheet.hasNamespaceAliases()) {
-        for (i <- 0 until namespaceCodes.size) {
+        for (i ← 0 until namespaceCodes.size) {
           val suri = namespaceCodes.get(i).getURI
           val ncode = sheet.getNamespaceAlias(suri)
           if (ncode != null && ncode.getURI != suri) {
@@ -155,7 +155,7 @@ class LiteralResultElement extends StyleElement {
         attributeSets = getAttributeSets(useAttSets, null)
       }
       if (numberOfAttributes > 0) {
-        for (i <- 0 until numberOfAttributes) {
+        for (i ← 0 until numberOfAttributes) {
           val anameCode = attributeNames(i)
           var alias = anameCode
           val attURI = anameCode.getNamespaceURI
@@ -207,7 +207,7 @@ class LiteralResultElement extends StyleElement {
         try {
           att.setSelect(attributeValues(i), exec.getConfiguration)
         } catch {
-          case err: XPathException => compileError(err)
+          case err: XPathException ⇒ compileError(err)
         }
         att.setSourceLocator(this)
         var exp = att
@@ -295,7 +295,7 @@ class LiteralResultElement extends StyleElement {
       builder.close()
       builder.getCurrentRoot.asInstanceOf[DocumentImpl]
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.setLocator(this)
         throw err
       }

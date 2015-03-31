@@ -81,7 +81,7 @@ class XSLForEach extends StyleElement {
     try {
       new ForEach(sortedSequence, makeExpressionVisitor().simplify(block), containsTailCall)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         compileError(err)
         null
       }

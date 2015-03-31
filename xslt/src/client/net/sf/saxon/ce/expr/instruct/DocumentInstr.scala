@@ -133,7 +133,7 @@ class DocumentInstr(@BooleanBeanProperty var textOnly: Boolean, var constantText
         out.close()
         root = builder.getCurrentRoot.asInstanceOf[DocumentInfo]
       } catch {
-        case e: XPathException => {
+        case e: XPathException ⇒ {
           e.maybeSetLocation(getSourceLocator)
           throw e
         }

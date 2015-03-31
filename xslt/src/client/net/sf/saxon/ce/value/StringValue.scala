@@ -60,7 +60,7 @@ object StringValue {
           val dbl = StringToDouble.stringToNumber(value)
           new DoubleValue(dbl)
         } catch {
-          case err: NumberFormatException => new ValidationFailure("Cannot convert string to double: " + value.toString, 
+          case err: NumberFormatException ⇒ new ValidationFailure("Cannot convert string to double: " + value.toString,
             "FORG0001")
         }
       } else if (requiredType == AtomicType.INTEGER) {
@@ -72,7 +72,7 @@ object StringValue {
           val flt = StringToDouble.stringToNumber(value).toFloat
           new FloatValue(flt)
         } catch {
-          case err: NumberFormatException => new ValidationFailure("Cannot convert string to float: " + value.toString, 
+          case err: NumberFormatException ⇒ new ValidationFailure("Cannot convert string to float: " + value.toString,
             "FORG0001")
         }
       } else if (requiredType == AtomicType.DATE) {
@@ -112,7 +112,7 @@ object StringValue {
           "XPTY0004")
       }
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         val vf = new ValidationFailure(err.getMessage)
         vf.setErrorCodeQName(err.getErrorCodeQName)
         if (vf.getErrorCodeQName == null) {
@@ -132,7 +132,7 @@ object StringValue {
    */
   def getStringLength(s: CharSequence): Int = {
     var n = 0
-    for (i <- 0 until s.length) {
+    for (i ← 0 until s.length) {
       val c = s.charAt(i).toInt
       if (c < 55296 || c > 56319) n += 1
     }
@@ -148,7 +148,7 @@ object StringValue {
   def expand(s: CharSequence): Array[Int] = {
     val array = Array.ofDim[Int](getStringLength(s))
     val o = 0
-    for (i <- 0 until s.length) {
+    for (i ← 0 until s.length) {
       var charval: Int = 0
       val c = s.charAt(i)
       if (c >= 55296 && c <= 56319) {
@@ -172,7 +172,7 @@ object StringValue {
    */
   def contract(codes: Array[Int], used: Int): CharSequence = {
     val sb = new FastStringBuffer(codes.length)
-    for (i <- 0 until used) {
+    for (i ← 0 until used) {
       if (codes(i) < 65536) {
         sb.append(codes(i).toChar)
       } else {
@@ -196,7 +196,7 @@ object StringValue {
    */
   def diagnosticDisplay(s: String): String = {
     val fsb = new FastStringBuffer(s.length)
-    for (i <- 0 until len) {
+    for (i ← 0 until len) {
       val c = s.charAt(i)
       if (c >= 0x20 && c <= 0x7e) {
         fsb.append(c)

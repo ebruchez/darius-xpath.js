@@ -70,10 +70,10 @@ class CallTemplate(var template: Template, var useTailRecursion: Boolean) extend
   def setActualParameters(actualParams: Array[WithParam], tunnelParams: Array[WithParam]): Unit = {
     this.actualParams = actualParams
     this.tunnelParams = tunnelParams
-    for (actualParam <- actualParams) {
+    for (actualParam ← actualParams) {
       adoptChildExpression(actualParam)
     }
-    for (tunnelParam <- tunnelParams) {
+    for (tunnelParam ← tunnelParams) {
       adoptChildExpression(tunnelParam)
     }
   }
@@ -98,7 +98,7 @@ class CallTemplate(var template: Template, var useTailRecursion: Boolean) extend
     WithParam.typeCheck(tunnelParams, visitor, contextItemType)
     if (template.getBody != null) {
       val backwards = visitor.getStaticContext.isInBackwardsCompatibleMode
-      for (p <- 0 until actualParams.length) {
+      for (p ← 0 until actualParams.length) {
         val wp = actualParams(p)
         val id = wp.getParameterId
         val lp = template.getLocalParam(id)

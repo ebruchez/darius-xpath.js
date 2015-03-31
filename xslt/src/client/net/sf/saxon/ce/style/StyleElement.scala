@@ -212,7 +212,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    */
   protected def getCommonChildItemType(): ItemType = {
     var t = EmptySequenceTest.getInstance
-    for (child <- allChildren()) {
+    for (child ← allChildren()) {
       if (child.isInstanceOf[StyleElement]) {
         val ret = child.asInstanceOf[StyleElement].getReturnedItemType
         if (ret != null) {
@@ -282,7 +282,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     try {
       qName = StructuredQName.fromLexicalQName(lexicalQName, "", new InscopeNamespaceResolver(this))
     } catch {
-      case e: XPathException => {
+      case e: XPathException ⇒ {
         e.setIsStaticError(true)
         val code = e.getErrorCodeLocalPart
         if ("FONS0004" == code) {
@@ -314,7 +314,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     }
     getStaticContext
     processAttributes()
-    for (child <- allChildren() if child.isInstanceOf[StyleElement]) {
+    for (child ← allChildren() if child.isInstanceOf[StyleElement]) {
       child.asInstanceOf[StyleElement].processAllAttributes()
     }
   }
@@ -340,7 +340,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     try {
       prepareAttributes()
     } catch {
-      case err: XPathException => compileError(err)
+      case err: XPathException ⇒ compileError(err)
     }
   }
 
@@ -354,9 +354,9 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
         reportAbsence(getDisplayName + "/" + name)
       }
     } else {
-      for (i <- 0 until flags.length) flags.charAt(i) match {
-        case 'a' => return makeAttributeValueTemplate(`val`)
-        case 'b' => 
+      for (i ← 0 until flags.length) flags.charAt(i) match {
+        case 'a' ⇒ return makeAttributeValueTemplate(`val`)
+        case 'b' ⇒
           var yesNo = Whitespace.trim(`val`)
           if ("yes" == yesNo) {
             return true
@@ -366,25 +366,25 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
             compileError("The @" + name + " attribute must have the value 'yes' or 'no'", "XTSE0020")
           }
 
-        case 'e' => return makeExpression(`val`)
-        case 'p' => return makePattern(`val`)
-        case 'q' => try {
+        case 'e' ⇒ return makeExpression(`val`)
+        case 'p' ⇒ return makePattern(`val`)
+        case 'q' ⇒ try {
           return makeQName(`val`)
         } catch {
-          case e: NamespaceException => compileError(e.getMessage, "XTSE0280")
+          case e: NamespaceException ⇒ compileError(e.getMessage, "XTSE0280")
         }
-        case 's' => return `val`
-        case 't' => compileError("The @type attribute is available only with a schema-aware XSLT processor", 
+        case 's' ⇒ return `val`
+        case 't' ⇒ compileError("The @type attribute is available only with a schema-aware XSLT processor",
           "XTSE1660")
-        case 'v' => 
+        case 'v' ⇒
           if (`val` != "strip") {
             compileError("The @type attribute is available only with a schema-aware XSLT processor", 
               "XTSE1660")
           }
           return null
 
-        case 'w' => return Whitespace.collapseWhitespace(`val`).toString
-        case 'z' => return makeSequenceType(`val`)
+        case 'w' ⇒ return Whitespace.collapseWhitespace(`val`).toString
+        case 'z' ⇒ return makeSequenceType(`val`)
       }
     }
     null
@@ -392,7 +392,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
 
   protected def checkForUnknownAttributes(): Unit = {
     val atts = getAttributeList
-    for (a <- 0 until atts.getLength) {
+    for (a ← 0 until atts.getLength) {
       val qn = atts.getStructuredQName(a)
       if (qn.getNamespaceURI == "" && !permittedAttributes.contains(qn.getLocalName)) {
         checkUnknownAttribute(qn)
@@ -447,7 +447,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    */
   protected def getLastChildInstruction(): StyleElement = {
     var last: StyleElement = null
-    for (child <- allChildren()) {
+    for (child ← allChildren()) {
       last = if (child.isInstanceOf[StyleElement]) child.asInstanceOf[StyleElement] else null
     }
     last
@@ -462,7 +462,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     try {
       ExpressionTool.make(expression, getStaticContext, this, 0, Token.EOF, this)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.setLocator(this)
         compileError(err)
         val erexp = new ErrorExpression(err)
@@ -482,7 +482,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     try {
       Pattern.make(pattern, getStaticContext, this)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         compileError(err)
         new NodeTestPattern(AnyNodeTest.getInstance)
       }
@@ -499,7 +499,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     try {
       AttributeValueTemplate.make(expression, this, getStaticContext)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         compileError(err)
         new StringLiteral(expression)
       }
@@ -519,7 +519,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
       parser.setLanguage(ExpressionParser.XPATH)
       parser.parseSequenceType(sequenceType, getStaticContext)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         compileError(err)
         SequenceType.ANY_SEQUENCE
       }
@@ -571,7 +571,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
       var count = tokens.size
       val result = Array.ofDim[String](count)
       count = 0
-      for (s <- tokens) {
+      for (s ← tokens) {
         if ("#default" == s) {
           s = ""
         } else if (allowAll && "#all" == s) {
@@ -647,7 +647,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
   protected def processDefaultCollationAttribute(ns: String): Unit = {
     val v = getAttributeValue(ns, "default-collation")
     if (v != null) {
-      for (uri <- Whitespace.tokenize(v)) {
+      for (uri ← Whitespace.tokenize(v)) {
         if (uri == NamespaceConstant.CODEPOINT_COLLATION_URI || uri.startsWith("http://saxon.sf.net/")) {
           defaultCollationName = uri
           return
@@ -661,7 +661,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
               uri = collationURI.toString
             }
           } catch {
-            case err: URI.URISyntaxException => {
+            case err: URI.URISyntaxException ⇒ {
               compileError("default collation '" + uri + "' is not a valid URI")
               uri = NamespaceConstant.CODEPOINT_COLLATION_URI
             }
@@ -704,7 +704,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     if (extensionNamespaces == null) {
       return false
     }
-    for (extensionNamespace <- extensionNamespaces if extensionNamespace == uri) {
+    for (extensionNamespace ← extensionNamespaces if extensionNamespace == uri) {
       return true
     }
     false
@@ -733,7 +733,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     if (excludedNamespaces == null) {
       return false
     }
-    for (excludedNamespace <- excludedNamespaces if excludedNamespace == uri) {
+    for (excludedNamespace ← excludedNamespaces if excludedNamespace == uri) {
       return true
     }
     false
@@ -828,7 +828,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
       }
       exp
     } catch {
-      case err: XPathException => if (err.isStaticError || err.isTypeError) {
+      case err: XPathException ⇒ if (err.isStaticError || err.isTypeError) {
         compileError(err)
         exp
       } else {
@@ -889,7 +889,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
       }
       pattern
     } catch {
-      case err: XPathException => if (err.isReportableStatically) {
+      case err: XPathException ⇒ if (err.isReportableStatically) {
         val e2 = new XPathException("Error in " + name + " pattern", err)
         e2.setLocator(this)
         e2.setErrorCodeQName(err.getErrorCodeQName)
@@ -908,7 +908,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * and variable declarations
    */
   def fixupReferences(): Unit = {
-    for (child <- allChildren() if child.isInstanceOf[StyleElement]) {
+    for (child ← allChildren() if child.isInstanceOf[StyleElement]) {
       child.asInstanceOf[StyleElement].fixupReferences()
     }
   }
@@ -930,7 +930,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
         compileError(validationError)
       } else if (reportingCircumstances == REPORT_UNLESS_FALLBACK_AVAILABLE) {
         var hasFallback = false
-        for (child <- allChildren() if child.isInstanceOf[XSLFallback]) {
+        for (child ← allChildren() if child.isInstanceOf[XSLFallback]) {
           hasFallback = true
           child.asInstanceOf[XSLFallback].validateSubtree(decl)
         }
@@ -942,7 +942,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
       try {
         validate(decl)
       } catch {
-        case err: XPathException => compileError(err)
+        case err: XPathException ⇒ compileError(err)
       }
       validateChildren(decl)
       postValidate()
@@ -956,7 +956,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    */
   protected def validateChildren(decl: Declaration): Unit = {
     val containsInstructions = mayContainSequenceConstructor()
-    for (child <- allChildren() if child.isInstanceOf[StyleElement]) {
+    for (child ← allChildren() if child.isInstanceOf[StyleElement]) {
       if (containsInstructions && !child.asInstanceOf[StyleElement].isInstruction && 
         !isPermittedChild(child.asInstanceOf[StyleElement])) {
         child.asInstanceOf[StyleElement].compileError("An " + getDisplayName + " element must not contain an " + 
@@ -1001,7 +1001,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
   protected def checkSortComesFirst(sortRequired: Boolean): Unit = {
     var sortFound = false
     var nonSortFound = false
-    for (child <- allChildren()) {
+    for (child ← allChildren()) {
       if (child.isInstanceOf[XSLSort]) {
         if (nonSortFound) {
           child.asInstanceOf[XSLSort].compileError("Within " + getDisplayName + 
@@ -1049,7 +1049,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @throws XPathException
    */
   def onlyAllow(localName: String*): Unit = {
-    for (child <- allChildren()) {
+    for (child ← allChildren()) {
       if (Arrays.binarySearch(localName, child.getLocalPart) >= 0) {
       } else if (child.getNodeKind == Type.TEXT) {
         if (!Whitespace.isWhite(child.getStringValue)) {
@@ -1178,7 +1178,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    */
   protected def fallbackProcessing(exec: Executable, decl: Declaration, instruction: StyleElement): Expression = {
     var fallback: Expression = null
-    for (child <- instruction.allChildren() if child.isInstanceOf[XSLFallback]) {
+    for (child ← instruction.allChildren() if child.isInstanceOf[XSLFallback]) {
       var b = child.asInstanceOf[XSLFallback].compileSequenceConstructor(exec, decl)
       if (b == null) {
         b = Literal.makeEmptySequence()
@@ -1205,7 +1205,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    */
   protected def makeSortKeys(decl: Declaration): Array[SortKeyDefinition] = {
     var numberOfSortKeys = 0
-    for (child <- allChildren() if child.isInstanceOf[XSLSort]) {
+    for (child ← allChildren() if child.isInstanceOf[XSLSort]) {
       child.asInstanceOf[XSLSort].compile(getExecutable, decl)
       if (numberOfSortKeys != 0 && child.asInstanceOf[XSLSort].getStable != null) {
         compileError("stable attribute may appear only on the first xsl:sort element", "XTSE1017")
@@ -1215,7 +1215,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     if (numberOfSortKeys > 0) {
       val keys = Array.ofDim[SortKeyDefinition](numberOfSortKeys)
       val k = 0
-      for (child <- allChildren() if child.isInstanceOf[XSLSort]) {
+      for (child ← allChildren() if child.isInstanceOf[XSLSort]) {
         keys(k += 1) = child.asInstanceOf[XSLSort].getSortKeyDefinition.simplify(makeExpressionVisitor())
       }
       keys
@@ -1239,16 +1239,16 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
       list = new ArrayList[Declaration](4)
     }
     val psm = getPrincipalStylesheetModule
-    for (asetname <- Whitespace.tokenize(use)) {
+    for (asetname ← Whitespace.tokenize(use)) {
       var name: StructuredQName = null
       try {
         name = makeQName(asetname)
       } catch {
-        case err: NamespaceException => {
+        case err: NamespaceException ⇒ {
           compileError(err.getMessage, "XTSE0710")
           name = null
         }
-        case err: XPathException => {
+        case err: XPathException ⇒ {
           compileError(err.getMessage, "XTSE0710")
           name = null
         }
@@ -1259,7 +1259,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
       }
     }
     val array = Array.ofDim[AttributeSet](list.size)
-    for (i <- 0 until list.size) {
+    for (i ← 0 until list.size) {
       val aset = list.get(i).getSourceElement.asInstanceOf[XSLAttributeSet]
       array(i) = aset.getInstruction
     }
@@ -1282,7 +1282,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
       tunnel: Boolean, 
       caller: Expression): Array[WithParam] = {
     val params = new ArrayList[WithParam]()
-    for (child <- allChildren() if child.isInstanceOf[XSLWithParam]) {
+    for (child ← allChildren() if child.isInstanceOf[XSLWithParam]) {
       val wp = child.asInstanceOf[XSLWithParam]
       if (wp.isTunnelParam == tunnel) {
         val p = wp.compile(exec, decl).asInstanceOf[WithParam]
@@ -1425,7 +1425,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
           objectName = new StructuredQName("saxon", NamespaceConstant.SAXON, "unnamed-" + getLocalPart)
         }
       } catch {
-        case err: XPathException => objectName = new StructuredQName("saxon", NamespaceConstant.SAXON, 
+        case err: XPathException ⇒ objectName = new StructuredQName("saxon", NamespaceConstant.SAXON,
           "unknown-" + getLocalPart)
       }
     }

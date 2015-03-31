@@ -23,7 +23,7 @@ object Configuration {
 //    try {
 //      location = new URI(Window.Location.getHref)
 //    } catch {
-//      case err: Exception =>
+//      case err: Exception ⇒
 //    }
 //    location
   }

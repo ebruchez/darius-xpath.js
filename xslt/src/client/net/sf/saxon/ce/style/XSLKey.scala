@@ -59,7 +59,7 @@ class XSLKey extends StyleElement with StylesheetProcedure {
         use = TypeChecker.staticTypeCheck(use, SequenceType.makeSequenceType(AtomicType.ANY_ATOMIC, StaticProperty.ALLOWS_ZERO_OR_MORE), 
           false, role)
       } catch {
-        case err: XPathException => compileError(err)
+        case err: XPathException ⇒ compileError(err)
       }
     } else {
       if (!hasChildNodes()) {
@@ -81,7 +81,7 @@ class XSLKey extends StyleElement with StylesheetProcedure {
           collationName = collationURI.toString
         }
       } catch {
-        case err: URI.URISyntaxException => compileError("Collation name '" + collationName + "' is not a valid URI")
+        case err: URI.URISyntaxException ⇒ compileError("Collation name '" + collationName + "' is not a valid URI")
       }
     } else {
       collationName = getDefaultCollationName
@@ -119,7 +119,7 @@ class XSLKey extends StyleElement with StylesheetProcedure {
         use = new Atomizer(body)
         use = visitor.simplify(use)
       } catch {
-        case e: XPathException => compileError(e)
+        case e: XPathException ⇒ compileError(e)
       }
       try {
         val role = new RoleLocator(RoleLocator.INSTRUCTION, "xsl:key/use", 0)
@@ -127,7 +127,7 @@ class XSLKey extends StyleElement with StylesheetProcedure {
           false, role)
         use = makeExpressionVisitor().typeCheck(use, `match`.getNodeTest)
       } catch {
-        case err: XPathException => compileError(err)
+        case err: XPathException ⇒ compileError(err)
       }
     }
     var useType = use.getItemType.asInstanceOf[AtomicType]
@@ -149,7 +149,7 @@ class XSLKey extends StyleElement with StylesheetProcedure {
     try {
       km.addKeyDefinition(getObjectName, keydef, exec.getConfiguration)
     } catch {
-      case err: XPathException => compileError(err)
+      case err: XPathException ⇒ compileError(err)
     }
     null
   }

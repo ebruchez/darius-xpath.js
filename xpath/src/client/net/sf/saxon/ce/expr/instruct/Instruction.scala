@@ -41,7 +41,7 @@ object Instruction {
 //      return null
 //    }
 //    val params = new ParameterSet(actualParams.length)
-//    for (actualParam <- actualParams) {
+//    for (actualParam ← actualParams) {
 //      params.put(actualParam.getParameterId, actualParam.getSelectValue(context), actualParam.isTypeChecked)
 //    }
 //    params
@@ -64,7 +64,7 @@ object Instruction {
 //    if (actualParams == null || actualParams.length == 0) {
 //      return newParams
 //    }
-//    for (actualParam <- actualParams) {
+//    for (actualParam ← actualParams) {
 //      newParams.put(actualParam.getParameterId, actualParam.getSelectValue(context), false)
 //    }
 //    newParams
@@ -122,7 +122,7 @@ abstract class Instruction extends Expression with TailCallReturner {
         tc = tc.processLeavingTail()
       }
     } catch {
-      case err: XPathException =>
+      case err: XPathException ⇒
         err.maybeSetLocation(getSourceLocator)
         throw err
     }

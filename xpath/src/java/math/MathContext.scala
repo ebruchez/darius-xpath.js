@@ -54,7 +54,7 @@ object MathContext {
       java.lang.Integer.parseInt(precisionString)
     }
     catch {
-      case _: Throwable => throw invalidMathContext("Bad precision", s)
+      case _: Throwable ⇒ throw invalidMathContext("Bad precision", s)
     }
 
     var roundingModeStart: Int = spaceIndex + 1

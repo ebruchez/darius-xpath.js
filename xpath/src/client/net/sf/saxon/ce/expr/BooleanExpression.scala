@@ -122,9 +122,9 @@ class BooleanExpression(p1: Expression, operator: Int, p2: Expression) extends B
    * Evaluate as a boolean.
    */
   override def effectiveBooleanValue(c: XPathContext): Boolean = operator match {
-    case Token.AND => operand0.effectiveBooleanValue(c) && operand1.effectiveBooleanValue(c)
-    case Token.OR => operand0.effectiveBooleanValue(c) || operand1.effectiveBooleanValue(c)
-    case _ => throw new UnsupportedOperationException("Unknown operator in boolean expression")
+    case Token.AND ⇒ operand0.effectiveBooleanValue(c) && operand1.effectiveBooleanValue(c)
+    case Token.OR ⇒ operand0.effectiveBooleanValue(c) || operand1.effectiveBooleanValue(c)
+    case _ ⇒ throw new UnsupportedOperationException("Unknown operator in boolean expression")
   }
 
   /**

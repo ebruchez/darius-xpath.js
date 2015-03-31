@@ -44,11 +44,11 @@ class IXSLScheduleAction extends StyleElement {
         val role = new RoleLocator(RoleLocator.INSTRUCTION, "ixsl:schedule-action/wait", 0)
         wait = TypeChecker.staticTypeCheck(wait, SequenceType.SINGLE_INTEGER, false, role)
       } catch {
-        case err: XPathException => compileError(err)
+        case err: XPathException ⇒ compileError(err)
       }
     }
     var found = false
-    for (child <- allChildren()) {
+    for (child ← allChildren()) {
       if (child.isInstanceOf[XSLFallback]) {
       } else if (child.isInstanceOf[XSLCallTemplate]) {
         if (found) {

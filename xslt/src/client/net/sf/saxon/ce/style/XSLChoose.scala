@@ -46,7 +46,7 @@ class XSLChoose extends StyleElement {
   }
 
   def validate(decl: Declaration): Unit = {
-    for (child <- allChildren()) {
+    for (child ← allChildren()) {
       if (child.isInstanceOf[XSLWhen]) {
         if (otherwise != null) {
           otherwise.compileError("xsl:otherwise must come last", "XTSE0010")
@@ -74,7 +74,7 @@ class XSLChoose extends StyleElement {
    */
   def markTailCalls(): Boolean = {
     var found = false
-    for (child <- allChildren()) {
+    for (child ← allChildren()) {
       found |= child.asInstanceOf[StyleElement].markTailCalls()
     }
     found
@@ -90,7 +90,7 @@ class XSLChoose extends StyleElement {
     }
     var w = 0
     val visitor = makeExpressionVisitor()
-    for (child <- allChildren()) {
+    for (child ← allChildren()) {
       val action = child.asInstanceOf[StyleElement].compileSequenceConstructor(exec, decl)
       actions(w) = visitor.simplify(action)
       if (child.isInstanceOf[XSLWhen]) {

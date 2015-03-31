@@ -62,7 +62,7 @@ object BigInteger {
 
   val TWO_POWS = new Array[BigInteger](32)
 
-  for (i <- 0 until TWO_POWS.length) {
+  for (i ← 0 until TWO_POWS.length) {
     TWO_POWS(i) = BigInteger.valueOf(1L << i)
   }
 
@@ -204,7 +204,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
       throw new NumberFormatException("Invalid signum value")
     }
     if (signum == 0) {
-      for (element <- magnitude if element != 0) {
+      for (element ← magnitude if element != 0) {
         throw new NumberFormatException("signum-magnitude mismatch")
       }
     }
@@ -259,7 +259,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
       sign = 1
       numberLength = (numBits + 31) >> 5
       digits = new Array[Int](numberLength)
-      for (i <- 0 until numberLength) {
+      for (i ← 0 until numberLength) {
         digits(i) = rnd.nextInt()
       }
       digits(numberLength - 1) >>>= (-numBits) & 31
@@ -617,8 +617,8 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
    *         false} otherwise.
    */
   override def equals(x: Any): Boolean = x match{
-    case that: BigInteger => this.sign == that.sign && this.numberLength == that.numberLength && this.equalsArrays(that.digits)
-    case _ => false
+    case that: BigInteger ⇒ this.sign == that.sign && this.numberLength == that.numberLength && this.equalsArrays(that.digits)
+    case _ ⇒ false
   }
 
 
@@ -712,7 +712,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     if (_hashCode != 0) {
       return _hashCode
     }
-    for (i <- 0 until digits.length) {
+    for (i ← 0 until digits.length) {
       _hashCode = _hashCode * 33 + (digits(i) & 0xffffffff)
     }
     _hashCode = _hashCode * sign
@@ -1330,12 +1330,12 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     if (highBytes != 0) {
       // Put the first bytes in the highest element of the int array
       if (firstNonzeroDigit != -2) {
-        for (j <- 0 until bytesLen) {
+        for (j ← 0 until bytesLen) {
           digits(i) = (digits(i) << 8) | (byteValues(j) & 0xFF)
         }
         digits(i) = ~digits(i)
       } else {
-        for (j <- 0 until bytesLen) {
+        for (j ← 0 until bytesLen) {
           digits(i) = (digits(i) << 8) | (byteValues(j) & 0xFF)
         }
         digits(i) = -digits(i)
@@ -1363,7 +1363,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
       i += 1
     }
     // Put the first bytes in the highest element of the int array
-    for (j <- 0 until bytesLen) {
+    for (j ← 0 until bytesLen) {
       digits(i) = (digits(i) << 8) | (byteValues(j) & 0xFF)
     }
   }

@@ -66,7 +66,7 @@ object Navigator {
           baseURI = if (xmlBase.length == 0) base else base.resolve(baseURI.toString)
         }
       } catch {
-        case e: URI.URISyntaxException => return xmlBase
+        case e: URI.URISyntaxException ⇒ return xmlBase
       }
       return baseURI.toString
     }
@@ -98,8 +98,8 @@ object Navigator {
     var pre: String = null
     val parent = node.getParent
     node.getNodeKind match {
-      case Type.DOCUMENT => "/"
-      case Type.ELEMENT => if (parent == null) {
+      case Type.DOCUMENT ⇒ "/"
+      case Type.ELEMENT ⇒ if (parent == null) {
         node.getDisplayName
       } else {
         pre = getPath(parent)
@@ -123,35 +123,35 @@ object Navigator {
             val index = if (count == 1) "" else "[" + position + "]"
             pre + '/' + node.getDisplayName + index
           } catch {
-            case e: UnsupportedOperationException => pre + '/' + node.getDisplayName
+            case e: UnsupportedOperationException ⇒ pre + '/' + node.getDisplayName
           }
         }
       }
-      case Type.ATTRIBUTE => getPath(parent) + "/@" + node.getDisplayName
-      case Type.TEXT => 
+      case Type.ATTRIBUTE ⇒ getPath(parent) + "/@" + node.getDisplayName
+      case Type.TEXT ⇒
         pre = getPath(parent)
         (if (pre == "/") "" else pre) + "/text()[" + getNumberSimple(node) + 
           ']'
 
-      case Type.COMMENT => 
+      case Type.COMMENT ⇒
         pre = getPath(parent)
         (if (pre == "/") "" else pre) + "/comment()[" + getNumberSimple(node) + 
           ']'
 
-      case Type.PROCESSING_INSTRUCTION => 
+      case Type.PROCESSING_INSTRUCTION ⇒
         pre = getPath(parent)
         (if (pre == "/") "" else pre) + "/processing-instruction()[" + 
           getNumberSimple(node) + 
           ']'
 
-      case Type.NAMESPACE => 
+      case Type.NAMESPACE ⇒
         var test = node.getLocalPart
         if (test.length == 0) {
           test = "*[not(local-name()]"
         }
         getPath(parent) + "/namespace::" + test
 
-      case _ => ""
+      case _ ⇒ ""
     }
   }
 
@@ -367,7 +367,7 @@ object Navigator {
    * @throws XPathException on any failure reported by the Receiver
    */
   def copy(node: NodeInfo, out: Receiver, copyOptions: Int) node.getNodeKind match {
-    case Type.DOCUMENT => {
+    case Type.DOCUMENT ⇒ {
       out.startDocument()
       val children0 = node.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
       while (true) {
@@ -380,11 +380,11 @@ object Navigator {
       out.endDocument()
       //break
     }
-    case Type.ELEMENT => {
+    case Type.ELEMENT ⇒ {
       out.startElement(node.getNodeName, 0)
       if ((copyOptions & CopyOptions.LOCAL_NAMESPACES) != 0) {
         val localNamespaces = node.getDeclaredNamespaces(null)
-        for (i <- 0 until localNamespaces.length) {
+        for (i ← 0 until localNamespaces.length) {
           val ns = localNamespaces(i)
           if (ns == null) {
             //break
@@ -414,26 +414,26 @@ object Navigator {
       out.endElement()
       return
     }
-    case Type.ATTRIBUTE => {
+    case Type.ATTRIBUTE ⇒ {
       out.attribute(node.getNodeName, node.getStringValue)
       return
     }
-    case Type.TEXT => {
+    case Type.TEXT ⇒ {
       val value = node.getStringValue
       if (value.length != 0) {
         out.characters(value)
       }
       return
     }
-    case Type.COMMENT => {
+    case Type.COMMENT ⇒ {
       out.comment(node.getStringValue)
       return
     }
-    case Type.PROCESSING_INSTRUCTION => {
+    case Type.PROCESSING_INSTRUCTION ⇒ {
       out.processingInstruction(node.getLocalPart, node.getStringValue)
       return
     }
-    case Type.NAMESPACE => {
+    case Type.NAMESPACE ⇒ {
       out.namespace(new NamespaceBinding(node.getLocalPart, node.getStringValue), 0)
       return
     }
@@ -544,11 +544,11 @@ object Navigator {
     }
     sb.append(alphaKey(node.getSiblingPosition))
     node.getNodeKind match {
-      case Type.ATTRIBUTE => sb.append('A')
-      case Type.NAMESPACE => sb.append('N')
-      case Type.TEXT => sb.append('T')
-      case Type.COMMENT => sb.append('C')
-      case Type.PROCESSING_INSTRUCTION => sb.append('P')
+      case Type.ATTRIBUTE ⇒ sb.append('A')
+      case Type.NAMESPACE ⇒ sb.append('N')
+      case Type.TEXT ⇒ sb.append('T')
+      case Type.COMMENT ⇒ sb.append('C')
+      case Type.PROCESSING_INSTRUCTION ⇒ sb.append('P')
     }
   }
 
@@ -751,14 +751,14 @@ object Navigator {
     private var descendEnum: UnfailingIterator = null
 
     start.getNodeKind match {
-      case Type.ELEMENT | Type.TEXT | Type.COMMENT | Type.PROCESSING_INSTRUCTION => siblingEnum = start.iterateAxis(Axis.FOLLOWING_SIBLING, 
+      case Type.ELEMENT | Type.TEXT | Type.COMMENT | Type.PROCESSING_INSTRUCTION ⇒ siblingEnum = start.iterateAxis(Axis.FOLLOWING_SIBLING,
         AnyNodeTest.getInstance)
-      case Type.ATTRIBUTE | Type.NAMESPACE => 
+      case Type.ATTRIBUTE | Type.NAMESPACE ⇒
         var parent = start.getParent
         siblingEnum = if (parent == null) EmptyIterator.getInstance else parent.iterateAxis(Axis.CHILD, 
           AnyNodeTest.getInstance)
 
-      case _ => siblingEnum = EmptyIterator.getInstance
+      case _ ⇒ siblingEnum = EmptyIterator.getInstance
     }
 
     def next(): Item = {
@@ -810,9 +810,9 @@ object Navigator {
     private var descendEnum: UnfailingIterator = null
 
     start.getNodeKind match {
-      case Type.ELEMENT | Type.TEXT | Type.COMMENT | Type.PROCESSING_INSTRUCTION => siblingEnum = start.iterateAxis(Axis.PRECEDING_SIBLING, 
+      case Type.ELEMENT | Type.TEXT | Type.COMMENT | Type.PROCESSING_INSTRUCTION ⇒ siblingEnum = start.iterateAxis(Axis.PRECEDING_SIBLING,
         AnyNodeTest.getInstance)
-      case _ => siblingEnum = EmptyIterator.getInstance
+      case _ ⇒ siblingEnum = EmptyIterator.getInstance
     }
 
     def next(): Item = {

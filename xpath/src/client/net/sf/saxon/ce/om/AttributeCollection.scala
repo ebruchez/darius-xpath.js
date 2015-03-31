@@ -181,7 +181,7 @@ class AttributeCollection {
     if (names == null) {
       return null
     }
-    for (i <- 0 until used if names(i).getNamespaceURI == uri && names(i).getLocalName == localname) {
+    for (i ← 0 until used if names(i).getNamespaceURI == uri && names(i).getLocalName == localname) {
       return values(i)
     }
     null
@@ -196,7 +196,7 @@ class AttributeCollection {
     if (names == null) {
       return -1
     }
-    for (i <- 0 until used if names(i) == name) {
+    for (i ← 0 until used if names(i) == name) {
       return i
     }
     -1

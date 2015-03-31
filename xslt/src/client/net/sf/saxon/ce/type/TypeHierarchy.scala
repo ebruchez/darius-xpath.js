@@ -59,11 +59,11 @@ object TypeHierarchy {
      * Indicates whether some other object is "equal to" this one.
      */
     override def equals(obj: Any): Boolean = obj match {
-      case obj: ItemTypePair => {
+      case obj: ItemTypePair ⇒ {
         val pair = obj
         s == pair.s && t == pair.t
       }
-      case _ => false
+      case _ ⇒ false
     }
   }
 }

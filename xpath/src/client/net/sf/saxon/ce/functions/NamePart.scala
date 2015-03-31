@@ -91,25 +91,25 @@ class NamePart(_operation: Int) extends SystemFunction {
     }
     var s: String = null
     operation match {
-      case NAME => s = node.getDisplayName
-      case LOCAL_NAME => s = node.getLocalPart
-      case NAMESPACE_URI => 
+      case NAME ⇒ s = node.getDisplayName
+      case LOCAL_NAME ⇒ s = node.getLocalPart
+      case NAMESPACE_URI ⇒
         var uri = node.getURI
         s = if (uri == null) "" else uri
         return new AnyURIValue(s)
 
-      case GENERATE_ID => 
+      case GENERATE_ID ⇒
         var buffer = new FastStringBuffer(FastStringBuffer.TINY)
         node.generateId(buffer)
         buffer.condense()
         return new StringValue(buffer)
 
-      case DOCUMENT_URI => return getDocumentURI(node, c)
-      case NODE_NAME => 
+      case DOCUMENT_URI ⇒ return getDocumentURI(node, c)
+      case NODE_NAME ⇒
         var nodeName = node.getNodeName
         return if (nodeName == null) null else new QNameValue(nodeName)
 
-      case _ => throw new UnsupportedOperationException("Unknown name operation")
+      case _ ⇒ throw new UnsupportedOperationException("Unknown name operation")
     }
     new StringValue(s)
   }

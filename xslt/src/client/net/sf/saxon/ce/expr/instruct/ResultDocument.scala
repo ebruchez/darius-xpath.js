@@ -267,7 +267,7 @@ class ResultDocument(var href: Expression,
       content.process(c2)
       out.endDocument()
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.maybeSetLocation(getSourceLocator)
         throw err
       }
@@ -277,7 +277,7 @@ class ResultDocument(var href: Expression,
       val list = controller.getPendingUpdateList
       if (action == REPLACE_CONTENT && command == APIcommand.UPDATE_HTML) {
         val existingChildren = targetNode.getChildCount
-        for (i <- 0 until existingChildren) {
+        for (i ← 0 until existingChildren) {
           val child = targetNode.getChild(i)
           list.add(new DeleteAction(child))
         }

@@ -15,8 +15,8 @@
  */
 package client.net.sf.saxon.ce.orbeon
 
-import scala.collection.{immutable => i, mutable => m}
-import scala.{collection => sc}
+import scala.collection.{immutable ⇒ i, mutable ⇒ m}
+import scala.{collection ⇒ sc}
 
 // IDEA: We could use, for Map[String, V], native JS object type. For other type of keys, such as Int,
 // we could also uniquely convert the keys to String. There is one use of AtomicType as a key, but that
@@ -28,13 +28,13 @@ class HashMap[K, V](underlying: m.HashMap[K, V]) extends Map[K, V] {
   def this(i: Int) = this()
 
   def get(k: K)(implicit ev: Null <:< V): V = underlying.get(k).orNull
-  def put(k: K, v: V): Unit = underlying += k -> v
+  def put(k: K, v: V): Unit = underlying += k → v
   def remove(k: K): Unit = underlying -= k
   def keysIterator(): Iterator[K] = Iterator(underlying.keysIterator)
   def containsKey(k: K): Boolean = underlying.contains(k)
   def containsValue(v: V): Boolean = underlying.exists(_._2 == v)
 
-  def foreach[U](f: ((K, V)) => U): Unit = underlying.foreach(f)
+  def foreach[U](f: ((K, V)) ⇒ U): Unit = underlying.foreach(f)
   def withFilter(p: ((K, V)) ⇒ Boolean): sc.Iterator[(K, V)] = underlying.iterator.filter(p)
 }
 
@@ -73,8 +73,8 @@ class ArrayList[T](underlying: m.ArrayBuffer[T]) extends List[T] {
     a
   }
 
-  def foreach[U](f: (T) => U) = underlying.foreach(f)
-  def filter(p: T => Boolean): ArrayList[T] = new ArrayList[T](underlying.filter(p))
+  def foreach[U](f: (T) ⇒ U) = underlying.foreach(f)
+  def filter(p: T ⇒ Boolean): ArrayList[T] = new ArrayList[T](underlying.filter(p))
 }
 
 private class IteratorImpl[T](underlying: scala.collection.Iterator[T]) extends Iterator[T] {
@@ -127,7 +127,7 @@ trait List[T] {
   def toArray[U >: T](a: Array[U]): Array[U]
   def isEmpty: Boolean
   def contains(t: T): Boolean
-  def foreach[U](f: T => U): Unit
+  def foreach[U](f: T ⇒ U): Unit
 }
 
 trait Map[K, V] {
@@ -137,7 +137,7 @@ trait Map[K, V] {
   def keysIterator(): Iterator[K]
   def containsKey(k: K): Boolean
   def containsValue(v: V): Boolean
-  def foreach[U](f: ((K, V)) => U): Unit
+  def foreach[U](f: ((K, V)) ⇒ U): Unit
 
   def withFilter(p: ((K, V)) ⇒ Boolean): sc.Iterator[(K, V)]
 }
@@ -162,7 +162,7 @@ class LinkedList[T]() extends List[T] {
   def iterator(): Iterator[T] = ???
   def isEmpty: Boolean = ???
   def contains(t: T): Boolean = ???
-  def foreach[U](f: (T) => U): Unit = ???
+  def foreach[U](f: (T) ⇒ U): Unit = ???
 }
 
 object Collections {
@@ -178,7 +178,7 @@ object Collections {
     def iterator(): Iterator[T] = emptyIterator
     def isEmpty: Boolean = true
     def contains(t: T): Boolean = false
-    def foreach[U](f: (T) => U): Unit = ()
+    def foreach[U](f: (T) ⇒ U): Unit = ()
   }
 }
 

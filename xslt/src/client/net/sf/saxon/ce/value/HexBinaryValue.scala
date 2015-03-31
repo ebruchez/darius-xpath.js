@@ -28,7 +28,7 @@ class HexBinaryValue(in: CharSequence) extends AtomicValue {
     throw err
   }
 
-  for (i <- 0 until binaryValue.length) {
+  for (i ← 0 until binaryValue.length) {
     binaryValue(i) = ((fromHex(s.charAt(2 * i)) << 4) + fromHex(s.charAt(2 * i + 1))).toByte
   }
 
@@ -99,7 +99,7 @@ class HexBinaryValue(in: CharSequence) extends AtomicValue {
   def getPrimitiveStringValue(): CharSequence = {
     val digits = "0123456789ABCDEF"
     val sb = new FastStringBuffer(binaryValue.length * 2)
-    for (i <- 0 until binaryValue.length) {
+    for (i ← 0 until binaryValue.length) {
       sb.append(digits.charAt((binaryValue(i) >> 4) & 0xf))
       sb.append(digits.charAt(binaryValue(i) & 0xf))
     }
@@ -129,8 +129,8 @@ class HexBinaryValue(in: CharSequence) extends AtomicValue {
    * Test if the two hexBinary or Base64Binaryvalues are equal.
    */
   override def equals(other: Any): Boolean = other match {
-    case other: HexBinaryValue => Arrays.==(binaryValue, other.binaryValue)
-    case _ => false
+    case other: HexBinaryValue ⇒ Arrays.==(binaryValue, other.binaryValue)
+    case _ ⇒ false
   }
 
   override def hashCode(): Int = {

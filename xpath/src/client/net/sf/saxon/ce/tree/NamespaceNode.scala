@@ -84,8 +84,8 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    *        The equals() method has been defined because it is useful in contexts such as a Java Set or HashMap.
    */
   override def equals(other: Any): Boolean = other match {
-    case other: NodeInfo => isSameNodeInfo(other)
-    case _ => false
+    case other: NodeInfo ⇒ isSameNodeInfo(other)
+    case _ ⇒ false
   }
 
   /**
@@ -219,18 +219,18 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    * @see client.net.sf.saxon.ce.om.Axis
    */
   def iterateAxis(axisNumber: Byte, nodeTest: NodeTest): UnfailingIterator = axisNumber match {
-    case Axis.ANCESTOR => element.iterateAxis(Axis.ANCESTOR_OR_SELF, nodeTest)
-    case Axis.ANCESTOR_OR_SELF => if (nodeTest.matchesItem(this)) {
+    case Axis.ANCESTOR ⇒ element.iterateAxis(Axis.ANCESTOR_OR_SELF, nodeTest)
+    case Axis.ANCESTOR_OR_SELF ⇒ if (nodeTest.matchesItem(this)) {
       new PrependIterator(this, element.iterateAxis(Axis.ANCESTOR_OR_SELF, nodeTest))
     } else {
       element.iterateAxis(Axis.ANCESTOR_OR_SELF, nodeTest)
     }
-    case Axis.ATTRIBUTE | Axis.CHILD | Axis.DESCENDANT | Axis.DESCENDANT_OR_SELF | Axis.FOLLOWING_SIBLING | Axis.NAMESPACE | Axis.PRECEDING_SIBLING => EmptyIterator.getInstance
-    case Axis.FOLLOWING => Navigator.newAxisFilter(new Navigator.FollowingEnumeration(this), nodeTest)
-    case Axis.PARENT => Navigator.filteredSingleton(element, nodeTest)
-    case Axis.PRECEDING => Navigator.newAxisFilter(new Navigator.PrecedingEnumeration(this, false), nodeTest)
-    case Axis.SELF => Navigator.filteredSingleton(this, nodeTest)
-    case _ => throw new IllegalArgumentException("Unknown axis number " + axisNumber)
+    case Axis.ATTRIBUTE | Axis.CHILD | Axis.DESCENDANT | Axis.DESCENDANT_OR_SELF | Axis.FOLLOWING_SIBLING | Axis.NAMESPACE | Axis.PRECEDING_SIBLING ⇒ EmptyIterator.getInstance
+    case Axis.FOLLOWING ⇒ Navigator.newAxisFilter(new Navigator.FollowingEnumeration(this), nodeTest)
+    case Axis.PARENT ⇒ Navigator.filteredSingleton(element, nodeTest)
+    case Axis.PRECEDING ⇒ Navigator.newAxisFilter(new Navigator.PrecedingEnumeration(this, false), nodeTest)
+    case Axis.SELF ⇒ Navigator.filteredSingleton(this, nodeTest)
+    case _ ⇒ throw new IllegalArgumentException("Unknown axis number " + axisNumber)
   }
 
   /**

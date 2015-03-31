@@ -97,7 +97,7 @@ class XSLSort extends StyleElement {
           collationString = collationURI.toString
         }
       } catch {
-        case err: URI.URISyntaxException => {
+        case err: URI.URISyntaxException ⇒ {
           compileError("Collation name '" + collationString + "' is not a valid URI")
           collationString = NamespaceConstant.CODEPOINT_COLLATION_URI
         }
@@ -120,7 +120,7 @@ class XSLSort extends StyleElement {
         val role = new RoleLocator(RoleLocator.INSTRUCTION, "xsl:sort/select", 0)
         select = TypeChecker.staticTypeCheck(select, SequenceType.ATOMIC_SEQUENCE, false, role)
       } catch {
-        case err: XPathException => compileError(err)
+        case err: XPathException ⇒ compileError(err)
       }
     }
     sortKeyDefinition = new SortKeyDefinition()
@@ -160,7 +160,7 @@ class XSLSort extends StyleElement {
         ExpressionTool.copyLocationInfo(b, atomizedSortKey)
         sortKeyDefinition.setSortKey(atomizedSortKey)
       } catch {
-        case e: XPathException => compileError(e)
+        case e: XPathException ⇒ compileError(e)
       }
     }
     sortKeyDefinition = sortKeyDefinition.simplify(makeExpressionVisitor())

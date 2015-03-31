@@ -85,7 +85,7 @@ class ForEachGroup(var select: Expression,
     adoptChildExpressions()
     if (sortKeys != null) {
       var allFixed = true
-      for (skd <- sortKeys) {
+      for (skd ← sortKeys) {
         var sortKey = skd.getSortKey
         sortKey = visitor.typeCheck(sortKey, selectedItemType)
         if (visitor.getStaticContext.isInBackwardsCompatibleMode) {
@@ -106,7 +106,7 @@ class ForEachGroup(var select: Expression,
       }
       if (allFixed) {
         sortComparators = Array.ofDim[AtomicComparer](sortKeys.length)
-        for (i <- 0 until sortKeys.length) {
+        for (i ← 0 until sortKeys.length) {
           sortComparators(i) = sortKeys(i).getFinalComparator
         }
       }
@@ -130,7 +130,7 @@ class ForEachGroup(var select: Expression,
     }
     val selectedItemType = select.getItemType
     if (sortKeys != null) {
-      for (skd <- sortKeys) {
+      for (skd ← sortKeys) {
         var sortKey = skd.getSortKey
         sortKey = visitor.optimize(sortKey, selectedItemType)
         skd.setSortKey(sortKey)
@@ -162,9 +162,9 @@ class ForEachGroup(var select: Expression,
     dependencies |= (action.getDependencies & 
       ~(StaticProperty.DEPENDS_ON_FOCUS | StaticProperty.DEPENDS_ON_CURRENT_GROUP))
     if (sortKeys != null) {
-      for (skd <- sortKeys) {
+      for (skd ← sortKeys) {
         dependencies |= (skd.getSortKey.getDependencies & ~StaticProperty.DEPENDS_ON_FOCUS)
-        for (i <- 0 until SortKeyDefinition.N) {
+        for (i ← 0 until SortKeyDefinition.N) {
           val e = skd.getSortProperty(i)
           if (e != null && !e.isInstanceOf[Literal]) {
             dependencies |= e.getDependencies
@@ -212,9 +212,9 @@ class ForEachGroup(var select: Expression,
       list.add(collationNameExpression)
     }
     if (sortKeys != null) {
-      for (skd <- sortKeys) {
+      for (skd ← sortKeys) {
         list.add(skd.getSortKey)
-        for (i <- 0 until SortKeyDefinition.N) {
+        for (i ← 0 until SortKeyDefinition.N) {
           val e = skd.getSortProperty(i)
           if (e != null) {
             list.add(e)
@@ -285,7 +285,7 @@ class ForEachGroup(var select: Expression,
           cname = collationURI.toString
         }
       } catch {
-        case e: URI.URISyntaxException => dynamicError("Collation name '" + cname + "' is not a valid URI", 
+        case e: URI.URISyntaxException ⇒ dynamicError("Collation name '" + cname + "' is not a valid URI",
           "XTDE1110")
       }
       context.getConfiguration.getNamedCollation(cname)
@@ -298,28 +298,28 @@ class ForEachGroup(var select: Expression,
     val population = select.iterate(context)
     var groupIterator: GroupIterator = null
     algorithm match {
-      case GROUP_BY => {
+      case GROUP_BY ⇒ {
         val c2 = context.newMinorContext()
         c2.setCurrentIterator(population)
         groupIterator = new GroupByIterator(population, key, c2, getCollator(context))
         //break
       }
-      case GROUP_ADJACENT => {
+      case GROUP_ADJACENT ⇒ {
         groupIterator = new GroupAdjacentIterator(population, key, context, getCollator(context))
         //break
       }
-      case GROUP_STARTING => groupIterator = new GroupStartingIterator(population, key.asInstanceOf[PatternSponsor].getPattern, 
+      case GROUP_STARTING ⇒ groupIterator = new GroupStartingIterator(population, key.asInstanceOf[PatternSponsor].getPattern,
         context)
-      case GROUP_ENDING => groupIterator = new GroupEndingIterator(population, key.asInstanceOf[PatternSponsor].getPattern, 
+      case GROUP_ENDING ⇒ groupIterator = new GroupEndingIterator(population, key.asInstanceOf[PatternSponsor].getPattern,
         context)
-      case _ => throw new AssertionError("Unknown grouping algorithm")
+      case _ ⇒ throw new AssertionError("Unknown grouping algorithm")
     }
     if (sortKeys != null) {
       var comps = sortComparators
       val xpc = context.newMinorContext()
       if (comps == null) {
         comps = Array.ofDim[AtomicComparer](sortKeys.length)
-        for (s <- 0 until sortKeys.length) {
+        for (s ← 0 until sortKeys.length) {
           comps(s) = sortKeys(s).makeComparator(xpc)
         }
       }

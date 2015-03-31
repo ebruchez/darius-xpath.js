@@ -159,7 +159,7 @@ abstract class AbstractTraceListener extends TraceListener {
     }
     val collapsed = Whitespace.collapseWhitespace(in)
     val sb = new FastStringBuffer(collapsed.length + 10)
-    for (i <- 0 until collapsed.length) {
+    for (i ← 0 until collapsed.length) {
       val c = collapsed.charAt(i)
       if (c == '<') {
         sb.append("&lt;")
@@ -221,7 +221,7 @@ abstract class AbstractTraceListener extends TraceListener {
       val curr = item.asInstanceOf[NodeInfo]
       logger.finest(AbstractTraceListener.spaces(indent) + "</source><!-- " + 
         Navigator.getPath(curr) + 
-        " -->")
+        " -→>")
     }
   }
 }

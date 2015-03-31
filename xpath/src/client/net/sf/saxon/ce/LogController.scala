@@ -106,7 +106,7 @@ object LogController {
       try {
         mainLogger.setLevel(Level.parse(newLevel))
       } catch {
-        case e: Exception => Logger.getLogger("LogController").severe("invalid level for setLogLevel: " + newLevel)
+        case e: Exception ⇒ Logger.getLogger("LogController").severe("invalid level for setLogLevel: " + newLevel)
       }
     }
   }

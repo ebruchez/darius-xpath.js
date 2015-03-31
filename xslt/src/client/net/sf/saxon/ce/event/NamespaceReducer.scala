@@ -90,7 +90,7 @@ class NamespaceReducer extends ProxyReceiver with NamespaceResolver {
       return false
     }
     if (pendingUndeclarations != null) {
-      for (p <- 0 until pendingUndeclarations.length if pendingUndeclarations(p) != null && 
+      for (p ← 0 until pendingUndeclarations.length if pendingUndeclarations(p) != null &&
         (nscode.getPrefix == pendingUndeclarations(p).getPrefix)) {
         pendingUndeclarations(p) = null
       }
@@ -127,7 +127,7 @@ class NamespaceReducer extends ProxyReceiver with NamespaceResolver {
    */
   def startContent(): Unit = {
     if (pendingUndeclarations != null) {
-      for (i <- 0 until pendingUndeclarations.length) {
+      for (i ← 0 until pendingUndeclarations.length) {
         val nscode = pendingUndeclarations(i)
         if (nscode != null) {
           namespace(new NamespaceBinding(nscode.getPrefix, ""), 0)

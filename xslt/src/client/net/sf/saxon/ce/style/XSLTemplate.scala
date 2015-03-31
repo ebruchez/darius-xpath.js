@@ -90,7 +90,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
       try {
         prepareAttributes()
       } catch {
-        case err: XPathException => 
+        case err: XPathException ⇒
       }
     }
     templateName
@@ -143,7 +143,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
         modeNames = Array.ofDim[StructuredQName](tokens.size)
         count = 0
         var allModes = false
-        for (s <- tokens) {
+        for (s ← tokens) {
           var mname: StructuredQName = null
           if ("#default" == s) {
             mname = getContainingStylesheet.getDefaultMode
@@ -156,7 +156,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
           } else {
             mname = makeQName(s)
           }
-          for (e <- 0 until count if modeNames(e) == mname) {
+          for (e ← 0 until count if modeNames(e) == mname) {
             compileError("In the list of modes, the value " + s + " is duplicated", "XTSE0550")
           }
           modeNames(count += 1) = mname
@@ -168,8 +168,8 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
         modeNames = Array(Mode.UNNAMED_MODE_NAME)
       }
     } catch {
-      case err: NamespaceException => compileError(err.getMessage, "XTSE0280")
-      case err: XPathException => {
+      case err: NamespaceException ⇒ compileError(err.getMessage, "XTSE0280")
+      case err: XPathException ⇒ {
         err.maybeSetErrorCode("XTSE0280")
         if (err.getErrorCodeLocalPart == "XTSE0020") {
           err.setErrorCode("XTSE0550")
@@ -186,7 +186,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
         }
         priority = Double.parseDouble(priorityAtt)
       } catch {
-        case err: NumberFormatException => priority = -1e0
+        case err: NumberFormatException ⇒ priority = -1e0
       }
     }
   }
@@ -195,7 +195,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
     checkTopLevel(null)
     `match` = typeCheck("match", `match`)
     numberOfParams = 0
-    for (param <- allChildren() if param.isInstanceOf[XSLParam]) {
+    for (param ← allChildren() if param.isInstanceOf[XSLParam]) {
       numberOfParams += 1
       if (param.asInstanceOf[XSLParam].isRequiredParam) {
         hasRequiredParams = true
@@ -237,7 +237,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
     try {
       exp = makeExpressionVisitor().simplify(block)
     } catch {
-      case e: XPathException => compileError(e)
+      case e: XPathException ⇒ compileError(e)
     }
     try {
       if (requiredType != null) {
@@ -246,7 +246,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
         exp = TypeChecker.staticTypeCheck(exp, requiredType, false, role)
       }
     } catch {
-      case err: XPathException => compileError(err)
+      case err: XPathException ⇒ compileError(err)
     }
     compiledTemplate.setBody(exp)
     compiledTemplate.setTemplateName(getObjectName)
@@ -284,7 +284,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
       val module = declaration.getModule
       val slots = `match`.allocateSlots(0)
       val mgr = getPreparedStylesheet.getRuleManager
-      for (nc <- modeNames) {
+      for (nc ← modeNames) {
         val mode = mgr.getMode(nc, true)
         if (prioritySpecified) {
           mgr.setTemplateRule(`match`, compiledTemplate, mode, module, priority, ixslPreventDefault, 
@@ -320,7 +320,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
         compiledTemplate.setBody(exp2)
       }
     } catch {
-      case e: XPathException => compileError(e)
+      case e: XPathException ⇒ compileError(e)
     }
     compiledTemplate.allocateSlots(numberOfParams)
   }

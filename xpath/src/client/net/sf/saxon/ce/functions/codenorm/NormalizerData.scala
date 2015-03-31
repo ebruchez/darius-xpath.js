@@ -59,7 +59,7 @@ class NormalizerData(var canonicalClass: Map[Int, Integer],
   def getRecursiveDecomposition(canonical: Boolean, ch: Int, buffer: StringBuffer): Unit = {
     val decomp = decompose.get(ch).asInstanceOf[String]
     if (decomp != null && !(canonical && isCompatibility.get(ch))) {
-      for (i <- 0 until decomp.length) {
+      for (i ← 0 until decomp.length) {
         getRecursiveDecomposition(canonical, decomp.charAt(i), buffer)
       }
     } else {

@@ -77,26 +77,26 @@ object DecimalValue {
       var state = 0
       var foundDigit = false
       val len = in.length
-      for (i <- 0 until len) {
+      for (i ← 0 until len) {
         val c = in.charAt(i)
         c match {
-          case ' ' | '\t' | '\r' | '\n' => if (state != 0) {
+          case ' ' | '\t' | '\r' | '\n' ⇒ if (state != 0) {
             state = 5
           }
-          case '+' =>
+          case '+' ⇒
             if (state != 0) {
               throw new NumberFormatException("unexpected sign")
             }
             state = 1
 
-          case '-' =>
+          case '-' ⇒
             if (state != 0) {
               throw new NumberFormatException("unexpected sign")
             }
             state = 1
             digits.append(c)
 
-          case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' =>
+          case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ⇒
             if (state == 0) {
               state = 1
             } else if (state >= 3) {
@@ -108,7 +108,7 @@ object DecimalValue {
             digits.append(c)
             foundDigit = true
 
-          case '.' =>
+          case '.' ⇒
             if (state == 5) {
               throw new NumberFormatException("contains embedded whitespace")
             }
@@ -117,7 +117,7 @@ object DecimalValue {
             }
             state = 3
 
-          case _ => throw new NumberFormatException("invalid character '" + c + "'")
+          case _ ⇒ throw new NumberFormatException("invalid character '" + c + "'")
         }
       }
       if (!foundDigit) {
@@ -141,7 +141,7 @@ object DecimalValue {
       val bigDec = new BigDecimal(bigInt, scale)
       new DecimalValue(bigDec)
     } catch {
-      case err: NumberFormatException => new ValidationFailure("Cannot convert string " + Err.wrap(Whitespace.trim(in),
+      case err: NumberFormatException ⇒ new ValidationFailure("Cannot convert string " + Err.wrap(Whitespace.trim(in),
         Err.VALUE) + 
         " to xs:decimal: " + 
         err.getMessage, "FORG0001")
@@ -181,7 +181,7 @@ object DecimalValue {
         fsb.append('-')
       }
       fsb.append(s)
-      for (i <- 0 until (-scale)) {
+      for (i ← 0 until (-scale)) {
         fsb.append('0')
       }
       fsb
@@ -197,7 +197,7 @@ object DecimalValue {
       }
       if (scale >= len) {
         fsb.append("0.")
-        for (i <- len until scale) {
+        for (i ← len until scale) {
           fsb.append('0')
         }
         fsb.append(s)
@@ -217,8 +217,8 @@ object DecimalValue {
 class DecimalValue(_value: Either[BigDecimal, Double]) extends NumericValue {
 
   private val value = _value match {
-    case Left(decimal) => stripTrailingZeros(decimal)
-    case Right(double) => new BigDecimal(double)
+    case Left(decimal) ⇒ stripTrailingZeros(decimal)
+    case Right(double) ⇒ new BigDecimal(double)
   }
 
   def this(in: BigDecimal) =
@@ -327,10 +327,10 @@ class DecimalValue(_value: Either[BigDecimal, Double]) extends NumericValue {
    * Implement the XPath round() function
    */
   def round(): NumericValue = value.signum() match {
-    case -1 => new DecimalValue(value.setScale(0, BigDecimal.ROUND_HALF_DOWN))
-    case 0 => this
-    case 1 => new DecimalValue(value.setScale(0, BigDecimal.ROUND_HALF_UP))
-    case _ => this
+    case -1 ⇒ new DecimalValue(value.setScale(0, BigDecimal.ROUND_HALF_DOWN))
+    case 0 ⇒ this
+    case 1 ⇒ new DecimalValue(value.setScale(0, BigDecimal.ROUND_HALF_UP))
+    case _ ⇒ this
   }
 
   /**

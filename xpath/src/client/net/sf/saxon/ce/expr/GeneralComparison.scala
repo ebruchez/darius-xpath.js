@@ -34,13 +34,13 @@ object GeneralComparison {
    * @return the corresponding value comparison operator, for example Token.FEQ
    */
   private def getSingletonOperator(op: Int): Int = op match {
-    case Token.EQUALS => Token.FEQ
-    case Token.GE => Token.FGE
-    case Token.NE => Token.FNE
-    case Token.LT => Token.FLT
-    case Token.GT => Token.FGT
-    case Token.LE => Token.FLE
-    case _ => op
+    case Token.EQUALS ⇒ Token.FEQ
+    case Token.GE ⇒ Token.FGE
+    case Token.NE ⇒ Token.FNE
+    case Token.LT ⇒ Token.FLT
+    case Token.GT ⇒ Token.FGT
+    case Token.LE ⇒ Token.FLE
+    case _ ⇒ op
   }
 }
 
@@ -150,7 +150,7 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
       if (a == null) {
         return false
       }
-      for (j <- 0 until val1.getLength) {
+      for (j ← 0 until val1.getLength) {
         val b = val1.itemAt(j).asInstanceOf[AtomicValue]
         if (compare(a, singletonOperator, b, comparer)) {
           return true

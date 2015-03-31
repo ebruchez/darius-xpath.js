@@ -90,7 +90,7 @@ class FloatValue(var value: Float) extends NumericValue {
       try {
         new DecimalValue(value)
       } catch {
-        case e: XPathException => new ValidationFailure(e.getMessage)
+        case e: XPathException ⇒ new ValidationFailure(e.getMessage)
       }
     } else if (requiredType == AtomicType.DOUBLE) {
       new DoubleValue(value)

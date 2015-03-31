@@ -56,7 +56,7 @@ class StylesheetModule(@BeanProperty var sourceElement: XSLStylesheet, var prece
     topLevel = new ArrayList[Declaration](50)
     minImportPrecedence = precedence
     var previousElement = sourceElement
-    for (child <- sourceElement.allChildren()) {
+    for (child ← sourceElement.allChildren()) {
       if (child.getNodeKind == Type.TEXT) {
         if (!Whitespace.isWhite(child.getStringValue)) {
           previousElement.compileError("No character data is allowed between top-level elements", "XTSE0120")
@@ -96,7 +96,7 @@ class StylesheetModule(@BeanProperty var sourceElement: XSLStylesheet, var prece
             inc.setWasIncluded()
           }
           val incchildren = inc.topLevel
-          for (j <- 0 until incchildren.size) {
+          for (j ← 0 until incchildren.size) {
             val decl = incchildren.get(j)
             var last = topLevel.size - 1
             if (last < 0 || 

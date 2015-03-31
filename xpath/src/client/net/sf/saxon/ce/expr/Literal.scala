@@ -83,7 +83,7 @@ object Literal {
       }
       false
     } catch {
-      case e: XPathException => false
+      case e: XPathException ⇒ false
     }
   }
 }
@@ -135,7 +135,7 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
         }
       }
     } catch {
-      case err: XPathException => StaticProperty.ALLOWS_ZERO_OR_MORE
+      case err: XPathException ⇒ StaticProperty.ALLOWS_ZERO_OR_MORE
     }
   }
 
@@ -265,7 +265,7 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
       }
       throw new IllegalStateException
     } catch {
-      case err: XPathException => false
+      case err: XPathException ⇒ false
     }
   }
 

@@ -106,7 +106,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
     buildIndexes()
     processAllAttributes()
     collectNamespaceAliases()
-    for (decl <- topLevel) {
+    for (decl ← topLevel) {
       val inst = decl.getSourceElement
       if (!inst.isActionCompleted(StyleElement.ACTION_FIXUP)) {
         inst.setActionCompleted(StyleElement.ACTION_FIXUP)
@@ -119,7 +119,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
     if (!top.isActionCompleted(StyleElement.ACTION_VALIDATE)) {
       top.setActionCompleted(StyleElement.ACTION_VALIDATE)
       top.validate(decl)
-      for (aTopLevel <- topLevel) {
+      for (aTopLevel ← topLevel) {
         decl = aTopLevel
         decl.getSourceElement.validateSubtree(decl)
       }
@@ -144,14 +144,14 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
   def processAllAttributes(): Unit = {
     getSourceElement.processDefaultCollationAttribute("")
     getSourceElement.prepareAttributes()
-    for (decl <- topLevel) {
+    for (decl ← topLevel) {
       val inst = decl.getSourceElement
       if (!inst.isActionCompleted(StyleElement.ACTION_PROCESS_ATTRIBUTES)) {
         inst.setActionCompleted(StyleElement.ACTION_PROCESS_ATTRIBUTES)
         try {
           inst.processAllAttributes()
         } catch {
-          case err: XPathException => decl.getSourceElement.compileError(err)
+          case err: XPathException ⇒ decl.getSourceElement.compileError(err)
         }
       }
     }
@@ -359,7 +359,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
     aliasResultUriSet = new HashSet(numberOfAliases)
     val aliasesAtThisPrecedence = new HashSet[String]()
     var currentPrecedence = -1
-    for (i <- 0 until numberOfAliases) {
+    for (i ← 0 until numberOfAliases) {
       val decl = namespaceAliasList.get(i)
       val xna = decl.getSourceElement.asInstanceOf[XSLNamespaceAlias]
       val scode = xna.getStylesheetURI
@@ -391,14 +391,14 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
   def compileStylesheet(): Unit = {
     try {
       val pss = getExecutable
-      for (i <- 0 until topLevel.size) {
+      for (i ← 0 until topLevel.size) {
         val decl = topLevel.get(i)
         val snode = decl.getSourceElement
         if (snode.isInstanceOf[XSLTemplate]) {
           snode.asInstanceOf[XSLTemplate].register(decl)
         }
       }
-      for (i <- 0 until topLevel.size) {
+      for (i ← 0 until topLevel.size) {
         val decl = topLevel.get(i)
         val snode = decl.getSourceElement
         if (!snode.isActionCompleted(StyleElement.ACTION_COMPILE)) {
@@ -424,7 +424,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
       if (getExecutable.getErrorCount > 0) {
         return
       }
-      for (i <- 0 until topLevel.size) {
+      for (i ← 0 until topLevel.size) {
         val decl = topLevel.get(i)
         val node = decl.getSourceElement
         if (node.isInstanceOf[StylesheetProcedure] && !node.isInstanceOf[XSLFunction] &&
@@ -449,13 +449,13 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
         try {
           pss.getDecimalFormatManager.fixupDefaultDefault()
         } catch {
-          case err: XPathException => compileError(err.getMessage, err.getErrorCodeLocalPart)
+          case err: XPathException ⇒ compileError(err.getMessage, err.getErrorCodeLocalPart)
         }
       }
       val ruleManager = getExecutable.getRuleManager
       ruleManager.computeRankings()
     } catch {
-      case err: RuntimeException => if (getExecutable.getErrorCount == 0) {
+      case err: RuntimeException ⇒ if (getExecutable.getErrorCount == 0) {
         throw err
       }
     }
@@ -472,7 +472,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
    */
   protected def getAttributeSets(name: StructuredQName, list: List[Declaration]): Boolean = {
     var found = false
-    for (decl <- topLevel if decl.getSourceElement.isInstanceOf[XSLAttributeSet]) {
+    for (decl ← topLevel if decl.getSourceElement.isInstanceOf[XSLAttributeSet]) {
       val t = decl.getSourceElement.asInstanceOf[XSLAttributeSet]
       if (t.getAttributeSetName == name) {
         list.add(decl)

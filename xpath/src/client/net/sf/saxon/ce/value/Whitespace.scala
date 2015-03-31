@@ -43,8 +43,8 @@ object Whitespace {
    * @return true if the character is one of tab, newline, carriage return, or space
    */
   def isWhitespace(ch: Int): Boolean = ch match {
-    case 9 | 10 | 13 | 32 => true
-    case _ => false
+    case 9 | 10 | 13 | 32 ⇒ true
+    case _ ⇒ false
   }
 
   /**
@@ -56,7 +56,7 @@ object Whitespace {
   def removeAllWhitespace(value: CharSequence): CharSequence = {
     if (containsWhitespace(value)) {
       val sb = new FastStringBuffer(value.length)
-      for (i <- 0 until value.length) {
+      for (i ← 0 until value.length) {
         val c = value.charAt(i)
         if (c > 32 || !C0WHITE(c)) {
           sb.append(c)
@@ -77,7 +77,7 @@ object Whitespace {
   def removeLeadingWhitespace(value: CharSequence): CharSequence = {
     var start = -1
     val len = value.length
-    for (i <- 0 until len) {
+    for (i ← 0 until len) {
       val c = value.charAt(i)
       if (c > 32 || !C0WHITE(c)) {
         start = i
@@ -152,12 +152,12 @@ object Whitespace {
     while (i < len) {
       val c = in.charAt(i)
       c match {
-        case '\n' | '\r' | '\t' | ' ' => if (inWhitespace) {
+        case '\n' | '\r' | '\t' | ' ' ⇒ if (inWhitespace) {
         } else {
           sb.append(' ')
           inWhitespace = true
         }
-        case _ =>
+        case _ ⇒
           sb.append(c)
           inWhitespace = false
 
@@ -236,7 +236,7 @@ object Whitespace {
     val list = new ArrayList[String](8)
     val fsb = new FastStringBuffer(FastStringBuffer.TINY)
     var inTok = false
-    for (i <- 0 until s.length) {
+    for (i ← 0 until s.length) {
       val c = s.charAt(i)
       if (c <= 32 && C0WHITE(c)) {
         if (inTok) {

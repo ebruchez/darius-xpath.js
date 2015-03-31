@@ -16,12 +16,12 @@ object StringToDouble {
   def stringToNumber(s: CharSequence): Double = {
     var containsDisallowedChars = false
     var containsWhitespace = false
-    for (i <- 0 until s.length) {
+    for (i ← 0 until s.length) {
       val c = s.charAt(i)
       c match {
-        case ' ' | '\n' | '\t' | '\r' => containsWhitespace = true
-        case 'x' | 'X' | 'f' | 'F' | 'd' | 'D' | 'n' | 'N' => containsDisallowedChars = true
-        case _ => //break
+        case ' ' | '\n' | '\t' | '\r' ⇒ containsWhitespace = true
+        case 'x' | 'X' | 'f' | 'F' | 'd' | 'D' | 'n' | 'N' ⇒ containsDisallowedChars = true
+        case _ ⇒ //break
       }
     }
     val n = if (containsWhitespace) Whitespace.trimWhitespace(s).toString else s.toString

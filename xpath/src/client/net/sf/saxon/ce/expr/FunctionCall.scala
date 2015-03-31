@@ -66,7 +66,7 @@ abstract class FunctionCall extends Expression {
    */
   def setArguments(args: Array[Expression]): Unit = {
     argument = args
-    for (a <- 0 until args.length) {
+    for (a ← 0 until args.length) {
       adoptChildExpression(args(a))
     }
   }
@@ -91,7 +91,7 @@ abstract class FunctionCall extends Expression {
    * @param visitor an expression visitor
    */
   protected def simplifyArguments(visitor: ExpressionVisitor): Expression = {
-    for (i <- 0 until argument.length) {
+    for (i ← 0 until argument.length) {
       val exp = visitor.simplify(argument(i))
       if (exp != argument(i)) {
         adoptChildExpression(exp)
@@ -108,7 +108,7 @@ abstract class FunctionCall extends Expression {
    */
   override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     var fixed = true
-    for (i <- 0 until argument.length) {
+    for (i ← 0 until argument.length) {
       val exp = visitor.typeCheck(argument(i), contextItemType)
       if (exp != argument(i)) {
         adoptChildExpression(exp)
@@ -143,7 +143,7 @@ abstract class FunctionCall extends Expression {
    */
   override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     var fixed = true
-    for (i <- 0 until argument.length) {
+    for (i ← 0 until argument.length) {
       val exp = visitor.optimize(argument(i), contextItemType)
       if (exp != argument(i)) {
         adoptChildExpression(exp)
@@ -186,7 +186,7 @@ abstract class FunctionCall extends Expression {
       exp
     } else {
       if (offer.action != PromotionOffer.UNORDERED) {
-        for (i <- 0 until argument.length) {
+        for (i ← 0 until argument.length) {
           argument(i) = doPromotion(argument(i), offer)
         }
       }
@@ -276,7 +276,7 @@ abstract class FunctionCall extends Expression {
     if (getNumberOfArguments != f.getNumberOfArguments) {
       return false
     }
-    for (i <- 0 until getNumberOfArguments if argument(i) != f.argument(i)) {
+    for (i ← 0 until getNumberOfArguments if argument(i) != f.argument(i)) {
       return false
     }
     true
@@ -287,7 +287,7 @@ abstract class FunctionCall extends Expression {
    */
   override def hashCode(): Int = {
     var h = getFunctionName.hashCode
-    for (i <- 0 until getNumberOfArguments) {
+    for (i ← 0 until getNumberOfArguments) {
       h ^= argument(i).hashCode
     }
     h

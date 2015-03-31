@@ -92,7 +92,7 @@ class DocumentPool {
    * @return the document supplied in the doc parameter
    */
   def discard(doc: DocumentInfo): DocumentInfo = {
-    for ((name, entry) <- documentNameMap) {
+    for ((name, entry) ← documentNameMap) {
       if (entry.isSameNodeInfo(doc)) {
         documentNameMap.remove(name)
         return doc

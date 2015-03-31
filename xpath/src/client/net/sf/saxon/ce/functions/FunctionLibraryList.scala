@@ -74,7 +74,7 @@ class FunctionLibraryList extends FunctionLibrary {
       staticArgs: Array[Expression], 
       env: StaticContext, 
       container: Container): Expression = {
-    for (lib <- libraryList) {
+    for (lib ← libraryList) {
       val func = lib.bind(functionName, staticArgs, env, container)
       if (func != null) {
         return func

@@ -28,7 +28,7 @@ class Concat extends SystemFunction {
   override def evaluateItem(c: XPathContext): Item = {
     val numArgs = argument.length
     val sb = new FastStringBuffer(FastStringBuffer.SMALL)
-    for (i <- 0 until numArgs) {
+    for (i ← 0 until numArgs) {
       val `val` = argument(i).evaluateItem(c).asInstanceOf[AtomicValue]
       if (`val` != null) {
         sb.append(`val`.getStringValue)

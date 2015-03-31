@@ -21,7 +21,7 @@ class LocalParamBlock(params: Array[LocalParam]) extends Instruction {
   @BeanProperty
   var children: Array[LocalParam] = params
 
-  for (c <- 0 until children.length) {
+  for (c ← 0 until children.length) {
     adoptChildExpression(children(c))
   }
 
@@ -55,7 +55,7 @@ class LocalParamBlock(params: Array[LocalParam]) extends Instruction {
    * @param visitor an expression visitor
    */
   def simplify(visitor: ExpressionVisitor): Expression = {
-    for (c <- 0 until children.length) {
+    for (c ← 0 until children.length) {
       children(c) = visitor.simplify(children(c)).asInstanceOf[LocalParam]
       adoptChildExpression(children(c))
     }
@@ -63,7 +63,7 @@ class LocalParamBlock(params: Array[LocalParam]) extends Instruction {
   }
 
   def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
-    for (c <- 0 until children.length) {
+    for (c ← 0 until children.length) {
       children(c) = visitor.typeCheck(children(c), contextItemType).asInstanceOf[LocalParam]
       adoptChildExpression(children(c))
     }
@@ -71,7 +71,7 @@ class LocalParamBlock(params: Array[LocalParam]) extends Instruction {
   }
 
   def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
-    for (c <- 0 until children.length) {
+    for (c ← 0 until children.length) {
       children(c) = visitor.optimize(children(c), contextItemType).asInstanceOf[LocalParam]
       adoptChildExpression(children(c))
     }
@@ -84,18 +84,18 @@ class LocalParamBlock(params: Array[LocalParam]) extends Instruction {
    * @throws client.net.sf.saxon.ce.trans.XPathException
    */
   protected def promoteInst(offer: PromotionOffer): Unit = {
-    for (c <- 0 until children.length) {
+    for (c ← 0 until children.length) {
       children(c) = doPromotion(children(c), offer).asInstanceOf[LocalParam]
     }
   }
 
   def processLeavingTail(context: XPathContext): TailCall = {
-    for (i <- 0 until children.length) {
+    for (i ← 0 until children.length) {
       try {
         val param = children(i)
         context.setLocalVariable(param.getSlotNumber, param.getSelectValue(context))
       } catch {
-        case e: XPathException => {
+        case e: XPathException ⇒ {
           e.maybeSetLocation(children(i).getSourceLocator)
           throw e
         }

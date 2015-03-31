@@ -48,7 +48,7 @@ class Tokenize extends SystemFunction {
       }
       re.tokenize(input)
     } catch {
-      case err: XPathException =>
+      case err: XPathException ⇒
         err.setErrorCode("FORX0002")
         err.maybeSetLocation(this.getSourceLocator)
         throw err

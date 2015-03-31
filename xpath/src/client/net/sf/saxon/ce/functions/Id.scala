@@ -28,7 +28,7 @@ object Id {
       if (Whitespace.containsWhitespace(idrefs)) {
         val tokens = Whitespace.tokenize(idrefs)
         val refs = new ArrayList[StringValue](tokens.size)
-        for (s <- tokens) {
+        for (s ← tokens) {
           refs.add(StringValue.makeStringValue(s))
         }
         val submap = new IdMappingFunction()
@@ -116,7 +116,7 @@ class Id extends SystemFunction {
     try {
       arg1 = argument(1).evaluateItem(context).asInstanceOf[NodeInfo]
     } catch {
-      case e: XPathException => if (context.getContextItem.isInstanceOf[AtomicValue]) {
+      case e: XPathException ⇒ if (context.getContextItem.isInstanceOf[AtomicValue]) {
         dynamicError("For the " + getFunctionName.getLocalName + "() function, the context item is not a node", 
           "XPTY0004")
         return null

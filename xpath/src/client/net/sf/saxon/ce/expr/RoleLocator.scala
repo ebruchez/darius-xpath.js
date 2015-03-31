@@ -30,10 +30,10 @@ object RoleLocator {
    * @return the ordinal representation
    */
   def ordinal(n: Int): String = n match {
-    case 1 => "first"
-    case 2 => "second"
-    case 3 => "third"
-    case _ => n + "th"
+    case 1 ⇒ "first"
+    case 2 ⇒ "second"
+    case 3 ⇒ "third"
+    case _ ⇒ n + "th"
   }
 }
 
@@ -71,13 +71,13 @@ class RoleLocator(var kind: Int, var operation: AnyRef, var operand: Int) {
     var name: String = null
     name = if (operation.isInstanceOf[String]) operation.asInstanceOf[String] else operation.asInstanceOf[StructuredQName].getDisplayName
     kind match {
-      case FUNCTION => ordinal(operand + 1) + " argument of " + 
+      case FUNCTION ⇒ ordinal(operand + 1) + " argument of " +
         (if (name.length == 0) "anonymous function" else name + "()")
-      case BINARY_EXPR => ordinal(operand + 1) + " operand of '" + name + '\''
-      case UNARY_EXPR => "operand of '-'"
-      case TYPE_OP => "value in '" + name + "' expression"
-      case VARIABLE => "value of variable $" + name
-      case INSTRUCTION => 
+      case BINARY_EXPR ⇒ ordinal(operand + 1) + " operand of '" + name + '\''
+      case UNARY_EXPR ⇒ "operand of '-'"
+      case TYPE_OP ⇒ "value in '" + name + "' expression"
+      case VARIABLE ⇒ "value of variable $" + name
+      case INSTRUCTION ⇒
         var slash = name.indexOf('/')
         var attributeName = ""
         if (slash >= 0) {
@@ -86,20 +86,20 @@ class RoleLocator(var kind: Int, var operation: AnyRef, var operand: Int) {
         }
         '@' + attributeName + " attribute of " + name
 
-      case FUNCTION_RESULT => if (name.length == 0) {
+      case FUNCTION_RESULT ⇒ if (name.length == 0) {
         "result of anonymous function"
       } else {
         "result of function " + name + "()"
       }
-      case TEMPLATE_RESULT => "result of template " + name
-      case ORDER_BY => ordinal(operand + 1) + " sort key"
-      case PARAM => "value of parameter $" + name
-      case UPDATING_EXPR => "value of " + ordinal(operand + 1) + " operand of " + 
+      case TEMPLATE_RESULT ⇒ "result of template " + name
+      case ORDER_BY ⇒ ordinal(operand + 1) + " sort key"
+      case PARAM ⇒ "value of parameter $" + name
+      case UPDATING_EXPR ⇒ "value of " + ordinal(operand + 1) + " operand of " +
         name + 
         " expression"
-      case GROUPING_KEY => "value of the grouping key"
-      case EVALUATE_RESULT => "result of the expression {" + name + "} evaluated by xsl:evaluate"
-      case _ => ""
+      case GROUPING_KEY ⇒ "value of the grouping key"
+      case EVALUATE_RESULT ⇒ "result of the expression {" + name + "} evaluated by xsl:evaluate"
+      case _ ⇒ ""
     }
   }
 

@@ -59,7 +59,7 @@ abstract class XSLVariableDeclaration extends XSLGeneralVariable with VariableDe
   def fixupReferences(): Unit = {
     val `type` = getRequiredType
     val th = TypeHierarchy.getInstance
-    for (reference <- references) {
+    for (reference ← references) {
       var constantValue: Sequence = null
       var properties = 0
       if (this.isInstanceOf[XSLVariable]) {
@@ -96,7 +96,7 @@ abstract class XSLVariableDeclaration extends XSLGeneralVariable with VariableDe
    * @param binding the Binding that represents this variable declaration in the executable code tree
    */
   protected def fixupBinding(binding: Binding): Unit = {
-    for (reference <- references) {
+    for (reference ← references) {
       reference.fixup(binding)
     }
   }
@@ -116,7 +116,7 @@ abstract class XSLVariableDeclaration extends XSLGeneralVariable with VariableDe
       try {
         exp2 = exp2.optimize(visitor, AnyNodeTest.getInstance)
       } catch {
-        case err: XPathException => {
+        case err: XPathException ⇒ {
           err.maybeSetLocation(this)
           compileError(err)
         }

@@ -61,9 +61,9 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
    * @return the sequence
    */
   def getSequence(): Sequence = list.size match {
-    case 0 => EmptySequence.getInstance
-    case 1 => list.get(0)
-    case _ => new SequenceExtent(list)
+    case 0 ⇒ EmptySequence.getInstance
+    case 1 ⇒ list.get(0)
+    case _ ⇒ new SequenceExtent(list)
   }
 
   /**

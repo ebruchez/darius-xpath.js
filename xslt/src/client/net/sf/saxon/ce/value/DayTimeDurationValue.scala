@@ -237,7 +237,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
     try {
       fromMicroseconds(product.toLong)
     } catch {
-      case err: IllegalArgumentException => if (err.getCause.isInstanceOf[XPathException]) {
+      case err: IllegalArgumentException ⇒ if (err.getCause.isInstanceOf[XPathException]) {
         throw err.getCause.asInstanceOf[XPathException]
       } else {
         throw new XPathException("Overflow when multiplying/dividing a duration by a number", "FODT0002")

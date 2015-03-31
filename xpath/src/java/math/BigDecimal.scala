@@ -178,16 +178,16 @@ object BigDecimal {
 
   Arrays.fill(CH_ZEROS, '0')
 
-  for (i <- 0 until ZERO_SCALED_BY.length) {
+  for (i ← 0 until ZERO_SCALED_BY.length) {
     BI_SCALED_BY_ZERO(i) = new BigDecimal(i, 0)
     ZERO_SCALED_BY(i) = new BigDecimal(0, i)
   }
 
-  for (i <- 0 until LONG_FIVE_POW_BIT_LENGTH.length) {
+  for (i ← 0 until LONG_FIVE_POW_BIT_LENGTH.length) {
     LONG_FIVE_POW_BIT_LENGTH(i) = bitLength(LONG_FIVE_POW(i))
   }
 
-  for (i <- 0 until LONG_POWERS_OF_TEN_BIT_LENGTH.length) {
+  for (i ← 0 until LONG_POWERS_OF_TEN_BIT_LENGTH.length) {
     LONG_POWERS_OF_TEN_BIT_LENGTH(i) = bitLength(LONG_POWERS_OF_TEN(i))
   }
 
@@ -345,20 +345,20 @@ object BigDecimal {
   private def roundingBehavior(parityBit: Int, fraction: Int, roundingMode: RoundingMode): Int = {
     var increment = 0 // the carry after rounding
     roundingMode match {
-      case RoundingMode.UNNECESSARY => if (fraction != 0) {
+      case RoundingMode.UNNECESSARY ⇒ if (fraction != 0) {
         throw new ArithmeticException("Rounding necessary")
       }
-      case RoundingMode.UP => increment = java.lang.Integer.signum(fraction)
-      case RoundingMode.DOWN => //break in case statement
-      case RoundingMode.CEILING => increment = Math.max(java.lang.Integer.signum(fraction), 0)
-      case RoundingMode.FLOOR => increment = Math.min(java.lang.Integer.signum(fraction), 0)
-      case RoundingMode.HALF_UP => if (Math.abs(fraction) >= 5) {
+      case RoundingMode.UP ⇒ increment = java.lang.Integer.signum(fraction)
+      case RoundingMode.DOWN ⇒ //break in case statement
+      case RoundingMode.CEILING ⇒ increment = Math.max(java.lang.Integer.signum(fraction), 0)
+      case RoundingMode.FLOOR ⇒ increment = Math.min(java.lang.Integer.signum(fraction), 0)
+      case RoundingMode.HALF_UP ⇒ if (Math.abs(fraction) >= 5) {
         increment = java.lang.Integer.signum(fraction)
       }
-      case RoundingMode.HALF_DOWN => if (Math.abs(fraction) > 5) {
+      case RoundingMode.HALF_DOWN ⇒ if (Math.abs(fraction) > 5) {
         increment = java.lang.Integer.signum(fraction)
       }
-      case RoundingMode.HALF_EVEN => if (Math.abs(fraction) + parityBit > 5) {
+      case RoundingMode.HALF_EVEN ⇒ if (Math.abs(fraction) + parityBit > 5) {
         increment = java.lang.Integer.signum(fraction)
       }
     }
@@ -2168,9 +2168,9 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    * instances are not equal if their scale differs.
    */
   override def equals(x: Any): Boolean = x match{
-    case that: BigDecimal => that._scale == this._scale &&
+    case that: BigDecimal ⇒ that._scale == this._scale &&
       (if (_bitLength < 64) that._smallValue == this._smallValue else this.intVal == that.intVal)
-    case _ => false
+    case _ ⇒ false
   }
 
   /**

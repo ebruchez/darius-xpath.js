@@ -25,14 +25,14 @@ object FilterExpression {
       operator: Int, 
       th: TypeHierarchy): Expression = {
     if (th.isSubType(comparand.getItemType, AtomicType.INTEGER)) operator match {
-      case Token.FEQ => {
+      case Token.FEQ ⇒ {
         if (Literal.isConstantOne(comparand)) {
           new FirstItemExpression(start)
         } else {
           SystemFunction.makeSystemFunction("subsequence", Array(start, comparand, new Literal(IntegerValue.PLUS_ONE)))
         }
       }
-      case Token.FLT => {
+      case Token.FLT ⇒ {
         val args = new Array[Expression](3)
         args(0) = start
         args(1) = new Literal(new IntegerValue(1))
@@ -45,17 +45,17 @@ object FilterExpression {
         }
         SystemFunction.makeSystemFunction("subsequence", args)
       }
-      case Token.FLE => {
+      case Token.FLE ⇒ {
         val args = new Array[Expression](3)
         args(0) = start
         args(1) = new Literal(new IntegerValue(1))
         args(2) = comparand
         SystemFunction.makeSystemFunction("subsequence", args)
       }
-      case Token.FNE => {
+      case Token.FNE ⇒ {
         SystemFunction.makeSystemFunction("remove", Array(start, comparand))
       }
-      case Token.FGT => {
+      case Token.FGT ⇒ {
         val args = new Array[Expression](2)
         args(0) = start
         if (Literal.isAtomic(comparand)) {
@@ -67,10 +67,10 @@ object FilterExpression {
         }
         SystemFunction.makeSystemFunction("subsequence", args)
       }
-      case Token.FGE => {
+      case Token.FGE ⇒ {
         SystemFunction.makeSystemFunction("subsequence", Array(start, comparand))
       }
-      case _ => throw new IllegalArgumentException("operator")
+      case _ ⇒ throw new IllegalArgumentException("operator")
     } else {
       null
     }
@@ -287,7 +287,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
               return SystemFunction.makeSystemFunction("subsequence", Array(start, filter, new Literal(IntegerValue.PLUS_ONE)))
             }
           } catch {
-            case err: XPathException => return null
+            case err: XPathException ⇒ return null
           }
         } else {
           return Literal.makeEmptySequence()

@@ -127,8 +127,8 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * The equals() method has been defined because it is useful in contexts such as a Java Set or HashMap.
    */
   override def equals(other: Any): Boolean = other match {
-    case other: NodeInfo => isSameNodeInfo(other)
-    case _ => false
+    case other: NodeInfo ⇒ isSameNodeInfo(other)
+    case _ ⇒ false
   }
 
   /**
@@ -324,10 +324,10 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * @return an AxisIterator that scans the nodes reached by the axis in turn.
    */
   def iterateAxis(axisNumber: Byte, nodeTest: NodeTest): UnfailingIterator = axisNumber match {
-    case Axis.ANCESTOR => new SteppingIterator(this, new Navigator.ParentFunction(nodeTest), false)
-    case Axis.ANCESTOR_OR_SELF => new SteppingIterator(this, new Navigator.ParentFunction(nodeTest), 
+    case Axis.ANCESTOR ⇒ new SteppingIterator(this, new Navigator.ParentFunction(nodeTest), false)
+    case Axis.ANCESTOR_OR_SELF ⇒ new SteppingIterator(this, new Navigator.ParentFunction(nodeTest),
       true)
-    case Axis.ATTRIBUTE => 
+    case Axis.ATTRIBUTE ⇒
       if (getNodeKind != Type.ELEMENT) {
         EmptyIterator.getInstance
       }
@@ -342,13 +342,13 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
         }
       } else {
         val nodes = Array.ofDim[AttributeImpl](atts.getLength)
-        for (i <- 0 until atts.getLength) {
+        for (i ← 0 until atts.getLength) {
           nodes(i) = new AttributeImpl(this.asInstanceOf[ElementImpl], i)
         }
         Navigator.newAxisFilter(new ArrayIterator(nodes), nodeTest)
       }
 
-    case Axis.CHILD => if (this.isInstanceOf[ParentNodeImpl]) {
+    case Axis.CHILD ⇒ if (this.isInstanceOf[ParentNodeImpl]) {
       val all = new ArrayIterator(this.asInstanceOf[ParentNodeImpl].allChildren())
       if (nodeTest == AnyNodeTest.getInstance) {
         all
@@ -358,7 +358,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
     } else {
       EmptyIterator.getInstance
     }
-    case Axis.DESCENDANT => if (getNodeKind == Type.DOCUMENT && nodeTest.isInstanceOf[NameTest] && 
+    case Axis.DESCENDANT ⇒ if (getNodeKind == Type.DOCUMENT && nodeTest.isInstanceOf[NameTest] &&
       nodeTest.getRequiredNodeKind == Type.ELEMENT) {
       this.asInstanceOf[DocumentImpl].getAllElements(nodeTest.asInstanceOf[NameTest].getRequiredNodeName)
     } else if (hasChildNodes()) {
@@ -366,28 +366,28 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
     } else {
       EmptyIterator.getInstance
     }
-    case Axis.DESCENDANT_OR_SELF => new SteppingIterator(this, new NextDescendantFunction(this, nodeTest), 
+    case Axis.DESCENDANT_OR_SELF ⇒ new SteppingIterator(this, new NextDescendantFunction(this, nodeTest),
       true)
-    case Axis.FOLLOWING => Navigator.newAxisFilter(new Navigator.FollowingEnumeration(this), nodeTest)
-    case Axis.FOLLOWING_SIBLING => new SteppingIterator(this, new NextSiblingFunction(nodeTest), false)
-    case Axis.NAMESPACE => 
+    case Axis.FOLLOWING ⇒ Navigator.newAxisFilter(new Navigator.FollowingEnumeration(this), nodeTest)
+    case Axis.FOLLOWING_SIBLING ⇒ new SteppingIterator(this, new NextSiblingFunction(nodeTest), false)
+    case Axis.NAMESPACE ⇒
       if (getNodeKind != Type.ELEMENT) {
         EmptyIterator.getInstance
       }
       NamespaceNode.makeIterator(this, nodeTest)
 
-    case Axis.PARENT => 
+    case Axis.PARENT ⇒
       var parent = getParent
       if (parent == null) {
         EmptyIterator.getInstance
       }
       Navigator.filteredSingleton(parent, nodeTest)
 
-    case Axis.PRECEDING => Navigator.newAxisFilter(new Navigator.PrecedingEnumeration(this, false), nodeTest)
-    case Axis.PRECEDING_SIBLING => new SteppingIterator(this, new PrecedingSiblingFunction(nodeTest), 
+    case Axis.PRECEDING ⇒ Navigator.newAxisFilter(new Navigator.PrecedingEnumeration(this, false), nodeTest)
+    case Axis.PRECEDING_SIBLING ⇒ new SteppingIterator(this, new PrecedingSiblingFunction(nodeTest),
       false)
-    case Axis.SELF => Navigator.filteredSingleton(this, nodeTest)
-    case _ => throw new IllegalArgumentException("Unknown axis number " + axisNumber)
+    case Axis.SELF ⇒ Navigator.filteredSingleton(this, nodeTest)
+    case _ ⇒ throw new IllegalArgumentException("Unknown axis number " + axisNumber)
   }
 
   /**

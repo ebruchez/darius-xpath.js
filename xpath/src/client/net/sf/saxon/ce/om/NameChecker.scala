@@ -25,7 +25,7 @@ object NameChecker {
     val parts = new Array[String](2)
     var colon = -1
     val len = qname.length
-    for (i <- 0 until len if qname.charAt(i) == ':') {
+    for (i ← 0 until len if qname.charAt(i) == ':') {
       colon = i
       //break
     }
@@ -76,7 +76,7 @@ object NameChecker {
       }
       parts
     } catch {
-      case e: QNameException =>
+      case e: QNameException ⇒
         val err = new XPathException(e.getMessage)
         err.setErrorCode("FORG0001")
         throw err
@@ -116,7 +116,7 @@ object NameChecker {
     if (!isNCNameStartChar(us.charAt(0))) {
       return false
     }
-    for (i <- 1 until len if !isNCNameChar(us.charAt(i))) {
+    for (i ← 1 until len if !isNCNameChar(us.charAt(i))) {
       return false
     }
     true

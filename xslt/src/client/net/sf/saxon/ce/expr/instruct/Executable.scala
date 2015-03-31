@@ -94,7 +94,7 @@ class Executable(config: Configuration) {
     if (requiredParams == null) {
       return
     }
-    for (req <- requiredParams if params == null || !params.containsKey(req)) {
+    for (req ← requiredParams if params == null || !params.containsKey(req)) {
       throw new XPathException("No value supplied for required parameter " + req.getDisplayName, "XTDE0050")
     }
   }
@@ -138,7 +138,7 @@ class Executable(config: Configuration) {
     try {
       setStylesheetDocument(loadStylesheetModule(doc))
     } catch {
-      case e: XPathException => {
+      case e: XPathException ⇒ {
         if (errorCount == 0) {
           errorCount += 1
         }

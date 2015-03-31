@@ -14,7 +14,7 @@ import client.net.sf.saxon.ce.tree.NamespaceNode
 import client.net.sf.saxon.ce.tree.iter.{ArrayIterator, EmptyIterator, SingletonIterator, UnfailingIterator}
 import client.net.sf.saxon.ce.tree.util.{FastStringBuffer, Navigator}
 import client.net.sf.saxon.ce.value.{AbstractNode, AtomicValue, StringValue, UntypedAtomicValue}
-import org.scalajs.dom.{raw => dom}
+import org.scalajs.dom.{raw ⇒ dom}
 
 import scala.util.control.Breaks
 
@@ -46,27 +46,27 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
   ): HTMLNodeWrapper = {
     var wrapper: HTMLNodeWrapper = null
     node.nodeType match {
-      case DocumentNode | DocumentFragmentNode =>
+      case DocumentNode | DocumentFragmentNode ⇒
         return docWrapper
-      case ElementNode =>
+      case ElementNode ⇒
         wrapper = new HTMLNodeWrapper(node, parent, index)
         wrapper.nodeKind = Type.ELEMENT
-      case Type.ATTRIBUTE =>
+      case Type.ATTRIBUTE ⇒
         wrapper = new HTMLNodeWrapper(node, parent, index)
         wrapper.nodeKind = Type.ATTRIBUTE
-      case TextNode =>
+      case TextNode ⇒
         wrapper = new HTMLNodeWrapper(node, parent, index)
         wrapper.nodeKind = Type.TEXT
-      case CDATASectionNode =>
+      case CDATASectionNode ⇒
         wrapper = new HTMLNodeWrapper(node, parent, index)
         wrapper.nodeKind = Type.TEXT
-      case Type.COMMENT =>
+      case Type.COMMENT ⇒
         wrapper = new HTMLNodeWrapper(node, parent, index)
         wrapper.nodeKind = Type.COMMENT
-      case Type.PROCESSING_INSTRUCTION =>
+      case Type.PROCESSING_INSTRUCTION ⇒
         wrapper = new HTMLNodeWrapper(node, parent, index)
         wrapper.nodeKind = Type.PROCESSING_INSTRUCTION
-      case _ =>
+      case _ ⇒
         throw new IllegalArgumentException(s"Unsupported node type in DOM: ${node.nodeType} instance ${node.toString}")
     }
     wrapper.docWrapper = docWrapper
@@ -77,33 +77,33 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
   def getNodeKind(): Int = nodeKind
 
   def getTypedValue(): AtomicValue = nodeKind match {
-    case Type.COMMENT | Type.PROCESSING_INSTRUCTION => new StringValue(getStringValue)
-    case _                                          => new UntypedAtomicValue(getStringValue)
+    case Type.COMMENT | Type.PROCESSING_INSTRUCTION ⇒ new StringValue(getStringValue)
+    case _                                          ⇒ new UntypedAtomicValue(getStringValue)
   }
 
   def isSameNodeInfo(other: NodeInfo): Boolean =
     other match {
-      case ow: HTMLNodeWrapper =>
+      case ow: HTMLNodeWrapper ⇒
         nodeKind match {
-          case Type.ELEMENT =>
+          case Type.ELEMENT ⇒
             ow.getNodeKind == Type.ELEMENT                &&
               getLocalPart == ow.getLocalPart             &&
               getURI == ow.getURI                         &&
               getSiblingPosition == ow.getSiblingPosition &&
               getParent.isSameNodeInfo(ow.getParent)
-          case _ =>
+          case _ ⇒
             ow.getNodeKind == getNodeKind                 &&
               getStringValue == ow.getStringValue         &&
               getSiblingPosition == ow.getSiblingPosition &&
               getParent.isSameNodeInfo(ow.getParent)
         }
-      case _ =>
+      case _ ⇒
         false
     }
 
   override def equals(other: Any): Boolean = other match {
-    case other: NodeInfo => isSameNodeInfo(other)
-    case _               => false
+    case other: NodeInfo ⇒ isSameNodeInfo(other)
+    case _               ⇒ false
   }
 
   override def hashCode(): Int = {
@@ -140,28 +140,28 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
    * the version of the method that returns a String.
    */
   def getStringValue(): String = nodeKind match {
-    case Type.DOCUMENT | Type.ELEMENT =>
+    case Type.DOCUMENT | Type.ELEMENT ⇒
       val children1 = node.childNodes
       val sb1 = new StringBuilder(16)
       expandStringValue(children1, sb1)
       sb1.toString
-    case Type.ATTRIBUTE =>
+    case Type.ATTRIBUTE ⇒
       emptyIfNull(node.nodeValue)
-    case Type.TEXT =>
+    case Type.TEXT ⇒
       if (span == 1) {
         emptyIfNull(node.nodeValue)
       } else {
         val fsb = new FastStringBuffer(FastStringBuffer.SMALL)
         var textNode = node
-        for (i <- 0 until span) {
+        for (i ← 0 until span) {
           fsb.append(emptyIfNull(textNode.nodeValue))
           textNode = textNode.nextSibling
         }
         fsb.toString
       }
-    case Type.COMMENT | Type.PROCESSING_INSTRUCTION =>
+    case Type.COMMENT | Type.PROCESSING_INSTRUCTION ⇒
       emptyIfNull(node.nodeValue)
-    case _ =>
+    case _ ⇒
       ""
   }
 
@@ -184,9 +184,9 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
   def getRawLocalName(): String = getLocalName(node)
 
   def getLocalPart(): String = nodeKind match {
-    case Type.ELEMENT | Type.ATTRIBUTE => getDomCorrectedName(getLocalName(node))
-    case Type.PROCESSING_INSTRUCTION   => node.nodeName
-    case _                             => null
+    case Type.ELEMENT | Type.ATTRIBUTE ⇒ getDomCorrectedName(getLocalName(node))
+    case Type.PROCESSING_INSTRUCTION   ⇒ node.nodeName
+    case _                             ⇒ null
   }
 
   private def getLocalName(node: dom.Node): String =
@@ -216,9 +216,9 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
   }
 
   def getDisplayName(): String = nodeKind match {
-    case Type.ELEMENT | Type.ATTRIBUTE => getDomCorrectedName(node.nodeName)
-    case Type.PROCESSING_INSTRUCTION   => node.nodeName
-    case _                             => ""
+    case Type.ELEMENT | Type.ATTRIBUTE ⇒ getDomCorrectedName(node.nodeName)
+    case Type.PROCESSING_INSTRUCTION   ⇒ node.nodeName
+    case _                             ⇒ ""
   }
 
   /**
@@ -230,9 +230,9 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
       return null
     }
     docWrapper.getDocType() match {
-      case DocTypeNONHTML => name
-      case DocTypeHTML    => name.toLowerCase()
-      case DocTypeXHTML =>
+      case DocTypeNONHTML ⇒ name
+      case DocTypeHTML    ⇒ name.toLowerCase()
+      case DocTypeXHTML ⇒
         val ns = getURI
         if (ns != null && ns == NamespaceConstant.XHTML) {
           name.toLowerCase()
@@ -240,7 +240,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
           name
         }
 
-      case _ => if (name.matches("[A-Z]+")) {
+      case _ ⇒ if (name.matches("[A-Z]+")) {
         name.toLowerCase()
       } else {
         name
@@ -255,9 +255,9 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     if (parent == null) {
       parent =
         nodeKind match {
-          case Type.ATTRIBUTE =>
+          case Type.ATTRIBUTE ⇒
             throw new IllegalStateException("parent of attribute node is unknown")
-          case _ =>
+          case _ ⇒
             val p = node.parentNode
             if (p == null) {
               null
@@ -272,7 +272,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
   def getSiblingPosition(): Int = {
     if (index == -1) {
       nodeKind match {
-        case Type.ELEMENT | Type.TEXT | Type.COMMENT | Type.PROCESSING_INSTRUCTION =>
+        case Type.ELEMENT | Type.TEXT | Type.COMMENT | Type.PROCESSING_INSTRUCTION ⇒
           var ix = 0
           var start = node
           while (true) {
@@ -284,7 +284,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
             ix += 1
           }
 
-        case Type.ATTRIBUTE =>
+        case Type.ATTRIBUTE ⇒
           var ix = 0
           val fp = getNodeName
           val iter = parent.iterateAxis(Axis.ATTRIBUTE, AnyNodeTest.getInstance)
@@ -297,7 +297,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
             ix += 1
           }
 
-        case Type.NAMESPACE =>
+        case Type.NAMESPACE ⇒
           var ix = 0
           val fp = getNodeName
           val iter = parent.iterateAxis(Axis.NAMESPACE, AnyNodeTest.getInstance)
@@ -310,7 +310,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
             ix += 1
           }
 
-        case _ =>
+        case _ ⇒
           index = 0
       }
     }
@@ -319,57 +319,57 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
 
   private def iterateAxis(axisNumber: Byte): UnfailingIterator =
     axisNumber match {
-      case Axis.ANCESTOR =>
+      case Axis.ANCESTOR ⇒
         if (nodeKind == Type.DOCUMENT)
           EmptyIterator.getInstance
         else
           Navigator.getAncestorIterator(this, AnyNodeTest.getInstance, false)
-      case Axis.ANCESTOR_OR_SELF =>
+      case Axis.ANCESTOR_OR_SELF ⇒
         if (nodeKind == Type.DOCUMENT)
           SingletonIterator.makeIterator(this)
         else
           Navigator.getAncestorIterator(this, AnyNodeTest.getInstance, true)
-      case Axis.ATTRIBUTE =>
+      case Axis.ATTRIBUTE ⇒
         if (nodeKind != Type.ELEMENT)
           EmptyIterator.getInstance
         else
           new ArrayIterator(getAltAttributes)
-      case Axis.CHILD =>
+      case Axis.CHILD ⇒
         if (hasChildNodes())
           Navigator.newEmptyTextFilter(new ChildEnumeration(this, true, true, false))
         else
           EmptyIterator.getInstance
-      case Axis.DESCENDANT =>
+      case Axis.DESCENDANT ⇒
         if (hasChildNodes())
           new Navigator.DescendantEnumeration(this, false, true)
         else
           EmptyIterator.getInstance
-      case Axis.DESCENDANT_OR_SELF =>
+      case Axis.DESCENDANT_OR_SELF ⇒
         new Navigator.DescendantEnumeration(this, true, true)
-      case Axis.FOLLOWING =>
+      case Axis.FOLLOWING ⇒
         new Navigator.FollowingEnumeration(this)
-      case Axis.FOLLOWING_SIBLING =>
+      case Axis.FOLLOWING_SIBLING ⇒
         nodeKind match {
-          case Type.DOCUMENT | Type.ATTRIBUTE | Type.NAMESPACE => EmptyIterator.getInstance
-          case _ => Navigator.newEmptyTextFilter(new ChildEnumeration(this, false, true, false))
+          case Type.DOCUMENT | Type.ATTRIBUTE | Type.NAMESPACE ⇒ EmptyIterator.getInstance
+          case _ ⇒ Navigator.newEmptyTextFilter(new ChildEnumeration(this, false, true, false))
         }
-      case Axis.NAMESPACE =>
+      case Axis.NAMESPACE ⇒
         if (nodeKind != Type.ELEMENT)
           EmptyIterator.getInstance
         else
           NamespaceNode.makeIterator(this, AnyNodeTest.getInstance)
-      case Axis.PARENT =>
+      case Axis.PARENT ⇒
         SingletonIterator.makeIterator(getParent)
-      case Axis.PRECEDING =>
+      case Axis.PRECEDING ⇒
         new Navigator.PrecedingEnumeration(this, false)
-      case Axis.PRECEDING_SIBLING =>
+      case Axis.PRECEDING_SIBLING ⇒
         nodeKind match {
-          case Type.DOCUMENT | Type.ATTRIBUTE | Type.NAMESPACE => EmptyIterator.getInstance
-          case _ => Navigator.newEmptyTextFilter(new ChildEnumeration(this, false, false, false))
+          case Type.DOCUMENT | Type.ATTRIBUTE | Type.NAMESPACE ⇒ EmptyIterator.getInstance
+          case _ ⇒ Navigator.newEmptyTextFilter(new ChildEnumeration(this, false, false, false))
         }
-      case Axis.SELF =>
+      case Axis.SELF ⇒
         SingletonIterator.makeIterator(this)
-      case _ =>
+      case _ ⇒
         throw new IllegalArgumentException
     }
 
@@ -458,7 +458,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     val nodeAtts = new ArrayList[HTMLAttributeNode]()
     namespaceBindings = new ArrayList[NamespaceBinding]()
     val getNamespaces = docWrapper.getDocType != DocTypeHTML
-    for (i <- 0 until len) {
+    for (i ← 0 until len) {
       val attNode = attributes(i)
       val name = attNode.nodeName
       val `val` = attNode.nodeValue
@@ -524,7 +524,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     if (span == 1) {
       textNode.parentNode.removeChild(textNode)
     } else {
-      for (i <- 0 until span) {
+      for (i ← 0 until span) {
         val t = textNode
         textNode = textNode.nextSibling
         t.parentNode.removeChild(t)
@@ -622,13 +622,13 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
               currentSpan = skipFollowingTextNodes()
               val currentDomNode = childNodes.item(ix)
               currentDomNode.nodeType match {
-                case Type.PROCESSING_INSTRUCTION =>
+                case Type.PROCESSING_INSTRUCTION ⇒
                   if (elementsOnly || "XML".equalsIgnoreCase(currentDomNode.nodeName))
                     break()
-                case Type.DOCUMENT_TYPE =>
+                case Type.DOCUMENT_TYPE ⇒
                   break()
-                case ElementNode =>
-                case _ => if (elementsOnly) {
+                case ElementNode ⇒
+                case _ ⇒ if (elementsOnly) {
                   break()
                 }
               }
@@ -645,13 +645,13 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
               ix -= (currentSpan - 1)
               val currentDomNode = childNodes.item(ix)
               currentDomNode.nodeType match {
-                case Type.PROCESSING_INSTRUCTION =>
+                case Type.PROCESSING_INSTRUCTION ⇒
                   if (elementsOnly || "XML".equalsIgnoreCase(currentDomNode.nodeName))
                     break()
-                case Type.DOCUMENT_TYPE =>
+                case Type.DOCUMENT_TYPE ⇒
                   break()
-                case ElementNode =>
-                case _ =>
+                case ElementNode ⇒
+                case _ ⇒
                   if (elementsOnly)
                     break()
               }
@@ -683,12 +683,12 @@ private object HTMLNodeWrapper {
 
   def expandStringValue(list: dom.NodeList, sb: StringBuilder): Unit = {
     val len = list.length
-    for (i <- 0 until len) {
+    for (i ← 0 until len) {
       val child = list.item(i)
       child.nodeType match {
-        case ElementNode => expandStringValue(child.childNodes, sb)
-        case Type.COMMENT | Type.PROCESSING_INSTRUCTION =>
-        case _ => sb.append(child.nodeValue)
+        case ElementNode ⇒ expandStringValue(child.childNodes, sb)
+        case Type.COMMENT | Type.PROCESSING_INSTRUCTION ⇒
+        case _ ⇒ sb.append(child.nodeValue)
       }
     }
   }

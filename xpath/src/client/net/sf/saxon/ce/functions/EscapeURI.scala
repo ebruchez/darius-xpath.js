@@ -25,7 +25,7 @@ object EscapeURI {
 
   Arrays.fill(allowedASCII, 33, 127, true)
 
-  for (c <- Array('"', '<', '>', '\\', '^', '`', '{', '|', '}')) {
+  for (c ← Array('"', '<', '>', '\\', '^', '`', '{', '|', '}')) {
     allowedASCII(c) = false
   }
 
@@ -40,7 +40,7 @@ object EscapeURI {
       return s
     }
     val sb = new FastStringBuffer(s.length + 20)
-    for (i <- 0 until s.length) {
+    for (i ← 0 until s.length) {
       val c = s.charAt(i)
       if (c >= 0x7f || !allowedASCII(c.toInt)) {
         escapeChar(c, if ((i + 1) < s.length) s.charAt(i + 1) else ' ', sb)
@@ -52,7 +52,7 @@ object EscapeURI {
   }
 
   private def allAllowedAscii(s: CharSequence): Boolean = {
-    for (i <- 0 until s.length) {
+    for (i ← 0 until s.length) {
       val c = s.charAt(i)
       if (c >= 0x7f || !allowedASCII(c.toInt)) {
         return false
@@ -73,7 +73,7 @@ object EscapeURI {
    */
   def escape(s: CharSequence, allowedPunctuation: String): CharSequence = {
     val sb = new FastStringBuffer(s.length)
-    for (i <- 0 until s.length) {
+    for (i ← 0 until s.length) {
       val c = s.charAt(i)
       if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
         sb.append(c)
@@ -100,7 +100,7 @@ object EscapeURI {
   private def escapeChar(c: Char, c2: Char, sb: FastStringBuffer): Unit = {
     val array = new Array[Byte](4)
     val used = UTF8CharacterSet.getUTF8Encoding(c, c2, array)
-    for (b <- 0 until used) {
+    for (b ← 0 until used) {
       val v = array(b).toInt & 0xff
       sb.append('%')
       sb.append(hex.charAt(v / 16))
@@ -117,7 +117,7 @@ object EscapeURI {
    */
   def escapeHtmlURL(url: CharSequence): CharSequence = {
     val sb = new FastStringBuffer(url.length + 20)
-    for (i <- 0 until url.length) {
+    for (i ← 0 until url.length) {
       val ch = url.charAt(i)
       if (ch < 32 || ch > 126) {
         var c2 = ' '
@@ -152,10 +152,10 @@ class EscapeURI(_operation: Int) extends SystemFunction {
     }
     val s = item.getStringValue
     operation match {
-      case ENCODE_FOR_URI => StringValue.makeStringValue(escape(s, "-_.~"))
-      case IRI_TO_URI => StringValue.makeStringValue(iriToUri(s))
-      case HTML_URI => StringValue.makeStringValue(escapeHtmlURL(s))
-      case _ => throw new UnsupportedOperationException("Unknown escape operation")
+      case ENCODE_FOR_URI ⇒ StringValue.makeStringValue(escape(s, "-_.~"))
+      case IRI_TO_URI ⇒ StringValue.makeStringValue(iriToUri(s))
+      case HTML_URI ⇒ StringValue.makeStringValue(escapeHtmlURL(s))
+      case _ ⇒ throw new UnsupportedOperationException("Unknown escape operation")
     }
   }
 }

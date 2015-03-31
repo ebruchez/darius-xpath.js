@@ -45,20 +45,20 @@ object StandardErrorListener {
         val q = Integer.parseInt(code)
         val suffix = " must match its declared type"
         q match {
-          case 570 => codeText = " The value of a variable" + suffix
-          case 600 => codeText = " Default value of a template paremeter" + suffix
-          case 590 => codeText = " Supplied value of a template parameter" + suffix
-          case _ =>
+          case 570 ⇒ codeText = " The value of a variable" + suffix
+          case 600 ⇒ codeText = " Default value of a template paremeter" + suffix
+          case 590 ⇒ codeText = " Supplied value of a template parameter" + suffix
+          case _ ⇒
         }
       } else if (code.startsWith("XPTY")) {
         code = code.substring(4)
         val q = Integer.parseInt(code)
         q match {
-          case 4 => codeText = " The expression value is not consistent with the context in which it appears"
-          case 18 => codeText = " Last step in path expression contains both nodes and atomic values"
-          case 19 => codeText = " A path expression step contains an atomic value"
-          case 20 => codeText = " In an axis step, the context item is not a node"
-          case _ =>
+          case 4 ⇒ codeText = " The expression value is not consistent with the context in which it appears"
+          case 18 ⇒ codeText = " Last step in path expression contains both nodes and atomic values"
+          case 19 ⇒ codeText = " A path expression step contains an atomic value"
+          case 20 ⇒ codeText = " In an axis step, the context item is not a node"
+          case _ ⇒
         }
       }
     }

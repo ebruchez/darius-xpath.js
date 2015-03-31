@@ -74,10 +74,10 @@ class StartTagBuffer extends ProxyReceiver {
   def startContent(): Unit = {
     nextReceiver.startElement(elementNameCode, elementProperties)
     val length = bufferedAttributes.getLength
-    for (i <- 0 until length) {
+    for (i ← 0 until length) {
       nextReceiver.attribute(bufferedAttributes.getStructuredQName(i), bufferedAttributes.getValue(i))
     }
-    for (nb <- bufferedNamespaces) {
+    for (nb ← bufferedNamespaces) {
       nextReceiver.namespace(nb, 0)
     }
     nextReceiver.startContent()

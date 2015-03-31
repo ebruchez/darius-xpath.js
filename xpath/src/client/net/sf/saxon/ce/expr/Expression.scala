@@ -254,7 +254,7 @@ abstract class Expression {
    */
   protected def nonNullChildren(children: Expression*): Iterator[Expression] = {
     val list = new ArrayList[Expression](children.length)
-    for (child <- children if child != null) {
+    for (child ← children if child != null) {
       list.add(child)
     }
     list.iterator()
@@ -376,7 +376,7 @@ abstract class Expression {
           out.append(it, NodeInfo.ALL_NAMESPACES)
         }
       } catch {
-        case e: XPathException => {
+        case e: XPathException ⇒ {
           e.maybeSetLocation(this.getSourceLocator)
           throw e
         }

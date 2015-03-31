@@ -39,8 +39,8 @@ class DocumentURI(uri: String) {
   override def toString(): String = displayValue
 
   override def equals(obj: Any): Boolean = obj match {
-    case obj: DocumentURI => normalizedValue == obj.normalizedValue
-    case _ => false
+    case obj: DocumentURI ⇒ normalizedValue == obj.normalizedValue
+    case _ ⇒ false
   }
 
   override def hashCode(): Int = normalizedValue.hashCode

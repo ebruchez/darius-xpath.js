@@ -51,7 +51,7 @@ object Primality {
   private val BIprimes = new Array[BigInteger](primes.length)
 
   // To initialize the dual table of BigInteger primes
-  for (i <- 0 until primes.length) {
+  for (i ← 0 until primes.length) {
     BIprimes(i) = BigInteger.valueOf(primes(i))
   }
 
@@ -75,7 +75,7 @@ object Primality {
     last -= 1
     do {
       // To fill the array with random integers
-      for (i <- 0 until n.numberLength) {
+      for (i ← 0 until n.numberLength) {
         n.digits(i) = rnd.nextInt()
       }
       // To fix to the correct bitLength
@@ -107,7 +107,7 @@ object Primality {
       return Arrays.binarySearch(primes, n.digits(0)) >= 0
     }
     // To check if 'n' is divisible by some prime of the table
-    for (i <- 1 until primes.length) {
+    for (i ← 1 until primes.length) {
       if (Division.remainderArrayByInt(n.digits, n.numberLength, primes(i)) == 0) {
         return false
       }
@@ -233,7 +233,7 @@ object Primality {
     val k = nMinus1.getLowestSetBit
     val q = nMinus1.shiftRight(k)
     val rnd = new Random()
-    for (i <- 0 until t) {
+    for (i ← 0 until t) {
       // To generate a witness 'x', first it use the primes of table
       if (i < primes.length) {
         x = BIprimes(i)
@@ -253,7 +253,7 @@ object Primality {
       if (y.isOne || y == nMinus1) {
         //continue changed to if/else
       }else {
-        for (j <- 1 until k) {
+        for (j ← 1 until k) {
           if (y == nMinus1) {
             //continue changed to if/else
           } else {

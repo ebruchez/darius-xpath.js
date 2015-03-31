@@ -100,7 +100,7 @@ class XSLResultDocument extends StyleElement {
   protected def getReturnedItemType(): ItemType = null
 
   def prepareAttributes(): Unit = {
-    for (att <- fans) {
+    for (att ← fans) {
       checkAttribute(att, "s")
     }
     methodExpression = checkAttribute("method", "a").asInstanceOf[Expression]

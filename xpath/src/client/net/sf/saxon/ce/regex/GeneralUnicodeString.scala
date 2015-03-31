@@ -8,7 +8,7 @@ import client.net.sf.saxon.ce.value._
 object GeneralUnicodeString {
 
   def containsSurrogatePairs(value: CharSequence): Boolean = {
-    for (i <- 0 until value.length) {
+    for (i ← 0 until value.length) {
       val c = value.charAt(i).toInt
       if (c >= 55296 && c < 56319) {
         return true
@@ -55,7 +55,7 @@ class GeneralUnicodeString private (val chars: Array[Int], val start: Int, val e
   def charAt(pos: Int): Int = chars(start + pos)
 
   def indexOf(search: Int, pos: Int): Int = {
-    (pos until length).find(x => chars(start + x) == search)
+    (pos until length).find(x ⇒ chars(start + x) == search)
       .getOrElse(-1)
   }
 

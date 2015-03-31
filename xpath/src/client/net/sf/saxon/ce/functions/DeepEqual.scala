@@ -69,8 +69,8 @@ object DeepEqual {
         }
       }
     } catch {
-      case err: ClassCastException => result = false
-      case err: XPathException => {
+      case err: ClassCastException ⇒ result = false
+      case err: XPathException ⇒ {
         if ("FOTY0015" == err.getErrorCodeLocalPart && NamespaceConstant.ERR == err.getErrorCodeNamespace) {
           throw err
         }
@@ -89,7 +89,7 @@ object DeepEqual {
       return false
     }
     n1.getNodeKind match {
-      case Type.ELEMENT => 
+      case Type.ELEMENT ⇒
         if (n1.getNodeName != n2.getNodeName) {
           return false
         }
@@ -136,7 +136,7 @@ object DeepEqual {
           throw new IllegalStateException
         }
 
-      case Type.DOCUMENT => 
+      case Type.DOCUMENT ⇒
         val c1 = n1.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
         val c2 = n2.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
         while (true) {
@@ -157,13 +157,13 @@ object DeepEqual {
         }
         throw new IllegalStateException
 
-      case Type.ATTRIBUTE | Type.PROCESSING_INSTRUCTION | Type.NAMESPACE | Type.TEXT | Type.COMMENT => 
+      case Type.ATTRIBUTE | Type.PROCESSING_INSTRUCTION | Type.NAMESPACE | Type.TEXT | Type.COMMENT ⇒
         val s1 = n1.getNodeName
         val s2 = n2.getNodeName
         (if (s1 == null) s2 == null else s1 == s2) &&
           comparer.comparesEqual(n1.getTypedValue, n2.getTypedValue)
 
-      case _ =>
+      case _ ⇒
         throw new IllegalArgumentException("Unknown node type")
     }
   }
@@ -198,7 +198,7 @@ class DeepEqual extends CollatingFunction {
     try {
       BooleanValue.get(deepEquals(op1, op2, collator))
     } catch {
-      case e: XPathException =>
+      case e: XPathException ⇒
         e.maybeSetLocation(getSourceLocator)
         throw e
     }

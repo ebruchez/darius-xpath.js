@@ -92,7 +92,7 @@ class AdjacentTextNodeMerger(p0: Expression) extends UnaryExpression(p0) {
     if (getBaseExpression.isInstanceOf[Choose]) {
       val choose = getBaseExpression.asInstanceOf[Choose]
       val actions = choose.getActions
-      for (i <- 0 until actions.length) {
+      for (i ← 0 until actions.length) {
         val atm2 = new AdjacentTextNodeMerger(actions(i))
         actions(i) = atm2.typeCheck(visitor, contextItemType)
       }
@@ -106,7 +106,7 @@ class AdjacentTextNodeMerger(p0: Expression) extends UnaryExpression(p0) {
       var maybeEmpty = false
       import Breaks._
       breakable {
-        for (i <- 0 until actions.length) {
+        for (i ← 0 until actions.length) {
           var maybetext: Boolean = false
           if (actions(i).isInstanceOf[ValueOf]) {
             maybetext = true

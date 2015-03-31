@@ -79,7 +79,7 @@ class RuleManager {
    */
   def getModesInNamespace(namespace: String): List[Mode] = {
     val result = new ArrayList[Mode]()
-    for (name <- modes.keySet if namespace == name.getNamespaceURI) {
+    for (name ← modes.keySet if namespace == name.getNamespaceURI) {
       result.add(modes.get(name))
     }
     result

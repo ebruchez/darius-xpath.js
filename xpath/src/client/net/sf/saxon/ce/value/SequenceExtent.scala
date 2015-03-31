@@ -180,7 +180,7 @@ class SequenceExtent[T <: Item](val value: Array[T]) extends Sequence {
       return itemType
     }
     itemType = Type.getItemType(value(0))
-    for (i <- 1 until value.length) {
+    for (i ← 1 until value.length) {
       if (itemType == AnyItemType.getInstance) {
         return itemType
       }
@@ -226,7 +226,7 @@ class SequenceExtent[T <: Item](val value: Array[T]) extends Sequence {
   override def toString(): String = {
     val fsb = new FastStringBuffer(FastStringBuffer.SMALL)
     fsb.append('(')
-    for (i <- 0 until value.length) {
+    for (i ← 0 until value.length) {
       fsb.append(value(i).toString)
       if (i != value.length - 1) {
         fsb.append(", ")

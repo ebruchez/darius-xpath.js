@@ -179,7 +179,7 @@ class ComplexContentOutputter extends SequenceReceiver {
         pendingStartTagDepth == -2)
     }
     val rejectDuplicates = (properties & ReceiverOptions.REJECT_DUPLICATES) != 0
-    for (i <- 0 until pendingNSListSize) {
+    for (i ← 0 until pendingNSListSize) {
       if (nsBinding == pendingNSList(i)) {
         return
       }
@@ -240,7 +240,7 @@ class ComplexContentOutputter extends SequenceReceiver {
       throw NoOpenStartTagException.makeNoOpenStartTagException(Type.ATTRIBUTE, nameCode.getDisplayName, 
         level < 0 || currentLevelIsDocument(level))
     }
-    for (a <- 0 until pendingAttListSize if pendingAttCode(a) == nameCode) {
+    for (a ← 0 until pendingAttListSize if pendingAttCode(a) == nameCode) {
       pendingAttValue(a) = value.toString
       return
     }
@@ -272,7 +272,7 @@ class ComplexContentOutputter extends SequenceReceiver {
   private def checkProposedPrefix(nameCode: StructuredQName, seq: Int): StructuredQName = {
     val nsprefix = nameCode.getPrefix
     val nsuri = nameCode.getNamespaceURI
-    for (i <- 0 until pendingNSListSize if nsprefix == pendingNSList(i).getPrefix) {
+    for (i ← 0 until pendingNSListSize if nsprefix == pendingNSList(i).getPrefix) {
       if (nsuri == pendingNSList(i).getURI) {
         return nameCode
       } else {
@@ -393,16 +393,16 @@ class ComplexContentOutputter extends SequenceReceiver {
       props = startElementProperties | ReceiverOptions.NAMESPACE_OK
     }
     nextReceiver.startElement(elcode, props)
-    for (a <- 0 until pendingAttListSize) {
+    for (a ← 0 until pendingAttListSize) {
       val attcode = pendingAttCode(a)
       if (!attcode.getPrefix.isEmpty) {
         pendingAttCode(a) = checkProposedPrefix(attcode, a + 1)
       }
     }
-    for (n <- 0 until pendingNSListSize) {
+    for (n ← 0 until pendingNSListSize) {
       nextReceiver.namespace(pendingNSList(n), 0)
     }
-    for (a <- 0 until pendingAttListSize) {
+    for (a ← 0 until pendingAttListSize) {
       nextReceiver.attribute(pendingAttCode(a), pendingAttValue(a))
     }
     nextReceiver.startContent()

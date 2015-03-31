@@ -87,7 +87,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
       try {
         qn = checkAttribute("name", "q1").asInstanceOf[StructuredQName]
       } catch {
-        case e: XPathException => 
+        case e: XPathException ⇒
       }
       setObjectName(qn)
     }
@@ -119,7 +119,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
           override = b
         }
       } catch {
-        case e: XPathException => 
+        case e: XPathException ⇒
       }
     }
     override
@@ -134,7 +134,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
    * @throws XPathException
    */
   def fixupReferences(): Unit = {
-    for (reference <- references) {
+    for (reference ← references) {
       reference.setStaticType(resultType)
     }
     super.fixupReferences()
@@ -207,7 +207,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
         exp2 = TypeChecker.staticTypeCheck(exp2, resultType, false, role)
       }
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.maybeSetLocation(this)
         compileError(err)
       }
@@ -224,7 +224,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
     try {
       exp2 = exp.optimize(visitor, null)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         err.maybeSetLocation(this)
         compileError(err)
       }
@@ -249,12 +249,12 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
   private def fixupInstruction(compiledFunction: UserFunction): Unit = {
     val visitor = makeExpressionVisitor()
     try {
-      for (call <- references) {
+      for (call ← references) {
         call.setFunction(compiledFunction)
         call.checkFunctionCall(compiledFunction, visitor)
       }
     } catch {
-      case err: XPathException => compileError(err)
+      case err: XPathException ⇒ compileError(err)
     }
   }
 
@@ -265,7 +265,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
   def getNumberOfArguments(): Int = {
     if (numberOfArguments == -1) {
       numberOfArguments = 0
-      for (child <- allChildren()) {
+      for (child ← allChildren()) {
         if (child.isInstanceOf[XSLParam]) {
           numberOfArguments += 1
         } else {
@@ -284,7 +284,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
     val params = Array.ofDim[UserFunctionParameter](getNumberOfArguments)
     fn.setParameterDefinitions(params)
     val count = 0
-    for (child <- allChildren() if child.isInstanceOf[XSLParam]) {
+    for (child ← allChildren() if child.isInstanceOf[XSLParam]) {
       val param = new UserFunctionParameter()
       params(count += 1) = param
       param.setRequiredType(child.asInstanceOf[XSLParam].getRequiredType)

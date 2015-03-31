@@ -123,7 +123,7 @@ class XSLStylesheet extends StyleElement {
     if (getParent.getNodeKind != Type.DOCUMENT) {
       compileError(getDisplayName + " must be the outermost element", "XTSE0010")
     }
-    for (child <- allChildren()) {
+    for (child ← allChildren()) {
       if (child.getNodeKind == Type.TEXT || 
         (child.isInstanceOf[StyleElement] && child.asInstanceOf[StyleElement].isDeclaration) || 
         child.isInstanceOf[DataElement]) {
@@ -147,11 +147,11 @@ class XSLStylesheet extends StyleElement {
   def processAllAttributes(): Unit = {
     processDefaultCollationAttribute("")
     prepareAttributes()
-    for (child <- allChildren() if child.isInstanceOf[StyleElement]) {
+    for (child ← allChildren() if child.isInstanceOf[StyleElement]) {
       try {
         child.asInstanceOf[StyleElement].processAllAttributes()
       } catch {
-        case err: XPathException => child.asInstanceOf[StyleElement].compileError(err)
+        case err: XPathException ⇒ child.asInstanceOf[StyleElement].compileError(err)
       }
     }
   }

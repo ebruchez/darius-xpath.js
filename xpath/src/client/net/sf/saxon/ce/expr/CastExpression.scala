@@ -161,7 +161,7 @@ object CastExpression {
     if (targets == null) {
       return false
     }
-    for (t <- targets if t == target) {
+    for (t ← targets if t == target) {
       return true
     }
     false
@@ -182,7 +182,7 @@ object CastExpression {
       val qn = StructuredQName.fromLexicalQName(arg, "", env.getNamespaceResolver)
       new QNameValue(qn)
     } catch {
-      case err: XPathException => {
+      case err: XPathException ⇒ {
         if (err.getErrorCodeQName == null) {
           err.setErrorCode("FONS0004")
         }

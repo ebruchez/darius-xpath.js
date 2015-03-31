@@ -63,35 +63,35 @@ object XPathProcessor {
       }
 
       compileExpression(currentExpr) flatMap {
-        case compiledExpr @ CompiledExpression(config, _, _) =>
+        case compiledExpr @ CompiledExpression(config, _, _) ⇒
           parseXML match {
-            case Success(xml) =>
+            case Success(xml) ⇒
               toggleAlert(UI.xmlInput, None)
               runExpression(compiledExpr, new HTMLDocumentWrapper(xml, null, config))
-            case Failure(t) =>
+            case Failure(t) ⇒
               toggleAlert(UI.xmlInput, Some("Error parsing XML document"))
               Failure(t)
           }
       } match {
-        case Success(Nil) =>
+        case Success(Nil) ⇒
 //          UI.results.value("")
           UI.results.children("li").detach()
           toggleAlert(UI.exprInput, None)
-        case Success(items) =>
+        case Success(items) ⇒
 //          UI.results.value(item.getStringValue())
           UI.results.children("li").detach()
-          for (item <- items) {
+          for (item ← items) {
             val itemString = item.getStringValue()
             UI.results.append(s"""<li class="list-group-item">$itemString</li>""")
           }
 
           toggleAlert(UI.exprInput, None)
-        case Failure(t) =>
+        case Failure(t) ⇒
           toggleAlert(UI.exprInput, Some(t.getMessage))
       }
     }
 
-    def keyChange(container: Array[Option[String]], getValue: => String)(x: JQueryEventObject) = {
+    def keyChange(container: Array[Option[String]], getValue: ⇒ String)(x: JQueryEventObject) = {
       val newValue = getValue
       if (Some(newValue) != container(0)) {
         compileAndRunExpression()
@@ -109,7 +109,7 @@ object XPathProcessor {
   }
 
   val ns = Map(
-    "xs" -> "http://www.w3.org/2001/XMLSchema"
+    "xs" → "http://www.w3.org/2001/XMLSchema"
   )
 
 //  "for $foo in //div return concat('name: ', name($foo))",

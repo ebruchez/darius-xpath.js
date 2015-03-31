@@ -122,11 +122,11 @@ abstract class GDateValue extends CalendarValue {
    * @throws ClassCastException if the values are not comparable
    */
   override def equals(o: Any): Boolean = o match {
-    case o: GDateValue => {
+    case o: GDateValue ⇒ {
       val gdv = o
       getItemType == gdv.getItemType && toDateTime() == gdv.toDateTime()
     }
-    case _ => false
+    case _ ⇒ false
   }
 
   override def hashCode(): Int = {
@@ -173,17 +173,17 @@ abstract class GDateValue extends CalendarValue {
    * requested and is not present.
    */
   override def getComponent(component: Int): AtomicValue = component match {
-    case Component.YEAR => 
+    case Component.YEAR ⇒
       val value = if (year > 0) year else year - 1
       new IntegerValue(value)
 
-    case Component.MONTH => new IntegerValue(month)
-    case Component.DAY => new IntegerValue(day)
-    case Component.TIMEZONE => if (hasTimezone()) {
+    case Component.MONTH ⇒ new IntegerValue(month)
+    case Component.DAY ⇒ new IntegerValue(day)
+    case Component.TIMEZONE ⇒ if (hasTimezone()) {
       DayTimeDurationValue.fromMilliseconds(60000L * getTimezoneInMinutes)
     } else {
       null
     }
-    case _ => throw new IllegalArgumentException("Unknown component for date: " + component)
+    case _ ⇒ throw new IllegalArgumentException("Unknown component for date: " + component)
   }
 }

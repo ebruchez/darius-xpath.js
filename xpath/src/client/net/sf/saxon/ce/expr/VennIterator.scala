@@ -36,7 +36,7 @@ class VennIterator(p1: SequenceIterator,
   private def next(iter: SequenceIterator): NodeInfo = iter.next().asInstanceOf[NodeInfo]
 
   def next(): Item = operator match {
-    case Token.UNION => 
+    case Token.UNION ⇒
       if (nextNode1 != null && nextNode2 != null) {
         val c = comparer.compare(nextNode1, nextNode2)
         if (c < 0) {
@@ -55,7 +55,7 @@ class VennIterator(p1: SequenceIterator,
       }
       deliverEndOfSequence()
 
-    case Token.INTERSECT => 
+    case Token.INTERSECT ⇒
       if (nextNode1 == null || nextNode2 == null) {
         deliverEndOfSequence()
       }
@@ -71,7 +71,7 @@ class VennIterator(p1: SequenceIterator,
       }
       deliverEndOfSequence()
 
-    case Token.EXCEPT =>
+    case Token.EXCEPT ⇒
       while (true) {
         if (nextNode1 == null) {
           deliverEndOfSequence()
@@ -93,7 +93,7 @@ class VennIterator(p1: SequenceIterator,
         }
       }
       throw new IllegalStateException
-    case _ => null
+    case _ ⇒ null
   }
 
   /**

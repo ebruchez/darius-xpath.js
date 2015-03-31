@@ -202,7 +202,7 @@ abstract class Assignation extends Expression with Binding {
       currentExpression: Assignation): Unit = {
     val references = new ArrayList[VariableReference]()
     ExpressionTool.gatherVariableReferences(currentExpression.getAction, this, references)
-    for (ref <- references) {
+    for (ref ← references) {
       ref.refineVariableType(`type`, cardinality, constantValue, properties, visitor)
       visitor.resetStaticProperties()
     }
