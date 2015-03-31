@@ -65,6 +65,7 @@ abstract class UnaryExpression protected () extends Expression {
       }
     } catch {
       case err: XPathException ⇒
+        // if early evaluation fails, suppress the error: the value might not be needed at run-time
     }
     this
   }
