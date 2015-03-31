@@ -12,14 +12,19 @@ The demo app is [here][2].
 
 The port is not complete yet, in particular:
 
-- types, in particular date/time types need regex support
+- some regex support is missing so types like date/time don't work
 - the `doc()` function is missing
 - nothing is really tested
+
+This should be considered a demo, nothing more for now.
+
+## Building and running locally
+
+Use `sbt fastOptJS` and `sbt fullOptJS`, then load `index-dev.html` or `index.html`.
 
 ## Licenses
 
 The Saxon files and their translations are under the MPL license. Other files are under the Apache 2 license.
-
 
 [1]: http://www.saxonica.com/ce/index.xml
 [2]: http://ebruchez.github.io/saxon.scala.js/
