@@ -24,7 +24,7 @@ object AnyNodeTest {
  */
 class AnyNodeTest private () extends NodeTest {
 
-  override def getSuperType(): ItemType = AnyItemType.getInstance
+  override def getSuperType: ItemType = AnyItemType.getInstance
 
   /**
    * Test whether this node test is satisfied by a given node
@@ -51,13 +51,13 @@ class AnyNodeTest private () extends NodeTest {
   /**
    * Determine the default priority of this node test when used on its own as a Pattern
    */
-  def getDefaultPriority(): Double = -0.5
+  def getDefaultPriority: Double = -0.5
 
   /**
    * Get a mask indicating which kinds of nodes this NodeTest can match. This is a combination
    * of bits: 1<<Type.ELEMENT for element nodes, 1<<Type.TEXT for text nodes, and so on.
    */
-  override def getNodeKindMask(): Int = {
+  override def getNodeKindMask: Int = {
     1 << Type.ELEMENT | 1 << Type.TEXT | 1 << Type.COMMENT | 
       1 << Type.PROCESSING_INSTRUCTION | 
       1 << Type.ATTRIBUTE | 

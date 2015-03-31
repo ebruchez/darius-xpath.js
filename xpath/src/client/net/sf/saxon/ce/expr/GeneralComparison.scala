@@ -204,5 +204,5 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
    * Determine the data type of the expression
    * @return Type.BOOLEAN
    */
-  def getItemType(): ItemType = AtomicType.BOOLEAN
+  def getItemType: ItemType = AtomicType.BOOLEAN
 }

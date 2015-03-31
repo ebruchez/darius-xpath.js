@@ -40,7 +40,7 @@ class AnalyzeString(var select: Expression,
    * An implementation of Expression must provide at least one of the methods evaluateItem(), iterate(), or process().
    * This method indicates which of these methods is prefered.
    */
-  def getImplementationMethod(): Int = {
+  def getImplementationMethod: Int = {
     Expression.PROCESS_METHOD | Expression.ITERATE_METHOD
   }
 
@@ -124,7 +124,7 @@ class AnalyzeString(var select: Expression,
    *
    * @return the static item type of the instruction
    */
-  def getItemType(): ItemType = {
+  def getItemType: ItemType = {
     if (matching != null) {
       if (nonMatching != null) {
         Type.getCommonSuperType(matching.getItemType, nonMatching.getItemType)

@@ -85,7 +85,7 @@ class IntegerValue(bigDecimalValue: BigDecimal) extends DecimalValue(Left(bigDec
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  override def getItemType(): AtomicType = AtomicType.INTEGER
+  override def getItemType: AtomicType = AtomicType.INTEGER
 
   /**
    * Determine whether the value is a whole number, that is, whether it compares
@@ -93,7 +93,7 @@ class IntegerValue(bigDecimalValue: BigDecimal) extends DecimalValue(Left(bigDec
    *
    * @return always true for this implementation
    */
-  override def isWholeNumber(): Boolean = true
+  override def isWholeNumber: Boolean = true
 
   /**
    * Take modulo another integer

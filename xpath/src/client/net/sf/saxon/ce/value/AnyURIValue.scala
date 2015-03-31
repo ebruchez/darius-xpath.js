@@ -23,7 +23,7 @@ object AnyURIValue {
 class AnyURIValue(_value: CharSequence)
   extends StringValue(if (_value == null) "" else Whitespace.collapseWhitespace(_value).toString) {
 
-  override def getItemType(): AtomicType = AtomicType.ANY_URI
+  override def getItemType: AtomicType = AtomicType.ANY_URI
 
   /**
    * Convert to target data type

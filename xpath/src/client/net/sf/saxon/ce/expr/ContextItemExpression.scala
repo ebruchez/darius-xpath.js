@@ -59,7 +59,7 @@ class ContextItemExpression extends Expression {
   /**
    * Determine the item type
    */
-  def getItemType(): ItemType = itemType
+  def getItemType: ItemType = itemType
 
   /**
    * Get the static cardinality
@@ -87,7 +87,7 @@ class ContextItemExpression extends Expression {
    */
   override def hashCode(): Int = "ContextItemExpression".hashCode
 
-  override def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_CONTEXT_ITEM
+  override def getIntrinsicDependencies: Int = StaticProperty.DEPENDS_ON_CONTEXT_ITEM
 
   /**
    * Iterate over the value of the expression

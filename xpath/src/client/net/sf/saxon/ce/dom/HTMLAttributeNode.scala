@@ -25,7 +25,7 @@ class HTMLAttributeNode(
 
   private val qname = new StructuredQName(prefix, uri, name)
 
-  def getNodeKind(): Int = Type.ATTRIBUTE
+  def getNodeKind: Int = Type.ATTRIBUTE
 
   def isSameNodeInfo(other: NodeInfo): Boolean = {
     other.isInstanceOf[HTMLAttributeNode] &&
@@ -33,9 +33,9 @@ class HTMLAttributeNode(
       name == other.asInstanceOf[HTMLAttributeNode].name
   }
 
-  def getSystemId(): String = element.getSystemId
+  def getSystemId: String = element.getSystemId
 
-  def getBaseURI(): String = element.getBaseURI
+  def getBaseURI: String = element.getBaseURI
 
   def compareOrder(other: NodeInfo): Int = {
     if (other.isInstanceOf[HTMLAttributeNode]) {
@@ -51,19 +51,19 @@ class HTMLAttributeNode(
     element.compareOrder(other)
   }
 
-  def getStringValue(): String = value
+  def getStringValue: String = value
 
-  def getNodeName(): StructuredQName = qname
+  def getNodeName: StructuredQName = qname
 
-  def getLocalPart(): String = name
+  def getLocalPart: String = name
 
-  def getURI(): String = uri
+  def getURI: String = uri
 
-  def getDisplayName(): String = {
+  def getDisplayName: String = {
     if (prefix.length == 0) name else prefix + ':' + name
   }
 
-  def getParent(): NodeInfo = element
+  def getParent: NodeInfo = element
 
   private def iterateAxis0(axisNumber: Byte): UnfailingIterator = axisNumber match {
     case Axis.ANCESTOR ⇒ element.iterateAxis(Axis.ANCESTOR_OR_SELF, AnyNodeTest.getInstance)
@@ -86,18 +86,18 @@ class HTMLAttributeNode(
     Navigator.newAxisFilter(iterateAxis0(axisNumber), nodeTest)
   }
 
-  def getRoot(): NodeInfo = element.getRoot
+  def getRoot: NodeInfo = element.getRoot
 
-  def getDocumentRoot(): DocumentInfo = element.getDocumentRoot
+  def getDocumentRoot: DocumentInfo = element.getDocumentRoot
 
-  def hasChildNodes(): Boolean = false
+  def hasChildNodes: Boolean = false
 
   def generateId(buffer: FastStringBuffer): Unit = {
     element.generateId(buffer)
     buffer.append("" + name.hashCode)
   }
 
-  def getDocumentNumber(): Int = element.getDocumentNumber
+  def getDocumentNumber: Int = element.getDocumentNumber
 
   def copy(out: Receiver, copyOptions: Int): Unit = {
     out.attribute(qname, value)
@@ -105,7 +105,7 @@ class HTMLAttributeNode(
 
   def getDeclaredNamespaces(buffer: Array[NamespaceBinding]): Array[NamespaceBinding] = NamespaceBinding.EMPTY_ARRAY
 
-  def getTypedValue(): AtomicValue = new UntypedAtomicValue(value)
+  def getTypedValue: AtomicValue = new UntypedAtomicValue(value)
 
-  def getSiblingPosition(): Int = 1
+  def getSiblingPosition: Int = 1
 }

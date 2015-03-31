@@ -59,7 +59,7 @@ class DocumentOrderIterator(base: SequenceIterator, var comparer: NodeOrderCompa
     throw new IllegalStateException
   }
 
-  def getAnother(): SequenceIterator = {
+  def getAnother: SequenceIterator = {
     val another = new DocumentOrderIterator()
     another.iterator = iterator.getAnother
     another

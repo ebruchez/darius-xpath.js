@@ -223,11 +223,11 @@ class NumberInstruction(config: Configuration,
    * @return a set of bit-significant flags identifying the "intrinsic"
    *         dependencies. The flags are documented in class client.net.sf.saxon.ce.value.StaticProperty
    */
-  def getIntrinsicDependencies(): Int = {
+  def getIntrinsicDependencies: Int = {
     if ((arguments(SELECT) == null && arguments(VALUE) == null)) StaticProperty.DEPENDS_ON_CONTEXT_ITEM else 0
   }
 
-  def getItemType(): ItemType = AtomicType.STRING
+  def getItemType: ItemType = AtomicType.STRING
 
   def computeCardinality(): Int = StaticProperty.EXACTLY_ONE
 

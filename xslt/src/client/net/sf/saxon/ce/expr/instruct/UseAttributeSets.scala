@@ -86,7 +86,7 @@ class UseAttributeSets(var attributeSets: Array[AttributeSet]) extends Instructi
    *
    * @return the static item type of the instruction
    */
-  def getItemType(): ItemType = NodeKindTest.ATTRIBUTE
+  def getItemType: ItemType = NodeKindTest.ATTRIBUTE
 
   /**
    * Determine the intrinsic dependencies of an expression, that is, those which are not derived
@@ -97,7 +97,7 @@ class UseAttributeSets(var attributeSets: Array[AttributeSet]) extends Instructi
    * @return a set of bit-significant flags identifying the "intrinsic"
    *         dependencies. The flags are documented in class client.net.sf.saxon.ce.value.StaticProperty
    */
-  def getIntrinsicDependencies(): Int = {
+  def getIntrinsicDependencies: Int = {
     var d = 0
     for (i ← 0 until attributeSets.length) {
       val as = attributeSets(i)

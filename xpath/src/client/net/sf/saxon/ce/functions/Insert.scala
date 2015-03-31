@@ -56,7 +56,7 @@ object Insert {
       }
     }
 
-    def getAnother(): SequenceIterator = {
+    def getAnother: SequenceIterator = {
       new InsertIterator(base.getAnother, insert.getAnother, insertPosition)
     }
   }

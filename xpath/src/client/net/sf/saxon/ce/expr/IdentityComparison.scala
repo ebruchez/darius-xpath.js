@@ -73,5 +73,5 @@ class IdentityComparison(p1: Expression, op: Int, p2: Expression) extends Binary
    * Determine the data type of the expression
    * @return Type.BOOLEAN
    */
-  def getItemType(): ItemType = AtomicType.BOOLEAN
+  def getItemType: ItemType = AtomicType.BOOLEAN
 }

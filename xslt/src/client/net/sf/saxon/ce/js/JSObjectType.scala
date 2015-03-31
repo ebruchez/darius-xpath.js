@@ -23,7 +23,7 @@ class JSObjectType extends ItemType {
 
   def matchesItem(item: Item): Boolean = item.isInstanceOf[JSObjectValue]
 
-  def getSuperType(): ItemType = AnyItemType.getInstance
+  def getSuperType: ItemType = AnyItemType.getInstance
 
-  def getAtomizedItemType(): AtomicType = null
+  def getAtomizedItemType: AtomicType = null
 }

@@ -62,13 +62,13 @@ class Orphan extends AbstractNode with NodeInfo {
    * Return the kind of node.
    * @return one of the values Type.ELEMENT, Type.TEXT, Type.ATTRIBUTE, etc.
    */
-  def getNodeKind(): Int = kind
+  def getNodeKind: Int = kind
 
   /**
    * Get the typed value of the node
    * @return an iterator over the items making up the typed value
    */
-  def getTypedValue(): AtomicValue = getNodeKind match {
+  def getTypedValue: AtomicValue = getNodeKind match {
     case Type.COMMENT | Type.PROCESSING_INSTRUCTION ⇒ new StringValue(stringValue)
     case _ ⇒ new UntypedAtomicValue(stringValue)
   }
@@ -110,7 +110,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * Get the Base URI for the node, that is, the URI used for resolving a relative URI contained
    * in the node. This will be the same as the System ID unless xml:base has been used.
    */
-  def getBaseURI(): String = {
+  def getBaseURI: String = {
     if (kind == Type.PROCESSING_INSTRUCTION) {
       systemId
     } else {
@@ -138,26 +138,26 @@ class Orphan extends AbstractNode with NodeInfo {
    *
    * @return 0 for the first child, 1 for the second child, etc.
    */
-  def getSiblingPosition(): Int = 1
+  def getSiblingPosition: Int = 1
 
   /**
    * Return the string value of the node.
    * @return the string value of the node
    */
-  def getStringValue(): String = stringValue.toString
+  def getStringValue: String = stringValue.toString
 
   /**
    * Get the name of the node
    *
    * @return the name of the node, as a StructuredQName. Return null for an unnamed node.
    */
-  def getNodeName(): StructuredQName = qName
+  def getNodeName: StructuredQName = qName
 
   /**
    * Get the local part of the name of this node. This is the name after the ":" if any.
    * @return the local part of the name. For an unnamed node, returns "".
    */
-  def getLocalPart(): String = {
+  def getLocalPart: String = {
     if (qName == null) "" else qName.getLocalName
   }
 
@@ -167,7 +167,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * @return The URI of the namespace of this node. For an unnamed node, return null.
    * For a node with an empty prefix, return an empty string.
    */
-  def getURI(): String = {
+  def getURI: String = {
     if (qName == null) "" else qName.getNamespaceURI
   }
 
@@ -177,7 +177,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * @return The display name of this node.
    * For a node with no name, return an empty string.
    */
-  def getDisplayName(): String = {
+  def getDisplayName: String = {
     if (qName == null) "" else qName.getDisplayName
   }
 
@@ -185,7 +185,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * Get the NodeInfo object representing the parent of this node
    * @return null - an Orphan has no parent.
    */
-  def getParent(): NodeInfo = null
+  def getParent: NodeInfo = null
 
   /**
    * Return an iteration over the nodes reached by the given axis from this node
@@ -204,20 +204,20 @@ class Orphan extends AbstractNode with NodeInfo {
    * Get the root node of this tree (not necessarily a document node).
    * Always returns this node in the case of an Orphan node.
    */
-  def getRoot(): NodeInfo = this
+  def getRoot: NodeInfo = this
 
   /**
    * Get the root (document) node
    * @return the DocumentInfo representing the containing document, or null if the
    * node is not part of a document. Always null for an Orphan node.
    */
-  def getDocumentRoot(): DocumentInfo = null
+  def getDocumentRoot: DocumentInfo = null
 
   /**
    * Determine whether the node has any children.
    * @return false - an orphan node never has any children
    */
-  def hasChildNodes(): Boolean = false
+  def hasChildNodes: Boolean = false
 
   /**
    * Get a character string that uniquely identifies this node.
@@ -236,7 +236,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * Get the document number of the document containing this node. For a free-standing
    * orphan node, just return the hashcode.
    */
-  def getDocumentNumber(): Int = hashCode & 0xffffff
+  def getDocumentNumber: Int = hashCode & 0xffffff
 
   /**
    * Copy this node to a given outputter (deep copy)

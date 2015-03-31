@@ -50,7 +50,7 @@ class GMonthValue private () extends GDateValue {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.G_MONTH
+  def getItemType: AtomicType = AtomicType.G_MONTH
 
   /**
    * Convert to target data type
@@ -70,7 +70,7 @@ class GMonthValue private () extends GDateValue {
     }
   }
 
-  def getPrimitiveStringValue(): CharSequence = {
+  def getPrimitiveStringValue: CharSequence = {
     FormatDate.formatDate(this, "--[M01][Z]", "en")
   }
 }

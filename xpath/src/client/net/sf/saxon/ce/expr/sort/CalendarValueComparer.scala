@@ -11,7 +11,7 @@ import client.net.sf.saxon.ce.value.{AtomicValue, CalendarValue}
  */
 class CalendarValueComparer(var implicitTimezone: Int) extends AtomicComparer {
 
-  def getCollator(): StringCollator = null
+  def getCollator: StringCollator = null
 
   /**
    * Compare two AtomicValue objects according to the rules for their data type. UntypedAtomic

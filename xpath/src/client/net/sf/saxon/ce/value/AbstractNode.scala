@@ -15,7 +15,7 @@ abstract class AbstractNode extends Item with Sequence {
   /**
    * Get the length of the sequence
    */
-  def getLength(): Int = 1
+  def getLength: Int = 1
 
   /**
    * Get the n'th item in the sequence (starting from 0). This is defined for all

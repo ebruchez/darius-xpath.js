@@ -199,7 +199,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    * An implementation of Expression must provide at least one of the methods evaluateItem(), iterate(), or process().
    * This method indicates which of these methods is prefered. For instructions this is the process() method.
    */
-  override def getImplementationMethod(): Int = {
+  override def getImplementationMethod: Int = {
     var m = Expression.PROCESS_METHOD | Expression.ITERATE_METHOD
     if (!Cardinality.allowsMany(getCardinality)) {
       m |= Expression.EVALUATE_METHOD
@@ -226,7 +226,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    *
    * @return the static item type of the instruction
    */
-  override def getItemType(): ItemType = {
+  override def getItemType: ItemType = {
     var `type` = actions(0).getItemType
     for (i ← 1 until actions.length) {
       `type` = Type.getCommonSuperType(`type`, actions(i).getItemType)

@@ -51,7 +51,7 @@ abstract class AbstractStaticContext extends StaticContext {
   /**
    * Get the system configuration
    */
-  def getConfiguration(): Configuration = config
+  def getConfiguration: Configuration = config
 
   /**
    * Set the base URI in the static context
@@ -66,14 +66,14 @@ abstract class AbstractStaticContext extends StaticContext {
    * in the expression. Used by the document() function, resolve-uri(), etc.
    * @return "" if no base URI has been set
    */
-  def getBaseURI(): String = if (baseURI == null) "" else baseURI
+  def getBaseURI: String = if (baseURI == null) "" else baseURI
 
   /**
    * Get the function library containing all the in-scope functions available in this static
    * context. This method is called by the XPath parser when binding a function call in the
    * XPath expression to an implementation of the function.
    */
-  def getFunctionLibrary(): FunctionLibrary = libraryList
+  def getFunctionLibrary: FunctionLibrary = libraryList
 
   /**
    * Set the function library to be used
@@ -89,7 +89,7 @@ abstract class AbstractStaticContext extends StaticContext {
    * @return the name of the default collation; or the name of the codepoint collation
    * if no default collation has been defined
    */
-  def getDefaultCollationName(): String = {
+  def getDefaultCollationName: String = {
     NamespaceConstant.CODEPOINT_COLLATION_URI
   }
 
@@ -97,7 +97,7 @@ abstract class AbstractStaticContext extends StaticContext {
    * Get the system ID of the container of the expression. Used to construct error messages.
    * @return "" always
    */
-  def getSystemId(): String = ""
+  def getSystemId: String = ""
 
   /**
    * Get the line number of the expression within that container.
@@ -120,7 +120,7 @@ abstract class AbstractStaticContext extends StaticContext {
    * @return true if XPath 1.0 compatibility mode is to be set to true;
    * otherwise false
    */
-  def isInBackwardsCompatibleMode(): Boolean = backwardsCompatible
+  def isInBackwardsCompatibleMode: Boolean = backwardsCompatible
 
   /**
    * Set the DecimalFormatManager used to resolve the names of decimal formats used in calls

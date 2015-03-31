@@ -18,7 +18,7 @@ import scala.beans.BeanProperty
  */
 class TextComparer(@BeanProperty var baseComparer: AtomicComparer) extends AtomicComparer {
 
-  def getCollator(): StringCollator = baseComparer.getCollator
+  def getCollator: StringCollator = baseComparer.getCollator
 
   /**
    * Compare two Items by converting them to strings and comparing the string values.

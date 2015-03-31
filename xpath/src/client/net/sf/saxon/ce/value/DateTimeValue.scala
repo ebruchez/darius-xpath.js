@@ -73,7 +73,7 @@ object DateTimeValue {
     if (tz1 != CalendarValue.NO_TIMEZONE && tz2 != CalendarValue.NO_TIMEZONE && tz1 != tz2) {
       throw new XPathException("Supplied date and time are in different timezones", "FORG0008")
     }
-    val v = date.toDateTime()
+    val v = date.toDateTime
     v.hour = time.getHour
     v.minute = time.getMinute
     v.second = time.getSecond
@@ -269,7 +269,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.DATE_TIME
+  def getItemType: AtomicType = AtomicType.DATE_TIME
 
   /**
    * Convert the value to a DateTime, retaining all the components that are actually present, and
@@ -278,7 +278,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
    *
    * @return the value as an xs:dateTime
    */
-  def toDateTime(): DateTimeValue = this
+  def toDateTime: DateTimeValue = this
 
   /**
    * Normalize the date and time to be in timezone Z.
@@ -358,7 +358,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
    * @return ISO 8601 representation. The value returned is the localized representation,
    *         that is it uses the timezone contained within the value itself.
    */
-  def getPrimitiveStringValue(): CharSequence = {
+  def getPrimitiveStringValue: CharSequence = {
     val sb = new FastStringBuffer(30)
     var yr = year
     if (year <= 0) {

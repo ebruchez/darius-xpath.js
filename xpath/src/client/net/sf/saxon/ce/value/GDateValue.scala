@@ -124,7 +124,7 @@ abstract class GDateValue extends CalendarValue {
   override def equals(o: Any): Boolean = o match {
     case o: GDateValue ⇒ {
       val gdv = o
-      getItemType == gdv.getItemType && toDateTime() == gdv.toDateTime()
+      getItemType == gdv.getItemType && toDateTime == gdv.toDateTime
     }
     case _ ⇒ false
   }
@@ -146,14 +146,14 @@ abstract class GDateValue extends CalendarValue {
     if (getItemType != other.getItemType) {
       throw new ClassCastException("Cannot compare dates of different types")
     }
-    toDateTime().compareTo(other.toDateTime, implicitTimezone)
+    toDateTime.compareTo(other.toDateTime, implicitTimezone)
   }
 
   /**
    * Convert to DateTime.
    * @return the starting instant of the GDateValue (with the same timezone)
    */
-  def toDateTime(): DateTimeValue = {
+  def toDateTime: DateTimeValue = {
     new DateTimeValue(year, month, day, 0.toByte, 0.toByte, 0.toByte, 0, getTimezoneInMinutes)
   }
 
@@ -165,7 +165,7 @@ abstract class GDateValue extends CalendarValue {
    * @return the date/time in the new timezone
    */
   override def adjustTimezone(tz: Int): CalendarValue = {
-    toDateTime().adjustTimezone(tz).convert(getItemType).asInstanceOf[DateTimeValue]
+    toDateTime.adjustTimezone(tz).convert(getItemType).asInstanceOf[DateTimeValue]
   }
 
   /**

@@ -322,7 +322,7 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
   /**
    * Get the static type of the expression
    */
-  override def getItemType(): ItemType = targetType
+  override def getItemType: ItemType = targetType
 
   /**
    * Determine the special properties of this expression

@@ -21,7 +21,7 @@ class CurrentGroupingKey extends SystemFunction {
   /**
    * Determine the dependencies
    */
-  def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_CURRENT_GROUP
+  def getIntrinsicDependencies: Int = StaticProperty.DEPENDS_ON_CURRENT_GROUP
 
   /**
    * Evaluate the expression

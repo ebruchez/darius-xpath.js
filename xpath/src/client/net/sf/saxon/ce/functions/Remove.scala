@@ -114,7 +114,7 @@ class Remove extends SystemFunction {
    * Determine the data type of the items in the sequence
    * @return the type of the input sequence
    */
-  override def getItemType(): ItemType = argument(0).getItemType
+  override def getItemType: ItemType = argument(0).getItemType
 
   /**
    * Evaluate the function to return an iteration of selected nodes.

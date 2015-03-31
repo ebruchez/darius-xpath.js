@@ -35,5 +35,5 @@ class Last extends SystemFunction {
   /**
    * Determine the dependencies
    */
-  override def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_LAST
+  override def getIntrinsicDependencies: Int = StaticProperty.DEPENDS_ON_LAST
 }

@@ -142,7 +142,7 @@ class VennIterator(p1: SequenceIterator,
     null
   }
 
-  def getAnother(): SequenceIterator = {
+  def getAnother: SequenceIterator = {
     new VennIterator(e1.getAnother, e2.getAnother, comparer, operator)
   }
 }

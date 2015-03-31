@@ -38,14 +38,14 @@ class EmptyIterator private () extends UnfailingIterator with LastPositionFinder
    * @return the position of the last item in the sequence, always zero in
    *     this implementation
    */
-  def getLastPosition(): Int = 0
+  def getLastPosition: Int = 0
 
   /**
    * Get another iterator over the same items, positioned at the start.
    * @return another iterator over an empty sequence (in practice, it
    *     returns the same iterator each time)
    */
-  def getAnother(): UnfailingIterator = theInstance
+  def getAnother: UnfailingIterator = theInstance
 
   /**
    * Return a Value containing all the items in the sequence returned by this

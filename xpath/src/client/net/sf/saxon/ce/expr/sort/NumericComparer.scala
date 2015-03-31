@@ -27,7 +27,7 @@ object NumericComparer {
  */
 class NumericComparer protected () extends AtomicComparer {
 
-  def getCollator(): StringCollator = null
+  def getCollator: StringCollator = null
 
   /**
    * Compare two Items by converting them to numbers and comparing the numeric values. If either

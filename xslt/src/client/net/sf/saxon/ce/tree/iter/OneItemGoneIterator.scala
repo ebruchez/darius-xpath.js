@@ -59,7 +59,7 @@ class OneItemGoneIterator(var initial: Item, var baseIterator: SequenceIterator)
    *          if any error occurs
    * @since 8.4
    */
-  def getAnother(): SequenceIterator = baseIterator.getAnother
+  def getAnother: SequenceIterator = baseIterator.getAnother
 
   /**
    * Get the last position (that is, the number of items in the sequence). This method is
@@ -67,7 +67,7 @@ class OneItemGoneIterator(var initial: Item, var baseIterator: SequenceIterator)
    * The result is undefined if the next() method of the iterator has already returned null.
    * This method returns -1 if the last position cannot be determined.
    */
-  def getLastPosition(): Int = {
+  def getLastPosition: Int = {
     if (baseIterator.isInstanceOf[LastPositionFinder]) {
       baseIterator.asInstanceOf[LastPositionFinder].getLastPosition
     } else {

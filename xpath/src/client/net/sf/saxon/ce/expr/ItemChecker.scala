@@ -65,7 +65,7 @@ class ItemChecker(sequence: Expression, var requiredItemType: ItemType, var role
    * This method indicates which of these methods is provided. This implementation provides both iterate() and
    * process() methods natively.
    */
-  override def getImplementationMethod(): Int = {
+  override def getImplementationMethod: Int = {
     var m = Expression.ITERATE_METHOD
     if (!Cardinality.allowsMany(getCardinality)) {
       m |= Expression.EVALUATE_METHOD
@@ -140,7 +140,7 @@ class ItemChecker(sequence: Expression, var requiredItemType: ItemType, var role
   /**
    * Determine the data type of the items returned by the expression
    */
-  override def getItemType(): ItemType = requiredItemType
+  override def getItemType: ItemType = requiredItemType
 
   /**
    * Is this expression the same as another expression?

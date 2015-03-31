@@ -85,7 +85,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
 
   def mutableCopy(): IntSet = copy()
 
-  def isEmpty(): Boolean = size == 0
+  def isEmpty: Boolean = size == 0
 
   def contains(value: Int): Boolean = {
     if (used == 0) {
@@ -326,7 +326,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
 
     private var current: Int = Integer.MIN_VALUE
 
-    def hasNext(): Boolean = {
+    def hasNext: Boolean = {
       if (i < 0) {
         size > 0
       } else {

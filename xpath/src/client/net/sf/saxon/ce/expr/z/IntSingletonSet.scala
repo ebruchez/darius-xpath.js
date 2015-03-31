@@ -24,7 +24,7 @@ class IntSingletonSet(var value: Int) extends IntSet {
 
   def size(): Int = 1
 
-  def isEmpty(): Boolean = false
+  def isEmpty: Boolean = false
 
   def contains(value: Int): Boolean = this.value == value
 
@@ -41,7 +41,7 @@ class IntSingletonSet(var value: Int) extends IntSet {
 
       var gone: Boolean = false
 
-      def hasNext(): Boolean = !gone
+      def hasNext: Boolean = !gone
 
       def next(): Int = {
         gone = true

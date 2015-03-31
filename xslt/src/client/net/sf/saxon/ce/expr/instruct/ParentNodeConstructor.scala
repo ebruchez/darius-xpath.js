@@ -88,5 +88,5 @@ abstract class ParentNodeConstructor extends Instruction {
    */
   def createsNewNodes(): Boolean = true
 
-  def getCardinality(): Int = StaticProperty.EXACTLY_ONE
+  def getCardinality: Int = StaticProperty.EXACTLY_ONE
 }

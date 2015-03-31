@@ -74,14 +74,14 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * Get the document number of the document containing this node. For a free-standing
    * orphan node, just return the hashcode.
    */
-  def getDocumentNumber(): Int = getPhysicalRoot.getDocumentNumber
+  def getDocumentNumber: Int = getPhysicalRoot.getDocumentNumber
 
   /**
    * Get the index position of this node among its siblings (starting from 0)
    * @return 0 for the first child, 1 for the second child, etc. Returns -1 for a node
    * that has been deleted.
    */
-  def getSiblingPosition(): Int = index
+  def getSiblingPosition: Int = index
 
   /**
    * Set the index position. For internal use only
@@ -96,7 +96,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * If there is no type annotation, we return the string value, as an instance
    * of xs:untypedAtomic
    */
-  def getTypedValue(): AtomicValue = new UntypedAtomicValue(getStringValue)
+  def getTypedValue: AtomicValue = new UntypedAtomicValue(getStringValue)
 
   /**
    * Set the system ID of this node. This method is provided so that a NodeInfo
@@ -136,7 +136,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    *
    * @return the name of the node, as a StructuredQName. Return null for an unnamed node.
    */
-  def getNodeName(): StructuredQName = null
+  def getNodeName: StructuredQName = null
 
   /**
    * Get a character string that uniquely identifies this node within this document
@@ -151,12 +151,12 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
   /**
    * Get the system ID for the node. Default implementation for child nodes.
    */
-  def getSystemId(): String = parent.getSystemId
+  def getSystemId: String = parent.getSystemId
 
   /**
    * Get the base URI for the node. Default implementation for child nodes.
    */
-  def getBaseURI(): String = parent.getBaseURI
+  def getBaseURI: String = parent.getBaseURI
 
   /**
    * Get the node sequence number (in document order). Sequence numbers are monotonic but not
@@ -222,7 +222,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * @return The URI of the namespace of this node. For the null namespace, return an
    *         empty string. For an unnamed node, return the empty string.
    */
-  def getURI(): String = {
+  def getURI: String = {
     val qName = getNodeName
     if (qName == null) "" else qName.getNamespaceURI
   }
@@ -234,7 +234,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * @return The display name of this node.
    *         For a node with no name, return an empty string.
    */
-  def getDisplayName(): String = {
+  def getDisplayName: String = {
     val qName = getNodeName
     if (qName == null) "" else qName.getDisplayName
   }
@@ -245,7 +245,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * @return The local name of this node.
    *         For a node with no name, return "",.
    */
-  def getLocalPart(): String = {
+  def getLocalPart: String = {
     val qName = getNodeName
     if (qName == null) "" else qName.getLocalName
   }
@@ -255,7 +255,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    *
    * @return The Node object describing the containing element or root node.
    */
-  def getParent(): NodeInfo = {
+  def getParent: NodeInfo = {
     if (parent.isInstanceOf[DocumentImpl] && parent.asInstanceOf[DocumentImpl].isImaginary) {
       return null
     }
@@ -395,7 +395,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * @return the NodeInfo representing the logical root of the tree. For this tree implementation the
    * root will either be a document node or an element node.
    */
-  def getRoot(): NodeInfo = {
+  def getRoot: NodeInfo = {
     val parent = getParent
     if (parent == null) {
       this
@@ -410,7 +410,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    *     node is part of a tree that does not have a document node as its
    *     root, returns null.
    */
-  def getDocumentRoot(): DocumentInfo = {
+  def getDocumentRoot: DocumentInfo = {
     val parent = getParent
     if (parent == null) {
       null
@@ -512,7 +512,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * @return <code>true</code> if the node has any children,
    *         <code>false</code> if the node has no children.
    */
-  def hasChildNodes(): Boolean = getFirstChild != null
+  def hasChildNodes: Boolean = getFirstChild != null
 
   /**
    * Get a Builder suitable for building nodes that can be attached to this document.

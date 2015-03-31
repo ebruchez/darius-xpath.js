@@ -65,7 +65,7 @@ class InscopeNamespaceResolver(_node: NodeInfo) extends NamespaceResolver {
 
       var iter: Iterator[NamespaceBinding] = NamespaceIterator.iterateNamespaces(node)
 
-      def hasNext(): Boolean = {
+      def hasNext: Boolean = {
         if (iter.hasNext) {
           true
         } else if (phase == 0) {

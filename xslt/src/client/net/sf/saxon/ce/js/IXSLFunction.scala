@@ -187,7 +187,7 @@ class IXSLFunction(var localName: String, arguments: Array[Expression]) extends 
 
   setArguments(arguments)
 
-  override def getFunctionName(): StructuredQName = {
+  override def getFunctionName: StructuredQName = {
     new StructuredQName(NamespaceConstant.IXSL, "", localName)
   }
 
@@ -196,7 +196,7 @@ class IXSLFunction(var localName: String, arguments: Array[Expression]) extends 
 
   override def preEvaluate(visitor: ExpressionVisitor): Expression = this
 
-  override def getItemType(): ItemType = AnyItemType.getInstance
+  override def getItemType: ItemType = AnyItemType.getInstance
 
   protected override def computeCardinality(): Int = StaticProperty.ALLOWS_ZERO_OR_MORE
 

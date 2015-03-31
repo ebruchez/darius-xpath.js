@@ -38,5 +38,5 @@ class RegexGroup extends SystemFunction {
   /**
    * Determine the dependencies
    */
-  def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_REGEX_GROUP
+  def getIntrinsicDependencies: Int = StaticProperty.DEPENDS_ON_REGEX_GROUP
 }

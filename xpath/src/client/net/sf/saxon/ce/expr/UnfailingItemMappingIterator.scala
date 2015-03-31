@@ -11,11 +11,11 @@ class UnfailingItemMappingIterator(base: UnfailingIterator, action: ItemMappingF
 
   override def next(): Item = super.next()
 
-  protected override def getBaseIterator(): UnfailingIterator = {
+  protected override def getBaseIterator: UnfailingIterator = {
     super.getBaseIterator.asInstanceOf[UnfailingIterator]
   }
 
-  override def getAnother(): UnfailingIterator = {
+  override def getAnother: UnfailingIterator = {
     val newBase = getBaseIterator.getAnother
     val action = getMappingFunction
     val newAction = if (action.isInstanceOf[StatefulMappingFunction]) action.asInstanceOf[StatefulMappingFunction].getAnother(newBase).asInstanceOf[ItemMappingFunction] else action

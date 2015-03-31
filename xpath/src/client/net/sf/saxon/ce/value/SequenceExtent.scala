@@ -167,7 +167,7 @@ class SequenceExtent[T <: Item](val value: Array[T]) extends Sequence {
    *
    * @return the number of items in the sequence
    */
-  def getLength(): Int = value.length
+  def getLength: Int = value.length
 
   /**
    * Get the (lowest common) item type

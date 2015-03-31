@@ -90,7 +90,7 @@ class BooleanValue private (var value: Boolean) extends AtomicValue with Compara
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.BOOLEAN
+  def getItemType: AtomicType = AtomicType.BOOLEAN
 
   /**
    * Convert to target data type
@@ -121,7 +121,7 @@ class BooleanValue private (var value: Boolean) extends AtomicValue with Compara
    * Convert to string
    * @return "true" or "false"
    */
-  def getPrimitiveStringValue(): String = if (value) "true" else "false"
+  def getPrimitiveStringValue: String = if (value) "true" else "false"
 
   /**
    * Get a Comparable value that implements the XPath ordering comparison semantics for this value.

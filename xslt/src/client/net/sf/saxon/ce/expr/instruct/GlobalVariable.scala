@@ -29,7 +29,7 @@ class GlobalVariable extends GeneralVariable with Container {
    *         that operates at the level of an XPath expression; 2 for a container at the level
    *         of a global function or template
    */
-  def getContainerGranularity(): Int = 2
+  def getContainerGranularity: Int = 2
 
   /**
    * The expression that initializes a global variable may itself use local variables.

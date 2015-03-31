@@ -91,25 +91,25 @@ class NodeKindTest private (var kind: Int) extends NodeTest {
   /**
    * Determine the default priority of this node test when used on its own as a Pattern
    */
-  def getDefaultPriority(): Double = -0.5
+  def getDefaultPriority: Double = -0.5
 
   /**
    * Determine the types of nodes to which this pattern applies. Used for optimisation.
    * @return the type of node matched by this pattern. e.g. Type.ELEMENT or Type.TEXT
    */
-  override def getRequiredNodeKind(): Int = kind
+  override def getRequiredNodeKind: Int = kind
 
   /**
    * Get a mask indicating which kinds of nodes this NodeTest can match. This is a combination
    * of bits: 1<<Type.ELEMENT for element nodes, 1<<Type.TEXT for text nodes, and so on.
    */
-  override def getNodeKindMask(): Int = 1 << kind
+  override def getNodeKindMask: Int = 1 << kind
 
   /**
    * Get the content type allowed by this NodeTest (that is, the type annotation).
    * Return AnyType if there are no restrictions. The default implementation returns AnyType.
    */
-  override def getAtomizedItemType(): AtomicType = kind match {
+  override def getAtomizedItemType: AtomicType = kind match {
     case Type.DOCUMENT ⇒ AtomicType.UNTYPED_ATOMIC
     case Type.ELEMENT ⇒ AtomicType.ANY_ATOMIC
     case Type.ATTRIBUTE ⇒ AtomicType.ANY_ATOMIC

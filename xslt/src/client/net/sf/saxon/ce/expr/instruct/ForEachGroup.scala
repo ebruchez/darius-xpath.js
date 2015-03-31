@@ -144,7 +144,7 @@ class ForEachGroup(var select: Expression,
    *
    * @return the static item type of the instruction
    */
-  def getItemType(): ItemType = action.getItemType
+  def getItemType: ItemType = action.getItemType
 
   /**
    * Compute the dependencies of an expression, as the union of the

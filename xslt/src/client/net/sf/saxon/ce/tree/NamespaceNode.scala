@@ -63,7 +63,7 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    * @return an integer identifying the kind of node. These integer values are the
    *         same as those used in the DOM
    */
-  def getNodeKind(): Int = Type.NAMESPACE
+  def getNodeKind: Int = Type.NAMESPACE
 
   /**
    * Determine whether this is the same node as another node.
@@ -116,7 +116,7 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    *         same as the base URI: the base URI can be modified by xml:base, but
    *         the system ID cannot.
    */
-  def getSystemId(): String = element.getSystemId
+  def getSystemId: String = element.getSystemId
 
   /**
    * Get the Base URI for the node, that is, the URI used for resolving a relative URI contained
@@ -124,7 +124,7 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    *
    * @return the base URI of the node
    */
-  def getBaseURI(): String = null
+  def getBaseURI: String = null
 
   /**
    * Determine the relative position of this node and another node, in document order.
@@ -160,7 +160,7 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    *
    * @return 0 for the first child, 1 for the second child, etc.
    */
-  def getSiblingPosition(): Int = 1
+  def getSiblingPosition: Int = 1
 
   /**
    * Return the string value of the node. The interpretation of this depends on the type
@@ -168,9 +168,9 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    *
    * @return the string value of the node
    */
-  def getStringValue(): String = nsBinding.getURI
+  def getStringValue: String = nsBinding.getURI
 
-  def getNodeName(): StructuredQName = {
+  def getNodeName: StructuredQName = {
     if (qName == null) {
       if (nsBinding.getPrefix.isEmpty) {
         return null
@@ -187,7 +187,7 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    * @return the local part of the name. For an unnamed node, returns "". Unlike the DOM
    *         interface, this returns the full name in the case of a non-namespaced name.
    */
-  def getLocalPart(): String = nsBinding.getPrefix
+  def getLocalPart: String = nsBinding.getPrefix
 
   /**
    * Get the URI part of the name of this node. This is the URI corresponding to the
@@ -196,7 +196,7 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    * @return The URI of the namespace of this node. Since the name of a namespace
    *         node is always an NCName (the namespace prefix), this method always returns "".
    */
-  def getURI(): String = ""
+  def getURI: String = ""
 
   /**
    * Get the display name of this node. For elements and attributes this is [prefix:]localname.
@@ -205,14 +205,14 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    * @return The display name of this node. For a node with no name, return
    *         an empty string.
    */
-  def getDisplayName(): String = getLocalPart
+  def getDisplayName: String = getLocalPart
 
   /**
    * Get the NodeInfo object representing the parent of this node
    *
    * @return the parent of this node; null if this node has no parent
    */
-  def getParent(): NodeInfo = element
+  def getParent: NodeInfo = element
 
   /**
    * Return an iteration over all the nodes reached by the given axis from this node
@@ -249,7 +249,7 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    * @return the NodeInfo representing the top-level ancestor of this node.
    *         This will not necessarily be a document node
    */
-  def getRoot(): NodeInfo = element.getRoot
+  def getRoot: NodeInfo = element.getRoot
 
   /**
    * Get the root node, if it is a document node.
@@ -258,7 +258,7 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    *         node is part of a tree that does not have a document node as its
    *         root, return null.
    */
-  def getDocumentRoot(): DocumentInfo = element.getDocumentRoot
+  def getDocumentRoot: DocumentInfo = element.getDocumentRoot
 
   /**
    * Determine whether the node has any children. <br />
@@ -267,7 +267,7 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    *
    * @return True if the node has one or more children
    */
-  def hasChildNodes(): Boolean = false
+  def hasChildNodes: Boolean = false
 
   /**
    * Get a character string that uniquely identifies this node.
@@ -286,7 +286,7 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    * Get the document number of the document containing this node. For a free-standing
    * orphan node, just return the hashcode.
    */
-  def getDocumentNumber(): Int = element.getDocumentNumber
+  def getDocumentNumber: Int = element.getDocumentNumber
 
   /**
    * Copy this node to a given outputter
@@ -320,5 +320,5 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    *
    * @return the typed value of the item. In general this will be a sequence
    */
-  def getTypedValue(): AtomicValue = new StringValue(getStringValue)
+  def getTypedValue: AtomicValue = new StringValue(getStringValue)
 }

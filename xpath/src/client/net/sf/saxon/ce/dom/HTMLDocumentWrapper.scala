@@ -141,7 +141,7 @@ class HTMLDocumentWrapper(
   /**
    * Get the unique document number
    */
-  override def getDocumentNumber(): Int = documentNumber
+  override def getDocumentNumber: Int = documentNumber
 
   /**
    * Get the element with a given ID, if any

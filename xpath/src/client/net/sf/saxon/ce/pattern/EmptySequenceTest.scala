@@ -25,7 +25,7 @@ object EmptySequenceTest {
  */
 class EmptySequenceTest private () extends NodeTest {
 
-  override def getRequiredNodeKind(): Int = Type.EMPTY
+  override def getRequiredNodeKind: Int = Type.EMPTY
 
   /**
    * Test whether this node test is satisfied by a given node
@@ -45,13 +45,13 @@ class EmptySequenceTest private () extends NodeTest {
   /**
    * Determine the default priority of this node test when used on its own as a Pattern
    */
-  def getDefaultPriority(): Double = -0.5
+  def getDefaultPriority: Double = -0.5
 
   /**
    * Get a mask indicating which kinds of nodes this NodeTest can match. This is a combination
    * of bits: 1<<Type.ELEMENT for element nodes, 1<<Type.TEXT for text nodes, and so on.
    */
-  override def getNodeKindMask(): Int = 0
+  override def getNodeKindMask: Int = 0
 
   override def toString(): String = "empty-sequence()"
 

@@ -38,12 +38,12 @@ class LocalParamBlock(params: Array[LocalParam]) extends Instruction {
    * Determine the data type of the items returned by this expression
    * @return the data type
    */
-  def getItemType(): ItemType = EmptySequenceTest.getInstance
+  def getItemType: ItemType = EmptySequenceTest.getInstance
 
   /**
    * Determine the cardinality of the expression
    */
-  def getCardinality(): Int = StaticProperty.EMPTY
+  def getCardinality: Int = StaticProperty.EMPTY
 
   /**
    * Simplify an expression. This performs any static optimization (by rewriting the expression
@@ -109,5 +109,5 @@ class LocalParamBlock(params: Array[LocalParam]) extends Instruction {
    * This method indicates which of these methods is provided. This implementation provides both iterate() and
    * process() methods natively.
    */
-  def getImplementationMethod(): Int = PROCESS_METHOD
+  def getImplementationMethod: Int = PROCESS_METHOD
 }

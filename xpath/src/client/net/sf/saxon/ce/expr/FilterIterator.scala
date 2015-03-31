@@ -74,7 +74,7 @@ class FilterIterator(_base: SequenceIterator, protected var filter: Expression, 
   /**
    * Get another iterator to return the same nodes
    */
-  def getAnother(): SequenceIterator = {
+  def getAnother: SequenceIterator = {
     new FilterIterator(base.getAnother, filter, filterContext)
   }
 }

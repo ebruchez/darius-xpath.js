@@ -71,14 +71,14 @@ class Message(var select: Expression, var terminate: Expression) extends Instruc
    * instruction can return anything
    * @return AnyItemType
    */
-  def getItemType(): ItemType = AnyItemType.getInstance
+  def getItemType: ItemType = AnyItemType.getInstance
 
   /**
    * Get the static cardinality. To avoid spurious compile-time type errors, we falsely declare that the
    * instruction returns zero or one items - this is always acceptable
    * @return zero or one
    */
-  def getCardinality(): Int = StaticProperty.ALLOWS_ZERO_OR_ONE
+  def getCardinality: Int = StaticProperty.ALLOWS_ZERO_OR_ONE
 
   /**
    * Determine whether this instruction creates new nodes.

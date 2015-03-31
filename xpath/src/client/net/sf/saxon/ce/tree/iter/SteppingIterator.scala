@@ -72,7 +72,7 @@ class SteppingIterator(var origin: Item, var function: SteppingFunction, var inc
    * is non-destructive: it does not change the state of the original iterator.
    * @return a new iterator over the same sequence
    */
-  def getAnother(): UnfailingIterator = {
+  def getAnother: UnfailingIterator = {
     new SteppingIterator(origin, function, includeSelf)
   }
 }

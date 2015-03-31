@@ -65,9 +65,9 @@ class UseWhenFilter(var startTag: StartTagBuffer, resolver: NamespaceResolver)
         try {
           val loc = new SourceLocator() {
 
-            def getSystemId(): String = return UseWhenFilter.this.getSystemId
+            def getSystemId: String = return UseWhenFilter.this.getSystemId
 
-            def getLocation(): String = {
+            def getLocation: String = {
               return "use-when expression in " + getSystemId
             }
           }

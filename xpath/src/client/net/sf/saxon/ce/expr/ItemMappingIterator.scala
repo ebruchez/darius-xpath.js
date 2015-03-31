@@ -61,13 +61,13 @@ class ItemMappingIterator(var base: SequenceIterator, var action: ItemMappingFun
     throw new IllegalStateException
   }
 
-  def getAnother(): SequenceIterator = {
+  def getAnother: SequenceIterator = {
     val newBase = base.getAnother
     val newAction = if (action.isInstanceOf[StatefulMappingFunction]) action.asInstanceOf[StatefulMappingFunction].getAnother(newBase).asInstanceOf[ItemMappingFunction] else action
     new ItemMappingIterator(newBase, newAction, oneToOne)
   }
 
-  def getLastPosition(): Int = {
+  def getLastPosition: Int = {
     if (base.isInstanceOf[LastPositionFinder] && oneToOne) {
       base.asInstanceOf[LastPositionFinder].getLastPosition
     } else {

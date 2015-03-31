@@ -47,7 +47,7 @@ abstract class NodeTest extends ItemType {
    * as possible.
    * @return the supertype, or null if this type is item()
    */
-  def getSuperType(): ItemType = AnyNodeTest.getInstance
+  def getSuperType: ItemType = AnyNodeTest.getInstance
 
   /**
    * Determine the default priority of this node test when used on its own as a Pattern
@@ -66,7 +66,7 @@ abstract class NodeTest extends ItemType {
    * Get the item type of the atomic values that will be produced when an item
    * of this type is atomized (assuming that atomization succeeds)
    */
-  def getAtomizedItemType(): AtomicType = AtomicType.ANY_ATOMIC
+  def getAtomizedItemType: AtomicType = AtomicType.ANY_ATOMIC
 
   /**
    * Test whether this node test is satisfied by a given node. This method is only

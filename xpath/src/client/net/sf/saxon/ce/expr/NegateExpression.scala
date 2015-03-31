@@ -40,7 +40,7 @@ class NegateExpression(base: Expression) extends UnaryExpression(base) {
   /**
    * Determine the data type of the expression, if this is known statically
    */
-  override def getItemType(): ItemType = operand.getItemType
+  override def getItemType: ItemType = operand.getItemType
 
   /**
    * Evaluate the expression.

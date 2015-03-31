@@ -37,7 +37,7 @@ class PrependIterator(var start: NodeInfo, var base: UnfailingIterator) extends 
    *
    * @return a new iterator over the same sequence
    */
-  def getAnother(): UnfailingIterator = {
+  def getAnother: UnfailingIterator = {
     new PrependIterator(start, base.getAnother)
   }
 }

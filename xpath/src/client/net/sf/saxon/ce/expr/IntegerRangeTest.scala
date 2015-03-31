@@ -60,7 +60,7 @@ class IntegerRangeTest(var value: Expression, var min: Expression, var max: Expr
   /**
    * Get the data type of the items returned
    */
-  def getItemType(): ItemType = AtomicType.BOOLEAN
+  def getItemType: ItemType = AtomicType.BOOLEAN
 
   /**
    * Determine the static cardinality

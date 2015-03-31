@@ -210,7 +210,7 @@ class Block extends Instruction {
    * Determine the data type of the items returned by this expression
    * @return the data type
    */
-  override def getItemType(): ItemType = {
+  override def getItemType: ItemType = {
     if (_children.length == 0) {
       return EmptySequenceTest.getInstance
     }
@@ -227,7 +227,7 @@ class Block extends Instruction {
   /**
    * Determine the cardinality of the expression
    */
-  override def getCardinality(): Int = {
+  override def getCardinality: Int = {
     if (_children.length == 0) {
       return StaticProperty.EMPTY
     }
@@ -440,7 +440,7 @@ class Block extends Instruction {
    * This method indicates which of these methods is provided. This implementation provides both iterate() and
    * process() methods natively.
    */
-  override def getImplementationMethod(): Int = Expression.ITERATE_METHOD | Expression.PROCESS_METHOD
+  override def getImplementationMethod: Int = Expression.ITERATE_METHOD | Expression.PROCESS_METHOD
 
   /**
    * Iterate over the results of all the child expressions

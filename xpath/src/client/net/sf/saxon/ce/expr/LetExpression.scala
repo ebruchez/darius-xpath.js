@@ -225,7 +225,7 @@ class LetExpression extends Assignation with TailCallReturner {
    * @return one of the values Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.NODE,
    *         or Type.ITEM (meaning not known in advance)
    */
-  def getItemType(): ItemType = action.getItemType
+  def getItemType: ItemType = action.getItemType
 
   /**
    * Determine the static cardinality of the expression

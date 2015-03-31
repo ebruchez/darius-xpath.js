@@ -98,7 +98,7 @@ abstract class SystemFunction extends FunctionCall {
   /**
    * Determine the item type of the value returned by the function
    */
-  def getItemType(): ItemType = {
+  def getItemType: ItemType = {
     val `type` = details.resultType.getPrimaryType
     if (details.sameItemTypeAsFirstArgument) {
       if (argument.length > 0) {

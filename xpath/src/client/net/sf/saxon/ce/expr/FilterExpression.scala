@@ -131,7 +131,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    *
    * @return an integer representing the data type
    */
-  def getItemType(): ItemType = {
+  def getItemType: ItemType = {
     if (filter.isInstanceOf[InstanceOfExpression] && 
       filter.asInstanceOf[InstanceOfExpression].getBaseExpression.isInstanceOf[ContextItemExpression]) {
       return filter.asInstanceOf[InstanceOfExpression].getRequiredItemType

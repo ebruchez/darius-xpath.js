@@ -49,7 +49,7 @@ class ContextMappingIterator(var action: ContextMappingFunction, var context: XP
     throw new IllegalStateException
   }
 
-  def getAnother(): SequenceIterator = {
+  def getAnother: SequenceIterator = {
     val newBase = base.getAnother
     val c2 = context.newMinorContext()
     c2.setCurrentIterator(newBase)

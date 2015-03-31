@@ -67,14 +67,14 @@ abstract class SingleNodeExpression extends Expression {
    * Determine the data type of the items returned by this expression
    * @return Type.NODE
    */
-  def getItemType(): ItemType = AnyNodeTest.getInstance
+  def getItemType: ItemType = AnyNodeTest.getInstance
 
   /**
    * Determine which aspects of the context the expression depends on. The result is
    * a bitwise-or'ed value composed from constants such as StaticProperty.VARIABLES and
    * StaticProperty.CURRENT_NODE
    */
-  override def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_CONTEXT_ITEM
+  override def getIntrinsicDependencies: Int = StaticProperty.DEPENDS_ON_CONTEXT_ITEM
 
   override def computeSpecialProperties(): Int = {
     StaticProperty.ORDERED_NODESET | StaticProperty.CONTEXT_DOCUMENT_NODESET | 

@@ -72,7 +72,7 @@ class Subsequence extends SystemFunction {
    * Determine the data type of the items in the sequence
    * @return the type of the argument
    */
-  override def getItemType(): ItemType = argument(0).getItemType
+  override def getItemType: ItemType = argument(0).getItemType
 
   /**
    * Get the static properties of this expression (other than its type). The result is

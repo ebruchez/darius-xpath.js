@@ -44,19 +44,19 @@ class EarlyEvaluationContext(var config: Configuration) extends XPathContext(nul
    * Get the calling XPathContext (the next one down the stack). This will be null if unknown, or
    * if the bottom of the stack has been reached.
    */
-  override def getCaller(): XPathContext = null
+  override def getCaller: XPathContext = null
 
   /**
    * Get the Configuration
    */
-  override def getConfiguration(): Configuration = config
+  override def getConfiguration: Configuration = config
 
   /**
    * Get the context item
    *
    * @return the context item, or null if the context item is undefined
    */
-  override def getContextItem(): Item = null
+  override def getContextItem: Item = null
 
   /**
    * Get the context position (the position of the context item)
@@ -65,7 +65,7 @@ class EarlyEvaluationContext(var config: Configuration) extends XPathContext(nul
    * @throws XPathException
    *          if the context position is undefined
    */
-  override def getContextPosition(): Int = {
+  override def getContextPosition: Int = {
     val err = new XPathException("The context position is undefined")
     err.setErrorCode("FONC0001")
     throw err
@@ -74,7 +74,7 @@ class EarlyEvaluationContext(var config: Configuration) extends XPathContext(nul
   /**
    * Get the Controller. May return null when running outside XSLT or XQuery
    */
-  override def getController(): Controller = null
+  override def getController: Controller = null
 
 //ORBEON XSLT
 //  /**
@@ -95,7 +95,7 @@ class EarlyEvaluationContext(var config: Configuration) extends XPathContext(nul
    * @return the current iterator, or null if there is no current iterator
    *         (which means the context item, position, and size are undefined).
    */
-  override def getCurrentIterator(): FocusIterator = null
+  override def getCurrentIterator: FocusIterator = null
 
 //ORBEON XSLT
 //  /**
@@ -132,7 +132,7 @@ class EarlyEvaluationContext(var config: Configuration) extends XPathContext(nul
    * @throws client.net.sf.saxon.ce.trans.XPathException
    *          if the context position is undefined
    */
-  override def getLast(): Int = {
+  override def getLast: Int = {
     val err = new XPathException("The context item is undefined")
     err.setErrorCode("XPDY0002")
     throw err
@@ -154,7 +154,7 @@ class EarlyEvaluationContext(var config: Configuration) extends XPathContext(nul
    *
    * @return the current Receiver
    */
-  override def getReceiver(): SequenceReceiver = {
+  override def getReceiver: SequenceReceiver = {
     notAllowed()
     null
   }
@@ -166,7 +166,7 @@ class EarlyEvaluationContext(var config: Configuration) extends XPathContext(nul
    *
    * @return array of variables.
    */
-  override def getStackFrame(): Array[Sequence] = {
+  override def getStackFrame: Array[Sequence] = {
     notAllowed()
     null
   }
@@ -247,7 +247,7 @@ class EarlyEvaluationContext(var config: Configuration) extends XPathContext(nul
    * NoDynamicContextException.
    * @return the implicit timezone, as an offset from UTC in minutes
    */
-  override def getImplicitTimezone(): Int = config.getImplicitTimezone
+  override def getImplicitTimezone: Int = config.getImplicitTimezone
 
   /**
    * Throw an error for operations that aren't supported when doing early evaluation of constant

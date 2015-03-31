@@ -32,5 +32,5 @@ class Position extends SystemFunction {
   /**
    * Determine the intrinsic dependencies
    */
-  override def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_POSITION
+  override def getIntrinsicDependencies: Int = StaticProperty.DEPENDS_ON_POSITION
 }

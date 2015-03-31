@@ -37,7 +37,7 @@ class ValueOf(select: Expression, var noNodeIfEmpty: Boolean) extends SimpleNode
     isNumberingInstruction = true
   }
 
-  override def getItemType(): ItemType = NodeKindTest.TEXT
+  override def getItemType: ItemType = NodeKindTest.TEXT
 
   override def computeCardinality(): Int = {
     if (noNodeIfEmpty) {

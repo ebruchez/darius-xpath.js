@@ -36,14 +36,14 @@ class ArrayIterator[T <: Item](protected var items: Array[T]) extends UnfailingI
    * @return the number of items; equivalently, the position of the last
    *     item
    */
-  def getLastPosition(): Int = items.length
+  def getLastPosition: Int = items.length
 
   /**
    * Get another iterator over the same items
    *
    * @return a new ArrayIterator
    */
-  def getAnother(): UnfailingIterator = new ArrayIterator(items)
+  def getAnother: UnfailingIterator = new ArrayIterator(items)
 
   /**
    * Return a SequenceValue containing all the items in the sequence returned by this

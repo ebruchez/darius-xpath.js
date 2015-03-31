@@ -74,7 +74,7 @@ class CastableExpression(source: Expression, var targetType: AtomicType, var all
   /**
    * Determine the data type of the result of the Castable expression
    */
-  override def getItemType(): ItemType = AtomicType.BOOLEAN
+  override def getItemType: ItemType = AtomicType.BOOLEAN
 
   override def computeCardinality(): Int = StaticProperty.EXACTLY_ONE
 

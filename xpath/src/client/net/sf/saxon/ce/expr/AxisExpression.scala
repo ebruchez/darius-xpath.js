@@ -114,7 +114,7 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
    * a bitwise-or'ed value composed from constants such as XPathContext.VARIABLES and
    * XPathContext.CURRENT_NODE
    */
-  override def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_CONTEXT_ITEM
+  override def getIntrinsicDependencies: Int = StaticProperty.DEPENDS_ON_CONTEXT_ITEM
 
   /**
    * Copy an expression. This makes a deep copy.
@@ -150,7 +150,7 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
    * @return Type.NODE or a subtype, based on the NodeTest in the axis step, plus
    *         information about the content type if this is known from schema analysis
    */
-  def getItemType(): ItemType = {
+  def getItemType: ItemType = {
     if (itemType != null) {
       return itemType
     }

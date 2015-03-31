@@ -66,7 +66,7 @@ class SetProperty(`object`: Expression, var select: Expression, var name: Expres
     this
   }
 
-  def getIntrinsicDependencies(): Int = StaticProperty.HAS_SIDE_EFFECTS
+  def getIntrinsicDependencies: Int = StaticProperty.HAS_SIDE_EFFECTS
 
   /**
    * Handle promotion offers, that is, non-local tree rewrites.
@@ -84,7 +84,7 @@ class SetProperty(`object`: Expression, var select: Expression, var name: Expres
    * @return the static item type of the instruction. This is empty: the set-attribute instruction
    *         returns nothing.
    */
-  def getItemType(): ItemType = EmptySequenceTest.getInstance
+  def getItemType: ItemType = EmptySequenceTest.getInstance
 
   /**
    * Get all the XPath expressions associated with this instruction

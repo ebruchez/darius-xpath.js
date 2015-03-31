@@ -14,7 +14,7 @@ import scala.beans.BeanProperty
  */
 class DescendingComparer(@BeanProperty var baseComparer: AtomicComparer) extends AtomicComparer {
 
-  def getCollator(): StringCollator = baseComparer.getCollator
+  def getCollator: StringCollator = baseComparer.getCollator
 
   /**
    * Compare two objects.

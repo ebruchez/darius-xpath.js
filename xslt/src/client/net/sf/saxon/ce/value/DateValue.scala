@@ -231,7 +231,7 @@ class DateValue private () extends GDateValue with Comparable[_] {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.DATE
+  def getItemType: AtomicType = AtomicType.DATE
 
   /**
    * Convert to target data type
@@ -269,7 +269,7 @@ class DateValue private () extends GDateValue with Comparable[_] {
    *
    * @return ISO 8601 representation.
    */
-  def getPrimitiveStringValue(): CharSequence = {
+  def getPrimitiveStringValue: CharSequence = {
     FormatDate.formatDate(this, "[Y0001]-[M01]-[D01][Z]", "en")
   }
 

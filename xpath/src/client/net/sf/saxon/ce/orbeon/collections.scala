@@ -78,7 +78,7 @@ class ArrayList[T](underlying: m.ArrayBuffer[T]) extends List[T] {
 }
 
 private class IteratorImpl[T](underlying: scala.collection.Iterator[T]) extends Iterator[T] {
-  def hasNext() = underlying.hasNext
+  def hasNext = underlying.hasNext
   def next(): T = underlying.next()
 }
 

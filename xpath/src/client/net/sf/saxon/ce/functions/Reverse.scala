@@ -19,7 +19,7 @@ class Reverse extends SystemFunction {
    * Determine the item type of the value returned by the function
    *
    */
-  override def getItemType(): ItemType = argument(0).getItemType
+  override def getItemType: ItemType = argument(0).getItemType
 
   override def computeSpecialProperties(): Int = {
     val baseProps = argument(0).getSpecialProperties

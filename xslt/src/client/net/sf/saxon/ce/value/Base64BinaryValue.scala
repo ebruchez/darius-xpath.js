@@ -310,7 +310,7 @@ class Base64BinaryValue(s: CharSequence) extends AtomicValue {
     binaryValue = value
   }
 
-  def getItemType(): AtomicType = AtomicType.BASE64_BINARY
+  def getItemType: AtomicType = AtomicType.BASE64_BINARY
 
   /**
    * Convert to target data type
@@ -336,7 +336,7 @@ class Base64BinaryValue(s: CharSequence) extends AtomicValue {
    * Convert to string
    * @return the canonical representation.
    */
-  def getPrimitiveStringValue(): String = {
+  def getPrimitiveStringValue: String = {
     val encoder = new Base64Encoder()
     encoder.translate(binaryValue)
     new String(encoder.getCharArray)

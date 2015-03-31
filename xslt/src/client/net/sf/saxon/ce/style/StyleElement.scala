@@ -112,16 +112,16 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
 
   protected var actionsCompleted: Int = 0
 
-  def getExecutable(): Executable = getPreparedStylesheet
+  def getExecutable: Executable = getPreparedStylesheet
 
   def getConfiguration(): Configuration = getPreparedStylesheet.getConfiguration
 
   /**
    * Get the LocationProvider allowing location identifiers to be resolved.
    */
-  def getSourceLocator(): SourceLocator = this
+  def getSourceLocator: SourceLocator = this
 
-  def getLocation(): String = {
+  def getLocation: String = {
     Navigator.getPath(this) + " in " + getBaseURI
   }
 
@@ -142,7 +142,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    *         that operates at the level of an XPath expression; 2 for a container at the level
    *         of a global function or template
    */
-  def getContainerGranularity(): Int = 1
+  def getContainerGranularity: Int = 1
 
   /**
    * Make an expression visitor

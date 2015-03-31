@@ -24,7 +24,7 @@ class StringLength extends SystemFunction {
    * @return a set of bit-significant flags identifying the "intrinsic"
    *         dependencies. The flags are documented in class client.net.sf.saxon.ce.value.StaticProperty
    */
-  override def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies: Int = {
     var d = super.getIntrinsicDependencies
     if (argument.length == 0) {
       d |= StaticProperty.DEPENDS_ON_CONTEXT_ITEM

@@ -52,7 +52,7 @@ object AdjacentTextNodeMerger {
       }
     }
 
-    def getAnother(): SequenceIterator = {
+    def getAnother: SequenceIterator = {
       new AdjacentTextNodeMergingIterator(base.getAnother)
     }
   }
@@ -150,7 +150,7 @@ class AdjacentTextNodeMerger(p0: Expression) extends UnaryExpression(p0) {
    * @return the item type of the items in the result sequence, insofar as this
    *         is known statically.
    */
-  override def getItemType(): ItemType = getBaseExpression.getItemType
+  override def getItemType: ItemType = getBaseExpression.getItemType
 
   override def computeCardinality(): Int = {
     getBaseExpression.getCardinality | StaticProperty.ALLOWS_ZERO
@@ -160,7 +160,7 @@ class AdjacentTextNodeMerger(p0: Expression) extends UnaryExpression(p0) {
    * An implementation of Expression must provide at least one of the methods evaluateItem(), iterate(), or process().
    * This method indicates which of these methods is prefered.
    */
-  override def getImplementationMethod(): Int = {
+  override def getImplementationMethod: Int = {
     Expression.PROCESS_METHOD | Expression.ITERATE_METHOD
   }
 

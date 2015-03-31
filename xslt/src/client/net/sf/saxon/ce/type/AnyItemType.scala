@@ -32,9 +32,9 @@ class AnyItemType private () extends ItemType {
    */
   def matchesItem(item: Item): Boolean = true
 
-  def getSuperType(): ItemType = null
+  def getSuperType: ItemType = null
 
-  def getAtomizedItemType(): AtomicType = AtomicType.ANY_ATOMIC
+  def getAtomizedItemType: AtomicType = AtomicType.ANY_ATOMIC
 
   override def toString(): String = "item()"
 

@@ -31,7 +31,7 @@ class UserFunctionParameter extends Binding {
    * value for the life of a query or transformation; any other binding is local.
    * @return false (always)
    */
-  def isGlobal(): Boolean = false
+  def isGlobal: Boolean = false
 
   /**
    * Set the slot number to be used by this parameter
@@ -46,7 +46,7 @@ class UserFunctionParameter extends Binding {
    * In other cases, return -1.
    * @return the slot number, indicating the position of the parameter on the local stack frame
    */
-  def getLocalSlotNumber(): Int = slotNumber
+  def getLocalSlotNumber: Int = slotNumber
 
   /**
    * Evaluate this function parameter

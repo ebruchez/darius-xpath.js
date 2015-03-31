@@ -91,7 +91,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
   /**
    * Get the system id of this root node
    */
-  def getSystemId(): String = {
+  def getSystemId: String = {
     systemIdMap.getSystemId(getRawSequenceNumber)
   }
 
@@ -107,7 +107,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    * Get the base URI of this root node.
    * @return the base URI
    */
-  def getBaseURI(): String = {
+  def getBaseURI: String = {
     if (baseURI != null) {
       return baseURI
     }
@@ -137,7 +137,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    * Return the type of node.
    * @return Type.DOCUMENT (always)
    */
-  def getNodeKind(): Int = Type.DOCUMENT
+  def getNodeKind: Int = Type.DOCUMENT
 
   /**
    * Get next sibling - always null
@@ -155,13 +155,13 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    * Get the root node
    * @return the NodeInfo representing the root of this tree
    */
-  def getRoot(): NodeInfo = this
+  def getRoot: NodeInfo = this
 
   /**
    * Get the root (document) node
    * @return the DocumentInfo representing this document
    */
-  def getDocumentRoot(): DocumentInfo = this
+  def getDocumentRoot: DocumentInfo = this
 
   /**
    * Get the physical root of the tree. This may be an imaginary document node: this method

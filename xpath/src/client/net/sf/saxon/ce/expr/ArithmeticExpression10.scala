@@ -72,7 +72,7 @@ class ArithmeticExpression10(p0: Expression, operator: Int, p1: Expression) exte
   /**
    * Determine the data type of the expression, if this is known statically
    */
-  def getItemType(): ItemType = AtomicType.ANY_ATOMIC
+  def getItemType: ItemType = AtomicType.ANY_ATOMIC
 
   /**
    * Evaluate the expression.

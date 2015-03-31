@@ -20,7 +20,7 @@ abstract class IntCheckingSet extends IntSet {
 
   def size(): Int = Integer.MAX_VALUE
 
-  def isEmpty(): Boolean = false
+  def isEmpty: Boolean = false
 
   def contains(value: Int): Boolean
 

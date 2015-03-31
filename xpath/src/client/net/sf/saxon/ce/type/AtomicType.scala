@@ -168,13 +168,13 @@ class AtomicType private (var localName: String) extends ItemType {
    *
    * @return the supertype, or null if this type is item()
    */
-  def getSuperType(): ItemType = baseType
+  def getSuperType: ItemType = baseType
 
   /**
    * Get the item type of the atomic values that will be produced when an item
    * of this type is atomized
    */
-  def getAtomizedItemType(): AtomicType = this
+  def getAtomizedItemType: AtomicType = this
 
   override def toString(): String = getDisplayName
 }

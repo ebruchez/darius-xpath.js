@@ -131,5 +131,5 @@ class BooleanExpression(p1: Expression, operator: Int, p2: Expression) extends B
    * Determine the data type of the expression
    * @return BuiltInAtomicType.BOOLEAN
    */
-  def getItemType(): ItemType = AtomicType.BOOLEAN
+  def getItemType: ItemType = AtomicType.BOOLEAN
 }

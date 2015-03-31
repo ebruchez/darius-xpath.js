@@ -43,9 +43,9 @@ class ListIterator(var list: List[_ <: Item]) extends UnfailingIterator with Las
     list.get(index += 1)
   }
 
-  def getLastPosition(): Int = length
+  def getLastPosition: Int = length
 
-  def getAnother(): UnfailingIterator = new ListIterator(list)
+  def getAnother: UnfailingIterator = new ListIterator(list)
 
   /**
    * Return a Sequence containing all the items in the sequence returned by this

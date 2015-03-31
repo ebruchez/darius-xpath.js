@@ -89,7 +89,7 @@ class Lang extends SystemFunction {
   /**
    * Determine the dependencies
    */
-  override def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies: Int = {
     if (argument.length == 1) StaticProperty.DEPENDS_ON_CONTEXT_ITEM else 0
   }
 }

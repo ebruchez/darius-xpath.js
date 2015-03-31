@@ -80,7 +80,7 @@ class ApplyImports(var operation: Int) extends Instruction {
     this
   }
 
-  def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_CONTEXT_ITEM
+  def getIntrinsicDependencies: Int = StaticProperty.DEPENDS_ON_CONTEXT_ITEM
 
   /**
    * Determine whether this instruction creates new nodes.

@@ -216,7 +216,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
    * @return a value such as Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.NODE,
    *         or Type.ITEM (meaning not known in advance)
    */
-  def getItemType(): ItemType = select.getItemType
+  def getItemType: ItemType = select.getItemType
 
   /**
    * Get the static properties of this expression (other than its type). The result is

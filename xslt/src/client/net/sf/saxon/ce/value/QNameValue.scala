@@ -69,7 +69,7 @@ class QNameValue(prefix: String, uri: String, localName: String) extends AtomicV
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.QNAME
+  def getItemType: AtomicType = AtomicType.QNAME
 
   /**
    * Convert a QName to target data type
@@ -117,7 +117,7 @@ class QNameValue(prefix: String, uri: String, localName: String) extends AtomicV
    * Get the string value as a String. Returns the QName as a lexical QName, retaining the original
    * prefix if available.
    */
-  def getPrimitiveStringValue(): String = qName.getDisplayName
+  def getPrimitiveStringValue: String = qName.getDisplayName
 
   /**
    * Convert to a StructuredQName

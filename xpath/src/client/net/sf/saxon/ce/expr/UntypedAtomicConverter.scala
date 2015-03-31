@@ -28,7 +28,7 @@ class UntypedAtomicConverter(sequence: Expression,
    * Determine the data type of the items returned by the expression
    *
    */
-  override def getItemType(): ItemType = {
+  override def getItemType: ItemType = {
     val it = operand.getItemType
     singleton = it.isInstanceOf[AtomicType] && !Cardinality.allowsMany(operand.getCardinality)
     if (allConverted) {

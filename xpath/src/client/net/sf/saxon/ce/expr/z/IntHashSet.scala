@@ -108,7 +108,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
 
   def size(): Int = _size
 
-  def isEmpty(): Boolean = _size == 0
+  def isEmpty: Boolean = _size == 0
 
   def getValues: Array[Int] = {
     var index = 0
@@ -295,7 +295,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
 
     private var i: Int = 0
 
-    def hasNext(): Boolean = {
+    def hasNext: Boolean = {
       while (i < _values.length) {
         if (_values(i) != ndv) {
           return true

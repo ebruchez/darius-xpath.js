@@ -77,7 +77,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * Get the required type of this variable
    * @return the required type
    */
-  def getRequiredType(): SequenceType = requiredType
+  def getRequiredType: SequenceType = requiredType
 
   /**
    * Indicate that this variable represents a required parameter
@@ -121,22 +121,22 @@ abstract class GeneralVariable extends Instruction with Binding {
    * type is empty.
    * @return the empty type.
    */
-  override def getItemType(): ItemType = EmptySequenceTest.getInstance
+  override def getItemType: ItemType = EmptySequenceTest.getInstance
 
   /**
    * Get the cardinality of the result of this instruction. An xsl:variable instruction returns nothing, so the
    * type is empty.
    * @return the empty cardinality.
    */
-  override def getCardinality(): Int = StaticProperty.EMPTY
+  override def getCardinality: Int = StaticProperty.EMPTY
 
-  def isGlobal(): Boolean = false
+  def isGlobal: Boolean = false
 
   /**
    * If this is a local variable held on the local stack frame, return the corresponding slot number.
    * In other cases, return -1.
    */
-  def getLocalSlotNumber(): Int = slotNumber
+  def getLocalSlotNumber: Int = slotNumber
 
   /**
    * Ask whether this variable represents a required parameter
@@ -317,5 +317,5 @@ abstract class GeneralVariable extends Instruction with Binding {
    * Get the name of this variable
    * @return the name of this variable (a QName)
    */
-  def getVariableQName(): StructuredQName = variableQName
+  def getVariableQName: StructuredQName = variableQName
 }

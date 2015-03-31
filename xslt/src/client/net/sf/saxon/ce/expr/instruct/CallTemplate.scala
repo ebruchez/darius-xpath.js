@@ -138,7 +138,7 @@ class CallTemplate(var template: Template, var useTailRecursion: Boolean) extend
    *
    * @return the static item type of the instruction
    */
-  def getItemType(): ItemType = {
+  def getItemType: ItemType = {
     if (template == null) {
       AnyItemType.getInstance
     } else {
@@ -146,7 +146,7 @@ class CallTemplate(var template: Template, var useTailRecursion: Boolean) extend
     }
   }
 
-  def getIntrinsicDependencies(): Int = {
+  def getIntrinsicDependencies: Int = {
     StaticProperty.DEPENDS_ON_XSLT_CONTEXT | StaticProperty.DEPENDS_ON_FOCUS
   }
 

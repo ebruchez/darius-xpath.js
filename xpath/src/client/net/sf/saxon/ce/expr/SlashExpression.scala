@@ -85,7 +85,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * Determine the data type of the items returned by this exprssion
    * @return the type of the step
    */
-  def getItemType(): ItemType = step.getItemType
+  def getItemType: ItemType = step.getItemType
 
   /**
    * Type-check the expression

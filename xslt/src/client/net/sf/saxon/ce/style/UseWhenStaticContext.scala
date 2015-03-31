@@ -50,7 +50,7 @@ class UseWhenStaticContext(config: Configuration, var namespaceContext: Namespac
    * entity (file) and is therefore useful for diagnostics. Use getBaseURI() to get
    * the base URI, which may be different.
    */
-  def getSystemId(): String = getBaseURI
+  def getSystemId: String = getBaseURI
 
   /**
    * Get the granularity of the container.
@@ -58,7 +58,7 @@ class UseWhenStaticContext(config: Configuration, var namespaceContext: Namespac
    *         that operates at the level of an XPath expression; 2 for a container at the level
    *         of a global function or template
    */
-  def getContainerGranularity(): Int = 1
+  def getContainerGranularity: Int = 1
 
   /**
    * Bind a variable used in this element to the XSLVariable element in which it is declared
@@ -85,19 +85,19 @@ class UseWhenStaticContext(config: Configuration, var namespaceContext: Namespac
    * @return the name of the default collation; or the name of the codepoint collation
    *         if no default collation has been defined
    */
-  def getDefaultCollationName(): String = {
+  def getDefaultCollationName: String = {
     NamespaceConstant.CODEPOINT_COLLATION_URI
   }
 
   /**
    * Get the default function namespace
    */
-  def getDefaultFunctionNamespace(): String = NamespaceConstant.FN
+  def getDefaultFunctionNamespace: String = NamespaceConstant.FN
 
   /**
    * Determine whether Backwards Compatible Mode is used
    */
-  def isInBackwardsCompatibleMode(): Boolean = false
+  def isInBackwardsCompatibleMode: Boolean = false
 
   /**
    * Determine whether a built-in type is available in this context. This method caters for differences
@@ -114,5 +114,5 @@ class UseWhenStaticContext(config: Configuration, var namespaceContext: Namespac
    *
    * @return a namespace resolver.
    */
-  def getNamespaceResolver(): NamespaceResolver = namespaceContext
+  def getNamespaceResolver: NamespaceResolver = namespaceContext
 }

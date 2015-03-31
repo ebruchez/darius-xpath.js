@@ -270,7 +270,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.DATE_TIME
+  def getItemType: AtomicType = AtomicType.DATE_TIME
 
   /**
    * Convert the value to a DateTime, retaining all the components that are actually present, and
@@ -279,7 +279,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    *
    * @return the value as an xs:dateTime
    */
-  def toDateTime(): DateTimeValue = this
+  def toDateTime: DateTimeValue = this
 
   /**
    * Normalize the date and time to be in timezone Z.
@@ -359,7 +359,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    * @return ISO 8601 representation. The value returned is the localized representation,
    *         that is it uses the timezone contained within the value itself.
    */
-  def getPrimitiveStringValue(): CharSequence = {
+  def getPrimitiveStringValue: CharSequence = {
     val sb = new FastStringBuffer(30)
     var yr = year
     if (year <= 0) {

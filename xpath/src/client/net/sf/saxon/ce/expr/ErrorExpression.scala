@@ -49,7 +49,7 @@ class ErrorExpression(@BeanProperty var exception: XPathException) extends Expre
    * Determine the data type of the expression, if possible
    * @return Type.ITEM (meaning not known in advance)
    */
-  def getItemType(): ItemType = AnyItemType.getInstance
+  def getItemType: ItemType = AnyItemType.getInstance
 
   /**
    * Determine the static cardinality

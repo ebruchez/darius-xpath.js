@@ -74,9 +74,9 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
   }
 
   def getUnderlyingNode: dom.Node = node
-  def getNodeKind(): Int = nodeKind
+  def getNodeKind: Int = nodeKind
 
-  def getTypedValue(): AtomicValue = nodeKind match {
+  def getTypedValue: AtomicValue = nodeKind match {
     case Type.COMMENT | Type.PROCESSING_INSTRUCTION ⇒ new StringValue(getStringValue)
     case _                                          ⇒ new UntypedAtomicValue(getStringValue)
   }
@@ -112,13 +112,13 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     buffer.toString.hashCode
   }
 
-  def getSystemId(): String = docWrapper._baseURI
+  def getSystemId: String = docWrapper._baseURI
 
   def setSystemId(uri: String): Unit = {
     docWrapper._baseURI = uri
   }
 
-  def getBaseURI(): String = {
+  def getBaseURI: String = {
     var n: NodeInfo = this
     if (nodeKind != Type.ELEMENT) {
       n = getParent
@@ -139,7 +139,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
    * Get the value of the item as a CharSequence. This is in some cases more efficient than
    * the version of the method that returns a String.
    */
-  def getStringValue(): String = nodeKind match {
+  def getStringValue: String = nodeKind match {
     case Type.DOCUMENT | Type.ELEMENT ⇒
       val children1 = node.childNodes
       val sb1 = new StringBuilder(16)
@@ -165,7 +165,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
       ""
   }
 
-  def getNodeName(): StructuredQName = {
+  def getNodeName: StructuredQName = {
     if (qName eq null) {
       val nodeKind = getNodeKind
       if (nodeKind == Type.ELEMENT || nodeKind == Type.ATTRIBUTE) {
@@ -183,7 +183,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
 
   def getRawLocalName: String = getLocalName(node)
 
-  def getLocalPart(): String = nodeKind match {
+  def getLocalPart: String = nodeKind match {
     case Type.ELEMENT | Type.ATTRIBUTE ⇒ getDomCorrectedName(getLocalName(node))
     case Type.PROCESSING_INSTRUCTION   ⇒ node.nodeName
     case _                             ⇒ null
@@ -201,7 +201,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
         fullname
     }
 
-  def getURI(): String = getNodeURI(node, isLocalAttribute = false)
+  def getURI: String = getNodeURI(node, isLocalAttribute = false)
 
   private def getNodeURI(lNode: dom.Node, isLocalAttribute: Boolean): String = {
     val uri = getNodeNamespace(lNode)
@@ -215,7 +215,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     }
   }
 
-  def getDisplayName(): String = nodeKind match {
+  def getDisplayName: String = nodeKind match {
     case Type.ELEMENT | Type.ATTRIBUTE ⇒ getDomCorrectedName(node.nodeName)
     case Type.PROCESSING_INSTRUCTION   ⇒ node.nodeName
     case _                             ⇒ ""
@@ -251,7 +251,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
   /**
    * Get the NodeInfo object representing the parent of this node
    */
-  def getParent(): NodeInfo = {
+  def getParent: NodeInfo = {
     if (parent == null) {
       parent =
         nodeKind match {
@@ -269,7 +269,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     parent
   }
 
-  def getSiblingPosition(): Int = {
+  def getSiblingPosition: Int = {
     if (index == -1) {
       nodeKind match {
         case Type.ELEMENT | Type.TEXT | Type.COMMENT | Type.PROCESSING_INSTRUCTION ⇒
@@ -335,12 +335,12 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
         else
           new ArrayIterator(getAltAttributes)
       case Axis.CHILD ⇒
-        if (hasChildNodes())
+        if (hasChildNodes)
           Navigator.newEmptyTextFilter(new ChildEnumeration(this, true, true, false))
         else
           EmptyIterator.getInstance
       case Axis.DESCENDANT ⇒
-        if (hasChildNodes())
+        if (hasChildNodes)
           new Navigator.DescendantEnumeration(this, false, true)
         else
           EmptyIterator.getInstance
@@ -376,7 +376,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
   def iterateAxis(axisNumber: Byte, nodeTest: NodeTest): UnfailingIterator = {
     if (axisNumber == Axis.CHILD && nodeTest.getRequiredNodeKind == Type.ELEMENT) {
       //println("Axis.CHILD and nodeTest.getRequiredNodeKind == Type.ELEMENT ")
-      if (hasChildNodes()) {
+      if (hasChildNodes) {
         //println(s"  has child nodes for $nodeTest")
         return Navigator.newAxisFilter(new ChildEnumeration(this, true, true, true), nodeTest)
       } else {
@@ -488,18 +488,18 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     nodes
   }
 
-  def getRoot(): NodeInfo = docWrapper
+  def getRoot: NodeInfo = docWrapper
 
-  def getDocumentRoot(): DocumentInfo = docWrapper
+  def getDocumentRoot: DocumentInfo = docWrapper
 
-  def hasChildNodes(): Boolean = {
+  def hasChildNodes: Boolean = {
     nodeKind != Type.ATTRIBUTE && node.hasChildNodes()
   }
 
   def generateId(buffer: FastStringBuffer) =
     Navigator.appendSequentialKey(this, buffer, addDocNr = true)
 
-  def getDocumentNumber(): Int = getDocumentRoot.getDocumentNumber
+  def getDocumentNumber: Int = getDocumentRoot.getDocumentNumber
 
   def copy(out: Receiver, copyOptions: Int): Unit = {
     ???
@@ -665,7 +665,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
       throw new IllegalStateException
     }
 
-    def getAnother(): UnfailingIterator = {
+    def getAnother: UnfailingIterator = {
       new ChildEnumeration(start, downwards, forwards, elementsOnly)
     }
   }

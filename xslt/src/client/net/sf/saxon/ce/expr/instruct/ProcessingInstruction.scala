@@ -31,9 +31,9 @@ class ProcessingInstruction(var name: Expression) extends SimpleNodeConstructor 
    */
   def getNameExpression(): Expression = name
 
-  def getItemType(): ItemType = NodeKindTest.PROCESSING_INSTRUCTION
+  def getItemType: ItemType = NodeKindTest.PROCESSING_INSTRUCTION
 
-  def getCardinality(): Int = StaticProperty.EXACTLY_ONE
+  def getCardinality: Int = StaticProperty.EXACTLY_ONE
 
   def simplify(visitor: ExpressionVisitor): Expression = {
     name = visitor.simplify(name)
@@ -48,7 +48,7 @@ class ProcessingInstruction(var name: Expression) extends SimpleNodeConstructor 
     adoptChildExpression(name)
   }
 
-  def getDependencies(): Int = {
+  def getDependencies: Int = {
     name.getDependencies | super.getDependencies
   }
 

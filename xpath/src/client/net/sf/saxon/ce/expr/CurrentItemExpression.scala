@@ -13,5 +13,5 @@ class CurrentItemExpression extends ContextItemExpression {
    * Get the error code for use when there is no context item
    * @return the string "XTDE1360"
    */
-  override protected def getErrorCodeForUndefinedContext(): String = "XTDE1360"
+  override protected def getErrorCodeForUndefinedContext: String = "XTDE1360"
 }

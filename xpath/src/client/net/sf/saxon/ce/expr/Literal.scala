@@ -111,7 +111,7 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
    * Determine the data type of the items in the expression, if possible
    * @return for the default implementation: AnyItemType (not known)
    */
-  def getItemType(): ItemType = SequenceTool.getItemTypeOfValue(value)
+  def getItemType: ItemType = SequenceTool.getItemTypeOfValue(value)
 
   /**
    * Determine the cardinality
@@ -164,7 +164,7 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
    * StaticProperty.CURRENT_NODE
    * @return for a Value, this always returns zero.
    */
-  override def getDependencies(): Int = 0
+  override def getDependencies: Int = 0
 
   /**
    * Return an Iterator to iterate over the values of a sequence. The value of every

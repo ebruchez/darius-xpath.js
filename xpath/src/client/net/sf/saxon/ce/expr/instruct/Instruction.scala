@@ -84,13 +84,13 @@ abstract class Instruction extends Expression with TailCallReturner {
    * An implementation of Expression must provide at least one of the methods evaluateItem(), iterate(), or process().
    * This method indicates which of these methods is prefered. For instructions this is the process() method.
    */
-  override def getImplementationMethod(): Int = Expression.PROCESS_METHOD
+  override def getImplementationMethod: Int = Expression.PROCESS_METHOD
 
   /**
    * Get the item type of the items returned by evaluating this instruction
    * @return the static item type of the instruction
    */
-  def getItemType(): ItemType = Type.ITEM_TYPE
+  def getItemType: ItemType = Type.ITEM_TYPE
 
   /**
    * Get the cardinality of the sequence returned by evaluating this instruction

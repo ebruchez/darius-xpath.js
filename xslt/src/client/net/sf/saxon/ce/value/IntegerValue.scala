@@ -91,7 +91,7 @@ class IntegerValue(value: Int) extends DecimalValue(value) {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.INTEGER
+  def getItemType: AtomicType = AtomicType.INTEGER
 
   /**
    * Determine whether the value is a whole number, that is, whether it compares
@@ -99,7 +99,7 @@ class IntegerValue(value: Int) extends DecimalValue(value) {
    *
    * @return always true for this implementation
    */
-  def isWholeNumber(): Boolean = true
+  def isWholeNumber: Boolean = true
 
   /**
    * Take modulo another integer

@@ -143,7 +143,7 @@ class VariableReference extends Expression {
    * @return the type of the variable, if this can be determined statically;
    *         otherwise Type.ITEM (meaning not known in advance)
    */
-  def getItemType(): ItemType = {
+  def getItemType: ItemType = {
     if (staticType == null || 
       staticType.getPrimaryType == AnyItemType.getInstance) {
       if (binding != null) {
@@ -216,7 +216,7 @@ class VariableReference extends Expression {
     if (binding == null) 73619830 else binding.hashCode
   }
 
-  override def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies: Int = {
     var d = 0
     if (binding == null) {
       d |= (StaticProperty.DEPENDS_ON_LOCAL_VARIABLES | StaticProperty.DEPENDS_ON_RUNTIME_ENVIRONMENT)
@@ -241,7 +241,7 @@ class VariableReference extends Expression {
    * This method indicates which of these methods is provided. This implementation provides both all three methods
    * natively.
    */
-  override def getImplementationMethod(): Int = {
+  override def getImplementationMethod: Int = {
     (if (Cardinality.allowsMany(getCardinality)) 0 else Expression.EVALUATE_METHOD) |
       Expression.ITERATE_METHOD |
       Expression.PROCESS_METHOD

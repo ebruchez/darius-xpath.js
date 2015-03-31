@@ -149,14 +149,14 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.DAY_TIME_DURATION
+  def getItemType: AtomicType = AtomicType.DAY_TIME_DURATION
 
   /**
    * Convert to string
    *
    * @return ISO 8601 representation.
    */
-  def getPrimitiveStringValue(): CharSequence = {
+  def getPrimitiveStringValue: CharSequence = {
     val sb = new FastStringBuffer(32)
     if (negative) {
       sb.append('-')
@@ -205,7 +205,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
   /**
    * Get length of duration in seconds
    */
-  def getLengthInSeconds(): Double = {
+  def getLengthInSeconds: Double = {
     val a = seconds + (microseconds.toDouble / 1000000)
     if (negative) -a else a
   }

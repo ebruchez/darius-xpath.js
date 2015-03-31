@@ -215,7 +215,7 @@ class DurationValue protected () extends AtomicValue {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.DURATION
+  def getItemType: AtomicType = AtomicType.DURATION
 
   /**
    * Convert to target data type
@@ -303,7 +303,7 @@ class DurationValue protected () extends AtomicValue {
    *
    * @return ISO 8601 representation.
    */
-  def getPrimitiveStringValue(): CharSequence = {
+  def getPrimitiveStringValue: CharSequence = {
     if (months == 0 && seconds == 0L && microseconds == 0) {
       return "PT0S"
     }

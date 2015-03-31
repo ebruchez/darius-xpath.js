@@ -746,7 +746,7 @@ object Navigator {
       xxx
     }
 
-    def getAnother(): UnfailingIterator = {
+    def getAnother: UnfailingIterator = {
       new DescendantEnumeration(start, includeSelf, forwards)
     }
   }
@@ -805,7 +805,7 @@ object Navigator {
       }
     }
 
-    def getAnother(): UnfailingIterator = new FollowingEnumeration(start)
+    def getAnother: UnfailingIterator = new FollowingEnumeration(start)
   }
 
   /**
@@ -863,7 +863,7 @@ object Navigator {
       }
     }
 
-    def getAnother(): UnfailingIterator = {
+    def getAnother: UnfailingIterator = {
       new PrecedingEnumeration(start, includeAncestors)
     }
   }

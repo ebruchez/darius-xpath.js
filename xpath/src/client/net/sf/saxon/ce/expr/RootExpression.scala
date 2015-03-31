@@ -36,7 +36,7 @@ class RootExpression extends SingleNodeExpression {
    *
    * @return Type.NODE
    */
-  override def getItemType(): ItemType = NodeKindTest.DOCUMENT
+  override def getItemType: ItemType = NodeKindTest.DOCUMENT
 
   /**
    * get HashCode for comparing two expressions
@@ -70,7 +70,7 @@ class RootExpression extends SingleNodeExpression {
    * a bitwise-or'ed value composed from constants such as StaticProperty.VARIABLES and
    * StaticProperty.CURRENT_NODE
    */
-  override def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies: Int = {
     StaticProperty.DEPENDS_ON_CONTEXT_DOCUMENT
   }
 

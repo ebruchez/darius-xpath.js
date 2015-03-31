@@ -20,7 +20,7 @@ class EmptyTextNodeRemover(p0: Expression) extends UnaryExpression(p0) {
    * @return the item type of the items in the result sequence, insofar as this
    *         is known statically.
    */
-  override def getItemType(): ItemType = getBaseExpression.getItemType
+  override def getItemType: ItemType = getBaseExpression.getItemType
 
   override def computeCardinality(): Int = {
     getBaseExpression.getCardinality | StaticProperty.ALLOWS_ZERO
@@ -30,7 +30,7 @@ class EmptyTextNodeRemover(p0: Expression) extends UnaryExpression(p0) {
    * An implementation of Expression must provide at least one of the methods evaluateItem(), iterate(), or process().
    * This method indicates which of these methods is prefered.
    */
-  override def getImplementationMethod(): Int = Expression.ITERATE_METHOD
+  override def getImplementationMethod: Int = Expression.ITERATE_METHOD
 
   /**
    * Return an Iterator to iterate over the values of a sequence. The value of every

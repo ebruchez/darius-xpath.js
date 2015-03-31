@@ -248,12 +248,12 @@ class DecimalValue(value: BigDecimal) extends NumericValue {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.DECIMAL
+  def getItemType: AtomicType = AtomicType.DECIMAL
 
   /**
    * Get the value
    */
-  def getDecimalValue(): BigDecimal = value
+  def getDecimalValue: BigDecimal = value
 
   /**
    * Get the hashCode. This must conform to the rules for other NumericValue hashcodes
@@ -301,7 +301,7 @@ class DecimalValue(value: BigDecimal) extends NumericValue {
    *
    * @return a String representation of the value
    */
-  def getPrimitiveStringValue(): CharSequence = {
+  def getPrimitiveStringValue: CharSequence = {
     decimalToString(value, new FastStringBuffer(FastStringBuffer.TINY))
   }
 
@@ -353,7 +353,7 @@ class DecimalValue(value: BigDecimal) extends NumericValue {
    * Determine whether the value is a whole number, that is, whether it compares
    * equal to some integer
    */
-  def isWholeNumber(): Boolean = {
+  def isWholeNumber: Boolean = {
     value.scale() == 0 || 
       value.compareTo(value.setScale(0, BigDecimal.ROUND_DOWN)) == 
       0

@@ -191,7 +191,7 @@ class ForExpression extends Assignation {
    * This method indicates which of these methods is provided. This implementation provides both iterate() and
    * process() methods natively.
    */
-  override def getImplementationMethod(): Int = Expression.ITERATE_METHOD | Expression.PROCESS_METHOD
+  override def getImplementationMethod: Int = Expression.ITERATE_METHOD | Expression.PROCESS_METHOD
 
   /**
    * Iterate over the sequence of values
@@ -235,7 +235,7 @@ class ForExpression extends Assignation {
    * @return one of the values Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.NODE,
    * or Type.ITEM (meaning not known in advance)
    */
-  def getItemType(): ItemType = action.getItemType
+  def getItemType: ItemType = action.getItemType
 
   /**
    * Determine the static cardinality of the expression

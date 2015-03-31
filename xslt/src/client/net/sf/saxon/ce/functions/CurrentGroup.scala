@@ -22,7 +22,7 @@ class CurrentGroup extends SystemFunction {
   /**
    * Determine the dependencies
    */
-  def getIntrinsicDependencies(): Int = StaticProperty.DEPENDS_ON_CURRENT_GROUP
+  def getIntrinsicDependencies: Int = StaticProperty.DEPENDS_ON_CURRENT_GROUP
 
   /**
    * Return an iteration over the result sequence

@@ -23,7 +23,7 @@ abstract class SequenceReceiver extends Receiver {
 
   protected var systemId: String = null
 
-  def getPipelineConfiguration(): PipelineConfiguration = pipelineConfiguration
+  def getPipelineConfiguration: PipelineConfiguration = pipelineConfiguration
 
   def setPipelineConfiguration(pipelineConfiguration: PipelineConfiguration): Unit = {
     this.pipelineConfiguration = pipelineConfiguration

@@ -37,7 +37,7 @@ class SuppliedParameterReference(var slotNumber: Int) extends Expression {
    * @return Type.ITEM, because we don't know the type of the supplied value
    * in advance.
    */
-  def getItemType(): ItemType = {
+  def getItemType: ItemType = {
     if (`type` != null) {
       `type`.getPrimaryType
     } else {
@@ -53,7 +53,7 @@ class SuppliedParameterReference(var slotNumber: Int) extends Expression {
    * @return a set of bit-significant flags identifying the "intrinsic"
    *         dependencies. The flags are documented in class client.net.sf.saxon.ce.value.StaticProperty
    */
-  override def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies: Int = {
     StaticProperty.DEPENDS_ON_LOCAL_VARIABLES
   }
 

@@ -248,12 +248,12 @@ class StringValue protected () extends AtomicValue {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.STRING
+  def getItemType: AtomicType = AtomicType.STRING
 
   /**
    * Get the string value as a String
    */
-  def getPrimitiveStringValue(): String = {
+  def getPrimitiveStringValue: String = {
     (value = value.toString).asInstanceOf[String]
   }
 

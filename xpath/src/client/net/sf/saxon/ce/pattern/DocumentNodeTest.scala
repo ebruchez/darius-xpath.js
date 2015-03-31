@@ -56,19 +56,19 @@ class DocumentNodeTest(@BeanProperty var elementTest: NodeTest) extends NodeTest
   /**
    * Determine the default priority of this node test when used on its own as a Pattern
    */
-  def getDefaultPriority(): Double = elementTest.getDefaultPriority
+  def getDefaultPriority: Double = elementTest.getDefaultPriority
 
   /**
    * Determine the types of nodes to which this pattern applies. Used for optimisation.
    * @return the type of node matched by this pattern. e.g. Type.ELEMENT or Type.TEXT
    */
-  override def getRequiredNodeKind(): Int = Type.DOCUMENT
+  override def getRequiredNodeKind: Int = Type.DOCUMENT
 
   /**
    * Get a mask indicating which kinds of nodes this NodeTest can match. This is a combination
    * of bits: 1<<Type.ELEMENT for element nodes, 1<<Type.TEXT for text nodes, and so on.
    */
-  override def getNodeKindMask(): Int = 1 << Type.DOCUMENT
+  override def getNodeKindMask: Int = 1 << Type.DOCUMENT
 
   override def toString(): String = {
     "document-node(" + elementTest.toString + ')'

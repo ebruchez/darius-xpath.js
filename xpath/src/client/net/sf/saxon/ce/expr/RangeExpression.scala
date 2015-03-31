@@ -59,7 +59,7 @@ class RangeExpression(start: Expression, op: Int, end: Expression) extends Binar
   /**
    * Get the data type of the items returned
    */
-  def getItemType(): ItemType = AtomicType.INTEGER
+  def getItemType: ItemType = AtomicType.INTEGER
 
   /**
    * Determine the static cardinality

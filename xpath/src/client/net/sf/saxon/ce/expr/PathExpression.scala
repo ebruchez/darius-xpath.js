@@ -60,7 +60,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
     }
   }
 
-  override def isHybrid(): Boolean = false
+  override def isHybrid: Boolean = false
 
   /**
    * Add a document sorting node to the expression tree, if needed
@@ -342,7 +342,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
    * @return a path expression containing all steps in this path expression other than the first,
    *         after expanding any nested path expressions
    */
-  override def getRemainingSteps(): Expression = {
+  override def getRemainingSteps: Expression = {
     if (start.isInstanceOf[PathExpression]) {
       val rem = new PathExpression(start.asInstanceOf[PathExpression].getRemainingSteps, step)
       ExpressionTool.copyLocationInfo(start, rem)

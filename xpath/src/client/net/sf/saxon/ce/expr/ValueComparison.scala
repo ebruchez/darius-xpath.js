@@ -83,13 +83,13 @@ class ValueComparison(p1: Expression, op: Int, p2: Expression) extends BinaryExp
    * Get the AtomicComparer used to compare atomic values. This encapsulates any collation that is used.
    * Note that the comparer is always known at compile time.
    */
-  def getAtomicComparer(): AtomicComparer = comparer
+  def getAtomicComparer: AtomicComparer = comparer
 
   /**
    * Get the primitive (singleton) operator used: one of Token.FEQ, Token.FNE, Token.FLT, Token.FGT,
    * Token.FLE, Token.FGE
    */
-  def getSingletonOperator(): Int = operator
+  def getSingletonOperator: Int = operator
 
   /**
    * Type-check the expression
@@ -254,5 +254,5 @@ class ValueComparison(p1: Expression, op: Int, p2: Expression) extends BinaryExp
    *
    * @return Type.BOOLEAN
    */
-  def getItemType(): ItemType = AtomicType.BOOLEAN
+  def getItemType: ItemType = AtomicType.BOOLEAN
 }

@@ -54,18 +54,18 @@ class CopyOf(var select: Expression, var copyNamespaces: Boolean) extends Instru
    * This method indicates which of these methods is provided. This implementation provides both iterate() and
    * process() methods natively.
    */
-  def getImplementationMethod(): Int = PROCESS_METHOD
+  def getImplementationMethod: Int = PROCESS_METHOD
 
   def simplify(visitor: ExpressionVisitor): Expression = {
     select = visitor.simplify(select)
     this
   }
 
-  def getItemType(): ItemType = select.getItemType
+  def getItemType: ItemType = select.getItemType
 
-  def getCardinality(): Int = select.getCardinality
+  def getCardinality: Int = select.getCardinality
 
-  def getDependencies(): Int = select.getDependencies
+  def getDependencies: Int = select.getDependencies
 
   protected def promoteInst(offer: PromotionOffer): Unit = {
     select = doPromotion(select, offer)

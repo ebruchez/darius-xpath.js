@@ -39,7 +39,7 @@ object CodepointCollatingComparer {
  */
 class CodepointCollatingComparer private () extends AtomicComparer {
 
-  def getCollator(): StringCollator = collator
+  def getCollator: StringCollator = collator
 
   /**
    * Compare two AtomicValue objects according to the rules for their data type. UntypedAtomic

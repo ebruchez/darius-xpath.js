@@ -19,7 +19,7 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
    * Determine the data type of the items returned by this expression
    * @return the data type
    */
-  def getItemType(): ItemType = {
+  def getItemType: ItemType = {
     val t1 = operand0.getItemType
     val t2 = operand1.getItemType
     Type.getCommonSuperType(t1, t2)

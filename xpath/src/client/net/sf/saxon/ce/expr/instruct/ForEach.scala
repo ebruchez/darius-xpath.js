@@ -52,7 +52,7 @@ class ForEach extends Instruction with ContextMappingFunction {
    * Determine the data type of the items returned by this expression
    * @return the data type
    */
-  override def getItemType(): ItemType = action.getItemType
+  override def getItemType: ItemType = action.getItemType
 
   /**
    * Determine whether this instruction creates new nodes.
@@ -170,7 +170,7 @@ class ForEach extends Instruction with ContextMappingFunction {
    * This method indicates which of these methods is provided. This implementation provides both iterate() and
    * process() methods natively.
    */
-  override def getImplementationMethod(): Int = Expression.ITERATE_METHOD | Expression.PROCESS_METHOD
+  override def getImplementationMethod: Int = Expression.ITERATE_METHOD | Expression.PROCESS_METHOD
 
   def processLeavingTail(context: XPathContext): TailCall = {
     val iter = select.iterate(context)

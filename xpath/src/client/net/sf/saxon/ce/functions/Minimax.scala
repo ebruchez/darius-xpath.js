@@ -212,7 +212,7 @@ class Minimax(_operation: Int) extends CollatingFunction {
    *
    * @return the statically inferred type of the expression
    */
-  override def getItemType(): ItemType = {
+  override def getItemType: ItemType = {
     val t = Atomizer.getAtomizedItemType(argument(0), false)
     if (t == AtomicType.UNTYPED_ATOMIC) {
       AtomicType.DOUBLE

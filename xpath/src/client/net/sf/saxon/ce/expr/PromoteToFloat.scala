@@ -16,7 +16,7 @@ class PromoteToFloat(exp: Expression) extends NumericPromoter(exp) {
    * @return a value such as Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.NODE,
    * or Type.ITEM (meaning not known in advance)
    */
-  override def getItemType(): ItemType = AtomicType.FLOAT
+  override def getItemType: ItemType = AtomicType.FLOAT
 
   /**
    * Perform the promotion

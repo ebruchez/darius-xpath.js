@@ -112,7 +112,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.TIME
+  def getItemType: AtomicType = AtomicType.TIME
 
   /**
    * Convert to target data type
@@ -139,7 +139,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    * @return ISO 8601 representation, in the localized timezone
    *         (the timezone held within the value).
    */
-  def getPrimitiveStringValue(): CharSequence = {
+  def getPrimitiveStringValue: CharSequence = {
     val sb = new FastStringBuffer(FastStringBuffer.TINY)
     CalendarValue.appendTwoDigits(sb, hour)
     sb.append(':')
@@ -167,7 +167,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    * Convert to a DateTime value. The date components represent a reference date, as defined
    * in the spec for comparing times.
    */
-  def toDateTime(): DateTimeValue = {
+  def toDateTime: DateTimeValue = {
     new DateTimeValue(1972, 12.toByte, 31.toByte, hour, minute, second, microsecond, getTimezoneInMinutes)
   }
 
@@ -189,7 +189,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    *         was required to the original value
    */
   def adjustTimezone(timezone: Int): CalendarValue = {
-    val dt = toDateTime().adjustTimezone(timezone).asInstanceOf[DateTimeValue]
+    val dt = toDateTime.adjustTimezone(timezone).asInstanceOf[DateTimeValue]
     new TimeValue(dt.getHour, dt.getMinute, dt.getSecond, dt.getMicrosecond, dt.getTimezoneInMinutes)
   }
 
@@ -228,7 +228,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    *                            is declared as Object to satisfy the Comparable interface)
    */
   def compareTo(other: TimeValue): Int = {
-    toDateTime().compareTo(other.toDateTime())
+    toDateTime.compareTo(other.toDateTime)
   }
 
   /**
@@ -244,7 +244,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    *                            is declared as Object to satisfy the Comparable interface)
    */
   def compareTo(other: CalendarValue, implicitTimezone: Int): Int = {
-    toDateTime().compareTo(other.asInstanceOf[TimeValue].toDateTime(), implicitTimezone)
+    toDateTime.compareTo(other.asInstanceOf[TimeValue].toDateTime, implicitTimezone)
   }
 
   override def equals(other: Any): Boolean = other match {
@@ -267,7 +267,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    */
   override def add(duration: DurationValue): TimeValue = {
     if (duration.isInstanceOf[DayTimeDurationValue]) {
-      val dt = toDateTime().add(duration)
+      val dt = toDateTime.add(duration)
       new TimeValue(dt.getHour, dt.getMinute, dt.getSecond, dt.getMicrosecond, getTimezoneInMinutes)
     } else {
       super.add(duration).asInstanceOf[TimeValue]

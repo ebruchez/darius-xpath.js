@@ -44,7 +44,7 @@ abstract class Assignation extends Expression with Binding {
    * Get the name of the variable
    * @return the variable name, as a QName
    */
-  def getVariableQName(): StructuredQName = variableName
+  def getVariableQName: StructuredQName = variableName
 
   def getObjectName: StructuredQName = variableName
 
@@ -53,13 +53,13 @@ abstract class Assignation extends Expression with Binding {
    *
    * @return the declared type
    */
-  def getRequiredType(): SequenceType = requiredType
+  def getRequiredType: SequenceType = requiredType
 
   /**
    * If this is a local variable held on the local stack frame, return the corresponding slot number.
    * In other cases, return -1.
    */
-  def getLocalSlotNumber(): Int = slotNumber
+  def getLocalSlotNumber: Int = slotNumber
 
   /**
    * Get the value of the range variable
@@ -86,7 +86,7 @@ abstract class Assignation extends Expression with Binding {
    * Indicate whether the binding is local or global. A global binding is one that has a fixed
    * value for the life of a query or transformation; any other binding is local.
    */
-  def isGlobal(): Boolean = false
+  def isGlobal: Boolean = false
 
   /**
    * Get the action expression

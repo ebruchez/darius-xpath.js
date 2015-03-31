@@ -116,7 +116,7 @@ abstract class AtomicValue extends Item with ConversionResult {
    *
    * @return always 1 for an atomic value
    */
-  def getLength(): Int = 1
+  def getLength: Int = 1
 
   /**
    * Iterate over the (single) item in the sequence
@@ -132,7 +132,7 @@ abstract class AtomicValue extends Item with ConversionResult {
    * it gives a space-separated list. This method is refined for AtomicValues
    * so that it never throws an Exception.
    */
-  def getStringValue(): String = getPrimitiveStringValue.toString
+  def getStringValue: String = getPrimitiveStringValue.toString
 
   /**
    * Convert the value to a string, using the serialization rules for the primitive type.
@@ -145,7 +145,7 @@ abstract class AtomicValue extends Item with ConversionResult {
    *
    * @return the typed value of the expression (which is this value)
    */
-  def getTypedValue(): AtomicValue = this
+  def getTypedValue: AtomicValue = this
 
   /**
    * Get the effective boolean value of the value

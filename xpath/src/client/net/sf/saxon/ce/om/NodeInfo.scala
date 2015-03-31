@@ -173,7 +173,7 @@ trait NodeInfo extends Item with Sequence {
    * @return the string value of the node
    * @since 8.4
    */
-  def getStringValue(): String
+  def getStringValue: String
 
   /**
    * Get the name of the node

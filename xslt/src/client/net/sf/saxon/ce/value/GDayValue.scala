@@ -57,7 +57,7 @@ class GDayValue private () extends GDateValue {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.G_DAY
+  def getItemType: AtomicType = AtomicType.G_DAY
 
   /**
    * Convert to target data type
@@ -77,7 +77,7 @@ class GDayValue private () extends GDateValue {
     }
   }
 
-  def getPrimitiveStringValue(): CharSequence = {
+  def getPrimitiveStringValue: CharSequence = {
     FormatDate.formatDate(this, "---[D01][Z]", "en")
   }
 }

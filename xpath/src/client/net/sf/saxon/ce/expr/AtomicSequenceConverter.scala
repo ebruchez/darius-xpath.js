@@ -86,7 +86,7 @@ class AtomicSequenceConverter(sequence: Expression, var requiredItemType: Atomic
    * @return a value such as Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.NODE,
    * or Type.ITEM (meaning not known in advance)
    */
-  override def getItemType(): ItemType = requiredItemType
+  override def getItemType: ItemType = requiredItemType
 
   /**
    * Determine the static cardinality of the expression

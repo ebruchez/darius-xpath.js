@@ -39,5 +39,5 @@ class RegularGroupFormatter(var groupSize: Int, var groupSeparator: String) exte
    *
    * @return the grouping separator
    */
-  override def getSeparator(): String = groupSeparator
+  override def getSeparator: String = groupSeparator
 }

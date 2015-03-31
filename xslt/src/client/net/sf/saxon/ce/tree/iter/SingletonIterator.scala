@@ -47,9 +47,9 @@ class SingletonIterator private (value: Item) extends UnfailingIterator with Gro
     }
   }
 
-  def getLastPosition(): Int = 1
+  def getLastPosition: Int = 1
 
-  def getAnother(): UnfailingIterator = new SingletonIterator(item)
+  def getAnother: UnfailingIterator = new SingletonIterator(item)
 
   def getValue(): Item = item
 

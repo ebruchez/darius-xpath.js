@@ -60,14 +60,14 @@ class YearMonthDurationValue private () extends DurationValue with Comparable[An
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  override def getItemType(): AtomicType = AtomicType.YEAR_MONTH_DURATION
+  override def getItemType: AtomicType = AtomicType.YEAR_MONTH_DURATION
 
   /**
    * Convert to string
    *
    * @return ISO 8601 representation.
    */
-  override def getPrimitiveStringValue(): CharSequence = {
+  override def getPrimitiveStringValue: CharSequence = {
     val y = getYears
     val m = getMonths
     val sb = new FastStringBuffer(32)

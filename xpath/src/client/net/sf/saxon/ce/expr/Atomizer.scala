@@ -199,7 +199,7 @@ class Atomizer(sequence: Expression) extends UnaryExpression(sequence) {
    * @return a value such as Type.STRING, Type.BOOLEAN, Type.NUMBER. For this class, the
    * result is always an atomic type, but it might be more specific.
    */
-  override def getItemType(): ItemType = getAtomizedItemType(operand, true)
+  override def getItemType: ItemType = getAtomizedItemType(operand, true)
 
   /**
    * Determine the static cardinality of the expression

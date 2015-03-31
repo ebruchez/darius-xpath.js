@@ -117,7 +117,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.TIME
+  def getItemType: AtomicType = AtomicType.TIME
 
   /**
    * Convert to target data type
@@ -144,7 +144,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    * @return ISO 8601 representation, in the localized timezone
    *         (the timezone held within the value).
    */
-  def getPrimitiveStringValue(): CharSequence = {
+  def getPrimitiveStringValue: CharSequence = {
     val sb = new FastStringBuffer(FastStringBuffer.TINY)
     appendTwoDigits(sb, hour)
     sb.append(':')
@@ -172,7 +172,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    * Convert to a DateTime value. The date components represent a reference date, as defined
    * in the spec for comparing times.
    */
-  def toDateTime(): DateTimeValue = {
+  def toDateTime: DateTimeValue = {
     new DateTimeValue(1972, 12.toByte, 31.toByte, hour, minute, second, microsecond, getTimezoneInMinutes)
   }
 

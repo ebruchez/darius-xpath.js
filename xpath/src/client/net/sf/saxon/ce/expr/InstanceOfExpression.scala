@@ -91,7 +91,7 @@ class InstanceOfExpression(source: Expression, var targetType: SequenceType)
   /**
    * Determine the data type of the result of the InstanceOf expression
    */
-  override def getItemType(): ItemType = AtomicType.BOOLEAN
+  override def getItemType: ItemType = AtomicType.BOOLEAN
 
   /**
    * Evaluate the expression

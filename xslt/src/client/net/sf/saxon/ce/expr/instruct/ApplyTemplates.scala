@@ -257,7 +257,7 @@ class ApplyTemplates protected () extends Instruction {
     this
   }
 
-  def getIntrinsicDependencies(): Int = {
+  def getIntrinsicDependencies: Int = {
     super.getIntrinsicDependencies | 
       (if (useCurrentMode) StaticProperty.DEPENDS_ON_CURRENT_ITEM else 0)
   }

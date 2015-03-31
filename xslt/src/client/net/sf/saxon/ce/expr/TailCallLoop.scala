@@ -34,7 +34,7 @@ class TailCallLoop(var containingFunction: UserFunction) extends UnaryExpression
    * This method indicates which of these methods is provided. This implementation provides both iterate() and
    * process() methods natively.
    */
-  override def getImplementationMethod(): Int = operand.getImplementationMethod
+  override def getImplementationMethod: Int = operand.getImplementationMethod
 
   /**
    * Copy an expression. This makes a deep copy.
@@ -124,5 +124,5 @@ class TailCallLoop(var containingFunction: UserFunction) extends UnaryExpression
   /**
    * Determine the data type of the items returned by the expression
    */
-  def getItemType(): ItemType = operand.getItemType
+  def getItemType: ItemType = operand.getItemType
 }

@@ -61,5 +61,5 @@ class BlockIterator(var children: Array[Expression], var context: XPathContext)
    * @throws client.net.sf.saxon.ce.trans.XPathException
    *          if any error occurs
    */
-  def getAnother(): SequenceIterator = new BlockIterator(children, context)
+  def getAnother: SequenceIterator = new BlockIterator(children, context)
 }

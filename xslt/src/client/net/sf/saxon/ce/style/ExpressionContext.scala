@@ -22,7 +22,7 @@ class ExpressionContext(var element: StyleElement) extends StaticContext {
   /**
    * Get the system configuration
    */
-  def getConfiguration(): Configuration = element.getConfiguration
+  def getConfiguration: Configuration = element.getConfiguration
 
   /**
    * Get the executable
@@ -33,20 +33,20 @@ class ExpressionContext(var element: StyleElement) extends StaticContext {
   /**
    * Get the System ID of the entity containing the expression (used for diagnostics)
    */
-  def getSystemId(): String = element.getSystemId
+  def getSystemId: String = element.getSystemId
 
   /**
    * Get the Base URI of the element containing the expression, for resolving any
    * relative URI's used in the expression.
    * Used by the document() function.
    */
-  def getBaseURI(): String = element.getBaseURI
+  def getBaseURI: String = element.getBaseURI
 
   /**
    * Get a copy of the NamespaceResolver suitable for saving in the executable code
    * @return a NamespaceResolver
    */
-  def getNamespaceResolver(): NamespaceResolver = new InscopeNamespaceResolver(element)
+  def getNamespaceResolver: NamespaceResolver = new InscopeNamespaceResolver(element)
 
   /**
    * Bind a variable to an object that can be used to refer to it
@@ -71,30 +71,30 @@ class ExpressionContext(var element: StyleElement) extends StaticContext {
    * Get the function library containing all the in-scope functions available in this static
    * context
    */
-  def getFunctionLibrary(): FunctionLibrary = {
+  def getFunctionLibrary: FunctionLibrary = {
     element.getPrincipalStylesheetModule.getFunctionLibrary
   }
 
   /**
    * Get the default collation. Return null if no default collation has been defined
    */
-  def getDefaultCollationName(): String = element.getDefaultCollationName
+  def getDefaultCollationName: String = element.getDefaultCollationName
 
   /**
    * Get the default XPath namespace for elements and types
    * Return NamespaceConstant.NULL for the non-namespace
    */
-  def getDefaultElementNamespace(): String = element.getDefaultXPathNamespace
+  def getDefaultElementNamespace: String = element.getDefaultXPathNamespace
 
   /**
    * Get the default function namespace
    */
-  def getDefaultFunctionNamespace(): String = NamespaceConstant.FN
+  def getDefaultFunctionNamespace: String = NamespaceConstant.FN
 
   /**
    * Determine whether Backwards Compatible Mode is used
    */
-  def isInBackwardsCompatibleMode(): Boolean = element.xPath10ModeIsEnabled()
+  def isInBackwardsCompatibleMode: Boolean = element.xPath10ModeIsEnabled()
 
   /**
    * Get the containing element in the stylesheet

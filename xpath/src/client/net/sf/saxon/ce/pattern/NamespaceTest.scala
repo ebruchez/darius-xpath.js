@@ -43,14 +43,14 @@ class NamespaceTest(var nodeKind: Int, var uri: String) extends NodeTest {
   /**
    * Determine the default priority of this node test when used on its own as a Pattern
    */
-  def getDefaultPriority(): Double = -0.25
+  def getDefaultPriority: Double = -0.25
 
   /**
    * Determine the types of nodes to which this pattern applies. Used for optimisation.
    * For patterns that match nodes of several types, return Type.NODE
    * @return the type of node matched by this pattern. e.g. Type.ELEMENT or Type.TEXT
    */
-  override def getRequiredNodeKind(): Int = nodeKind
+  override def getRequiredNodeKind: Int = nodeKind
 
   /**
    * Get the type from which this item type is derived by restriction. This
@@ -64,13 +64,13 @@ class NamespaceTest(var nodeKind: Int, var uri: String) extends NodeTest {
    * as possible.
    * @return the supertype, or null if this type is item()
    */
-  override def getSuperType(): ItemType = NodeKindTest.makeNodeKindTest(nodeKind)
+  override def getSuperType: ItemType = NodeKindTest.makeNodeKindTest(nodeKind)
 
   /**
    * Get a mask indicating which kinds of nodes this NodeTest can match. This is a combination
    * of bits: 1<<Type.ELEMENT for element nodes, 1<<Type.TEXT for text nodes, and so on.
    */
-  override def getNodeKindMask(): Int = 1 << nodeKind
+  override def getNodeKindMask: Int = 1 << nodeKind
 
   /**
    * Get the namespace URI matched by this NamespaceTest

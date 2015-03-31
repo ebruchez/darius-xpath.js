@@ -136,7 +136,7 @@ class QuantifiedExpression extends Assignation {
    * Determine the data type of the items returned by the expression
    * @return Type.BOOLEAN
    */
-  def getItemType(): ItemType = AtomicType.BOOLEAN
+  def getItemType: ItemType = AtomicType.BOOLEAN
 
   /**
    * The toString() method for an expression attempts to give a representation of the expression

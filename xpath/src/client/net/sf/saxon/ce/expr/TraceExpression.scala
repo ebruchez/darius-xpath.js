@@ -54,7 +54,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    * will be of type String, and each string can be supplied as input to the getProperty()
    * method to retrieve the value of the property.
    */
-  def getProperties(): Iterator[String] = properties.keysIterator()
+  def getProperties: Iterator[String] = properties.keysIterator()
 
   /**
    * Get the InstructionInfo details about the construct. This is to satisfy the InstructionInfoProvider
@@ -83,7 +83,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
     this
   }
 
-  override def getImplementationMethod(): Int = child.getImplementationMethod
+  override def getImplementationMethod: Int = child.getImplementationMethod
 
   /**
    * Offer promotion for this subexpression. The offer will be accepted if the subexpression
@@ -132,7 +132,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
     null
   }
 
-  override def getItemType(): ItemType = child.getItemType
+  override def getItemType: ItemType = child.getItemType
 
   /**
    * Determine the static cardinality of the expression. This establishes how many items
@@ -145,7 +145,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    *         implementation returns ZERO_OR_MORE (which effectively gives no
    *         information).
    */
-  override def getCardinality(): Int = child.getCardinality
+  override def getCardinality: Int = child.getCardinality
 
   /**
    * Determine which aspects of the context the expression depends on. The result is
@@ -159,7 +159,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    * @return a set of bit-significant flags identifying the dependencies of
    *     the expression
    */
-  override def getDependencies(): Int = child.getDependencies
+  override def getDependencies: Int = child.getDependencies
 
   /**
    * Determine whether this instruction creates new nodes.
@@ -239,5 +239,5 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
 //    }
 //  }
 
-  def getLineNumber(): Int = 0
+  def getLineNumber: Int = 0
 }

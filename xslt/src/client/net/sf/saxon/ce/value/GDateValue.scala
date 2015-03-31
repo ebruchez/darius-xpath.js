@@ -159,7 +159,7 @@ abstract class GDateValue extends CalendarValue {
    * Convert to DateTime.
    * @return the starting instant of the GDateValue (with the same timezone)
    */
-  def toDateTime(): DateTimeValue = {
+  def toDateTime: DateTimeValue = {
     new DateTimeValue(year, month, day, 0.toByte, 0.toByte, 0.toByte, 0, getTimezoneInMinutes)
   }
 

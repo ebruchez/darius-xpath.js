@@ -29,7 +29,7 @@ class UntypedAtomicValue(value: CharSequence) extends StringValue {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.UNTYPED_ATOMIC
+  def getItemType: AtomicType = AtomicType.UNTYPED_ATOMIC
 
   /**
    * Convert a value to another primitive data type, with control over how validation is

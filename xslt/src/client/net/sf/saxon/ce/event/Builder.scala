@@ -36,7 +36,7 @@ abstract class Builder extends Receiver {
     config = pipe.getConfiguration
   }
 
-  def getPipelineConfiguration(): PipelineConfiguration = pipe
+  def getPipelineConfiguration: PipelineConfiguration = pipe
 
   /**
    * Get the Configuration

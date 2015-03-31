@@ -96,7 +96,7 @@ class CardinalityChecker private (sequence: Expression, @BeanProperty var requir
    * This method indicates which of these methods is provided. This implementation provides both iterate() and
    * process() methods natively.
    */
-  override def getImplementationMethod(): Int = {
+  override def getImplementationMethod: Int = {
     var m = Expression.ITERATE_METHOD
     if (!Cardinality.allowsMany(requiredCardinality)) {
       m |= Expression.EVALUATE_METHOD
@@ -185,7 +185,7 @@ class CardinalityChecker private (sequence: Expression, @BeanProperty var requir
    * @return a value such as Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.NODE,
    * or Type.ITEM (meaning not known in advance)
    */
-  override def getItemType(): ItemType = operand.getItemType
+  override def getItemType: ItemType = operand.getItemType
 
   /**
    * Determine the static cardinality of the expression

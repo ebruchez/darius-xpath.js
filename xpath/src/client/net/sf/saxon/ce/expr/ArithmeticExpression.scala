@@ -291,7 +291,7 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
    *
    * @return the atomic type of the result of this arithmetic expression
    */
-  def getItemType(): ItemType = {
+  def getItemType: ItemType = {
     val t1 = operand0.getItemType.getAtomizedItemType
     val t2 = operand1.getItemType.getAtomizedItemType
     val th = TypeHierarchy.getInstance

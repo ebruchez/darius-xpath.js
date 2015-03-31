@@ -33,14 +33,14 @@ class DoubleValue(var value: Double) extends NumericValue {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.DOUBLE
+  def getItemType: AtomicType = AtomicType.DOUBLE
 
   /**
    * Return this numeric value as a double
    *
    * @return the value as a double
    */
-  override def getDoubleValue(): Double = value
+  override def getDoubleValue: Double = value
 
   /**
    * Get the hashCode. This must conform to the rules for other NumericValue hashcodes
@@ -58,7 +58,7 @@ class DoubleValue(var value: Double) extends NumericValue {
   /**
    * Test whether the value is the double/float value NaN
    */
-  override def isNaN(): Boolean = value.isNaN
+  override def isNaN: Boolean = value.isNaN
 
   /**
    * Get the effective boolean value
@@ -110,7 +110,7 @@ class DoubleValue(var value: Double) extends NumericValue {
    *
    * @return the string value
    */
-  def getPrimitiveStringValue(): CharSequence = {
+  def getPrimitiveStringValue: CharSequence = {
     if (value.isNaN) {
       return "NaN"
     } else if (value.isInfinite) {
@@ -229,7 +229,7 @@ class DoubleValue(var value: Double) extends NumericValue {
    * Determine whether the value is a whole number, that is, whether it compares
    * equal to some integer
    */
-  def isWholeNumber(): Boolean = {
+  def isWholeNumber: Boolean = {
     value == Math.floor(value) && ! value.isInfinite
   }
 

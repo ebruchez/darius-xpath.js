@@ -47,20 +47,20 @@ class LocalNameTest(var nodeKind: Int, @BeanProperty var localName: String) exte
   /**
    * Determine the default priority of this node test when used on its own as a Pattern
    */
-  def getDefaultPriority(): Double = -0.25
+  def getDefaultPriority: Double = -0.25
 
   /**
    * Determine the types of nodes to which this pattern applies. Used for optimisation.
    * For patterns that match nodes of several types, return Type.NODE
    * @return the type of node matched by this pattern. e.g. Type.ELEMENT or Type.TEXT
    */
-  override def getRequiredNodeKind(): Int = nodeKind
+  override def getRequiredNodeKind: Int = nodeKind
 
   /**
    * Get a mask indicating which kinds of nodes this NodeTest can match. This is a combination
    * of bits: 1<<Type.ELEMENT for element nodes, 1<<Type.TEXT for text nodes, and so on.
    */
-  override def getNodeKindMask(): Int = 1 << nodeKind
+  override def getNodeKindMask: Int = 1 << nodeKind
 
   override def toString(): String = "*:" + localName
 

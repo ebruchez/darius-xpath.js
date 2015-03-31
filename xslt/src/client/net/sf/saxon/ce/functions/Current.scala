@@ -48,7 +48,7 @@ class Current extends SystemFunction {
   /**
    * Determine the dependencies
    */
-  def getIntrinsicDependencies(): Int = {
+  def getIntrinsicDependencies: Int = {
     StaticProperty.DEPENDS_ON_CURRENT_ITEM | StaticProperty.DEPENDS_ON_LOCAL_VARIABLES
   }
 }

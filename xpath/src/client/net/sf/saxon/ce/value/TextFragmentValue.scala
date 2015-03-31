@@ -43,7 +43,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
   /**
    * Get the unique document number
    */
-  override def getDocumentNumber(): Int = {
+  override def getDocumentNumber: Int = {
     if (documentNumber == -1) {
       documentNumber = config.allocateDocumentNumber()
     }
@@ -75,7 +75,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
    * @return <code>true</code> if this node has any attributes,
    *   <code>false</code> otherwise.
    */
-  override def hasChildNodes(): Boolean = !("" == getStringValue)
+  override def hasChildNodes: Boolean = !("" == getStringValue)
 
   /**
    * Return an enumeration over the nodes reached by the given axis from this node
@@ -114,7 +114,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
    * Get the root (document) node
    * @return the DocumentInfo representing the containing document
    */
-  override def getDocumentRoot(): DocumentInfo = this
+  override def getDocumentRoot: DocumentInfo = this
 
   /**
    * Copy the result tree fragment value to a given Outputter
@@ -168,7 +168,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
      * Get the document number of the document containing this node. For a free-standing
      * orphan node, just return the hashcode.
      */
-    override def getDocumentNumber(): Int = getDocumentRoot.getDocumentNumber
+    override def getDocumentNumber: Int = getDocumentRoot.getDocumentNumber
 
     /**
      * Return an enumeration over the nodes reached by the given axis from this node
@@ -201,19 +201,19 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
      * Find the parent node of this node.
      * @return The Node object describing the containing element or root node.
      */
-    override def getParent(): NodeInfo = TextFragmentValue.this
+    override def getParent: NodeInfo = TextFragmentValue.this
 
     /**
      * Get the root node
      * @return the NodeInfo representing the root of this tree
      */
-    override def getRoot(): NodeInfo = TextFragmentValue.this
+    override def getRoot: NodeInfo = TextFragmentValue.this
 
     /**
      * Get the root (document) node
      * @return the DocumentInfo representing the containing document
      */
-    override def getDocumentRoot(): DocumentInfo = TextFragmentValue.this
+    override def getDocumentRoot: DocumentInfo = TextFragmentValue.this
 
     /**
      * Copy the node to a given Outputter

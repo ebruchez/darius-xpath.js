@@ -106,7 +106,7 @@ abstract class UnaryExpression protected () extends Expression {
    * @return the item type of the items in the result sequence, insofar as this
    * is known statically.
    */
-  def getItemType(): ItemType = operand.getItemType
+  def getItemType: ItemType = operand.getItemType
 
   /**
    * Is this expression the same as another expression?

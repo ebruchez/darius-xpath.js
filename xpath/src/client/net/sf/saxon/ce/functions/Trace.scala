@@ -146,7 +146,7 @@ class Trace extends SystemFunction {
       n
     }
 
-    def getAnother(): SequenceIterator = {
+    def getAnother: SequenceIterator = {
       new TracingIterator(base.getAnother, label)
     }
   }

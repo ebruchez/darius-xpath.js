@@ -24,7 +24,7 @@ object ComparableAtomicValueComparer {
  */
 class ComparableAtomicValueComparer protected () extends AtomicComparer {
 
-  def getCollator(): StringCollator = null
+  def getCollator: StringCollator = null
 
   /**
    * Compare two AtomicValue objects according to the rules for their data type. UntypedAtomic

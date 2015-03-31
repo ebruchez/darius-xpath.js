@@ -72,7 +72,7 @@ class UserFunctionCall extends FunctionCall {
    *
    * @return the qualified name
    */
-  def getFunctionName(): StructuredQName = {
+  def getFunctionName: StructuredQName = {
     val n = super.getFunctionName
     if (n == null) {
       function.getFunctionName
@@ -94,7 +94,7 @@ class UserFunctionCall extends FunctionCall {
    *
    * @return Type.ITEM (meaning not known in advance)
    */
-  def getItemType(): ItemType = {
+  def getItemType: ItemType = {
     if (staticType == null) {
       AnyItemType.getInstance
     } else {
@@ -102,7 +102,7 @@ class UserFunctionCall extends FunctionCall {
     }
   }
 
-  def getIntrinsicDependencies(): Int = {
+  def getIntrinsicDependencies: Int = {
     StaticProperty.DEPENDS_ON_USER_FUNCTIONS
   }
 
@@ -154,7 +154,7 @@ class UserFunctionCall extends FunctionCall {
     if (getFunctionName == qName && arity == getNumberOfArguments) 2 else 1
   }
 
-  def getImplementationMethod(): Int = {
+  def getImplementationMethod: Int = {
     if (Cardinality.allowsMany(getCardinality)) {
       ITERATE_METHOD | PROCESS_METHOD
     } else {

@@ -61,7 +61,7 @@ class HexBinaryValue(private val binaryValue: Array[Byte]) extends AtomicValue {
    * the 19 primitive types of XML Schema, plus xs:integer, xs:dayTimeDuration and xs:yearMonthDuration,
    * and xs:untypedAtomic. For external objects, the result is AnyAtomicType.
    */
-  def getItemType(): AtomicType = AtomicType.HEX_BINARY
+  def getItemType: AtomicType = AtomicType.HEX_BINARY
 
   /**
    * Convert to target data type
@@ -89,7 +89,7 @@ class HexBinaryValue(private val binaryValue: Array[Byte]) extends AtomicValue {
    *
    * @return the canonical representation.
    */
-  def getPrimitiveStringValue(): CharSequence = {
+  def getPrimitiveStringValue: CharSequence = {
     val digits = "0123456789ABCDEF"
     val sb = new FastStringBuffer(binaryValue.length * 2)
     for (i ← 0 until binaryValue.length) {

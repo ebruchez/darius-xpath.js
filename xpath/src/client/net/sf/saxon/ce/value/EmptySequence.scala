@@ -39,7 +39,7 @@ class EmptySequence private () extends Sequence {
    * Get the length of the sequence
    * @return always 0 for an empty sequence
    */
-  def getLength(): Int = 0
+  def getLength: Int = 0
 
   /**
    * Is this expression the same as another expression?

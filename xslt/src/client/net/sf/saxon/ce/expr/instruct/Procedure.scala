@@ -43,7 +43,7 @@ abstract class Procedure extends Container with InstructionInfo {
    *         that operates at the level of an XPath expression; 2 for a container at the level
    *         of a global function or template
    */
-  def getContainerGranularity(): Int = 2
+  def getContainerGranularity: Int = 2
 
   def setBody(body: Expression): Unit = {
     this.body = body
@@ -58,9 +58,9 @@ abstract class Procedure extends Container with InstructionInfo {
 
   def getProperty(name: String): AnyRef = null
 
-  def getLineNumber(): Int = -1
+  def getLineNumber: Int = -1
 
-  def getSystemId(): String = ""
+  def getSystemId: String = ""
 
   /**
    * Get an iterator over all the properties available. The values returned by the iterator
@@ -68,5 +68,5 @@ abstract class Procedure extends Container with InstructionInfo {
    * method to retrieve the value of the property. The iterator may return properties whose
    * value is null.
    */
-  def getProperties(): Iterator = Collections.EMPTY_LIST.iterator()
+  def getProperties: Iterator = Collections.EMPTY_LIST.iterator()
 }

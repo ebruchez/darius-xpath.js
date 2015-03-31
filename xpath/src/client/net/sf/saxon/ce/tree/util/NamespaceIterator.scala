@@ -69,7 +69,7 @@ class NamespaceIterator private (var element: NodeInfo) extends Iterator[Namespa
 
   var undeclaredPrefixes: HashSet[String] = new HashSet(8)
 
-  def hasNext(): Boolean = {
+  def hasNext: Boolean = {
     if (next == null && index != 0) {
       return false
     }

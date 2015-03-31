@@ -130,7 +130,7 @@ class ResultDocument(var href: Expression,
     this
   }
 
-  def getIntrinsicDependencies(): Int = StaticProperty.HAS_SIDE_EFFECTS
+  def getIntrinsicDependencies: Int = StaticProperty.HAS_SIDE_EFFECTS
 
   /**
    * Handle promotion offers, that is, non-local tree rewrites.
@@ -149,7 +149,7 @@ class ResultDocument(var href: Expression,
    * @return the static item type of the instruction. This is empty: the result-document instruction
    *         returns nothing.
    */
-  def getItemType(): ItemType = EmptySequenceTest.getInstance
+  def getItemType: ItemType = EmptySequenceTest.getInstance
 
   /**
    * Get all the XPath expressions associated with this instruction
@@ -201,9 +201,9 @@ class ResultDocument(var href: Expression,
 
         def bindVariable(qName: StructuredQName): Expression = return null
 
-        def getNamespaceResolver(): NamespaceResolver = return null
+        def getNamespaceResolver: NamespaceResolver = return null
 
-        def getFunctionLibrary(): FunctionLibrary = {
+        def getFunctionLibrary: FunctionLibrary = {
           return controller.getPreparedStylesheet.getFunctionLibrary
         }
       }

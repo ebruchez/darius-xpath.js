@@ -42,9 +42,9 @@ class JsArrayIterator(var list: JsArray, var config: Configuration) extends Unfa
 
   def current(): Item = current
 
-  def getLastPosition(): Int = length
+  def getLastPosition: Int = length
 
-  def getAnother(): UnfailingIterator = new JsArrayIterator(list, config)
+  def getAnother: UnfailingIterator = new JsArrayIterator(list, config)
 
   /**
    * Return an iterator over this sequence.
@@ -79,5 +79,5 @@ class JsArrayIterator(var list: JsArray, var config: Configuration) extends Unfa
    *
    * @return the number of items in the sequence
    */
-  def getLength(): Int = length
+  def getLength: Int = length
 }

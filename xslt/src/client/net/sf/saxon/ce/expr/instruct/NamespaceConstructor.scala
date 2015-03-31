@@ -28,9 +28,9 @@ class NamespaceConstructor(var name: Expression) extends SimpleNodeConstructor {
     super.simplify(visitor)
   }
 
-  def getItemType(): ItemType = NodeKindTest.NAMESPACE
+  def getItemType: ItemType = NodeKindTest.NAMESPACE
 
-  def getCardinality(): Int = StaticProperty.EXACTLY_ONE
+  def getCardinality: Int = StaticProperty.EXACTLY_ONE
 
   protected def promoteInst(offer: PromotionOffer): Unit = {
     if (select != null) {

@@ -28,7 +28,7 @@ class CurrentDateTime extends SystemFunction {
   /**
    * Determine the dependencies
    */
-  override def getIntrinsicDependencies(): Int = {
+  override def getIntrinsicDependencies: Int = {
     StaticProperty.DEPENDS_ON_RUNTIME_ENVIRONMENT
   }
 

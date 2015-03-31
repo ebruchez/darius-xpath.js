@@ -16,9 +16,9 @@ import scala.collection.JavaConversions._
  */
 class Comment extends SimpleNodeConstructor {
 
-  def getItemType(): ItemType = NodeKindTest.COMMENT
+  def getItemType: ItemType = NodeKindTest.COMMENT
 
-  def getCardinality(): Int = StaticProperty.EXACTLY_ONE
+  def getCardinality: Int = StaticProperty.EXACTLY_ONE
 
   def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Unit = {
   }

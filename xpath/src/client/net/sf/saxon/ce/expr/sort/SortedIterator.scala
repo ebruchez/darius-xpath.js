@@ -75,14 +75,14 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
     nodeKeys((position - 1) * recordSize).asInstanceOf[Item]
   }
 
-  def getLastPosition(): Int = {
+  def getLastPosition: Int = {
     if (count < 0) {
       doSort()
     }
     count
   }
 
-  def getAnother(): SequenceIterator = {
+  def getAnother: SequenceIterator = {
     if (count < 0) {
       doSort()
     }

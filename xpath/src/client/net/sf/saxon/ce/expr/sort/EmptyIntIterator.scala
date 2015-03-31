@@ -26,7 +26,7 @@ class EmptyIntIterator private () extends IntIterator {
    *
    * @return true if there are more integers to come
    */
-  def hasNext(): Boolean = false
+  def hasNext: Boolean = false
 
   /**
    * Return the next integer in the sequence. The result is undefined unless hasNext() has been called

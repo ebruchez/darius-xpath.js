@@ -20,9 +20,9 @@ class JSObjectValue(var jsObject: JavaScriptObject) extends Item {
 
   def getJavaScriptObject(): JavaScriptObject = jsObject
 
-  def getStringValue(): String = jsObject.toString
+  def getStringValue: String = jsObject.toString
 
-  def getTypedValue(): AtomicValue = new StringValue(getStringValue)
+  def getTypedValue: AtomicValue = new StringValue(getStringValue)
 
   /**
    * Iterate over the items contained in this value.
@@ -47,5 +47,5 @@ class JSObjectValue(var jsObject: JavaScriptObject) extends Item {
    *
    * @return the number of items in the sequence
    */
-  def getLength(): Int = 1
+  def getLength: Int = 1
 }

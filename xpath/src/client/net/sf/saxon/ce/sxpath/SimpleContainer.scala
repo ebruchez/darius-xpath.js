@@ -22,7 +22,7 @@ class SimpleContainer(exec: Executable) extends Container with SourceLocator {
    *
    * @return the location provider
    */
-  def getSourceLocator(): SourceLocator = this
+  def getSourceLocator: SourceLocator = this
 
   /**
    * Get the granularity of the container. During successive phases of compilation, growing
@@ -34,7 +34,7 @@ class SimpleContainer(exec: Executable) extends Container with SourceLocator {
    *         that operates at the level of an XPath expression; 2 for a container at the level
    *         of a global function or template
    */
-  def getContainerGranularity(): Int = 1
+  def getContainerGranularity: Int = 1
 
   /**
    * Return the system identifier for the current document event.
@@ -49,7 +49,7 @@ class SimpleContainer(exec: Executable) extends Container with SourceLocator {
    * @return A string containing the system identifier, or null
    *         if none is available.
    */
-  def getSystemId(): String = null
+  def getSystemId: String = null
 
-  def getLocation(): String = null
+  def getLocation: String = null
 }
