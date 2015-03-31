@@ -223,7 +223,7 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
    * Type-check the expression statically. We try to work out which particular
    * arithmetic function to use if the types of operands are known an compile time.
    */
-  def NHtypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
+  override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val th = TypeHierarchy.getInstance
     val oldOp0 = operand0
     val oldOp1 = operand1
