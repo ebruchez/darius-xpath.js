@@ -6,7 +6,7 @@ Only the XPath processor is ported. The full XSLT processor files are present bu
 
 ## Try it out
 
-The demo app is [here][2].
+The demo app is [here][3].
 
 ## Status
 
@@ -27,5 +27,5 @@ Use `sbt fastOptJS` and `sbt fullOptJS`, then load `index-dev.html` or `index.ht
 The Saxon files and their translations are under the MPL license. Other files are under the Apache 2 license.
 
 [1]: http://www.saxonica.com/ce/index.xml
-[2]: http://ebruchez.github.io/saxon.scala.js/
-[3]: http://www.scala-js.org/
+[2]: http://www.scala-js.org/
+[3]: http://ebruchez.github.io/saxon.scala.js/
