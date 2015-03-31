@@ -96,12 +96,14 @@ object FormatDate {
       }
       format = use + format
     }
-    if (value.isInstanceOf[TimeValue] && "YMDdWwFE".indexOf(component) >= 0) {
-      throw new XPathException("In formatTime(): an xs:time value does not contain component " +
-        component, "XTDE1350")
-    } else if (value.isInstanceOf[DateValue] && "hmsfP".indexOf(component) >= 0) {
-      throw new XPathException("In formatTime(): an xs:date value does not contain component " +
-        component, "XTDE1350")
+    value match {
+      case _: TimeValue if "YMDdWwFE".indexOf(component) >= 0 ⇒
+        throw new XPathException("In formatTime(): an xs:time value does not contain component " +
+          component, "XTDE1350")
+      case _: DateValue if "hmsfP".indexOf(component) >= 0 ⇒
+        throw new XPathException("In formatTime(): an xs:date value does not contain component " +
+          component, "XTDE1350")
+      case _ ⇒
     }
     var componentValue: Int = 0
     component match {

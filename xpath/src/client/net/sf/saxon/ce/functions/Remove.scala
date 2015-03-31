@@ -55,10 +55,11 @@ class Remove extends SystemFunction {
    */
   override def simplify(visitor: ExpressionVisitor): Expression = {
     val exp = super.simplify(visitor)
-    if (exp.isInstanceOf[Remove]) {
-      exp.asInstanceOf[Remove].simplifyAsTailExpression()
-    } else {
-      exp
+    exp match {
+      case remove: Remove ⇒
+        remove.simplifyAsTailExpression()
+      case _ ⇒
+        exp
     }
   }
 

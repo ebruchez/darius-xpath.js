@@ -34,12 +34,16 @@ abstract class CollatingFunction extends SystemFunction {
   private def preEvaluateCollation(env: StaticContext): Unit = {
     if (getNumberOfArguments == getDetails.maxArguments) {
       val collationExp = argument(getNumberOfArguments - 1)
-      val collationVal = if (collationExp.isInstanceOf[Literal]) collationExp.asInstanceOf[Literal].getValue else null
-      if (collationVal.isInstanceOf[AtomicValue]) {
-        var collationName = collationVal.asInstanceOf[AtomicValue].getStringValue
-        collationName = resolveCollationURI(collationName)
-        stringCollator = env.getConfiguration.getNamedCollation(collationName)
-      } else {
+      val collationVal = collationExp match {
+        case literal: Literal ⇒ literal.getValue
+        case _ ⇒ null
+      }
+      collationVal match {
+        case value: AtomicValue ⇒
+          var collationName = value.getStringValue
+          collationName = resolveCollationURI(collationName)
+          stringCollator = env.getConfiguration.getNamedCollation(collationName)
+        case _ ⇒
       }
     } else {
       val uri = env.getDefaultCollationName

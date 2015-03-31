@@ -89,57 +89,61 @@ class AdjacentTextNodeMerger(p0: Expression) extends UnaryExpression(p0) {
     if (!Cardinality.allowsMany(getBaseExpression.getCardinality)) {
       return getBaseExpression
     }
-    if (getBaseExpression.isInstanceOf[Choose]) {
-      val choose = getBaseExpression.asInstanceOf[Choose]
-      val actions = choose.getActions
-      for (i ← 0 until actions.length) {
-        val atm2 = new AdjacentTextNodeMerger(actions(i))
-        actions(i) = atm2.typeCheck(visitor, contextItemType)
-      }
-      return choose
-    }
-    if (getBaseExpression.isInstanceOf[Block]) {
-      val block = getBaseExpression.asInstanceOf[Block]
-      val actions = block.getChildren
-      var prevtext = false
-      var needed = false
-      var maybeEmpty = false
-      import Breaks._
-      breakable {
+    getBaseExpression match {
+      case choose: Choose ⇒
+        val actions = choose.getActions
         for (i ← 0 until actions.length) {
-          var maybetext: Boolean = false
-          if (actions(i).isInstanceOf[ValueOf]) {
-            maybetext = true
-            val content = actions(i).asInstanceOf[ValueOf].getContentExpression
-            if (content.isInstanceOf[StringLiteral]) {
-              maybeEmpty |= content.asInstanceOf[StringLiteral].getStringValue.length ==
-                0
-            } else {
-              maybeEmpty = true
+          val atm2 = new AdjacentTextNodeMerger(actions(i))
+          actions(i) = atm2.typeCheck(visitor, contextItemType)
+        }
+        return choose
+      case _ ⇒
+    }
+    getBaseExpression match {
+      case block: Block ⇒
+        val actions = block.getChildren
+        var prevtext = false
+        var needed = false
+        var maybeEmpty = false
+        import Breaks._
+        breakable {
+          for (i ← 0 until actions.length) {
+            var maybetext: Boolean = false
+            actions(i) match {
+              case of: ValueOf ⇒
+                maybetext = true
+                val content = of.getContentExpression
+                content match {
+                  case literal: StringLiteral ⇒
+                    maybeEmpty |= literal.getStringValue.length ==
+                      0
+                  case _ ⇒
+                    maybeEmpty = true
+                }
+              case _ ⇒
+                maybetext = th.relationship(actions(i).getItemType, NodeKindTest.TEXT) !=
+                  TypeHierarchy.DISJOINT
+                maybeEmpty |= maybetext
             }
+            if (prevtext && maybetext) {
+              needed = true
+              break()
+            }
+            if (maybetext && Cardinality.allowsMany(actions(i).getCardinality)) {
+              needed = true
+              break()
+            }
+            prevtext = maybetext
+          }
+        }
+        if (!needed) {
+          if (maybeEmpty) {
+            return new EmptyTextNodeRemover(block)
           } else {
-            maybetext = th.relationship(actions(i).getItemType, NodeKindTest.TEXT) !=
-              TypeHierarchy.DISJOINT
-            maybeEmpty |= maybetext
+            return block
           }
-          if (prevtext && maybetext) {
-            needed = true
-            break()
-          }
-          if (maybetext && Cardinality.allowsMany(actions(i).getCardinality)) {
-            needed = true
-            break()
-          }
-          prevtext = maybetext
         }
-      }
-      if (!needed) {
-        if (maybeEmpty) {
-          return new EmptyTextNodeRemover(block)
-        } else {
-          return block
-        }
-      }
+      case _ ⇒
     }
     this
   }

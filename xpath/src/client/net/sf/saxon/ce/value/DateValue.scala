@@ -288,38 +288,39 @@ class DateValue private () extends GDateValue with Comparable[AnyRef] {
    *          a subclass thereof
    */
   override def add(duration: DurationValue): DateValue = {
-    if (duration.isInstanceOf[DayTimeDurationValue]) {
-      var microseconds = duration.asInstanceOf[DayTimeDurationValue].getLengthInMicroseconds
-      val negative = microseconds < 0
-      microseconds = Math.abs(microseconds)
-      val days = Math.floor(microseconds.toDouble / (1000000L * 60L * 60L * 24L)).toInt
-      val partDay = (microseconds % (1000000L * 60L * 60L * 24L)) > 0
-      val julian = getJulianDayNumber(year, month, day)
-      var d = dateFromJulianDayNumber(julian + (if (negative) -days else days))
-      if (partDay) {
-        if (negative) {
-          d = yesterday(d.year, d.month, d.day)
+    duration match {
+      case value: DayTimeDurationValue ⇒
+        var microseconds = value.getLengthInMicroseconds
+        val negative = microseconds < 0
+        microseconds = Math.abs(microseconds)
+        val days = Math.floor(microseconds.toDouble / (1000000L * 60L * 60L * 24L)).toInt
+        val partDay = (microseconds % (1000000L * 60L * 60L * 24L)) > 0
+        val julian = getJulianDayNumber(year, month, day)
+        var d = dateFromJulianDayNumber(julian + (if (negative) -days else days))
+        if (partDay) {
+          if (negative) {
+            d = yesterday(d.year, d.month, d.day)
+          }
         }
-      }
-      d.setTimezoneInMinutes(getTimezoneInMinutes)
-      d
-    } else if (duration.isInstanceOf[YearMonthDurationValue]) {
-      val months = duration.asInstanceOf[YearMonthDurationValue].getLengthInMonths
-      var m = (month - 1) + months
-      var y = year + m / 12
-      m = m % 12
-      if (m < 0) {
-        m += 12
-        y -= 1
-      }
-      m += 1
-      var d = day
-      while (! GDateValue.isValidDate(y, m, d)) {
-        d -= 1
-      }
-      new DateValue(y, m.toByte, d.toByte, getTimezoneInMinutes)
-    } else {
-      super.add(duration).asInstanceOf[DateValue]
+        d.setTimezoneInMinutes(getTimezoneInMinutes)
+        d
+      case value: YearMonthDurationValue ⇒
+        val months = value.getLengthInMonths
+        var m = (month - 1) + months
+        var y = year + m / 12
+        m = m % 12
+        if (m < 0) {
+          m += 12
+          y -= 1
+        }
+        m += 1
+        var d = day
+        while (!GDateValue.isValidDate(y, m, d)) {
+          d -= 1
+        }
+        new DateValue(y, m.toByte, d.toByte, getTimezoneInMinutes)
+      case _ ⇒
+        super.add(duration).asInstanceOf[DateValue]
     }
   }
 

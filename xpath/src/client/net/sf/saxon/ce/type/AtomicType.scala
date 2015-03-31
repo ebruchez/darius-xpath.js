@@ -148,14 +148,16 @@ class AtomicType private (var localName: String) extends ItemType {
    * @return true if the item is an instance of this type; false otherwise
    */
   def matchesItem(item: Item): Boolean = {
-    if (item.isInstanceOf[AtomicValue]) {
-      var `type`: ItemType = item.asInstanceOf[AtomicValue].getItemType
-      do {
-        if (`type` == this) {
-          return true
-        }
-        `type` = `type`.getSuperType
-      } while (`type` != null);
+    item match {
+      case value: AtomicValue ⇒
+        var `type`: ItemType = value.getItemType
+        do {
+          if (`type` == this) {
+            return true
+          }
+          `type` = `type`.getSuperType
+        } while (`type` != null);
+      case _ ⇒
     }
     false
   }

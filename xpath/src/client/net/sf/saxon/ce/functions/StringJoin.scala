@@ -18,10 +18,11 @@ class StringJoin extends SystemFunction {
 
   override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val exp = super.optimize(visitor, contextItemType)
-    if (exp.isInstanceOf[StringJoin]) {
-      exp.asInstanceOf[StringJoin].simplifySingleton()
-    } else {
-      exp
+    exp match {
+      case join: StringJoin ⇒
+        join.simplifySingleton()
+      case _ ⇒
+        exp
     }
   }
 

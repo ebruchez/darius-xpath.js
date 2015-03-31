@@ -27,21 +27,24 @@ object BooleanFn {
    */
   def rewriteEffectiveBooleanValue(exp: Expression, visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val th = TypeHierarchy.getInstance
-    if (exp.isInstanceOf[BooleanFn] && 
-      exp.asInstanceOf[BooleanFn].operation == BooleanFn.BOOLEAN) {
-      exp.asInstanceOf[BooleanFn].getArguments(0)
-    } else if (th.isSubType(exp.getItemType, AtomicType.BOOLEAN) && exp.getCardinality == StaticProperty.EXACTLY_ONE) {
-      exp
-    } else if (exp.isInstanceOf[Count]) {
-      val exists = SystemFunction.makeSystemFunction("exists", exp.asInstanceOf[Count].getArguments)
-      exists.setSourceLocator(exp.getSourceLocator)
-      exists.optimize(visitor, contextItemType)
-    } else if (exp.getItemType.isInstanceOf[NodeTest]) {
-      val exists = SystemFunction.makeSystemFunction("exists", Array(exp))
-      exists.setSourceLocator(exp.getSourceLocator)
-      exists.optimize(visitor, contextItemType)
-    } else {
-      null
+    exp match {
+      case fn: BooleanFn if fn.operation == BooleanFn.BOOLEAN ⇒
+        fn.getArguments(0)
+      case _ ⇒ if (th.isSubType(exp.getItemType, AtomicType.BOOLEAN) && exp.getCardinality == StaticProperty.EXACTLY_ONE) {
+        exp
+      } else exp match {
+        case count: Count ⇒
+          val exists = SystemFunction.makeSystemFunction("exists", count.getArguments)
+          exists.setSourceLocator(exp.getSourceLocator)
+          exists.optimize(visitor, contextItemType)
+        case _ ⇒ if (exp.getItemType.isInstanceOf[NodeTest]) {
+          val exists = SystemFunction.makeSystemFunction("exists", Array(exp))
+          exists.setSourceLocator(exp.getSourceLocator)
+          exists.optimize(visitor, contextItemType)
+        } else {
+          null
+        }
+      }
     }
   }
 }

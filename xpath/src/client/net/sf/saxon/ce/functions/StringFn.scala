@@ -51,8 +51,10 @@ class StringFn extends SystemFunction {
       argument(0).getCardinality == StaticProperty.EXACTLY_ONE) {
       return argument(0)
     }
-    if (argument(0).isInstanceOf[SimpleNodeConstructor]) {
-      return argument(0).asInstanceOf[SimpleNodeConstructor].getContentExpression
+    argument(0) match {
+      case constructor: SimpleNodeConstructor ⇒
+        return constructor.getContentExpression
+      case _ ⇒
     }
     this
   }
@@ -65,11 +67,11 @@ class StringFn extends SystemFunction {
       val arg = argument(0).evaluateItem(c)
       if (arg == null) {
         StringValue.EMPTY_STRING
-      } else if (arg.isInstanceOf[StringValue] && 
-        arg.asInstanceOf[StringValue].getItemType == AtomicType.STRING) {
-        arg
-      } else {
-        StringValue.makeStringValue(arg.getStringValue)
+      } else arg match {
+        case value: StringValue if value.getItemType == AtomicType.STRING ⇒
+          arg
+        case _ ⇒
+          StringValue.makeStringValue(arg.getStringValue)
       }
     } catch {
       case e: UnsupportedOperationException ⇒ {

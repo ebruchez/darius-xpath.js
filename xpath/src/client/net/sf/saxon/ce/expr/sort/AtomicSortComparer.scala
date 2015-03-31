@@ -8,6 +8,7 @@ import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.om.StructuredQName
 import client.net.sf.saxon.ce.value.{AtomicValue, StringValue, UntypedAtomicValue}
 
+import scala.ClassCastException
 import scala.beans.BeanProperty
 
 object AtomicSortComparer {
@@ -90,31 +91,38 @@ class AtomicSortComparer protected (@BeanProperty var collator: StringCollator, 
     } else if (b == null) {
       return +1
     }
-    if (a.isInstanceOf[UntypedAtomicValue]) {
-      a.asInstanceOf[UntypedAtomicValue].compareTo(b, collator)
-    } else if (b.isInstanceOf[UntypedAtomicValue]) {
-      -b.asInstanceOf[UntypedAtomicValue].compareTo(a, collator)
-    } else if (a.isNaN) {
-      if (b.isNaN) 0 else -1
-    } else if (b.isNaN) {
-      +1
-    } else if (a.isInstanceOf[StringValue] && b.isInstanceOf[StringValue]) {
-      if (collator.isInstanceOf[CodepointCollator]) {
-        collator.asInstanceOf[CodepointCollator].compareCS(a.getStringValue, b.getStringValue)
-      } else {
-        collator.compareStrings(a.getStringValue, b.getStringValue)
-      }
-    } else {
-      val ac = a.getXPathComparable(true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef]]
-      val bc = b.getXPathComparable(true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef] with AnyRef]//ORBEON with AnyRef is ugly!
-      if (ac == null || bc == null) {
-        throw new ClassCastException("Values are not comparable (" + Type.displayTypeName(a) + 
-          ", " + 
-          Type.displayTypeName(b) + 
-          ')')
-      } else {
-        ac.compareTo(bc)
-      }
+    a match {
+      case value: UntypedAtomicValue ⇒
+        value.compareTo(b, collator)
+      case _ ⇒
+        b match {
+          case value: UntypedAtomicValue ⇒
+            -value.compareTo(a, collator)
+          case _ ⇒
+            if (a.isNaN) {
+              if (b.isNaN) 0 else -1
+            } else if (b.isNaN) {
+              +1
+            } else if (a.isInstanceOf[StringValue] && b.isInstanceOf[StringValue]) {
+              collator match {
+                case codepointCollator: CodepointCollator ⇒
+                  codepointCollator.compareCS(a.getStringValue, b.getStringValue)
+                case _ ⇒
+                  collator.compareStrings(a.getStringValue, b.getStringValue)
+              }
+            } else {
+              val ac = a.getXPathComparable(true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef]]
+              val bc = b.getXPathComparable(true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef] with AnyRef] //ORBEON with AnyRef is ugly!
+              if (ac == null || bc == null) {
+                throw new scala.ClassCastException("Values are not comparable (" + Type.displayTypeName(a) +
+                  ", " +
+                  Type.displayTypeName(b) +
+                  ')')
+              } else {
+                ac.compareTo(bc)
+              }
+            }
+        }
     }
   }
 

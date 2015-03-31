@@ -54,10 +54,12 @@ object Minimax {
         prim = min
         foundDouble = true
       } else {
-        if (prim.isInstanceOf[DoubleValue]) {
-          foundDouble = true
-        } else if (prim.isInstanceOf[FloatValue]) {
-          foundFloat = true
+        prim match {
+          case _: DoubleValue ⇒
+            foundDouble = true
+          case _: FloatValue ⇒
+            foundFloat = true
+          case _ ⇒
         }
       }
       if (prim.isNaN) {
@@ -94,13 +96,15 @@ object Minimax {
         prim = test2
         foundDouble = true
       } else {
-        if (prim.isInstanceOf[DoubleValue]) {
-          if (foundNaN) {
-            return DoubleValue.NaN
-          }
-          foundDouble = true
-        } else if (prim.isInstanceOf[FloatValue]) {
-          foundFloat = true
+        prim match {
+          case _: DoubleValue ⇒
+            if (foundNaN) {
+              return DoubleValue.NaN
+            }
+            foundDouble = true
+          case _: FloatValue ⇒
+            foundFloat = true
+          case _ ⇒
         }
       }
       lowestCommonSuperType = Type.getCommonSuperType(lowestCommonSuperType, prim.getItemType).asInstanceOf[AtomicType]
@@ -192,7 +196,7 @@ class Minimax(_operation: Int) extends CollatingFunction {
    */
   override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val th = TypeHierarchy.getInstance
-    argumentType = argument(0).getItemType.getAtomizedItemType.asInstanceOf[AtomicType]
+    argumentType = argument(0).getItemType.getAtomizedItemType
     val e = super.optimize(visitor, contextItemType)
     if (e != this) {
       return e

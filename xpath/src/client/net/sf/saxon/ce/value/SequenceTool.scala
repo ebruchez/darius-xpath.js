@@ -21,18 +21,19 @@ object SequenceTool {
    * @throws XPathException if the Value contains multiple items
    */
   def asItem(value: Sequence): Item = {
-    if (value.isInstanceOf[Item]) {
-      value.asInstanceOf[Item]
-    } else {
-      val iter = value.iterate()
-      val item = iter.next()
-      if (item == null) {
-        null
-      } else if (iter.next() != null) {
-        throw new XPathException("Attempting to access a sequence as a singleton item")
-      } else {
-        item
-      }
+    value match {
+      case item1: Item ⇒
+        item1
+      case _ ⇒
+        val iter = value.iterate()
+        val item = iter.next()
+        if (item == null) {
+          null
+        } else if (iter.next() != null) {
+          throw new XPathException("Attempting to access a sequence as a singleton item")
+        } else {
+          item
+        }
     }
   }
 
@@ -63,51 +64,51 @@ object SequenceTool {
   }
 
   def getItemType(item: Item): ItemType = {
-    if (item.isInstanceOf[NodeInfo]) {
-      val node = item.asInstanceOf[NodeInfo]
-      node.getNodeKind match {
-        case Type.DOCUMENT ⇒
-          val iter = node.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
-          var elementType: ItemType = null
-          import Breaks._
-          breakable {
-            while (true) {
-              val n = iter.next().asInstanceOf[NodeInfo]
-              if (n == null) {
-                break()
-              }
-              val kind = n.getNodeKind
-              if (kind == Type.TEXT) {
-                elementType = null
-                break()
-              } else if (kind == Type.ELEMENT) {
-                if (elementType != null) {
-                  elementType = null
+    item match {
+      case node: NodeInfo ⇒
+        node.getNodeKind match {
+          case Type.DOCUMENT ⇒
+            val iter = node.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
+            var elementType: ItemType = null
+            import Breaks._
+            breakable {
+              while (true) {
+                val n = iter.next().asInstanceOf[NodeInfo]
+                if (n == null) {
                   break()
                 }
-                elementType = getItemType(n)
+                val kind = n.getNodeKind
+                if (kind == Type.TEXT) {
+                  elementType = null
+                  break()
+                } else if (kind == Type.ELEMENT) {
+                  if (elementType != null) {
+                    elementType = null
+                    break()
+                  }
+                  elementType = getItemType(n)
+                }
               }
             }
-          }
-          if (elementType == null) {
-            NodeKindTest.DOCUMENT
-          } else {
-            new DocumentNodeTest(elementType.asInstanceOf[NodeTest])
-          }
+            if (elementType == null) {
+              NodeKindTest.DOCUMENT
+            } else {
+              new DocumentNodeTest(elementType.asInstanceOf[NodeTest])
+            }
 
-        case Type.ELEMENT ⇒ new NameTest(Type.ELEMENT, node.getNodeName)
-        case Type.ATTRIBUTE ⇒ new NameTest(Type.ATTRIBUTE, node.getNodeName)
-        case Type.TEXT ⇒ NodeKindTest.TEXT
-        case Type.COMMENT ⇒ NodeKindTest.COMMENT
-        case Type.PROCESSING_INSTRUCTION ⇒ NodeKindTest.PROCESSING_INSTRUCTION
-        case Type.NAMESPACE ⇒ NodeKindTest.NAMESPACE
-        case _ ⇒ throw new IllegalArgumentException("Unknown node kind " + node.getNodeKind)
-      }
-//ORBEON unused
-//    } else if (item.isInstanceOf[JSObjectValue]) {
-//      new JSObjectType()
-    } else {
-      item.asInstanceOf[AtomicValue].getItemType
+          case Type.ELEMENT ⇒ new NameTest(Type.ELEMENT, node.getNodeName)
+          case Type.ATTRIBUTE ⇒ new NameTest(Type.ATTRIBUTE, node.getNodeName)
+          case Type.TEXT ⇒ NodeKindTest.TEXT
+          case Type.COMMENT ⇒ NodeKindTest.COMMENT
+          case Type.PROCESSING_INSTRUCTION ⇒ NodeKindTest.PROCESSING_INSTRUCTION
+          case Type.NAMESPACE ⇒ NodeKindTest.NAMESPACE
+          case _ ⇒ throw new IllegalArgumentException("Unknown node kind " + node.getNodeKind)
+        }
+      //ORBEON unused
+      //    } else if (item.isInstanceOf[JSObjectValue]) {
+      //      new JSObjectType()
+      case _ ⇒
+        item.asInstanceOf[AtomicValue].getItemType
     }
   }
 

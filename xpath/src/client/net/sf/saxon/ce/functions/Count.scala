@@ -21,8 +21,10 @@ object Count {
    */
   def count(iter: SequenceIterator): Int = {
     var count = -1
-    if (iter.isInstanceOf[LastPositionFinder]) {
-      count = iter.asInstanceOf[LastPositionFinder].getLastPosition
+    iter match {
+      case finder: LastPositionFinder ⇒
+        count = finder.getLastPosition
+      case _ ⇒
     }
     if (count == -1) {
       count = 0

@@ -61,16 +61,19 @@ class NumericComparer protected () extends AtomicComparer {
 
   private def makeDouble(a: AtomicValue): Double = {
     var d1: Double = 0.0
-    if (a.isInstanceOf[NumericValue]) {
-      d1 = a.asInstanceOf[NumericValue].getDoubleValue
-    } else if (a == null) {
-      d1 = Double.NaN
-    } else {
-      try {
-        d1 = StringToDouble.stringToNumber(a.getStringValue)
-      } catch {
-        case err: NumberFormatException ⇒ d1 = Double.NaN
-      }
+    a match {
+      case value: NumericValue ⇒
+        d1 = value.getDoubleValue
+      case _ ⇒
+        if (a == null) {
+          d1 = Double.NaN
+        } else {
+          try {
+            d1 = StringToDouble.stringToNumber(a.getStringValue)
+          } catch {
+            case err: NumberFormatException ⇒ d1 = Double.NaN
+          }
+        }
     }
     d1
   }

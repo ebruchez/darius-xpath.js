@@ -186,11 +186,15 @@ class TypeHierarchy {
           var nodeNameRelationship: Int = 0
           var n1: StructuredQName = null
           var n2: StructuredQName = null
-          if (t1.isInstanceOf[NameTest]) {
-            n1 = t1.asInstanceOf[NameTest].getRequiredNodeName
+          t1 match {
+            case test1: NameTest ⇒
+              n1 = test1.getRequiredNodeName
+            case _ ⇒
           }
-          if (t2.isInstanceOf[NameTest]) {
-            n2 = t2.asInstanceOf[NameTest].getRequiredNodeName
+          t2 match {
+            case test: NameTest ⇒
+              n2 = test.getRequiredNodeName
+            case _ ⇒
           }
           nodeNameRelationship = if (n1 == null) if (n2 == null) SAME_TYPE else SUBSUMES else if (n2 == null) SUBSUMED_BY else if (n1 == n2) SAME_TYPE else DISJOINT
           if (nodeKindRelationship == SAME_TYPE && nodeNameRelationship == SAME_TYPE) {

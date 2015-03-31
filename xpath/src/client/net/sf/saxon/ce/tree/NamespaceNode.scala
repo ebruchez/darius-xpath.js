@@ -128,20 +128,21 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    *         produce the same result for generateId())
    */
   def compareOrder(other: NodeInfo): Int = {
-    if (other.isInstanceOf[NamespaceNode] && 
-      element.isSameNodeInfo(other.asInstanceOf[NamespaceNode].element)) {
-      val c = position - other.asInstanceOf[NamespaceNode].position
-      if (c == 0) {
-        return 0
+    other match {
+      case node: NamespaceNode if element.isSameNodeInfo(node.element) ⇒
+        val c = position - node.position
+        if (c == 0) {
+          return 0
+        }
+        if (c < 0) {
+          return -1
+        }
+        +1
+      case _ ⇒ if (element.isSameNodeInfo(other)) {
+        +1
+      } else {
+        element.compareOrder(other)
       }
-      if (c < 0) {
-        return -1
-      }
-      +1
-    } else if (element.isSameNodeInfo(other)) {
-      +1
-    } else {
-      element.compareOrder(other)
     }
   }
 

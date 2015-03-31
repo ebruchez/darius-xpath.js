@@ -192,11 +192,13 @@ class FloatValue(var value: Float) extends NumericValue {
     if (!other.isInstanceOf[NumericValue]) {
       throw new ClassCastException("Numeric values are not comparable to " + other.getClass)
     }
-    if (other.isInstanceOf[FloatValue]) {
-      val otherFloat = other.asInstanceOf[FloatValue].value
-      if (value == otherFloat) return 0
-      if (value < otherFloat) return -1
-      return +1
+    other match {
+      case value1: FloatValue ⇒
+        val otherFloat = value1.value
+        if (value == otherFloat) return 0
+        if (value < otherFloat) return -1
+        return +1
+      case _ ⇒
     }
     if (other.isInstanceOf[DoubleValue]) {
       return super.compareTo(other)

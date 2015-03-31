@@ -42,29 +42,31 @@ object DeepEqual {
             result = false
             break()
           }
-          if (item1.isInstanceOf[NodeInfo]) {
-            if (item2.isInstanceOf[NodeInfo]) {
-              if (!deepEquals(item1.asInstanceOf[NodeInfo], item2.asInstanceOf[NodeInfo], collator)) {
+          item1 match {
+            case n1: NodeInfo ⇒
+              item2 match {
+                case n2: NodeInfo ⇒
+                  if (!deepEquals(n1, n2, collator)) {
+                    result = false
+                    break()
+                  }
+                case _ ⇒
+                  result = false
+                  break()
+              }
+            case _ ⇒
+              if (item2.isInstanceOf[NodeInfo]) {
                 result = false
                 break()
+              } else {
+                val av1 = item1.asInstanceOf[AtomicValue]
+                val av2 = item2.asInstanceOf[AtomicValue]
+                if (av1.isNaN && av2.isNaN) {
+                } else if (!collator.comparesEqual(av1, av2)) {
+                  result = false
+                  break()
+                }
               }
-            } else {
-              result = false
-              break()
-            }
-          } else {
-            if (item2.isInstanceOf[NodeInfo]) {
-              result = false
-              break()
-            } else {
-              val av1 = item1.asInstanceOf[AtomicValue]
-              val av2 = item2.asInstanceOf[AtomicValue]
-              if (av1.isNaN && av2.isNaN) {
-              } else if (!collator.comparesEqual(av1, av2)) {
-                result = false
-                break()
-              }
-            }
           }
         }
       }

@@ -22,10 +22,11 @@ object Trace {
     if (`val` == null) {
       logger.info(label + ": empty sequence")
     } else {
-      if (`val`.isInstanceOf[NodeInfo]) {
-        logger.info(label + ": " + Type.displayTypeName(`val`) + ": " + Navigator.getPath(`val`.asInstanceOf[NodeInfo]))
-      } else {
-        logger.info(label + ": " + Type.displayTypeName(`val`) + ": " + `val`.getStringValue)
+      `val` match {
+        case node: NodeInfo ⇒
+          logger.info(label + ": " + Type.displayTypeName(`val`) + ": " + Navigator.getPath(node))
+        case _ ⇒
+          logger.info(label + ": " + Type.displayTypeName(`val`) + ": " + `val`.getStringValue)
       }
     }
   }

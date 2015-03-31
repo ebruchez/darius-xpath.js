@@ -39,9 +39,7 @@ object XPathProcessor {
     def exprInput = jQuery("#expression-textarea")
     def xmlInput  = jQuery("#input-textarea")
     def results   = jQuery("#result-list")
-//    def results   = jQuery("#result-textarea")
-//    def runButton = jQuery(".try-button")
-    
+
     def exprAlert(field: JQuery) = field.parent().find(".alert")
   }
 
@@ -74,17 +72,14 @@ object XPathProcessor {
           }
       } match {
         case Success(Nil) ⇒
-//          UI.results.value("")
           UI.results.children("li").detach()
           toggleAlert(UI.exprInput, None)
         case Success(items) ⇒
-//          UI.results.value(item.getStringValue())
           UI.results.children("li").detach()
           for (item ← items) {
             val itemString = item.getStringValue
             UI.results.append(s"""<li class="list-group-item">$itemString</li>""")
           }
-
           toggleAlert(UI.exprInput, None)
         case Failure(t) ⇒
           toggleAlert(UI.exprInput, Some(t.getMessage))
@@ -100,7 +95,6 @@ object XPathProcessor {
     }
 
     // Event handlers
-//    UI.runButton.click(compileAndRunExpression _)
     UI.exprInput.keyup(keyChange(Array(None), UI.exprInput.value.toString) _)
     UI.xmlInput.keyup(keyChange(Array(None), UI.xmlInput.value.toString) _)
 
@@ -111,10 +105,6 @@ object XPathProcessor {
   val ns = Map(
     "xs" → "http://www.w3.org/2001/XMLSchema"
   )
-
-//  "for $foo in //div return concat('name: ', name($foo))",
-//  "for $foo in //div return (if ($foo castable as xs:decimal) then xs:decimal($foo) else ())",
-//  "for $foo in //div return $foo[@id = 'my-id'][. castable as xs:decimal]/xs:decimal(.)"
 
   def compileExpression(expression: String): Try[CompiledExpression] = Try {
 

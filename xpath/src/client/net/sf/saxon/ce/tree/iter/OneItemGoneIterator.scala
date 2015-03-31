@@ -63,10 +63,9 @@ class OneItemGoneIterator(var initial: Item, var baseIterator: SequenceIterator)
    * This method returns -1 if the last position cannot be determined.
    */
   def getLastPosition: Int = {
-    if (baseIterator.isInstanceOf[LastPositionFinder]) {
-      baseIterator.asInstanceOf[LastPositionFinder].getLastPosition
-    } else {
-      -1
+    baseIterator match {
+      case finder: LastPositionFinder ⇒ finder.getLastPosition
+      case _ ⇒ -1
     }
   }
 
@@ -76,10 +75,9 @@ class OneItemGoneIterator(var initial: Item, var baseIterator: SequenceIterator)
    * @return the corresponding Value if the base iterator is grounded, or null otherwise.
    */
   def materialize(): Sequence = {
-    if (baseIterator.isInstanceOf[GroundedIterator]) {
-      baseIterator.asInstanceOf[GroundedIterator].materialize()
-    } else {
-      null
+    baseIterator match {
+      case iterator: GroundedIterator ⇒ iterator.materialize()
+      case _ ⇒ null
     }
   }
 }

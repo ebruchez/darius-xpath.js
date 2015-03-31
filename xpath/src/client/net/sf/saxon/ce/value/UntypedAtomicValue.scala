@@ -7,6 +7,8 @@ import client.net.sf.saxon.ce.`type`.{AtomicType, ConversionResult, StringToDoub
 import client.net.sf.saxon.ce.lib.StringCollator
 import client.net.sf.saxon.ce.trans.XPathException
 
+import scala.ClassCastException
+
 /**
  * An Untyped Atomic value. This inherits from StringValue for implementation convenience, even
  * though an untypedAtomic value is not a String in the data model type hierarchy.
@@ -76,21 +78,22 @@ class UntypedAtomicValue(_value: CharSequence) extends StringValue {
    * @throws ClassCastException if the value cannot be cast to the type of the other operand
    */
   def compareTo(other: AtomicValue, collator: StringCollator): Int = {
-    if (other.isInstanceOf[NumericValue]) {
-      if (doubleValue == null) {
-        doubleValue = convert(AtomicType.DOUBLE).asAtomic().asInstanceOf[DoubleValue]
-      }
-      doubleValue.compareTo(other)
-    } else if (other.isInstanceOf[StringValue]) {
-      collator.compareStrings(getStringValue, other.getStringValue)
-    } else {
-      val result = convert(other.getItemType)
-      if (result.isInstanceOf[ValidationFailure]) {
-        throw new ClassCastException("Cannot convert untyped atomic value '" + getStringValue + 
-          "' to type " + 
-          other.getItemType)
-      }
-      result.asInstanceOf[Comparable[AnyRef]].compareTo(other)
+    other match {
+      case _: NumericValue ⇒
+        if (doubleValue == null) {
+          doubleValue = convert(AtomicType.DOUBLE).asAtomic().asInstanceOf[DoubleValue]
+        }
+        doubleValue.compareTo(other)
+      case _: StringValue ⇒
+        collator.compareStrings(getStringValue, other.getStringValue)
+      case _ ⇒
+        val result = convert(other.getItemType)
+        if (result.isInstanceOf[ValidationFailure]) {
+          throw new ClassCastException("Cannot convert untyped atomic value '" + getStringValue +
+            "' to type " +
+            other.getItemType)
+        }
+        result.asInstanceOf[Comparable[AnyRef]].compareTo(other)
     }
   }
 }

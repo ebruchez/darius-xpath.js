@@ -115,19 +115,20 @@ class YearMonthDurationValue private () extends DurationValue with Comparable[An
    * @throws XPathException
    */
   override def divide(other: DurationValue): DecimalValue = {
-    if (other.isInstanceOf[YearMonthDurationValue]) {
-      val v1 = BigDecimal.valueOf(getLengthInMonths)
-      val v2 = BigDecimal.valueOf(other.asInstanceOf[YearMonthDurationValue].getLengthInMonths)
-      if (v2.signum() == 0) {
-        val err = new XPathException("Divide by zero (durations)")
-        err.setErrorCode("FOAR0001")
+    other match {
+      case value: YearMonthDurationValue ⇒
+        val v1 = BigDecimal.valueOf(getLengthInMonths)
+        val v2 = BigDecimal.valueOf(value.getLengthInMonths)
+        if (v2.signum() == 0) {
+          val err = new XPathException("Divide by zero (durations)")
+          err.setErrorCode("FOAR0001")
+          throw err
+        }
+        new DecimalValue(v1.divide(v2, 20, BigDecimal.ROUND_HALF_EVEN))
+      case _ ⇒
+        val err = new XPathException("Cannot divide two durations of different type")
+        err.setErrorCode("XPTY0004")
         throw err
-      }
-      new DecimalValue(v1.divide(v2, 20, BigDecimal.ROUND_HALF_EVEN))
-    } else {
-      val err = new XPathException("Cannot divide two durations of different type")
-      err.setErrorCode("XPTY0004")
-      throw err
     }
   }
 
@@ -135,13 +136,14 @@ class YearMonthDurationValue private () extends DurationValue with Comparable[An
    * Add two year-month-durations
    */
   override def add(other: DurationValue): DurationValue = {
-    if (other.isInstanceOf[YearMonthDurationValue]) {
-      fromMonths(getLengthInMonths + 
-        other.asInstanceOf[YearMonthDurationValue].getLengthInMonths)
-    } else {
-      val err = new XPathException("Cannot add two durations of different type")
-      err.setErrorCode("XPTY0004")
-      throw err
+    other match {
+      case value: YearMonthDurationValue ⇒
+        fromMonths(getLengthInMonths +
+          value.getLengthInMonths)
+      case _ ⇒
+        val err = new XPathException("Cannot add two durations of different type")
+        err.setErrorCode("XPTY0004")
+        throw err
     }
   }
 
@@ -162,12 +164,13 @@ class YearMonthDurationValue private () extends DurationValue with Comparable[An
    *                            is declared as Object to satisfy the Comparable interface)
    */
   def compareTo(other: AnyRef): Int = {
-    if (other.isInstanceOf[YearMonthDurationValue]) {
-      getLengthInMonths - 
-        other.asInstanceOf[YearMonthDurationValue].getLengthInMonths
-    } else {
-      throw new ClassCastException("Cannot compare a yearMonthDuration to an object of class " + 
-        other.getClass)
+    other match {
+      case value: YearMonthDurationValue ⇒
+        getLengthInMonths -
+          value.getLengthInMonths
+      case _ ⇒
+        throw new ClassCastException("Cannot compare a yearMonthDuration to an object of class " +
+          other.getClass)
     }
   }
 

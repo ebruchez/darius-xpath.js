@@ -51,37 +51,38 @@ class Average extends Aggregate {
         }
       }
     }
-    if (item.isInstanceOf[NumericValue]) {
-      while (true) {
-        var next = iter.next().asInstanceOf[AtomicValue]
-        if (next == null) {
-          return ArithmeticExpression.compute(item, Token.DIV, new IntegerValue(count), context)
+    item match {
+      case _: NumericValue ⇒
+        while (true) {
+          var next = iter.next().asInstanceOf[AtomicValue]
+          if (next == null) {
+            return ArithmeticExpression.compute(item, Token.DIV, new IntegerValue(count), context)
+          }
+          count += 1
+          if (next.isInstanceOf[UntypedAtomicValue]) {
+            next = next.convert(AtomicType.DOUBLE).asAtomic()
+          } else if (!next.isInstanceOf[NumericValue]) {
+            badMix(context)
+          }
+          item = ArithmeticExpression.compute(item, Token.PLUS, next, context)
         }
-        count += 1
-        if (next.isInstanceOf[UntypedAtomicValue]) {
-          next = next.convert(AtomicType.DOUBLE).asAtomic()
-        } else if (!next.isInstanceOf[NumericValue]) {
-          badMix(context)
+        throw new IllegalStateException
+      case value: DurationValue ⇒
+        while (true) {
+          val next = iter.next().asInstanceOf[AtomicValue]
+          if (next == null) {
+            return value.multiply(1.0 / count)
+          }
+          count += 1
+          if (!next.isInstanceOf[DurationValue]) {
+            badMix(context)
+          }
+          item = value.add(next.asInstanceOf[DurationValue])
         }
-        item = ArithmeticExpression.compute(item, Token.PLUS, next, context)
-      }
-      throw new IllegalStateException
-    } else if (item.isInstanceOf[DurationValue]) {
-      while (true) {
-        val next = iter.next().asInstanceOf[AtomicValue]
-        if (next == null) {
-          return item.asInstanceOf[DurationValue].multiply(1.0 / count)
-        }
-        count += 1
-        if (!next.isInstanceOf[DurationValue]) {
-          badMix(context)
-        }
-        item = item.asInstanceOf[DurationValue].add(next.asInstanceOf[DurationValue])
-      }
-      throw new IllegalStateException
-    } else {
-      badMix(context)
-      null
+        throw new IllegalStateException
+      case _ ⇒
+        badMix(context)
+        null
     }
   }
 

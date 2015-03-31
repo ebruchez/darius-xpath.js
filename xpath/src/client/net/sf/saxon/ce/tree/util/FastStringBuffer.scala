@@ -74,12 +74,13 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
   def append(s: CharSequence): Unit = {
     val len = s.length
     ensureCapacity(len)
-    if (s.isInstanceOf[String]) {
-      s.asInstanceOf[String].getChars(0, len, array, used)
-    } else if (s.isInstanceOf[FastStringBuffer]) {
-      s.asInstanceOf[FastStringBuffer].getChars(0, len, array, used)
-    } else {
-      s.toString.getChars(0, len, array, used)
+    s match {
+      case s1: String ⇒
+        s1.getChars(0, len, array, used)
+      case buffer: FastStringBuffer ⇒
+        buffer.getChars(0, len, array, used)
+      case _ ⇒
+        s.toString.getChars(0, len, array, used)
     }
     used += len
   }

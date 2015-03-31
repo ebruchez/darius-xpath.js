@@ -27,11 +27,12 @@ class ParentNodeExpression extends SingleNodeExpression {
     if (item == null) {
       dynamicError("The context item is not set", "XPDY0002")
     }
-    if (item.isInstanceOf[NodeInfo]) {
-      item.asInstanceOf[NodeInfo].getParent
-    } else {
-      dynamicError("The context item for the parent axis (..) is not a node", "XPTY0020")
-      null
+    item match {
+      case info: NodeInfo ⇒
+        info.getParent
+      case _ ⇒
+        dynamicError("The context item for the parent axis (..) is not a node", "XPTY0020")
+        null
     }
   }
 

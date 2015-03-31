@@ -18,10 +18,11 @@ object Literal {
    * @return the Literal
    */
   def makeLiteral(value: Sequence): Literal = {
-    if (value.isInstanceOf[StringValue]) {
-      new StringLiteral(value.asInstanceOf[StringValue])
-    } else {
-      new Literal(value)
+    value match {
+      case stringValue: StringValue ⇒
+        new StringLiteral(stringValue)
+      case _ ⇒
+        new Literal(value)
     }
   }
 
@@ -62,12 +63,13 @@ object Literal {
    * second argument
    */
   def isConstantBoolean(exp: Expression, value: Boolean): Boolean = {
-    if (exp.isInstanceOf[Literal]) {
-      val b = exp.asInstanceOf[Literal].getValue
-      return b.isInstanceOf[BooleanValue] &&
-        b.asInstanceOf[BooleanValue].getBooleanValue == value
+    exp match {
+      case literal: Literal ⇒
+        val b = literal.getValue
+        b.isInstanceOf[BooleanValue] && b.asInstanceOf[BooleanValue].getBooleanValue == value
+      case _ ⇒
+        false
     }
-    false
   }
 
   /**
@@ -77,11 +79,13 @@ object Literal {
    */
   def isConstantOne(exp: Expression): Boolean = {
     try {
-      if (exp.isInstanceOf[Literal]) {
-        val v = exp.asInstanceOf[Literal].getValue
-        return v.isInstanceOf[IntegerValue] && v.asInstanceOf[IntegerValue].intValue() == 1
+      exp match {
+        case literal: Literal ⇒
+          val v = literal.getValue
+          v.isInstanceOf[IntegerValue] && v.asInstanceOf[IntegerValue].intValue() == 1
+        case _ ⇒
+          false
       }
-      false
     } catch {
       case e: XPathException ⇒ false
     }
@@ -117,10 +121,12 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
    * Determine the cardinality
    */
   def computeCardinality(): Int = {
-    if (value.isInstanceOf[EmptySequence]) {
-      return StaticProperty.EMPTY
-    } else if (value.isInstanceOf[AtomicValue]) {
-      return StaticProperty.EXACTLY_ONE
+    value match {
+      case _: EmptySequence ⇒
+        return StaticProperty.EMPTY
+      case _: AtomicValue ⇒
+        return StaticProperty.EXACTLY_ONE
+      case _ ⇒
     }
     try {
       val iter = value.iterate()
@@ -188,8 +194,10 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
    * has been done to ensure that the value will be a singleton.
    */
   override def evaluateItem(context: XPathContext): Item = {
-    if (value.isInstanceOf[AtomicValue]) {
-      return value.asInstanceOf[AtomicValue]
+    value match {
+      case atomicValue: AtomicValue ⇒
+        return atomicValue
+      case _ ⇒
     }
     value.iterate().next()
   }
@@ -251,16 +259,18 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
           !m0.asInstanceOf[NodeInfo].isSameNodeInfo(m1.asInstanceOf[NodeInfo])) {
           return false
         }
-        if (m0.isInstanceOf[StringValue] && m1.isInstanceOf[StringValue]) {
-          if (!(m0.asInstanceOf[StringValue].getStringValue == m1.asInstanceOf[StringValue].getStringValue)) {
-            false
-          }
-        } else if (m0.isInstanceOf[AtomicValue] && m1.isInstanceOf[AtomicValue]) {
-          if (!n0 && !n1 && 
-            (m0.asInstanceOf[AtomicValue] != m1.asInstanceOf[AtomicValue]) || 
-            m0.asInstanceOf[AtomicValue].getItemType != m1.asInstanceOf[AtomicValue].getItemType) {
-            false
-          }
+        m0 match {
+          case stringValue: StringValue if m1.isInstanceOf[StringValue] ⇒
+            if (!(stringValue.getStringValue == m1.asInstanceOf[StringValue].getStringValue)) {
+              false
+            }
+          case atomicValue: AtomicValue if m1.isInstanceOf[AtomicValue] ⇒
+            if (!n0 && !n1 &&
+              (atomicValue != m1.asInstanceOf[AtomicValue]) ||
+              atomicValue.getItemType != m1.asInstanceOf[AtomicValue].getItemType) {
+              false
+            }
+          case _ ⇒
         }
       }
       throw new IllegalStateException

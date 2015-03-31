@@ -359,10 +359,12 @@ object FormatNumber {
       if (value.isInstanceOf[DoubleValue] || value.isInstanceOf[FloatValue]) {
         val dec = adjustToDecimal(value.getDoubleValue, 2)
         formatDecimal(dec, sb)
-      } else if (value.isInstanceOf[IntegerValue]) {
-        formatInteger(value, sb)
-      } else if (value.isInstanceOf[DecimalValue]) {
-        formatDecimal(value.asInstanceOf[DecimalValue].getDecimalValue, sb)
+      } else value match {
+        case _: IntegerValue ⇒
+          formatInteger(value, sb)
+        case decimalValue: DecimalValue ⇒
+          formatDecimal(decimalValue.getDecimalValue, sb)
+        case _ ⇒
       }
       var ib = StringValue.expand(sb)
       var ibused = ib.length

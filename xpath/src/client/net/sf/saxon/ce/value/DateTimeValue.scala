@@ -458,32 +458,35 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
    *          a subclass thereof
    */
   override def add(duration: DurationValue): DateTimeValue = {
-    if (duration.isInstanceOf[DayTimeDurationValue]) {
-      val microseconds = duration.asInstanceOf[DayTimeDurationValue].getLengthInMicroseconds
-      val seconds = BigDecimal.valueOf(microseconds).divide(DecimalValue.BIG_DECIMAL_ONE_MILLION, 6, 
-        BigDecimal.ROUND_HALF_EVEN)
-      var julian = toJulianInstant
-      julian = julian.add(seconds)
-      val dt = fromJulianInstant(julian)
-      dt.setTimezoneInMinutes(getTimezoneInMinutes)
-      dt
-    } else if (duration.isInstanceOf[YearMonthDurationValue]) {
-      val months = duration.asInstanceOf[YearMonthDurationValue].getLengthInMonths
-      var m = (month - 1) + months
-      var y = year + m / 12
-      m = m % 12
-      if (m < 0) {
-        m += 12
-        y -= 1
+    duration match {
+      case dayTimeDurationValue: DayTimeDurationValue ⇒
+        val microseconds = dayTimeDurationValue.getLengthInMicroseconds
+        val seconds = BigDecimal.valueOf(microseconds).divide(DecimalValue.BIG_DECIMAL_ONE_MILLION, 6,
+          BigDecimal.ROUND_HALF_EVEN)
+        var julian = toJulianInstant
+        julian = julian.add(seconds)
+        val dt = fromJulianInstant(julian)
+        dt.setTimezoneInMinutes(getTimezoneInMinutes)
+        dt
+      case _ ⇒ duration match {
+        case value: YearMonthDurationValue ⇒
+          val months = value.getLengthInMonths
+          var m = (month - 1) + months
+          var y = year + m / 12
+          m = m % 12
+          if (m < 0) {
+            m += 12
+            y -= 1
+          }
+          m += 1
+          var d = day
+          while (!GDateValue.isValidDate(y, m, d)) {
+            d -= 1
+          }
+          new DateTimeValue(y, m.toByte, d.toByte, hour, minute, second, microsecond, getTimezoneInMinutes)
+        case _ ⇒
+          super.add(duration).asInstanceOf[DateTimeValue]
       }
-      m += 1
-      var d = day
-      while (! GDateValue.isValidDate(y, m, d)) {
-        d -= 1
-      }
-      new DateTimeValue(y, m.toByte, d.toByte, hour, minute, second, microsecond, getTimezoneInMinutes)
-    } else {
-      super.add(duration).asInstanceOf[DateTimeValue]
     }
   }
 

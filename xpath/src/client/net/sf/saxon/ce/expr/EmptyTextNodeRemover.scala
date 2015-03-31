@@ -49,12 +49,11 @@ class EmptyTextNodeRemover(p0: Expression) extends UnaryExpression(p0) {
     val map = new ItemMappingFunction() {
 
       def mapItem(item: Item): Item = {
-        if (item.isInstanceOf[NodeInfo] && 
-          item.asInstanceOf[NodeInfo].getNodeKind == Type.TEXT && 
-          item.getStringValue.length == 0) {
-          return null
-        } else {
-          return item
+        item match {
+          case info: NodeInfo if info.getNodeKind == Type.TEXT && item.getStringValue.length == 0 ⇒
+            return null
+          case _ ⇒
+            return item
         }
       }
     }

@@ -3,6 +3,7 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.expr.number
 
+import java.lang.Long
 import java.math.BigDecimal
 
 import client.net.sf.saxon.ce.expr.number.NumberFormatter._
@@ -156,12 +157,18 @@ class NumberFormatter {
       }
       val o = numbers.get(num)
       num += 1
-      var s: String = null
-      if (o.isInstanceOf[java.lang.Long]) {
-        val nr = o.asInstanceOf[java.lang.Long].longValue()
-        val rgf = new RegularGroupFormatter(groupSize, groupSeparator)
-        s = numberer.format(nr, formatTokens.get(tok), rgf, letterValue, ordinal)
-      } else s = if (o.isInstanceOf[BigDecimal]) new IntegerValue(o.asInstanceOf[BigDecimal]).getStringValue else o.toString
+      val s =
+        o match {
+          case long: Long ⇒
+            val nr = long.longValue()
+            val rgf = new RegularGroupFormatter(groupSize, groupSeparator)
+            numberer.format(nr, formatTokens.get(tok), rgf, letterValue, ordinal)
+          case _ ⇒
+            o match {
+              case decimal: BigDecimal ⇒ new IntegerValue(decimal).getStringValue
+              case _ ⇒ o.toString
+            }
+        }
       sb.append(s)
       tok += 1
       if (tok == formatTokens.size) tok -= 1

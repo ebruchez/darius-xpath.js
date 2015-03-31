@@ -38,12 +38,14 @@ class HTMLAttributeNode(
   def getBaseURI: String = element.getBaseURI
 
   def compareOrder(other: NodeInfo): Int = {
-    if (other.isInstanceOf[HTMLAttributeNode]) {
-      if (element.isSameNodeInfo(other.asInstanceOf[HTMLAttributeNode].element)) {
-        return qname.compareTo(other.asInstanceOf[HTMLAttributeNode].qname)
-      } else {
-        return element.compareOrder(other.asInstanceOf[HTMLAttributeNode].element)
-      }
+    other match {
+      case node: HTMLAttributeNode ⇒
+        if (element.isSameNodeInfo(node.element)) {
+          return qname.compareTo(node.qname)
+        } else {
+          return element.compareOrder(node.element)
+        }
+      case _ ⇒
     }
     if (other.isSameNodeInfo(element)) {
       return +1

@@ -376,13 +376,14 @@ class DecimalValue(_value: Either[BigDecimal, Double]) extends NumericValue {
    * Compare the value to another numeric value
    */
   override def compareTo(other: AnyRef): Int = {
-    if (other.isInstanceOf[DecimalValue]) {
-      value.compareTo(other.asInstanceOf[DecimalValue].value)
-    } else if (other.isInstanceOf[FloatValue]) {
-      val f = convert(AtomicType.FLOAT).asAtomic().asInstanceOf[FloatValue]
-      f.compareTo(other)
-    } else {
-      super.compareTo(other)
+    other match {
+      case decimalValue: DecimalValue ⇒
+        value.compareTo(decimalValue.value)
+      case _: FloatValue ⇒
+        val f = convert(AtomicType.FLOAT).asAtomic().asInstanceOf[FloatValue]
+        f.compareTo(other)
+      case _ ⇒
+        super.compareTo(other)
     }
   }
 

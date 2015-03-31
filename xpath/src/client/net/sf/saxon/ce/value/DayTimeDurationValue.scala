@@ -13,6 +13,8 @@ import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
 import client.net.sf.saxon.ce.value.DayTimeDurationValue._
 
+import scala.ClassCastException
+
 object DayTimeDurationValue {
 
   val ONE_DAY = new DayTimeDurationValue(1, 1, 0, 0, 0, 0)
@@ -242,11 +244,13 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[AnyR
     try {
       fromMicroseconds(product.toLong)
     } catch {
-      case err: IllegalArgumentException ⇒ if (err.getCause.isInstanceOf[XPathException]) {
-        throw err.getCause.asInstanceOf[XPathException]
-      } else {
-        throw new XPathException("Overflow when multiplying/dividing a duration by a number", "FODT0002")
-      }
+      case err: IllegalArgumentException ⇒
+        err.getCause match {
+          case exception: XPathException ⇒
+            throw exception
+          case _ ⇒
+            throw new XPathException("Overflow when multiplying/dividing a duration by a number", "FODT0002")
+        }
     }
   }
 
@@ -258,15 +262,16 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[AnyR
    * @throws XPathException
    */
   override def divide(other: DurationValue): DecimalValue = {
-    if (other.isInstanceOf[DayTimeDurationValue]) {
-      val v1 = BigDecimal.valueOf(getLengthInMicroseconds)
-      val v2 = BigDecimal.valueOf(other.asInstanceOf[DayTimeDurationValue].getLengthInMicroseconds)
-      if (v2.signum() == 0) {
-        throw new XPathException("Divide by zero (durations)", "FOAR0001")
-      }
-      new DecimalValue(v1.divide(v2, 20, BigDecimal.ROUND_HALF_EVEN))
-    } else {
-      throw new XPathException("Cannot divide two durations of different type", "XPTY0004")
+    other match {
+      case value: DayTimeDurationValue ⇒
+        val v1 = BigDecimal.valueOf(getLengthInMicroseconds)
+        val v2 = BigDecimal.valueOf(value.getLengthInMicroseconds)
+        if (v2.signum() == 0) {
+          throw new XPathException("Divide by zero (durations)", "FOAR0001")
+        }
+        new DecimalValue(v1.divide(v2, 20, BigDecimal.ROUND_HALF_EVEN))
+      case _ ⇒
+        throw new XPathException("Cannot divide two durations of different type", "XPTY0004")
     }
   }
 
@@ -274,11 +279,12 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[AnyR
    * Add two dayTimeDurations
    */
   override def add(other: DurationValue): DurationValue = {
-    if (other.isInstanceOf[DayTimeDurationValue]) {
-      fromMicroseconds(getLengthInMicroseconds + 
-        other.asInstanceOf[DayTimeDurationValue].getLengthInMicroseconds)
-    } else {
-      throw new XPathException("Cannot add two durations of different type", "XPTY0004")
+    other match {
+      case value: DayTimeDurationValue ⇒
+        fromMicroseconds(getLengthInMicroseconds +
+          value.getLengthInMicroseconds)
+      case _ ⇒
+        throw new XPathException("Cannot add two durations of different type", "XPTY0004")
     }
   }
 
@@ -305,19 +311,19 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[AnyR
    *                            is declared as Object to satisfy the Comparable interface)
    */
   def compareTo(other: AnyRef): Int = {
-    if (other.isInstanceOf[DayTimeDurationValue]) {
-      val diff = getLengthInMicroseconds - 
-        other.asInstanceOf[DayTimeDurationValue].getLengthInMicroseconds
-      if (diff < 0) {
-        -1
-      } else if (diff > 0) {
-        +1
-      } else {
-        0
-      }
-    } else {
-      throw new ClassCastException("Cannot compare a dayTimeDuration to an object of class " + 
-        other.getClass)
+    other match {
+      case value: DayTimeDurationValue ⇒
+        val diff = getLengthInMicroseconds -
+          value.getLengthInMicroseconds
+        if (diff < 0) {
+          -1
+        } else if (diff > 0) {
+          +1
+        } else {
+          0
+        }
+      case _ ⇒
+        throw new ClassCastException("Cannot compare a dayTimeDuration to an object of class " + other.getClass)
     }
   }
 

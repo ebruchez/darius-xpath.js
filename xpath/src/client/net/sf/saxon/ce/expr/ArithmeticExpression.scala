@@ -48,138 +48,138 @@ object ArithmeticExpression {
     if (p1 == AtomicType.DATE || p1 == AtomicType.TIME) {
       p1 = AtomicType.DATE_TIME
     }
-    if (value0.isInstanceOf[NumericValue] && value1.isInstanceOf[NumericValue]) {
-      val n0 = value0.asInstanceOf[NumericValue]
-      val n1 = value1.asInstanceOf[NumericValue]
-      if (value0.isInstanceOf[DoubleValue] || value1.isInstanceOf[DoubleValue]) {
-        val d0 = n0.getDoubleValue
-        val d1 = n1.getDoubleValue
-        var result: Double = 0.0
-        operator match {
-          case Token.PLUS  ⇒ result = d0 + d1
-          case Token.MINUS ⇒ result = d0 - d1
-          case Token.MULT ⇒ result = d0 * d1
-          case Token.DIV ⇒ result = d0 / d1
-          case Token.MOD ⇒ result = d0 % d1
-          case Token.IDIV ⇒
-            if (d1 == 0.0) {
-              throw new XPathException("Integer division by zero", "FOAR0001")
-            }
-            if (d0.isNaN || d0.isInfinite) {
-              throw new XPathException("First operand of idiv is NaN or infinity", "FOAR0002")
-            }
-            if (d1.isNaN) {
-              throw new XPathException("Second operand of idiv is NaN", "FOAR0002")
-            }
-            return new DoubleValue(d0 / d1).convert(AtomicType.INTEGER)
-              .asAtomic()
+    value0 match {
+      case n0: NumericValue if value1.isInstanceOf[NumericValue] ⇒
+        val n1 = value1.asInstanceOf[NumericValue]
+        if (value0.isInstanceOf[DoubleValue] || value1.isInstanceOf[DoubleValue]) {
+          val d0 = n0.getDoubleValue
+          val d1 = n1.getDoubleValue
+          var result: Double = 0.0
+          operator match {
+            case Token.PLUS ⇒ result = d0 + d1
+            case Token.MINUS ⇒ result = d0 - d1
+            case Token.MULT ⇒ result = d0 * d1
+            case Token.DIV ⇒ result = d0 / d1
+            case Token.MOD ⇒ result = d0 % d1
+            case Token.IDIV ⇒
+              if (d1 == 0.0) {
+                throw new XPathException("Integer division by zero", "FOAR0001")
+              }
+              if (d0.isNaN || d0.isInfinite) {
+                throw new XPathException("First operand of idiv is NaN or infinity", "FOAR0002")
+              }
+              if (d1.isNaN) {
+                throw new XPathException("Second operand of idiv is NaN", "FOAR0002")
+              }
+              return new DoubleValue(d0 / d1).convert(AtomicType.INTEGER)
+                .asAtomic()
 
-        }
-        return new DoubleValue(result)
-      } else if (value0.isInstanceOf[FloatValue] || value1.isInstanceOf[FloatValue]) {
-        val f0 = n0.getFloatValue
-        val f1 = n1.getFloatValue
-        var result: Float = 0.0f
-        operator match {
-          case Token.PLUS  ⇒ result = f0 + f1
-          case Token.MINUS ⇒ result = f0 - f1
-          case Token.MULT ⇒ result = f0 * f1
-          case Token.DIV ⇒ result = f0 / f1
-          case Token.MOD ⇒ result = f0 % f1
-          case Token.IDIV ⇒
-            if (f1 == 0.0) {
-              throw new XPathException("Integer division by zero", "FOAR0001")
-            }
-            if (f0.isNaN || f0.isInfinite) {
-              throw new XPathException("First operand of idiv is NaN or infinity", "FOAR0002")
-            }
-            if (f1.isNaN) {
-              throw new XPathException("Second operand of idiv is NaN", "FOAR0002")
-            }
-            return new FloatValue(f0 / f1).convert(AtomicType.INTEGER)
-              .asAtomic()
+          }
+          return new DoubleValue(result)
+        } else if (value0.isInstanceOf[FloatValue] || value1.isInstanceOf[FloatValue]) {
+          val f0 = n0.getFloatValue
+          val f1 = n1.getFloatValue
+          var result: Float = 0.0f
+          operator match {
+            case Token.PLUS ⇒ result = f0 + f1
+            case Token.MINUS ⇒ result = f0 - f1
+            case Token.MULT ⇒ result = f0 * f1
+            case Token.DIV ⇒ result = f0 / f1
+            case Token.MOD ⇒ result = f0 % f1
+            case Token.IDIV ⇒
+              if (f1 == 0.0) {
+                throw new XPathException("Integer division by zero", "FOAR0001")
+              }
+              if (f0.isNaN || f0.isInfinite) {
+                throw new XPathException("First operand of idiv is NaN or infinity", "FOAR0002")
+              }
+              if (f1.isNaN) {
+                throw new XPathException("Second operand of idiv is NaN", "FOAR0002")
+              }
+              return new FloatValue(f0 / f1).convert(AtomicType.INTEGER)
+                .asAtomic()
 
-        }
-        return new FloatValue(result)
-      } else {
-        val d0 = n0.getDecimalValue
-        val d1 = n1.getDecimalValue
-        var result: BigDecimal = null
-        operator match {
-          case Token.PLUS  ⇒ result = d0.add(d1)
-          case Token.MINUS ⇒ result = d0.subtract(d1)
-          case Token.MULT ⇒ result = d0.multiply(d1)
-          case Token.DIV ⇒
-            var result1: BigDecimal = null
-            val scale = Math.max(DecimalValue.DIVIDE_PRECISION, Math.max(d0.scale(), d1.scale()))
-            try {
-              result1 = d0.divide(d1, scale, BigDecimal.ROUND_HALF_DOWN)
+          }
+          return new FloatValue(result)
+        } else {
+          val d0 = n0.getDecimalValue
+          val d1 = n1.getDecimalValue
+          var result: BigDecimal = null
+          operator match {
+            case Token.PLUS ⇒ result = d0.add(d1)
+            case Token.MINUS ⇒ result = d0.subtract(d1)
+            case Token.MULT ⇒ result = d0.multiply(d1)
+            case Token.DIV ⇒
+              var result1: BigDecimal = null
+              val scale = Math.max(DecimalValue.DIVIDE_PRECISION, Math.max(d0.scale(), d1.scale()))
+              try {
+                result1 = d0.divide(d1, scale, BigDecimal.ROUND_HALF_DOWN)
+              } catch {
+                case err1: ArithmeticException ⇒ if (d1.signum() == 0) {
+                  throw new XPathException("Decimal divide by zero", "FOAR0001")
+                } else {
+                  throw err1
+                }
+              }
+              return new DecimalValue(result1)
+
+            case Token.MOD ⇒ try {
+              result = d0.remainder(d1)
             } catch {
-              case err1: ArithmeticException ⇒ if (d1.signum() == 0) {
-                throw new XPathException("Decimal divide by zero", "FOAR0001")
+              case err: ArithmeticException ⇒ if (n1.compareTo(0) == 0) {
+                throw new XPathException("Decimal modulo zero", "FOAR0001")
               } else {
-                throw err1
+                throw err
               }
             }
-            return new DecimalValue(result1)
+            case Token.IDIV ⇒
+              if (d1.signum() == 0) {
+                throw new XPathException("Integer division by zero", "FOAR0001")
+              }
+              var quot = d0.divideToIntegralValue(d1)
+              return IntegerValue.decimalToInteger(quot).asAtomic()
 
-          case Token.MOD ⇒ try {
-            result = d0.remainder(d1)
-          } catch {
-            case err: ArithmeticException ⇒ if (n1.compareTo(0) == 0) {
-              throw new XPathException("Decimal modulo zero", "FOAR0001")
-            } else {
-              throw err
+          }
+          if (n0.isInstanceOf[IntegerValue] && n0.isInstanceOf[IntegerValue]) {
+            return new IntegerValue(result)
+          } else {
+            return new DecimalValue(result)
+          }
+        }
+      case _ ⇒
+        if (p0 == AtomicType.DATE_TIME) {
+          if (p1 == AtomicType.DATE_TIME && operator == Token.MINUS) {
+            return value0.asInstanceOf[CalendarValue].subtract(value1.asInstanceOf[CalendarValue], context)
+          } else if (th.isSubType(p1, AtomicType.DURATION) &&
+            (operator == Token.PLUS || operator == Token.MINUS)) {
+            var b = value1.asInstanceOf[DurationValue]
+            if (operator == Token.MINUS) {
+              b = b.multiply(-1.0)
             }
+            return value0.asInstanceOf[CalendarValue].add(b)
           }
-          case Token.IDIV ⇒
-            if (d1.signum() == 0) {
-              throw new XPathException("Integer division by zero", "FOAR0001")
+        } else if (th.isSubType(p0, AtomicType.DURATION)) {
+          if (th.isSubType(p1, AtomicType.DURATION)) {
+            val d0 = value1.asInstanceOf[DurationValue]
+            val d1 = value1.asInstanceOf[DurationValue]
+            operator match {
+              case Token.PLUS ⇒ return d0.add(d1)
+              case Token.MINUS ⇒ return d0.add(d1.negate())
+              case Token.DIV ⇒ return d0.divide(d1)
             }
-            var quot = d0.divideToIntegralValue(d1)
-            return IntegerValue.decimalToInteger(quot).asAtomic()
-
-        }
-        if (n0.isInstanceOf[IntegerValue] && n0.isInstanceOf[IntegerValue]) {
-          return new IntegerValue(result)
-        } else {
-          return new DecimalValue(result)
-        }
-      }
-    } else {
-      if (p0 == AtomicType.DATE_TIME) {
-        if (p1 == AtomicType.DATE_TIME && operator == Token.MINUS) {
-          return value0.asInstanceOf[CalendarValue].subtract(value1.asInstanceOf[CalendarValue], context)
-        } else if (th.isSubType(p1, AtomicType.DURATION) && 
-          (operator == Token.PLUS || operator == Token.MINUS)) {
-          var b = value1.asInstanceOf[DurationValue]
-          if (operator == Token.MINUS) {
-            b = b.multiply(-1.0)
+          } else if (p1 == AtomicType.DATE_TIME && operator == Token.PLUS) {
+            return value1.asInstanceOf[CalendarValue].add(value0.asInstanceOf[DurationValue])
+          } else if (th.isSubType(p1, AtomicType.NUMERIC) && (operator == Token.MULT || operator == Token.DIV)) {
+            var d1 = value1.asInstanceOf[NumericValue].getDoubleValue
+            if (operator == Token.DIV) {
+              d1 = 1.0 / d1
+            }
+            return value0.asInstanceOf[DurationValue].multiply(d1)
           }
-          return value0.asInstanceOf[CalendarValue].add(b)
+        } else if (th.isSubType(p0, AtomicType.NUMERIC) && th.isSubType(p1, AtomicType.DURATION) &&
+          operator == Token.MULT) {
+          return value1.asInstanceOf[DurationValue].multiply(value0.asInstanceOf[NumericValue].getDoubleValue)
         }
-      } else if (th.isSubType(p0, AtomicType.DURATION)) {
-        if (th.isSubType(p1, AtomicType.DURATION)) {
-          val d0 = value1.asInstanceOf[DurationValue]
-          val d1 = value1.asInstanceOf[DurationValue]
-          operator match {
-            case Token.PLUS ⇒ return d0.add(d1)
-            case Token.MINUS ⇒ return d0.add(d1.negate())
-            case Token.DIV ⇒ return d0.divide(d1)
-          }
-        } else if (p1 == AtomicType.DATE_TIME && operator == Token.PLUS) {
-          return value1.asInstanceOf[CalendarValue].add(value0.asInstanceOf[DurationValue])
-        } else if (th.isSubType(p1, AtomicType.NUMERIC) && (operator == Token.MULT || operator == Token.DIV)) {
-          var d1 = value1.asInstanceOf[NumericValue].getDoubleValue
-          if (operator == Token.DIV) {
-            d1 = 1.0 / d1
-          }
-          return value0.asInstanceOf[DurationValue].multiply(d1)
-        }
-      } else if (th.isSubType(p0, AtomicType.NUMERIC) && th.isSubType(p1, AtomicType.DURATION) && 
-        operator == Token.MULT) {
-        return value1.asInstanceOf[DurationValue].multiply(value0.asInstanceOf[NumericValue].getDoubleValue)
-      }
     }
     throw new XPathException("Undefined arithmetic operation: " + p0 + " " + Token.tokens(operator) + 
       " " + 
@@ -209,8 +209,10 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
     } else {
       if (operator == Token.NEGATE && Literal.isAtomic(operand1)) {
         val `val` = operand1.asInstanceOf[Literal].getValue.asInstanceOf[AtomicValue]
-        if (`val`.isInstanceOf[NumericValue]) {
-          return new Literal(`val`.asInstanceOf[NumericValue].negate())
+        `val` match {
+          case value: NumericValue ⇒
+            return new Literal(value.negate())
+          case _ ⇒
         }
       }
       e
@@ -266,14 +268,14 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
       return new Literal(EmptySequence.getInstance)
     }
     if (operator == Token.NEGATE) {
-      if (operand1.isInstanceOf[Literal] && 
-        operand1.asInstanceOf[Literal].getValue.isInstanceOf[NumericValue]) {
-        val nv = operand1.asInstanceOf[Literal].getValue.asInstanceOf[NumericValue]
-        return new Literal(nv.negate())
-      } else {
-        val ne = new NegateExpression(operand1)
-        ne.setBackwardsCompatible(false)
-        return visitor.typeCheck(ne, contextItemType)
+      operand1 match {
+        case literal: Literal if literal.getValue.isInstanceOf[NumericValue] ⇒
+          val nv = literal.getValue.asInstanceOf[NumericValue]
+          return new Literal(nv.negate())
+        case _ ⇒
+          val ne = new NegateExpression(operand1)
+          ne.setBackwardsCompatible(false)
+          return visitor.typeCheck(ne, contextItemType)
       }
     }
     try {

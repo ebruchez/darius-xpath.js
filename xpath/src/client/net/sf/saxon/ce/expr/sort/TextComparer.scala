@@ -34,10 +34,11 @@ class TextComparer(@BeanProperty var baseComparer: AtomicComparer) extends Atomi
   }
 
   private def toStringValue(a: AtomicValue): StringValue = {
-    if (a.isInstanceOf[StringValue]) {
-      a.asInstanceOf[StringValue]
-    } else {
-      new StringValue(if (a == null) "" else a.getStringValue)
+    a match {
+      case value: StringValue ⇒
+        value
+      case _ ⇒
+        new StringValue(if (a == null) "" else a.getStringValue)
     }
   }
 

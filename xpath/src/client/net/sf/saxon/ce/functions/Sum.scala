@@ -37,44 +37,45 @@ object Sum {
         }
       }
     }
-    if (sum.isInstanceOf[NumericValue]) {
-      while (true) {
-        var next = iter.next().asInstanceOf[AtomicValue]
-        if (next == null) {
-          return sum
+    sum match {
+      case _: NumericValue ⇒
+        while (true) {
+          var next = iter.next().asInstanceOf[AtomicValue]
+          if (next == null) {
+            return sum
+          }
+          if (next.isInstanceOf[UntypedAtomicValue]) {
+            next = next.convert(AtomicType.DOUBLE).asAtomic()
+          } else if (!next.isInstanceOf[NumericValue]) {
+            throw new XPathException("Input to sum() contains a mix of numeric and non-numeric values",
+              "FORG0006", location)
+          }
+          sum = ArithmeticExpression.compute(sum, Token.PLUS, next, context)
+          if (sum.isNaN && sum.isInstanceOf[DoubleValue]) {
+            return sum
+          }
         }
-        if (next.isInstanceOf[UntypedAtomicValue]) {
-          next = next.convert(AtomicType.DOUBLE).asAtomic()
-        } else if (!next.isInstanceOf[NumericValue]) {
-          throw new XPathException("Input to sum() contains a mix of numeric and non-numeric values", 
+        throw new IllegalStateException
+      case value: DurationValue ⇒
+        if (!(sum.isInstanceOf[DayTimeDurationValue] || sum.isInstanceOf[YearMonthDurationValue])) {
+          throw new XPathException("Input to sum() contains a duration that is neither a dayTimeDuration nor a yearMonthDuration",
             "FORG0006", location)
         }
-        sum = ArithmeticExpression.compute(sum, Token.PLUS, next, context)
-        if (sum.isNaN && sum.isInstanceOf[DoubleValue]) {
-          return sum
+        while (true) {
+          val next = iter.next().asInstanceOf[AtomicValue]
+          if (next == null) {
+            return sum
+          }
+          if (!next.isInstanceOf[DurationValue]) {
+            throw new XPathException("Input to sum() contains a mix of duration and non-duration values",
+              "FORG0006", location)
+          }
+          sum = value.add(next.asInstanceOf[DurationValue])
         }
-      }
-      throw new IllegalStateException
-    } else if (sum.isInstanceOf[DurationValue]) {
-      if (!(sum.isInstanceOf[DayTimeDurationValue] || sum.isInstanceOf[YearMonthDurationValue])) {
-        throw new XPathException("Input to sum() contains a duration that is neither a dayTimeDuration nor a yearMonthDuration", 
-          "FORG0006", location)
-      }
-      while (true) {
-        val next = iter.next().asInstanceOf[AtomicValue]
-        if (next == null) {
-          return sum
-        }
-        if (!next.isInstanceOf[DurationValue]) {
-          throw new XPathException("Input to sum() contains a mix of duration and non-duration values", 
-            "FORG0006", location)
-        }
-        sum = sum.asInstanceOf[DurationValue].add(next.asInstanceOf[DurationValue])
-      }
-      throw new IllegalStateException
-    } else {
-      throw new XPathException("Input to sum() contains a value of type " + sum.getItemType.getDisplayName + 
-        " which is neither numeric, nor a duration", "FORG0006", location)
+        throw new IllegalStateException
+      case _ ⇒
+        throw new XPathException("Input to sum() contains a value of type " + sum.getItemType.getDisplayName +
+          " which is neither numeric, nor a duration", "FORG0006", location)
     }
   }
 }

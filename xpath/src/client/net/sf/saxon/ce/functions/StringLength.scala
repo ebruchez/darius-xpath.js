@@ -71,11 +71,12 @@ class StringLength extends SystemFunction {
     if (sv == null) {
       return IntegerValue.ZERO
     }
-    if (sv.isInstanceOf[StringValue]) {
-      new IntegerValue(sv.asInstanceOf[StringValue].getStringLength)
-    } else {
-      val s = sv.getStringValue
-      new IntegerValue(StringValue.getStringLength(s))
+    sv match {
+      case value: StringValue ⇒
+        new IntegerValue(value.getStringLength)
+      case _ ⇒
+        val s = sv.getStringValue
+        new IntegerValue(StringValue.getStringLength(s))
     }
   }
 }

@@ -25,11 +25,13 @@ object SequenceExtent {
    * @throws XPathException if a dynamic error occurs while evaluating the iterator
    */
   def makeSequenceExtent(iter: SequenceIterator): Sequence = {
-    if (iter.isInstanceOf[GroundedIterator]) {
-      val value = iter.asInstanceOf[GroundedIterator].materialize()
-      if (value != null) {
-        return value
-      }
+    iter match {
+      case iterator: GroundedIterator ⇒
+        val value = iterator.materialize()
+        if (value != null) {
+          return value
+        }
+      case _ ⇒
     }
     val extent = SequenceExtent(iter)
     val len = extent.getLength
@@ -95,8 +97,10 @@ object SequenceExtent {
    */
   def apply(iter: SequenceIterator): SequenceExtent[Item] = {
     var allocated = -1
-    if (iter.isInstanceOf[LastPositionFinder]) {
-      allocated = iter.asInstanceOf[LastPositionFinder].getLastPosition
+    iter match {
+      case finder: LastPositionFinder ⇒
+        allocated = finder.getLastPosition
+      case _ ⇒
     }
     import Breaks._
     val value =

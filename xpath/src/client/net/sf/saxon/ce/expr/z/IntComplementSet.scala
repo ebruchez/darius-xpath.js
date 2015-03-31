@@ -53,10 +53,11 @@ class IntComplementSet(_exclusions: IntSet) extends IntSet {
       new IntHashSet()
     } else if (other == IntUniversalSet.getInstance) {
       copy()
-    } else if (other.isInstanceOf[IntComplementSet]) {
-      new IntComplementSet(exclusions.union(other.asInstanceOf[IntComplementSet].exclusions))
-    } else {
-      other.intersect(this)
+    } else other match {
+      case set: IntComplementSet ⇒
+        new IntComplementSet(exclusions.union(set.exclusions))
+      case _ ⇒
+        other.intersect(this)
     }
   }
 

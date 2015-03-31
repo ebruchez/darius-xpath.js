@@ -97,12 +97,13 @@ object Type {
    * @return the item type of the item
    */
   def getItemType(item: Item): ItemType = {
-    if (item.isInstanceOf[AtomicValue]) {
-      item.asInstanceOf[AtomicValue].getItemType
-    } else if (item.isInstanceOf[NodeInfo]) {
-      NodeKindTest.makeNodeKindTest(item.asInstanceOf[NodeInfo].getNodeKind)
-    } else {
-      null
+    item match {
+      case value: AtomicValue ⇒
+        value.getItemType
+      case info: NodeInfo ⇒
+        NodeKindTest.makeNodeKindTest(info.getNodeKind)
+      case _ ⇒
+        null
     }
   }
 
@@ -113,22 +114,22 @@ object Type {
    * @return a string representation of the type of the item
    */
   def displayTypeName(item: Item): String = {
-    if (item.isInstanceOf[NodeInfo]) {
-      val node = item.asInstanceOf[NodeInfo]
-      node.getNodeKind match {
-        case DOCUMENT ⇒ "document-node()"
-        case ELEMENT ⇒ "element(" + item.asInstanceOf[NodeInfo].getDisplayName +
-          ')'
-        case ATTRIBUTE ⇒ "attribute(" + item.asInstanceOf[NodeInfo].getDisplayName +
-          ')'
-        case TEXT ⇒ "text()"
-        case COMMENT ⇒ "comment()"
-        case PROCESSING_INSTRUCTION ⇒ "processing-instruction()"
-        case NAMESPACE ⇒ "namespace()"
-        case _ ⇒ ""
-      }
-    } else {
-      item.asInstanceOf[AtomicValue].getItemType.toString
+    item match {
+      case node: NodeInfo ⇒
+        node.getNodeKind match {
+          case DOCUMENT ⇒ "document-node()"
+          case ELEMENT ⇒ "element(" + node.getDisplayName +
+            ')'
+          case ATTRIBUTE ⇒ "attribute(" + node.getDisplayName +
+            ')'
+          case TEXT ⇒ "text()"
+          case COMMENT ⇒ "comment()"
+          case PROCESSING_INSTRUCTION ⇒ "processing-instruction()"
+          case NAMESPACE ⇒ "namespace()"
+          case _ ⇒ ""
+        }
+      case _ ⇒
+        item.asInstanceOf[AtomicValue].getItemType.toString
     }
   }
 

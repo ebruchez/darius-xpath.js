@@ -46,11 +46,15 @@ class ArithmeticExpression10(p0: Expression, operator: Int, p1: Expression) exte
     adoptChildExpression(operand0)
     adoptChildExpression(operand1)
     if (operator == Token.NEGATE) {
-      if (operand1.isInstanceOf[Literal]) {
-        val v = operand1.asInstanceOf[Literal].getValue
-        if (v.isInstanceOf[NumericValue]) {
-          return Literal.makeLiteral(v.asInstanceOf[NumericValue].negate())
-        }
+      operand1 match {
+        case literal: Literal ⇒
+          val v = literal.getValue
+          v match {
+            case value: NumericValue ⇒
+              return Literal.makeLiteral(value.negate())
+            case _ ⇒
+          }
+        case _ ⇒
       }
       val ne = new NegateExpression(operand1)
       ne.setBackwardsCompatible(true)
@@ -89,8 +93,10 @@ class ArithmeticExpression10(p0: Expression, operator: Int, p1: Expression) exte
     if (value == null) {
       return DoubleValue.NaN
     }
-    if (value.isInstanceOf[DoubleValue]) {
-      return value.asInstanceOf[DoubleValue]
+    value match {
+      case value1: DoubleValue ⇒
+        return value1
+      case _ ⇒
     }
     val `type` = value.getItemType
     if (`type` == AtomicType.INTEGER || `type` == AtomicType.UNTYPED_ATOMIC || 

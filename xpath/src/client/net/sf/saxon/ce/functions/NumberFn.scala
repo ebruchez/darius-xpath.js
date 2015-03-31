@@ -67,8 +67,10 @@ class NumberFn extends SystemFunction {
     if (e2 != this) {
       return e2
     }
-    if (argument(0).isInstanceOf[NumberFn]) {
-      argument(0) = argument(0).asInstanceOf[NumberFn].argument(0)
+    argument(0) match {
+      case fn: NumberFn ⇒
+        argument(0) = fn.argument(0)
+      case _ ⇒
     }
     this
   }

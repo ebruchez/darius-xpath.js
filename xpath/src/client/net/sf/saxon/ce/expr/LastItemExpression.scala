@@ -23,11 +23,13 @@ class LastItemExpression(base: Expression) extends SingleItemFilter {
    */
   override def evaluateItem(context: XPathContext): Item = {
     val forwards = operand.iterate(context)
-    if (forwards.isInstanceOf[GroundedIterator]) {
-      val `val` = forwards.asInstanceOf[GroundedIterator].materialize()
-      if (`val` != null) {
-        return `val`.itemAt(`val`.getLength - 1)
-      }
+    forwards match {
+      case iterator: GroundedIterator ⇒
+        val `val` = iterator.materialize()
+        if (`val` != null) {
+          return `val`.itemAt(`val`.getLength - 1)
+        }
+      case _ ⇒
     }
     var current: Item = null
     while (true) {

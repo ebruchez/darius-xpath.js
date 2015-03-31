@@ -63,15 +63,17 @@ class ItemMappingIterator(var base: SequenceIterator, var action: ItemMappingFun
 
   def getAnother: SequenceIterator = {
     val newBase = base.getAnother
-    val newAction = if (action.isInstanceOf[StatefulMappingFunction]) action.asInstanceOf[StatefulMappingFunction].getAnother(newBase).asInstanceOf[ItemMappingFunction] else action
+    val newAction = action match {
+      case function: StatefulMappingFunction ⇒ function.getAnother(newBase).asInstanceOf[ItemMappingFunction]
+      case _ ⇒ action
+    }
     new ItemMappingIterator(newBase, newAction, oneToOne)
   }
 
   def getLastPosition: Int = {
-    if (base.isInstanceOf[LastPositionFinder] && oneToOne) {
-      base.asInstanceOf[LastPositionFinder].getLastPosition
-    } else {
-      -1
+    base match {
+      case finder: LastPositionFinder if oneToOne ⇒ finder.getLastPosition
+      case _ ⇒ -1
     }
   }
 }
