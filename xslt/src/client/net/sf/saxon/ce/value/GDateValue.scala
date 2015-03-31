@@ -185,7 +185,7 @@ abstract class GDateValue extends CalendarValue {
 
     case Component.MONTH ⇒ new IntegerValue(month)
     case Component.DAY ⇒ new IntegerValue(day)
-    case Component.TIMEZONE ⇒ if (hasTimezone()) {
+    case Component.TIMEZONE ⇒ if (hasTimezone) {
       DayTimeDurationValue.fromMilliseconds(60000L * getTimezoneInMinutes)
     } else {
       null

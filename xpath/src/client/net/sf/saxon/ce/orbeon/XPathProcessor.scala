@@ -81,7 +81,7 @@ object XPathProcessor {
 //          UI.results.value(item.getStringValue())
           UI.results.children("li").detach()
           for (item ← items) {
-            val itemString = item.getStringValue()
+            val itemString = item.getStringValue
             UI.results.append(s"""<li class="list-group-item">$itemString</li>""")
           }
 
@@ -140,7 +140,7 @@ object XPathProcessor {
 
     val CompiledExpression(config, expr, slots) = compiledExpr
 
-    val controller = new Controller(config, expr.getExecutable())
+    val controller = new Controller(config, expr.getExecutable)
 
     val xpc = new XPathContext(controller)
     xpc.setStackFrame(slots, new Array[Sequence](slots))

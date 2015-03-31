@@ -67,7 +67,7 @@ class RoleLocator(var kind: Int, var operation: AnyRef, var operand: Int) {
    * Construct and return the error message indicating a type error
    * @return the constructed error message
    */
-  def getMessage(): String = {
+  def getMessage: String = {
     var name: String = null
     name = if (operation.isInstanceOf[String]) operation.asInstanceOf[String] else operation.asInstanceOf[StructuredQName].getDisplayName
     kind match {

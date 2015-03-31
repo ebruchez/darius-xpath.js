@@ -47,7 +47,7 @@ class SingletonIterator private (value: Item) extends UnfailingIterator with Gro
 
   def getAnother(): UnfailingIterator = new SingletonIterator(item)
 
-  def getValue(): Item = item
+  def getValue: Item = item
 
   /**
    * Return a Value containing all the items in the sequence returned by this

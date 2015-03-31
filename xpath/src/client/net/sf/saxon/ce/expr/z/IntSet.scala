@@ -38,7 +38,7 @@ trait IntSet {
    * Determine if the set is empty
    * @return true if the set is empty, false if not
    */
-  def isEmpty(): Boolean
+  def isEmpty: Boolean
 
   /**
    * Determine whether a particular integer is present in the set

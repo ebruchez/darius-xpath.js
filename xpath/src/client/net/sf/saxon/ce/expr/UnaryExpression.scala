@@ -21,7 +21,7 @@ abstract class UnaryExpression protected () extends Expression {
     adoptChildExpression(p0)
   }
 
-  def getBaseExpression(): Expression = operand
+  def getBaseExpression: Expression = operand
 
   /**
    * Simplify an expression

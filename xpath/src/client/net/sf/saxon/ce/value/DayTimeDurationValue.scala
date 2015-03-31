@@ -51,7 +51,7 @@ object DayTimeDurationValue {
       seconds = seconds.negate()
     }
     val microseconds = seconds.multiply(DecimalValue.BIG_DECIMAL_ONE_MILLION)
-    val intMicros = microseconds.toBigInteger()
+    val intMicros = microseconds.toBigInteger
     val parts = intMicros.divideAndRemainder(BigInteger.valueOf(1000000))
     sdv.seconds = parts(0).longValue()
     sdv.microseconds = parts(1).intValue()
@@ -220,7 +220,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[AnyR
    *
    * @return the length in microseconds
    */
-  def getLengthInMicroseconds(): Long = {
+  def getLengthInMicroseconds: Long = {
     val a = seconds * 1000000 + microseconds
     if (negative) -a else a
   }

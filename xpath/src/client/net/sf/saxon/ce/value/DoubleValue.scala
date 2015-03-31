@@ -127,7 +127,7 @@ class DoubleValue(var value: Double) extends NumericValue {
         if (a >= 1e-3) {
           value.toString
         } else if (a >= 1e-6) {
-          BigDecimal.valueOf(value).toPlainString()
+          BigDecimal.valueOf(value).toPlainString
         } else {
           val dec = BigDecimal.valueOf(value)
           dec.toString

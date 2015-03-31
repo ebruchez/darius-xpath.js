@@ -273,7 +273,7 @@ class StringValue protected () extends AtomicValue {
    *
    * @return the length of the string in Unicode code points
    */
-  def getStringLength(): Int = {
+  def getStringLength: Int = {
     if (noSurrogates) {
       value.length
     } else {
@@ -291,7 +291,7 @@ class StringValue protected () extends AtomicValue {
    *
    * @return true if the string is zero length
    */
-  def isZeroLength(): Boolean = value.length == 0
+  def isZeroLength: Boolean = value.length == 0
 
   /**
    * Determine whether the string contains surrogate pairs
@@ -307,7 +307,7 @@ class StringValue protected () extends AtomicValue {
    *
    * @return true if it is known to contain no surrogates, false if the answer is not known
    */
-  def isKnownToContainNoSurrogates(): Boolean = noSurrogates
+  def isKnownToContainNoSurrogates: Boolean = noSurrogates
 
   /**
    * Expand a string containing surrogate pairs into an array of 32-bit characters

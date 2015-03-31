@@ -44,7 +44,7 @@ trait ItemType {
    * as possible.
    * @return the supertype, or null if this type is item()
    */
-  def getSuperType(): ItemType
+  def getSuperType: ItemType
 
   /**
    * Get the item type of the atomic values that will be produced when an item
@@ -52,5 +52,5 @@ trait ItemType {
    * @return  the item type of the atomic values that will be produced when an item
    * of this type is atomized
    */
-  def getAtomizedItemType(): AtomicType
+  def getAtomizedItemType: AtomicType
 }

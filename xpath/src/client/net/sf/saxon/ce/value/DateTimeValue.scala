@@ -147,7 +147,7 @@ object DateTimeValue {
    * @return the xs:dateTime value corresponding to the Julian instant. This will always be in timezone Z.
    */
   def fromJulianInstant(instant: BigDecimal): DateTimeValue = {
-    val julianSecond = instant.toBigInteger()
+    val julianSecond = instant.toBigInteger
     val microseconds = instant.subtract(new BigDecimal(julianSecond)).multiply(DecimalValue.BIG_DECIMAL_ONE_MILLION)
     var js = julianSecond.longValue()
     val jd = js / (24L * 60L * 60L)
@@ -289,7 +289,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
    *         Returns the original DateTimeValue if this is already in timezone Z.
    */
   def normalize(cc: XPathContext): DateTimeValue = {
-    if (hasTimezone()) {
+    if (hasTimezone) {
       adjustTimezone(0).asInstanceOf[DateTimeValue]
     } else {
       val dt = copy().asInstanceOf[DateTimeValue]
@@ -307,7 +307,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
    *
    * @return the Julian instant corresponding to this xs:dateTime value
    */
-  def toJulianInstant(): BigDecimal = {
+  def toJulianInstant: BigDecimal = {
     val julianDay = DateValue.getJulianDayNumber(year, month, day)
     var julianSecond = julianDay * (24L * 60L * 60L)
     julianSecond += (((hour * 60L + minute) * 60L) + second)
@@ -389,7 +389,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
         div /= 10
       }
     }
-    if (hasTimezone()) {
+    if (hasTimezone) {
       appendTimezone(sb)
     }
     sb
@@ -412,7 +412,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
    *         was required to the original value
    */
   def adjustTimezone(timezone: Int): CalendarValue = {
-    if (!hasTimezone()) {
+    if (!hasTimezone) {
       val in = copy().asInstanceOf[CalendarValue]
       in.setTimezoneInMinutes(timezone)
       return in
@@ -462,7 +462,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
       val microseconds = duration.asInstanceOf[DayTimeDurationValue].getLengthInMicroseconds
       val seconds = BigDecimal.valueOf(microseconds).divide(DecimalValue.BIG_DECIMAL_ONE_MILLION, 6, 
         BigDecimal.ROUND_HALF_EVEN)
-      var julian = toJulianInstant()
+      var julian = toJulianInstant
       julian = julian.add(seconds)
       val dt = fromJulianInstant(julian)
       dt.setTimezoneInMinutes(getTimezoneInMinutes)
@@ -524,7 +524,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
 
     case Component.WHOLE_SECONDS ⇒ new IntegerValue(second)
     case Component.MICROSECONDS ⇒ new IntegerValue(microsecond)
-    case Component.TIMEZONE ⇒ if (hasTimezone()) {
+    case Component.TIMEZONE ⇒ if (hasTimezone) {
       DayTimeDurationValue.fromMilliseconds(60000L * getTimezoneInMinutes)
     } else {
       null
@@ -550,9 +550,9 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
     if (!other.isInstanceOf[DateTimeValue]) {
       throw new ClassCastException("DateTime values are not comparable to " + other.getClass)
     }
-    var v1 = (if (hasTimezone()) this else adjustTimezone(implicitTimezone)).asInstanceOf[DateTimeValue]
+    var v1 = (if (hasTimezone) this else adjustTimezone(implicitTimezone)).asInstanceOf[DateTimeValue]
     var v2 = other.asInstanceOf[DateTimeValue]
-    if (!v2.hasTimezone()) {
+    if (!v2.hasTimezone) {
       v2 = v2.adjustTimezone(implicitTimezone).asInstanceOf[DateTimeValue]
     }
     if (v1.getTimezoneInMinutes != v2.getTimezoneInMinutes) {

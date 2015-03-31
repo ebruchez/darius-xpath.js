@@ -45,7 +45,7 @@ class UntypedAtomicValue(_value: CharSequence) extends StringValue {
       this
     } else if (requiredType == AtomicType.DOUBLE || requiredType == AtomicType.NUMERIC) {
       try {
-        toDouble()
+        toDouble
       } catch {
         case e: XPathException ⇒ new ValidationFailure(e.getMessage)
       }
@@ -57,7 +57,7 @@ class UntypedAtomicValue(_value: CharSequence) extends StringValue {
   /**
    * Convert the value to a double, returning a DoubleValue
    */
-  private def toDouble(): AtomicValue = {
+  private def toDouble: AtomicValue = {
     if (doubleValue == null) {
       val d = StringToDouble.stringToNumber(value)
       doubleValue = new DoubleValue(d)

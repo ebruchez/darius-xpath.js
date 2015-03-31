@@ -17,11 +17,11 @@ trait InstructionInfo {
    * or it will be a constant in class [[Location]].
    * @return an integer identifying the kind of construct
    */
-  def getConstructType(): StructuredQName
+  def getConstructType: StructuredQName
 
-  def getObjectName(): StructuredQName
+  def getObjectName: StructuredQName
 
-  def getSystemId(): String
+  def getSystemId: String
 
   /**
    * Get the line number of the instruction in the source stylesheet module.
@@ -29,7 +29,7 @@ trait InstructionInfo {
    * not relate to anything in the source code, the value returned may be -1.
    * @return the line number of the expression within the containing module
    */
-  def getLineNumber(): Int
+  def getLineNumber: Int
 
   def getProperty(name: String): AnyRef
 
@@ -40,5 +40,5 @@ trait InstructionInfo {
    * value is null.
    * @return an iterator over the properties.
    */
-  def getProperties(): Iterator[String]
+  def getProperties: Iterator[String]
 }

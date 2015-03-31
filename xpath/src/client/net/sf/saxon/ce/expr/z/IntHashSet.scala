@@ -110,7 +110,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
 
   def isEmpty(): Boolean = _size == 0
 
-  def getValues(): Array[Int] = {
+  def getValues: Array[Int] = {
     var index = 0
     val values = new Array[Int](_size)
     for (_value ← _values if _value != ndv) {

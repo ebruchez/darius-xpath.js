@@ -279,7 +279,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * array.
    * @return a char[] array containing the characters
    */
-  def getCharArray(): Array[Char] = array
+  def getCharArray: Array[Char] = array
 
   /**
    * Set the character at a particular offset

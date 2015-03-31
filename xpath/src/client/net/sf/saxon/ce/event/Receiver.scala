@@ -30,7 +30,7 @@ trait Receiver {
    * Get the pipeline configuration
    * @return the pipeline configuration
    */
-  def getPipelineConfiguration(): PipelineConfiguration
+  def getPipelineConfiguration: PipelineConfiguration
 
   /**
    * Set the System ID of the tree represented by this event stream

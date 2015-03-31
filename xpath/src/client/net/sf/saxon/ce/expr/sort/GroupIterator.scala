@@ -20,7 +20,7 @@ trait GroupIterator extends SequenceIterator {
    * @return the current grouping key in the case of group-by or group-adjacent,
    * or null in the case of group-starting-with and group-ending-with
    */
-  def getCurrentGroupingKey(): AtomicValue
+  def getCurrentGroupingKey: AtomicValue
 
   /**
    * Get an iterator over the members of the current group, in population

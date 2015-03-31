@@ -89,7 +89,7 @@ class DecimalSymbols {
    * Check that the character declared as a zero-digit is indeed a valid zero-digit
    * @return false if it is not a valid zero-digit
    */
-  def isValidZeroDigit(): Boolean = {
+  def isValidZeroDigit: Boolean = {
     Arrays.binarySearch(zeroDigits, zeroDigit) >= 0
   }
 

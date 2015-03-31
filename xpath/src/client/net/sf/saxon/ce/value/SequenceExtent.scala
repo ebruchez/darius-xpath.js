@@ -175,7 +175,7 @@ class SequenceExtent[T <: Item](val value: Array[T]) extends Sequence {
    * @return integer identifying an item type to which all the items in this
    *      sequence conform
    */
-  def getItemType(): ItemType = {
+  def getItemType: ItemType = {
     if (itemType != null) {
       return itemType
     }

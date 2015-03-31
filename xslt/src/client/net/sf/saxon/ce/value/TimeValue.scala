@@ -162,7 +162,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
         div /= 10
       }
     }
-    if (hasTimezone()) {
+    if (hasTimezone) {
       appendTimezone(sb)
     }
     sb
@@ -213,7 +213,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
 
     case Component.WHOLE_SECONDS ⇒ new IntegerValue(second)
     case Component.MICROSECONDS ⇒ new IntegerValue(microsecond)
-    case Component.TIMEZONE ⇒ if (hasTimezone()) {
+    case Component.TIMEZONE ⇒ if (hasTimezone) {
       DayTimeDurationValue.fromMilliseconds(60000L * getTimezoneInMinutes)
     } else {
       null

@@ -50,7 +50,7 @@ class LocalVariableReference(binding: Binding) extends VariableReference(binding
    * Get the slot number allocated to this local variable
    * @return the slot number
    */
-  def getSlotNumber(): Int = slotNumber
+  def getSlotNumber: Int = slotNumber
 
   /**
    * Return the value of the variable
@@ -60,7 +60,7 @@ class LocalVariableReference(binding: Binding) extends VariableReference(binding
    */
   override def evaluateVariable(c: XPathContext): Sequence = {
     try {
-      c.getStackFrame()(slotNumber)
+      c.getStackFrame(slotNumber)
     } catch {
       case err: ArrayIndexOutOfBoundsException ⇒ {
         if (slotNumber == -999) {

@@ -27,5 +27,5 @@ trait VariableDeclaration {
    * Get the name of the variable as a structured QName
    * @return the variable name
    */
-  def getVariableQName(): StructuredQName
+  def getVariableQName: StructuredQName
 }

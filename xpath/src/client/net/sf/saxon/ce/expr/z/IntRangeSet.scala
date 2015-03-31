@@ -315,7 +315,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
   /**
    * Get the number of ranges actually in use
    */
-  def getNumberOfRanges(): Int = used
+  def getNumberOfRanges: Int = used
 
   /**
    * Iterator class

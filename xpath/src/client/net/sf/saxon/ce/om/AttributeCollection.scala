@@ -82,7 +82,7 @@ class AttributeCollection {
    * of slots used in the list, including any slots allocated to attributes that have since been deleted.
    * Such slots are not reused, to preserve attribute identity.
    */
-  def getLength(): Int = if (values == null) 0 else used
+  def getLength: Int = if (values == null) 0 else used
 
   /**
    * Get the name of an attribute (by position).

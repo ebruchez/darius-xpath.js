@@ -22,7 +22,7 @@ trait SourceLocator {
    * @return A string containing the system identifier, or null
    *         if none is available.
    */
-  def getSystemId(): String
+  def getSystemId: String
 
   /**
    * Return a string identifying the current location for the purpose
@@ -30,5 +30,5 @@ trait SourceLocator {
    * such as "Error XXX at LOCATION". May be null if no location information is available
    * @return a string identifying the location
    */
-  def getLocation(): String
+  def getLocation: String
 }

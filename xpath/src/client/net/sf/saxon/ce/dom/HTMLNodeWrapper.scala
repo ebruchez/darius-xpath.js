@@ -73,7 +73,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     wrapper
   }
 
-  def getUnderlyingNode(): dom.Node = node
+  def getUnderlyingNode: dom.Node = node
   def getNodeKind(): Int = nodeKind
 
   def getTypedValue(): AtomicValue = nodeKind match {
@@ -181,7 +181,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     qName
   }
 
-  def getRawLocalName(): String = getLocalName(node)
+  def getRawLocalName: String = getLocalName(node)
 
   def getLocalPart(): String = nodeKind match {
     case Type.ELEMENT | Type.ATTRIBUTE ⇒ getDomCorrectedName(getLocalName(node))
@@ -229,7 +229,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     if (name == null) {
       return null
     }
-    docWrapper.getDocType() match {
+    docWrapper.getDocType match {
       case DocTypeNONHTML ⇒ name
       case DocTypeHTML    ⇒ name.toLowerCase()
       case DocTypeXHTML ⇒
@@ -435,7 +435,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
   private var attributeNames: ArrayList[String] = null
   private var namespaceBindings: ArrayList[NamespaceBinding] = null
 
-  private def getAttributeNames(): ArrayList[String] = {
+  private def getAttributeNames: ArrayList[String] = {
     if (attributeNames != null) {
       attributeNames
     } else {
@@ -444,7 +444,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     }
   }
 
-  private def getAltAttributes(): Array[HTMLAttributeNode] =
+  private def getAltAttributes: Array[HTMLAttributeNode] =
     if (attributeList != null)
       attributeList
     else

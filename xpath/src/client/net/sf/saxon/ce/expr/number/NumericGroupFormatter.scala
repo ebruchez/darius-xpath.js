@@ -23,5 +23,5 @@ abstract class NumericGroupFormatter {
    * If no grouping separators are used, return null
    * @return the grouping separator
    */
-  def getSeparator(): String
+  def getSeparator: String
 }

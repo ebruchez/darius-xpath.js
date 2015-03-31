@@ -280,14 +280,14 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
     }
     if (targetType == AtomicType.UNTYPED_ATOMIC) {
       if (operand.isInstanceOf[StringFn]) {
-        val e = operand.asInstanceOf[StringFn].getArguments()(0)
+        val e = operand.asInstanceOf[StringFn].getArguments(0)
         if (e.getItemType.isInstanceOf[AtomicType] && e.getCardinality == StaticProperty.EXACTLY_ONE) {
           operand = e
         }
       }
     }
     if (operand.isInstanceOf[StringFn]) {
-      val e = operand.asInstanceOf[StringFn].getArguments()(0)
+      val e = operand.asInstanceOf[StringFn].getArguments(0)
       val et = e.getItemType
       if (et.isInstanceOf[AtomicType] && e.getCardinality == StaticProperty.EXACTLY_ONE && 
         th.isSubType(et, targetType)) {

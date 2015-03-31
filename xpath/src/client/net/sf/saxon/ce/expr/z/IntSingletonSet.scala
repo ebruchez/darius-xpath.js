@@ -8,7 +8,7 @@ package client.net.sf.saxon.ce.expr.z
  */
 class IntSingletonSet(var value: Int) extends IntSet {
 
-  def getMember(): Int = value
+  def getMember: Int = value
 
   def clear(): Unit = {
     throw new UnsupportedOperationException("IntSingletonSet is immutable")

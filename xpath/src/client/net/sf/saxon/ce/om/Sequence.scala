@@ -36,5 +36,5 @@ trait Sequence {
    * Get the length of the sequence
    * @return the number of items in the sequence
    */
-  def getLength(): Int
+  def getLength: Int
 }

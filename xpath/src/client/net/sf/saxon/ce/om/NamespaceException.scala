@@ -13,5 +13,5 @@ class NamespaceException(var prefix: String) extends Exception {
     "Namespace prefix " + prefix + " has not been declared"
   }
 
-  def getPrefix(): String = prefix
+  def getPrefix: String = prefix
 }

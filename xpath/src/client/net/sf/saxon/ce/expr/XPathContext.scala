@@ -196,13 +196,13 @@ class XPathContext(var controller: Controller) {
    * Get the Controller. May return null when running outside XSLT or XQuery
    * @return the controller for this query or transformation
    */
-  def getController(): Controller = controller
+  def getController: Controller = controller
 
   /**
    * Get the Configuration
    * @return the Saxon configuration object
    */
-  def getConfiguration(): Configuration = controller.getConfiguration
+  def getConfiguration: Configuration = controller.getConfiguration
 
   /**
    * Set the calling XPathContext
@@ -217,7 +217,7 @@ class XPathContext(var controller: Controller) {
    * if the bottom of the stack has been reached.
    * @return the XPathContext of the calling expression
    */
-  def getCaller(): XPathContext = caller
+  def getCaller: XPathContext = caller
 
   /**
    * Set a new sequence iterator.
@@ -249,14 +249,14 @@ class XPathContext(var controller: Controller) {
    * @return the current iterator, or null if there is no current iterator
    * (which means the context item, position, and size are undefined).
    */
-  def getCurrentIterator(): FocusIterator = currentIterator
+  def getCurrentIterator: FocusIterator = currentIterator
 
   /**
    * Get the context position (the position of the context item)
    * @return the context position (starting at one)
    * @throws XPathException if the context position is undefined
    */
-  def getContextPosition(): Int = {
+  def getContextPosition: Int = {
     if (currentIterator == null) {
       throw new XPathException("The context position is currently undefined", "FONC0001")
     }
@@ -267,7 +267,7 @@ class XPathContext(var controller: Controller) {
    * Get the context item
    * @return the context item, or null if the context item is undefined
    */
-  def getContextItem(): Item = {
+  def getContextItem: Item = {
     if (currentIterator == null) null else currentIterator.current()
   }
 
@@ -276,7 +276,7 @@ class XPathContext(var controller: Controller) {
    * @return the context size
    * @throws XPathException if the context position is undefined
    */
-  def getLast(): Int = {
+  def getLast: Int = {
     if (currentIterator == null) {
       throw new XPathException("The context size is currently undefined", "FONC0001")
     }
@@ -288,7 +288,7 @@ class XPathContext(var controller: Controller) {
    * the caller's job to make a local copy of this.
    * @return array of variables.
    */
-  def getStackFrame(): Array[Sequence] = stackFrame
+  def getStackFrame: Array[Sequence] = stackFrame
 
   /**
    * Get the value of a local variable, identified by its slot number
@@ -357,7 +357,7 @@ class XPathContext(var controller: Controller) {
    * Get the Receiver to which output is currently being written.
    * @return the current SequenceReceiver
    */
-  def getReceiver(): SequenceReceiver = currentReceiver
+  def getReceiver: SequenceReceiver = currentReceiver
 
 //ORBEON XSLT
 //  /**
@@ -403,5 +403,5 @@ class XPathContext(var controller: Controller) {
    * all calls within a single query or transformation will return the same value. The result is
    * expressed as an offset from UTC in minutes.
    */
-  def getImplicitTimezone(): Int = getConfiguration.getImplicitTimezone
+  def getImplicitTimezone: Int = getConfiguration.getImplicitTimezone
 }

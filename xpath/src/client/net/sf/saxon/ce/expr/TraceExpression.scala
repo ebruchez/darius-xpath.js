@@ -61,7 +61,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    * interface.
    * @return the instruction details
    */
-  def getInstructionInfo(): InstructionInfo = this
+  def getInstructionInfo: InstructionInfo = this
 
   override def simplify(visitor: ExpressionVisitor): Expression = {
     child = visitor.simplify(child)

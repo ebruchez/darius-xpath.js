@@ -25,7 +25,7 @@ trait Numberer {
   /**
    * Get the country used by this numberer
    */
-  def getCountry(): String
+  def getCountry: String
 
   /**
    * Format a number into a string

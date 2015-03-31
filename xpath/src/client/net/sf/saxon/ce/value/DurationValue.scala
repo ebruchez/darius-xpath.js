@@ -242,35 +242,35 @@ class DurationValue protected () extends AtomicValue {
    * Ask whether the duration is negative (less than zero)
    * @return true if negative
    */
-  def isNegative(): Boolean = negative
+  def isNegative: Boolean = negative
 
   /**
    * Get the year component
    *
    * @return the number of years in the normalized duration; always positive
    */
-  def getYears(): Int = months / 12
+  def getYears: Int = months / 12
 
   /**
    * Get the months component
    *
    * @return the number of months in the normalized duration; always positive
    */
-  def getMonths(): Int = months % 12
+  def getMonths: Int = months % 12
 
   /**
    * Get the days component
    *
    * @return the number of days in the normalized duration; always positive
    */
-  def getDays(): Int = (seconds / (24L * 60L * 60L)).toInt
+  def getDays: Int = (seconds / (24L * 60L * 60L)).toInt
 
   /**
    * Get the hours component
    *
    * @return the number of hours in the normalized duration; always positive
    */
-  def getHours(): Int = {
+  def getHours: Int = {
     (seconds % (24L * 60L * 60L) / (60L * 60L)).toInt
   }
 
@@ -279,21 +279,21 @@ class DurationValue protected () extends AtomicValue {
    *
    * @return the number of minutes in the normalized duration; always positive
    */
-  def getMinutes(): Int = (seconds % (60L * 60L) / 60L).toInt
+  def getMinutes: Int = (seconds % (60L * 60L) / 60L).toInt
 
   /**
    * Get the seconds component
    *
    * @return the number of whole seconds in the normalized duration; always positive
    */
-  def getSeconds(): Int = (seconds % 60L).toInt
+  def getSeconds: Int = (seconds % 60L).toInt
 
   /**
    * Get the microseconds component
    *
    * @return the number of microseconds in the normalized duration; always positive
    */
-  def getMicroseconds(): Int = microseconds
+  def getMicroseconds: Int = microseconds
 
   /**
    * Convert to string
@@ -364,7 +364,7 @@ class DurationValue protected () extends AtomicValue {
    *
    * @return the duration in seconds, as a double
    */
-  def getLengthInSeconds(): Double = {
+  def getLengthInSeconds: Double = {
     val a = months * (365.242199 / 12.0) * 24 * 60 * 60 + seconds + 
       (microseconds.toDouble / 1000000)
     if (negative) -a else a

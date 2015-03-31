@@ -18,13 +18,13 @@ trait Container {
    * Get the Executable (representing a complete stylesheet or query) of which this Container forms part
    * @return the executable
    */
-  def getExecutable(): Executable
+  def getExecutable: Executable
 
   /**
    * Get the SourceLocator allowing location identifiers to be resolved.
    * @return the SourceLocator
    */
-  def getSourceLocator(): SourceLocator
+  def getSourceLocator: SourceLocator
 
   /**
    * Get the granularity of the container. During successive phases of compilation, growing
@@ -35,5 +35,5 @@ trait Container {
    * that operates at the level of an XPath expression; 2 for a container at the level
    * of a global function or template
    */
-  def getContainerGranularity(): Int
+  def getContainerGranularity: Int
 }

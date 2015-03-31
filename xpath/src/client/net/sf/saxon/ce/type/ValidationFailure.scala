@@ -40,7 +40,7 @@ class ValidationFailure(val message: String, private var errorCode: StructuredQN
     this.errorCode = new StructuredQName("err", NamespaceConstant.ERR, errorCode)
   }
 
-  def getErrorCodeQName(): StructuredQName = errorCode
+  def getErrorCodeQName: StructuredQName = errorCode
 
   /**
    * Calling this method on a ConversionResult returns the AtomicValue that results

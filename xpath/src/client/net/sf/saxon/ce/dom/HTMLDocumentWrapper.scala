@@ -98,7 +98,7 @@ class HTMLDocumentWrapper(
   def this(doc: dom.Node, baseURI: String, config: Configuration) =
     this(doc, baseURI, config, DocTypeUNKNOWN)
 
-  def getDocType(): DocType = htmlType
+  def getDocType: DocType = htmlType
 
 //  private def isNodeXMLDocument: Boolean = {
 //    val nodeString = node.toString
@@ -136,7 +136,7 @@ class HTMLDocumentWrapper(
   /**
    * Get the configuration previously set using setConfiguration
    */
-  def getConfiguration(): Configuration = config
+  def getConfiguration: Configuration = config
 
   /**
    * Get the unique document number

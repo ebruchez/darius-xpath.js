@@ -124,27 +124,27 @@ class QNameValue(protected var qName: StructuredQName) extends AtomicValue {
    * Convert to a StructuredQName
    * @return the name as a StructuredQName
    */
-  def toStructuredQName(): StructuredQName = qName
+  def toStructuredQName: StructuredQName = qName
 
   /**
    * Get the QName in Clark notation, that is "{uri}local" if in a namespace, or "local" otherwise
    */
-  def getClarkName(): String = qName.getClarkName
+  def getClarkName: String = qName.getClarkName
 
   /**
    * Get the local part
    */
-  def getLocalName(): String = qName.getLocalName
+  def getLocalName: String = qName.getLocalName
 
   /**
    * Get the namespace part. Returns the empty string for a name in no namespace.
    */
-  def getNamespaceURI(): String = qName.getNamespaceURI
+  def getNamespaceURI: String = qName.getNamespaceURI
 
   /**
    * Get the prefix. Returns the empty string if the name is unprefixed.
    */
-  def getPrefix(): String = qName.getPrefix
+  def getPrefix: String = qName.getPrefix
 
   /**
    * Get an object value that implements the XPath equality and ordering comparison semantics for this value.

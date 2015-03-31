@@ -703,7 +703,7 @@ object Navigator {
       if (children != null) {
         val n = children.next().asInstanceOf[NodeInfo]
         if (n != null) {
-          if (n.hasChildNodes()) {
+          if (n.hasChildNodes) {
             if (forwards) {
               descendants = new DescendantEnumeration(n, false, forwards)
                n
@@ -726,7 +726,7 @@ object Navigator {
       } else if (atEnd) {
          null
       } else {
-        if (start.hasChildNodes()) {
+        if (start.hasChildNodes) {
           children = start.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
           if (!forwards) {
             val forwards = start.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
@@ -787,7 +787,7 @@ object Navigator {
       if (siblingEnum != null) {
         val nextSib = siblingEnum.next().asInstanceOf[NodeInfo]
         if (nextSib != null) {
-          descendEnum = if (nextSib.hasChildNodes()) new DescendantEnumeration(nextSib, false, true) else null
+          descendEnum = if (nextSib.hasChildNodes) new DescendantEnumeration(nextSib, false, true) else null
           return nextSib
         } else {
           descendEnum = null
@@ -841,7 +841,7 @@ object Navigator {
       if (siblingEnum != null) {
         val nexts = siblingEnum.next().asInstanceOf[NodeInfo]
         if (nexts != null) {
-          if (nexts.hasChildNodes()) {
+          if (nexts.hasChildNodes) {
             descendEnum = new DescendantEnumeration(nexts, true, false)
             return next()
           } else {

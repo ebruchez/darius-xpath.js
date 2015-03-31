@@ -34,7 +34,7 @@ class DocAvailable extends SystemFunction {
   /**
    * Get the static base URI of the expression
    */
-  def getStaticBaseURI(): String = expressionBaseURI
+  def getStaticBaseURI: String = expressionBaseURI
 
   /**
    * preEvaluate: this method suppresses compile-time evaluation by doing nothing

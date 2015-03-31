@@ -40,13 +40,13 @@ class ForEach extends Instruction with ContextMappingFunction {
    * @return the select expression. Note this will have been wrapped in a sort expression
    * if sorting was requested.
    */
-  def getSelectExpression(): Expression = select
+  def getSelectExpression: Expression = select
 
   /**
    * Get the action expression (the content of the for-each)
    * @return the body of the for-each loop
    */
-  def getActionExpression(): Expression = action
+  def getActionExpression: Expression = action
 
   /**
    * Determine the data type of the items returned by this expression

@@ -18,7 +18,7 @@ class InstanceOfExpression(source: Expression, var targetType: SequenceType)
    * Get the item type that we are testing for membership of
    * @return the item type
    */
-  def getRequiredItemType(): ItemType = targetType.getPrimaryType
+  def getRequiredItemType: ItemType = targetType.getPrimaryType
 
   /**
    * Type-check the expression

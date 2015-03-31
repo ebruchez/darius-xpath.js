@@ -162,7 +162,7 @@ class PromotionOffer {
 //      }
     case UNORDERED ⇒
       if (child.isInstanceOf[Reverse]) {
-        child.asInstanceOf[Reverse].getArguments()(0)
+        child.asInstanceOf[Reverse].getArguments(0)
       } else if (child.isInstanceOf[DocumentSorter] && !retainAllNodes) {
         child.asInstanceOf[DocumentSorter].getBaseExpression
       } else

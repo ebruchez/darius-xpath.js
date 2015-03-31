@@ -15,9 +15,9 @@ import scala.beans.BeanProperty
 
 object Configuration {
 
-  def getEditionCode(): String = "CE"
+  def getEditionCode: String = "CE"
 
-  def getLocation(): URI = {
+  def getLocation: URI = {
     ???
 //    var location: URI = null
 //    try {
@@ -64,7 +64,7 @@ class Configuration {
     }
   }
 
-  def getDocumentPool(): DocumentPool = sourceDocumentPool
+  def getDocumentPool: DocumentPool = sourceDocumentPool
 
   def issueWarning(message: String): Unit =
     logger.warning(message)

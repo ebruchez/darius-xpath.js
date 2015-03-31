@@ -21,5 +21,5 @@ class IntComplementPredicate(var p1: IntPredicate) extends IntPredicate {
    * Get the operand
    * @return the negated predicate
    */
-  def getOperand(): IntPredicate = p1
+  def getOperand: IntPredicate = p1
 }

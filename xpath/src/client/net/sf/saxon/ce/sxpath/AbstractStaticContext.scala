@@ -104,7 +104,7 @@ abstract class AbstractStaticContext extends StaticContext {
    * Used to construct error messages.
    * @return -1 always
    */
-  private def getLineNumber(): Int = -1
+  private def getLineNumber: Int = -1
 
   /**
    * Set XPath 1.0 backwards compatibility mode on or off

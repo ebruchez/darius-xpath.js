@@ -21,5 +21,5 @@ trait LastPositionFinder {
    * @return the number of items in the sequence, or -1 if this cannot be determined.
    * @throws XPathException if a dynamic error occurs while obtaining the value.
    */
-  def getLastPosition(): Int
+  def getLastPosition: Int
 }

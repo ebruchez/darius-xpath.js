@@ -168,7 +168,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * For a node with an empty prefix, return an empty string.
    */
   def getURI(): String = {
-    if (qName == null) "" else qName.getNamespaceURI()
+    if (qName == null) "" else qName.getNamespaceURI
   }
 
   /**
@@ -178,7 +178,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * For a node with no name, return an empty string.
    */
   def getDisplayName(): String = {
-    if (qName == null) "" else qName.getDisplayName()
+    if (qName == null) "" else qName.getDisplayName
   }
 
   /**

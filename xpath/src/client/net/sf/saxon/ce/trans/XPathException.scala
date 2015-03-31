@@ -28,7 +28,7 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
   private var errorCode: StructuredQName = _
 
   private var _hasBeenReported = false
-  def hasBeenReported() = _hasBeenReported
+  def hasBeenReported = _hasBeenReported
 
   @BeanProperty
   var locator: SourceLocator = _
@@ -120,7 +120,7 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
    * as a prefix to the error message if desired. (It is not concatenated with the message, because
    * it may be superfluous in an IDE environment.)
    */
-  def getAdditionalLocationText(): String = locationText
+  def getAdditionalLocationText: String = locationText
 
   /**
    * Mark this exception to indicate that it represents (or does not represent) a static error
@@ -173,13 +173,13 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
    * Get the error code as a QName
    * @return the error code as a QName
    */
-  def getErrorCodeQName(): StructuredQName = errorCode
+  def getErrorCodeQName: StructuredQName = errorCode
 
   /**
    * Get the local part of the name of the error code
    * @return the local part of the name of the error code
    */
-  def getErrorCodeLocalPart(): String = {
+  def getErrorCodeLocalPart: String = {
     if (errorCode == null) null else errorCode.getLocalName
   }
 
@@ -187,7 +187,7 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
    * Get the namespace URI part of the name of the error code
    * @return the namespace URI part of the name of the error code
    */
-  def getErrorCodeNamespace(): String = {
+  def getErrorCodeNamespace: String = {
     if (errorCode == null) null else errorCode.getNamespaceURI
   }
 
@@ -214,7 +214,7 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
    * Tests whether this is a dynamic error that may be reported statically if it is detected statically
    * @return true if the error can be reported statically
    */
-  def isReportableStatically(): Boolean = {
+  def isReportableStatically: Boolean = {
     if (isStaticError || isTypeError) {
       return true
     }

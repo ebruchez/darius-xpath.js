@@ -53,14 +53,14 @@ abstract class NodeTest extends ItemType {
    * Determine the default priority of this node test when used on its own as a Pattern
    * @return the default priority
    */
-  def getDefaultPriority(): Double
+  def getDefaultPriority: Double
 
   /**
    * Get the basic kind of node that this ItemType matches: this is the specific kind of node,
    * or Type.Node if it matches different kinds of nodes.
    * @return the node kind matched by this node test
    */
-  def getRequiredNodeKind(): Int = Type.NODE
+  def getRequiredNodeKind: Int = Type.NODE
 
   /**
    * Get the item type of the atomic values that will be produced when an item
@@ -100,7 +100,7 @@ abstract class NodeTest extends ItemType {
    * implementation indicates that nodes of all kinds are matched.
    * @return a bit mask indicating the kinds of nodes that can be matched
    */
-  def getNodeKindMask(): Int = {
+  def getNodeKindMask: Int = {
     1 << Type.ELEMENT | 1 << Type.TEXT | 1 << Type.COMMENT | 
       1 << Type.PROCESSING_INSTRUCTION | 
       1 << Type.ATTRIBUTE | 

@@ -91,19 +91,19 @@ abstract class GDateValue extends CalendarValue {
    * Get the year component of the date (in local form)
    * @return the year component, as represented internally (allowing a year zero)
    */
-  def getYear(): Int = year
+  def getYear: Int = year
 
   /**
    * Get the month component of the date (in local form)
    * @return the month component (1-12)
    */
-  def getMonth(): Int = month
+  def getMonth: Int = month
 
   /**
    * Get the day component of the date (in local form)
    * @return the day component (1-31)
    */
-  def getDay(): Int = day
+  def getDay: Int = day
 
   /**
    * The equals() methods on atomic values is defined to follow the semantics of eq when applied
@@ -146,7 +146,7 @@ abstract class GDateValue extends CalendarValue {
     if (getItemType != other.getItemType) {
       throw new ClassCastException("Cannot compare dates of different types")
     }
-    toDateTime().compareTo(other.toDateTime(), implicitTimezone)
+    toDateTime().compareTo(other.toDateTime, implicitTimezone)
   }
 
   /**
@@ -179,7 +179,7 @@ abstract class GDateValue extends CalendarValue {
 
     case Component.MONTH ⇒ new IntegerValue(month)
     case Component.DAY ⇒ new IntegerValue(day)
-    case Component.TIMEZONE ⇒ if (hasTimezone()) {
+    case Component.TIMEZONE ⇒ if (hasTimezone) {
       DayTimeDurationValue.fromMilliseconds(60000L * getTimezoneInMinutes)
     } else {
       null

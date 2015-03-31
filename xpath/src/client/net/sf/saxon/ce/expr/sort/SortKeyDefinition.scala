@@ -65,7 +65,7 @@ class SortKeyDefinition {
    * Get the expression used as the sort key
    * @return the sort key select expression
    */
-  def getSortKey(): Expression = sortKey
+  def getSortKey: Expression = sortKey
 
   def setSortProperty(property: Int, value: Expression): Unit = {
     sortProperties(property) = value
@@ -85,7 +85,7 @@ class SortKeyDefinition {
    * Get the collation to be used
    * @return A StringCollator, which encapsulates both the collation URI and the collating function
    */
-  def getCollation(): StringCollator = collation
+  def getCollation: StringCollator = collation
 
   /**
    * Set the base URI of the expression. This is needed to handle the case where a collation URI
@@ -101,7 +101,7 @@ class SortKeyDefinition {
    * evaluated at run-time turns out to be a relative URI.
    * @return the static base URI of the expression
    */
-  def getBaseURI(): String = baseURI
+  def getBaseURI: String = baseURI
 
   /**
    * Set whether this sort key is evaluated in XSLT 1.0 backwards compatibility mode
@@ -115,14 +115,14 @@ class SortKeyDefinition {
    * Ask whether this sort key is evaluated in XSLT 1.0 backwards compatibility mode
    * @return true if backwards compatibility mode was selected
    */
-  def isBackwardsCompatible(): Boolean = backwardsCompatible
+  def isBackwardsCompatible: Boolean = backwardsCompatible
 
   /**
    * Ask whether the sort key definition is fixed, that is, whether all the information needed
    * to create a Comparator is known statically
    * @return true if all information needed to create a Comparator is known statically
    */
-  def isFixed(): Boolean = {
+  def isFixed: Boolean = {
     (0 until N).find(x ⇒ sortProperties(x) != null && !sortProperties(x).isInstanceOf[Literal])
       .map(_ ⇒ false)
       .getOrElse(true)

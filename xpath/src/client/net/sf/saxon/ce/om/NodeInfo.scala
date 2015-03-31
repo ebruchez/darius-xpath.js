@@ -70,7 +70,7 @@ trait NodeInfo extends Item with Sequence {
    * @see client.net.sf.saxon.ce.type.Type
    * @since 8.4
    */
-  def getNodeKind(): Int
+  def getNodeKind: Int
 
   /**
    * Determine whether this is the same node as another node.
@@ -127,7 +127,7 @@ trait NodeInfo extends Item with Sequence {
    * containing the node, or null if not known or not applicable.
    * @since 8.4
    */
-  def getSystemId(): String
+  def getSystemId: String
 
   /**
    * Get the Base URI for the node, that is, the URI used for resolving a relative URI contained
@@ -138,7 +138,7 @@ trait NodeInfo extends Item with Sequence {
    * where the node has no parent.
    * @since 8.4
    */
-  def getBaseURI(): String
+  def getBaseURI: String
 
   /**
    * Determine the relative position of this node and another node, in document order.
@@ -179,7 +179,7 @@ trait NodeInfo extends Item with Sequence {
    * Get the name of the node
    * @return the name of the node, as a StructuredQName. Return null for an unnamed node.
    */
-  def getNodeName(): StructuredQName
+  def getNodeName: StructuredQName
 
   /**
    * Get the local part of the name of this node. This is the name after the ":" if any.
@@ -188,7 +188,7 @@ trait NodeInfo extends Item with Sequence {
    * interface, this returns the full name in the case of a non-namespaced name.
    * @since 8.4
    */
-  def getLocalPart(): String
+  def getLocalPart: String
 
   /**
    * Get the URI part of the name of this node. This is the URI corresponding to the
@@ -199,7 +199,7 @@ trait NodeInfo extends Item with Sequence {
    *     instruction, returns an empty string.
    * @since 8.4
    */
-  def getURI(): String
+  def getURI: String
 
   /**
    * Get the display name of this node, in the form of a lexical QName.
@@ -210,7 +210,7 @@ trait NodeInfo extends Item with Sequence {
    *     an empty string.
    * @since 8.4
    */
-  def getDisplayName(): String
+  def getDisplayName: String
 
   /**
    * Get the NodeInfo object representing the parent of this node
@@ -218,7 +218,7 @@ trait NodeInfo extends Item with Sequence {
    * @return the parent of this node; null if this node has no parent
    * @since 8.4
    */
-  def getParent(): NodeInfo
+  def getParent: NodeInfo
 
   /**
    * Return an iteration over all the nodes reached by the given axis from this node
@@ -246,7 +246,7 @@ trait NodeInfo extends Item with Sequence {
    *     then the method returns this node.
    * @since 8.4
    */
-  def getRoot(): NodeInfo
+  def getRoot: NodeInfo
 
   /**
    * Get the root node, if it is a document node.
@@ -256,7 +256,7 @@ trait NodeInfo extends Item with Sequence {
    *     root, returns null.
    * @since 8.4
    */
-  def getDocumentRoot(): DocumentInfo
+  def getDocumentRoot: DocumentInfo
 
   /**
    * Determine whether the node has any children.
@@ -267,7 +267,7 @@ trait NodeInfo extends Item with Sequence {
    * @return True if the node has one or more children
    * @since 8.4
    */
-  def hasChildNodes(): Boolean
+  def hasChildNodes: Boolean
 
   /**
    * Construct a character string that uniquely identifies this node.
@@ -286,13 +286,13 @@ trait NodeInfo extends Item with Sequence {
    * @return the document number of the document containing this node
    * @since 8.4
    */
-  def getDocumentNumber(): Int
+  def getDocumentNumber: Int
 
   /**
    * Get the index position of this node among its siblings (starting from 0)
    * @return 0 for the first child, 1 for the second child, etc.
    */
-  def getSiblingPosition(): Int
+  def getSiblingPosition: Int
 
   /**
    * Copy this node to a given Receiver.

@@ -151,13 +151,13 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
    * Get the operator
    * @return the operator, for example [[Token.PLUS]]
    */
-  def getOperator(): Int = operator
+  def getOperator: Int = operator
 
   /**
    * Get the operands
    * @return the two operands of the binary expression, as an array of length 2
    */
-  def getOperands(): Array[Expression] = Array(operand0, operand1)
+  def getOperands: Array[Expression] = Array(operand0, operand1)
 
   /**
    * Determine the static cardinality. Default implementation returns [0..1] if either operand

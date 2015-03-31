@@ -56,7 +56,7 @@ abstract class NumericValue extends AtomicValue with Comparable[AnyRef] {
    * @return A double representing this numeric value; NaN if it cannot be
    *     converted
    */
-  def getDoubleValue(): Double = {
+  def getDoubleValue: Double = {
     try {
       convert(AtomicType.DOUBLE).asAtomic().asInstanceOf[DoubleValue]
         .getDoubleValue
@@ -69,7 +69,7 @@ abstract class NumericValue extends AtomicValue with Comparable[AnyRef] {
    * Get the numeric value converted to a float
    * @return a float representing this numeric value; NaN if it cannot be converted
    */
-  def getFloatValue(): Float = {
+  def getFloatValue: Float = {
     try {
       convert(AtomicType.FLOAT).asAtomic().asInstanceOf[FloatValue]
         .getFloatValue
@@ -83,7 +83,7 @@ abstract class NumericValue extends AtomicValue with Comparable[AnyRef] {
    * @return a decimal representing this numeric value;
    * @throws XPathException if the value cannot be converted, for example if it is NaN or infinite
    */
-  def getDecimalValue(): BigDecimal = {
+  def getDecimalValue: BigDecimal = {
     convert(AtomicType.DECIMAL).asAtomic().asInstanceOf[DecimalValue]
       .getDecimalValue
   }
@@ -155,7 +155,7 @@ abstract class NumericValue extends AtomicValue with Comparable[AnyRef] {
    *
    * @return true if the value is a whole number
    */
-  def isWholeNumber(): Boolean
+  def isWholeNumber: Boolean
 
   /**
    * Get the absolute value as defined by the XPath abs() function

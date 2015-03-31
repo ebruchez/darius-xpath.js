@@ -25,5 +25,5 @@ class IntSetPredicate(var set: IntSet) extends IntPredicate {
    * Get the underlying IntSet
    * @return the underlying IntSet
    */
-  def getIntSet(): IntSet = set
+  def getIntSet: IntSet = set
 }

@@ -13,16 +13,16 @@ trait ComparisonExpression {
   /**
    * Get the AtomicComparer used to compare atomic values. This encapsulates any collation that is used
    */
-  def getAtomicComparer(): AtomicComparer
+  def getAtomicComparer: AtomicComparer
 
   /**
    * Get the primitive (singleton) operator used: one of Token.FEQ, Token.FNE, Token.FLT, Token.FGT,
    * Token.FLE, Token.FGE
    */
-  def getSingletonOperator(): Int
+  def getSingletonOperator: Int
 
   /**
    * Get the two operands of the comparison
    */
-  def getOperands(): Array[Expression]
+  def getOperands: Array[Expression]
 }

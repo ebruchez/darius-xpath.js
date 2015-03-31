@@ -144,13 +144,13 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    *
    * @return the expression being filtered
    */
-  def getControllingExpression(): Expression = start
+  def getControllingExpression: Expression = start
 
   /**
    * Get the subexpression that is evaluated in the new context
    * @return the subexpression evaluated in the context set by the controlling expression
    */
-  def getControlledExpression(): Expression = filter
+  def getControlledExpression: Expression = filter
 
   /**
    * Determine if the filter is positional

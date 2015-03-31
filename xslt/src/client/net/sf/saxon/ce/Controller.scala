@@ -588,7 +588,7 @@ class Controller {
    * @param err the error to be reported
    */
   def reportFatalError(err: XPathException): Unit = {
-    if (!err.hasBeenReported()) {
+    if (!err.hasBeenReported) {
       getErrorListener.error(err)
       err.setHasBeenReported(true)
     }

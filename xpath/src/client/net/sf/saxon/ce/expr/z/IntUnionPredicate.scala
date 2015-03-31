@@ -21,5 +21,5 @@ class IntUnionPredicate(var p1: IntPredicate, var p2: IntPredicate) extends IntP
    * Get the operands
    * @return an array containing the two operands
    */
-  def getOperands(): Array[IntPredicate] = Array(p1, p2)
+  def getOperands: Array[IntPredicate] = Array(p1, p2)
 }

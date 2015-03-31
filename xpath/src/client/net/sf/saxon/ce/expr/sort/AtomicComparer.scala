@@ -16,7 +16,7 @@ trait AtomicComparer {
    * Get the collation used by this AtomicComparer if any
    * @return the collation used for comparing strings, or null if not applicable
    */
-  def getCollator(): StringCollator
+  def getCollator: StringCollator
 
   /**
    * Compare two AtomicValue objects according to the rules for their data type. UntypedAtomic

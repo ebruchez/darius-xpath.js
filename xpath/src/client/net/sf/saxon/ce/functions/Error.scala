@@ -36,7 +36,7 @@ class Error extends SystemFunction {
     var description: String = null
     description = if (argument.length > 1) argument(1).evaluateItem(context).getStringValue else "Error signalled by application call on error()"
     val e = new XPathException(description)
-    e.setErrorCodeQName(qname.toStructuredQName())
+    e.setErrorCodeQName(qname.toStructuredQName)
     e.setLocator(getSourceLocator)
     throw e
   }

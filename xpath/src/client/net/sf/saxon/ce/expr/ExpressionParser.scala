@@ -59,13 +59,13 @@ class ExpressionParser {
    * Get the tokenizer (the lexical analyzer)
    * @return  the tokenizer (the lexical analyzer)
    */
-  def getTokenizer(): Tokenizer = t
+  def getTokenizer: Tokenizer = t
 
   /**
    * Get the static context used by this expression parser
    * @return the static context
    */
-  def getStaticContext(): StaticContext = env
+  def getStaticContext: StaticContext = env
 
   /**
    * Set the default container for newly constructed expressions
@@ -158,7 +158,7 @@ class ExpressionParser {
    * Get the current language (XPath or XQuery)
    * @return a string representation of the language being parsed, for use in error messages
    */
-  protected def getLanguage(): String = language match {
+  protected def getLanguage: String = language match {
     case XPATH ⇒ "XPath"
     case XSLT_PATTERN ⇒ "XSLT Pattern"
     case SEQUENCE_TYPE ⇒ "SequenceType"
@@ -334,7 +334,7 @@ class ExpressionParser {
     lhs
   }
 
-  private def getCurrentOperatorPrecedence(): Int = t.currentToken match {
+  private def getCurrentOperatorPrecedence: Int = t.currentToken match {
     case Token.OR ⇒ 4
     case Token.AND ⇒ 5
     case Token.FEQ | Token.FNE | Token.FLE | Token.FLT | Token.FGE | Token.FGT | Token.EQUALS | Token.NE | Token.LE | Token.LT | Token.GE | Token.GT | Token.IS | Token.PRECEDES | Token.FOLLOWS ⇒ 6

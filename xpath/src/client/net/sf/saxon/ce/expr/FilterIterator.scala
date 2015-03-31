@@ -28,7 +28,7 @@ class FilterIterator(_base: SequenceIterator, protected var filter: Expression, 
    * if there is such an item, or null if not.
    * @return the next item that matches the predicate
    */
-  protected def getNextMatchingItem(): Item = {
+  protected def getNextMatchingItem: Item = {
     while (true) {
       val next = base.next()
       if (next == null) {

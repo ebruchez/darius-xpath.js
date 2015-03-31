@@ -22,7 +22,7 @@ class StringLiteral(value: StringValue) extends Literal(value) {
    * Get the string represented by this StringLiteral
    * @return the underlying string
    */
-  def getStringValue(): String = {
+  def getStringValue: String = {
     getValue.asInstanceOf[StringValue].getStringValue
   }
 

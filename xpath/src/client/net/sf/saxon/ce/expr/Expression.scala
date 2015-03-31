@@ -49,7 +49,7 @@ abstract class Expression {
    * @return the implementation method, for example [[ITERATE_METHOD]] or [[EVALUATE_METHOD]] or
    * [[PROCESS_METHOD]]
    */
-  def getImplementationMethod(): Int = {
+  def getImplementationMethod: Int = {
     if (Cardinality.allowsMany(getCardinality)) {
       ITERATE_METHOD
     } else {
@@ -183,7 +183,7 @@ abstract class Expression {
    *
    * @return a set of flags indicating static properties of this expression
    */
-  def getSpecialProperties(): Int = {
+  def getSpecialProperties: Int = {
     if (staticProperties == -1) {
       computeStaticProperties()
     }
@@ -201,7 +201,7 @@ abstract class Expression {
    *     implementation returns ZERO_OR_MORE (which effectively gives no
    *     information).
    */
-  def getCardinality(): Int = {
+  def getCardinality: Int = {
     if (staticProperties == -1) {
       computeStaticProperties()
     }
@@ -220,7 +220,7 @@ abstract class Expression {
    * @return a value such as Type.STRING, Type.BOOLEAN, Type.NUMBER,
    *     Type.NODE, or Type.ITEM (meaning not known at compile time)
    */
-  def getItemType(): ItemType
+  def getItemType: ItemType
 
   /**
    * Determine which aspects of the context the expression depends on. The result is
@@ -234,7 +234,7 @@ abstract class Expression {
    * @return a set of bit-significant flags identifying the dependencies of
    *     the expression
    */
-  def getDependencies(): Int = {
+  def getDependencies: Int = {
     if (staticProperties == -1) {
       computeStaticProperties()
     }
@@ -495,7 +495,7 @@ abstract class Expression {
    * @return a location identifier, which can be turned into real
    * location information by reference to a location provider
    */
-  def getSourceLocator(): SourceLocator = {
+  def getSourceLocator: SourceLocator = {
     if (sourceLocator == null) {
       val container = getContainer
       if (container != null) {
@@ -511,7 +511,7 @@ abstract class Expression {
   /**
    * Get the systemId of the module containing the expression
    */
-  def getSystemId(): String = {
+  def getSystemId: String = {
     if (sourceLocator == null) null else sourceLocator.getSystemId
   }
 
@@ -519,7 +519,7 @@ abstract class Expression {
    * Get the executable containing this expression
    * @return the containing Executable
    */
-  def getExecutable(): Executable = getContainer.getExecutable
+  def getExecutable: Executable = getContainer.getExecutable
 
   /**
    * Promote a subexpression if possible, and if the expression was changed, carry out housekeeping
@@ -601,7 +601,7 @@ abstract class Expression {
    * @return a set of bit-significant flags identifying the "intrinsic"
    *     dependencies. The flags are documented in class client.net.sf.saxon.ce.value.StaticProperty
    */
-  def getIntrinsicDependencies(): Int = 0
+  def getIntrinsicDependencies: Int = 0
 
   /**
    * Mark tail-recursive calls on stylesheet functions. For most expressions, this does nothing.

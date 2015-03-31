@@ -65,7 +65,7 @@ class NameTest(var nodeKind: Int, var qName: StructuredQName) extends NodeTest {
   /**
    * Get the fingerprint required
    */
-  def getRequiredNodeName(): StructuredQName = qName
+  def getRequiredNodeName: StructuredQName = qName
 
   /**
    * Determine the types of nodes to which this pattern applies. Used for optimisation.

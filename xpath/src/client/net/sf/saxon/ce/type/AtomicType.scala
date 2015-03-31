@@ -124,14 +124,14 @@ class AtomicType private (var localName: String) extends ItemType {
    *
    * @return true if ordering operations are permitted
    */
-  def isOrdered(): Boolean = ordered
+  def isOrdered: Boolean = ordered
 
   /**
    * Determine whether the atomic type is numeric
    *
    * @return true if the type is a built-in numeric type
    */
-  def isPrimitiveNumeric(): Boolean = {
+  def isPrimitiveNumeric: Boolean = {
     this == NUMERIC || this == INTEGER || baseType == NUMERIC
   }
 
@@ -140,7 +140,7 @@ class AtomicType private (var localName: String) extends ItemType {
    *
    * @return a lexical QName identifying the type
    */
-  def getDisplayName(): String = "xs:" + localName
+  def getDisplayName: String = "xs:" + localName
 
   /**
    * Test whether a given item conforms to this type

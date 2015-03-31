@@ -46,7 +46,7 @@ abstract class Assignation extends Expression with Binding {
    */
   def getVariableQName(): StructuredQName = variableName
 
-  def getObjectName(): StructuredQName = variableName
+  def getObjectName: StructuredQName = variableName
 
   /**
    * Get the declared type of the variable
@@ -92,7 +92,7 @@ abstract class Assignation extends Expression with Binding {
    * Get the action expression
    * @return the action expression (introduced by "return" or "satisfies")
    */
-  def getAction(): Expression = action
+  def getAction: Expression = action
 
   /**
    * Set the "sequence" expression - the one to which the variable is bound
@@ -107,7 +107,7 @@ abstract class Assignation extends Expression with Binding {
    * Get the "sequence" expression - the one to which the variable is bound
    * @return the expression to which the variable is bound
    */
-  def getSequence(): Expression = sequence
+  def getSequence: Expression = sequence
 
   /**
    * Set the slot number for the range variable
@@ -174,7 +174,7 @@ abstract class Assignation extends Expression with Binding {
    * Get the display name of the range variable, for diagnostics only
    * @return the lexical QName of the range variable
    */
-  def getVariableName(): String = {
+  def getVariableName: String = {
     if (variableName == null) {
       "zz:var" + hashCode
     } else {

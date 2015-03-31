@@ -111,7 +111,7 @@ class ResolveURI extends SystemFunction {
   /**
    * Get the static base URI of the expression
    */
-  def getStaticBaseURI(): String = expressionBaseURI
+  def getStaticBaseURI: String = expressionBaseURI
 
   /**
    * Evaluate the function at run-time

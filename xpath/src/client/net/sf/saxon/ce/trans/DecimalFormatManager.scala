@@ -69,7 +69,7 @@ class DecimalFormatManager {
   /**
    * Get the default decimal-format.
    */
-  def getDefaultDecimalFormat(): DecimalSymbols = defaultDFS
+  def getDefaultDecimalFormat: DecimalSymbols = defaultDFS
 
   /**
    * Set a named decimal format.

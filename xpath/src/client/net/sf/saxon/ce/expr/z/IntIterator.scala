@@ -12,7 +12,7 @@ trait IntIterator {
    * Test whether there are any more integers in the sequence
    * @return true if there are more integers to come
    */
-  def hasNext(): Boolean
+  def hasNext: Boolean
 
   /**
    * Return the next integer in the sequence. The result is undefined unless hasNext() has been called

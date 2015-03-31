@@ -98,7 +98,7 @@ object Base64BinaryValue {
       for (i ← 0 until line.length) line(i) = 0
     }
 
-    def getCharArray(): Array[Char] = {
+    def getCharArray: Array[Char] = {
       var ch: Array[Char] = null
       if (buf_bytes != 0) encode_partial_token()
       flush_line()
@@ -275,7 +275,7 @@ object Base64BinaryValue {
       bytes = new Array[Byte](3)
     }
 
-    def getByteArray(): Array[Byte] = {
+    def getByteArray: Array[Byte] = {
       eof()
       val result = new Array[Byte](used)
       System.arraycopy(out, 0, result, 0, used)

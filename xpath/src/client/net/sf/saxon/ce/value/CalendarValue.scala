@@ -76,7 +76,7 @@ abstract class CalendarValue extends AtomicValue {
    *
    * @return true if there is a timezone in the value, false if not
    */
-  def hasTimezone(): Boolean = tzMinutes != NO_TIMEZONE
+  def hasTimezone: Boolean = tzMinutes != NO_TIMEZONE
 
   /**
    * Modify the timezone value held in this object. This must be done only while the value is being
@@ -96,7 +96,7 @@ abstract class CalendarValue extends AtomicValue {
    *
    * @return the equivalent DateTimeValue
    */
-  def toDateTime(): DateTimeValue
+  def toDateTime: DateTimeValue
 
   /**
    * Get the timezone value held in this object.
@@ -104,7 +104,7 @@ abstract class CalendarValue extends AtomicValue {
    * @return The timezone offset from GMT in minutes, positive or negative; or the special
    *         value NO_TIMEZONE indicating that the value is not in a timezone
    */
-  def getTimezoneInMinutes(): Int = tzMinutes
+  def getTimezoneInMinutes: Int = tzMinutes
 
   /**
    * Add a duration to this date/time value
@@ -131,14 +131,14 @@ abstract class CalendarValue extends AtomicValue {
    *          for example if one value is a date and the other is a time
    */
   def subtract(other: CalendarValue, context: XPathContext): DayTimeDurationValue = {
-    var dt1 = toDateTime()
-    var dt2 = other.toDateTime()
+    var dt1 = toDateTime
+    var dt2 = other.toDateTime
     if (dt1.getTimezoneInMinutes != dt2.getTimezoneInMinutes) {
       dt1 = dt1.normalize(context)
       dt2 = dt2.normalize(context)
     }
-    val d1 = dt1.toJulianInstant()
-    val d2 = dt2.toJulianInstant()
+    val d1 = dt1.toJulianInstant
+    val d2 = dt2.toJulianInstant
     val difference = d1.subtract(d2)
     DayTimeDurationValue.fromSeconds(difference)
   }
@@ -191,7 +191,7 @@ abstract class CalendarValue extends AtomicValue {
     if (ordered && !this.isInstanceOf[Comparable[_]]) {
       return null
     }
-    if (hasTimezone()) this else adjustTimezone(implicitTimezone)
+    if (hasTimezone) this else adjustTimezone(implicitTimezone)
   }
 
   /**
@@ -213,7 +213,7 @@ abstract class CalendarValue extends AtomicValue {
    *           representation
    */
   def appendTimezone(sb: FastStringBuffer): Unit = {
-    if (hasTimezone()) {
+    if (hasTimezone) {
       var tz = getTimezoneInMinutes
       if (tz == 0) {
         sb.append("Z")

@@ -33,7 +33,7 @@ class EmptySequence private () extends Sequence {
   /**
    * Determine the item type
    */
-  def getItemType(): ItemType = EmptySequenceTest.getInstance
+  def getItemType: ItemType = EmptySequenceTest.getInstance
 
   /**
    * Get the length of the sequence

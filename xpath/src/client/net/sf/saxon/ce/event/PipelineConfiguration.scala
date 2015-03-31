@@ -37,7 +37,7 @@ class PipelineConfiguration {
    * Get the Saxon Configuration object
    * @return the Saxon Configuration
    */
-  def getConfiguration(): Configuration = config
+  def getConfiguration: Configuration = config
 
   /**
    * Set the Saxon Configuration object

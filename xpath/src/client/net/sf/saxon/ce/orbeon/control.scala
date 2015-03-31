@@ -33,7 +33,7 @@ class Controller(config: Configuration, executable: Executable) {
   def getCurrentDateTime: DateTimeValue =
     DateTimeValue.fromJavaDate(new Date())
 
-  def getDocumentPool(): DocumentPool = getConfiguration.getDocumentPool
+  def getDocumentPool: DocumentPool = getConfiguration.getDocumentPool
 
   private var _errorListener: ErrorListener = _
 

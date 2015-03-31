@@ -267,8 +267,8 @@ object BigDecimal {
       Math.max(thisValue._bitLength, augend._bitLength + LONG_POWERS_OF_TEN_BIT_LENGTH(diffScale)) + 1 < 64) {
       valueOf(thisValue._smallValue + augend._smallValue * LONG_POWERS_OF_TEN(diffScale), thisValue._scale)
     } else {
-      new BigDecimal(thisValue.getUnscaledValue().add(
-        Multiplication.multiplyByTenPow(augend.getUnscaledValue(), diffScale)), thisValue.scale)
+      new BigDecimal(thisValue.getUnscaledValue.add(
+        Multiplication.multiplyByTenPow(augend.getUnscaledValue, diffScale)), thisValue.scale)
     }
   }
 
@@ -1823,7 +1823,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
       getUnscaledValue.signum()
   }
 
-  private def isZero(): Boolean = _bitLength == 0 && this._smallValue != -1
+  private def isZero: Boolean = _bitLength == 0 && this._smallValue != -1
 
   /**
    * Returns the precision of this {@code BigDecimal}. The precision is the
@@ -2278,7 +2278,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    * @return a string representation of {@code this} in engineering notation
    *         if necessary.
    */
-  def toEngineeringString(): String = {
+  def toEngineeringString: String = {
     val intString = getUnscaledValue.toString
     if (_scale == 0) {
       return intString
@@ -2347,7 +2347,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    *
    * @return a string representation of {@code this} without exponent part.
    */
-  def toPlainString(): String = {
+  def toPlainString: String = {
     val intStr = getUnscaledValue.toString
     if ((_scale == 0) || (isZero && (_scale < 0))) {
       return intStr
@@ -2395,7 +2395,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    *
    * @return this {@code BigDecimal} as a big integer instance.
    */
-  def toBigInteger(): BigInteger = {
+  def toBigInteger: BigInteger = {
     if ((_scale == 0) || isZero) {
       getUnscaledValue
     } else if (_scale < 0) {
@@ -2414,7 +2414,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    * @throws ArithmeticException
      *             if rounding is necessary.
    */
-  def toBigIntegerExact(): BigInteger = {
+  def toBigIntegerExact: BigInteger = {
     if ((_scale == 0) || isZero) {
       getUnscaledValue
     } else if (_scale < 0) {
@@ -2445,7 +2445,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
      * 10^(-scale). If the scale is positive and very large the long value
      * could be zero.
      */
-    if ((_scale <= -64) || (_scale > approxPrecision())) 0L else toBigInteger().longValue()
+    if ((_scale <= -64) || (_scale > approxPrecision())) 0L else toBigInteger.longValue()
   }
 
   /**
@@ -2469,7 +2469,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
      * 10^(-scale). If the scale is positive and very large the long value
      * could be zero.
      */
-    if ((_scale <= -32) || (_scale > approxPrecision())) 0 else toBigInteger().intValue()
+    if ((_scale <= -32) || (_scale > approxPrecision())) 0 else toBigInteger.intValue()
   }
 
   /**
@@ -2774,7 +2774,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    *             number don't fit in the primitive type
    */
   private def valueExact(bitLengthOfType: Int): Long = {
-    val bigInteger = toBigIntegerExact()
+    val bigInteger = toBigIntegerExact
     if (bigInteger.bitLength() < bitLengthOfType) {
       return bigInteger.longValue()
     }
@@ -2815,7 +2815,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     out.defaultWriteObject()
   }
 
-  private def getUnscaledValue(): BigInteger = {
+  private def getUnscaledValue: BigInteger = {
     if (intVal == null) {
       intVal = BigInteger.valueOf(_smallValue)
     }

@@ -44,7 +44,7 @@ class ExpressionVisitor {
   @BeanProperty
   var configuration: Configuration = _
 
-  private def getLastLocator(): SourceLocator = {
+  private def getLastLocator: SourceLocator = {
     val stackSize = stack.size
     val expr = new Array[Expression](stackSize)
     stack.toArray(expr)
@@ -59,7 +59,7 @@ class ExpressionVisitor {
     result
   }
 
-  def getLocation(): String = {
+  def getLocation: String = {
     val sl = getLastLocator
     var message = ""
     if (sl != null) {

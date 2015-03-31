@@ -191,7 +191,7 @@ class StandardErrorListener extends ErrorListener {
    *
    * @return the error output stream
    */
-  def getErrorOutput(): PrintStream = errorOutput
+  def getErrorOutput: PrintStream = errorOutput
 
   /**
    * Receive notification of a warning.
@@ -241,7 +241,7 @@ class StandardErrorListener extends ErrorListener {
    *                              chooses to discontinue the transformation.
    */
   def error(exception: XPathException): Unit = {
-    if (exception.hasBeenReported()) {
+    if (exception.hasBeenReported) {
       return
     }
     if (errorOutput == null) {

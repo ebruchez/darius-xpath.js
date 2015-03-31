@@ -111,7 +111,7 @@ object LogController {
     }
   }
 
-  def getLogLevel(): String = mainLogger.getLevel.getName
+  def getLogLevel: String = mainLogger.getLevel.getName
 
   def addRequiredLogHanders(record: LogRecord): Unit = {
     ???

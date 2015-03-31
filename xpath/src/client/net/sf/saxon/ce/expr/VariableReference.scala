@@ -317,13 +317,13 @@ class VariableReference extends Expression {
    * Get the object bound to the variable
    * @return the Binding which declares this variable and associates it with a value
    */
-  def getBinding(): Binding = binding
+  def getBinding: Binding = binding
 
   /**
    * Get the display name of the variable. This is taken from the variable binding if possible
    * @return the display name (a lexical QName
    */
-  def getDisplayName(): String = {
+  def getDisplayName: String = {
     if (binding != null) {
       binding.getVariableQName.getDisplayName
     } else {

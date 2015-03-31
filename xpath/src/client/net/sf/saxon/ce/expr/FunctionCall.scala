@@ -52,13 +52,13 @@ abstract class FunctionCall extends Expression {
    * Get the qualified of the function being called
    * @return the qualified name
    */
-  def getFunctionName(): StructuredQName = name
+  def getFunctionName: StructuredQName = name
 
   /**
    * Determine the number of actual arguments supplied in the function call
    * @return the arity (the number of arguments)
    */
-  def getNumberOfArguments(): Int = argument.length
+  def getNumberOfArguments: Int = argument.length
 
   /**
    * Method called by the expression parser when all arguments have been supplied
@@ -75,7 +75,7 @@ abstract class FunctionCall extends Expression {
    * Get the expressions supplied as actual arguments to the function
    * @return the array of expressions supplied in the argument list of the function call
    */
-  def getArguments(): Array[Expression] = argument
+  def getArguments: Array[Expression] = argument
 
   /**
    * Simplify the function call. Default method is to simplify each of the supplied arguments and
@@ -238,7 +238,7 @@ abstract class FunctionCall extends Expression {
    * Get the name of the function for display in messages
    * @return  the name of the function as a lexical QName
    */
-  def getDisplayName(): String = {
+  def getDisplayName: String = {
     val fName = getFunctionName
     if (fName == null) "(anonymous)" else fName.getDisplayName
   }

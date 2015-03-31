@@ -34,7 +34,7 @@ trait Item extends Sequence {
    * needed)
    * @since 8.4
    */
-  def getStringValue(): String
+  def getStringValue: String
 
   /**
    * Get the typed value of the item.
@@ -50,5 +50,5 @@ trait Item extends Sequence {
    
    * @since 8.4
    */
-  def getTypedValue(): AtomicValue
+  def getTypedValue: AtomicValue
 }

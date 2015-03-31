@@ -103,7 +103,7 @@ class StructuredQName(prefix: String, var uri: String, localName: String) extend
    * Get the prefix of the QName.
    * @return the prefix. Returns the empty string if the name is unprefixed.
    */
-  def getPrefix(): String = {
+  def getPrefix: String = {
     new String(content, prefixStart, content.length - prefixStart)
   }
 
@@ -111,7 +111,7 @@ class StructuredQName(prefix: String, var uri: String, localName: String) extend
    * Get the namespace URI of the QName.
    * @return the URI. Returns the empty string to represent the no-namespace
    */
-  def getNamespaceURI(): String = {
+  def getNamespaceURI: String = {
     if (localNameStart == 0) {
       return EMPTY_STRING
     }
@@ -122,7 +122,7 @@ class StructuredQName(prefix: String, var uri: String, localName: String) extend
    * Get the local part of the QName
    * @return the local part of the QName
    */
-  def getLocalName(): String = {
+  def getLocalName: String = {
     new String(content, localNameStart, prefixStart - localNameStart)
   }
 
@@ -130,7 +130,7 @@ class StructuredQName(prefix: String, var uri: String, localName: String) extend
    * Get the display name, that is the lexical QName in the form [prefix:]local-part
    * @return the lexical QName
    */
-  def getDisplayName(): String = {
+  def getDisplayName: String = {
     if (prefixStart == content.length) {
       getLocalName
     } else {
@@ -147,7 +147,7 @@ class StructuredQName(prefix: String, var uri: String, localName: String) extend
    * otherwise.
    * @return the QName in Clark notation
    */
-  def getClarkName(): String = {
+  def getClarkName: String = {
     val buff = new FastStringBuffer(content.length - prefixStart + 2)
     if (localNameStart > 0) {
       buff.append('{')

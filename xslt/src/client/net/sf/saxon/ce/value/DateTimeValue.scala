@@ -290,7 +290,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    *         Returns the original DateTimeValue if this is already in timezone Z.
    */
   def normalize(cc: XPathContext): DateTimeValue = {
-    if (hasTimezone()) {
+    if (hasTimezone) {
       adjustTimezone(0).asInstanceOf[DateTimeValue]
     } else {
       val dt = copy().asInstanceOf[DateTimeValue]
@@ -390,7 +390,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
         div /= 10
       }
     }
-    if (hasTimezone()) {
+    if (hasTimezone) {
       appendTimezone(sb)
     }
     sb
@@ -413,7 +413,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    *         was required to the original value
    */
   def adjustTimezone(timezone: Int): CalendarValue = {
-    if (!hasTimezone()) {
+    if (!hasTimezone) {
       val in = copy().asInstanceOf[CalendarValue]
       in.setTimezoneInMinutes(timezone)
       return in
@@ -525,7 +525,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
 
     case Component.WHOLE_SECONDS ⇒ new IntegerValue(second)
     case Component.MICROSECONDS ⇒ new IntegerValue(microsecond)
-    case Component.TIMEZONE ⇒ if (hasTimezone()) {
+    case Component.TIMEZONE ⇒ if (hasTimezone) {
       DayTimeDurationValue.fromMilliseconds(60000L * getTimezoneInMinutes)
     } else {
       null
@@ -551,9 +551,9 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
     if (!other.isInstanceOf[DateTimeValue]) {
       throw new ClassCastException("DateTime values are not comparable to " + other.getClass)
     }
-    var v1 = (if (hasTimezone()) this else adjustTimezone(implicitTimezone)).asInstanceOf[DateTimeValue]
+    var v1 = (if (hasTimezone) this else adjustTimezone(implicitTimezone)).asInstanceOf[DateTimeValue]
     var v2 = other.asInstanceOf[DateTimeValue]
-    if (!v2.hasTimezone()) {
+    if (!v2.hasTimezone) {
       v2 = v2.adjustTimezone(implicitTimezone).asInstanceOf[DateTimeValue]
     }
     if (v1.getTimezoneInMinutes != v2.getTimezoneInMinutes) {

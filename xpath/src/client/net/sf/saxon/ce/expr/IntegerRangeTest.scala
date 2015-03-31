@@ -21,19 +21,19 @@ class IntegerRangeTest(var value: Expression, var min: Expression, var max: Expr
    * Get the value to be tested
    * @return the expression that evaluates to the value being tested
    */
-  def getValueExpression(): Expression = value
+  def getValueExpression: Expression = value
 
   /**
    * Get the expression denoting the start of the range
    * @return the expression denoting the minumum value
    */
-  def getMinValueExpression(): Expression = min
+  def getMinValueExpression: Expression = min
 
   /**
    * Get the expression denoting the end of the range
    * @return the expression denoting the maximum value
    */
-  def getMaxValueExpression(): Expression = max
+  def getMaxValueExpression: Expression = max
 
   /**
    * Type-check the expression

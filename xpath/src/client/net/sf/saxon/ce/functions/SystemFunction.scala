@@ -81,7 +81,7 @@ abstract class SystemFunction extends FunctionCall {
    * @return the error code to be used for type errors in the function call. Normally XPTY0004,
    * but different codes are used for functions such as exactly-one()
    */
-  def getErrorCodeForTypeErrors(): String = "XPTY0004"
+  def getErrorCodeForTypeErrors: String = "XPTY0004"
 
   /**
    * Get the required type of the nth argument

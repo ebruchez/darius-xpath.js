@@ -83,7 +83,7 @@ private class IteratorImpl[T](underlying: scala.collection.Iterator[T]) extends 
 }
 
 trait Iterator[T] {
-  def hasNext(): Boolean
+  def hasNext: Boolean
   def next(): T
 }
 

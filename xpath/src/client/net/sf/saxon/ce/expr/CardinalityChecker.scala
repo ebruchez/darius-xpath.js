@@ -89,7 +89,7 @@ class CardinalityChecker private (sequence: Expression, @BeanProperty var requir
    * Get the RoleLocator, which contains diagnostic information for use if the cardinality check fails
    * @return the diagnostic information
    */
-  def getRoleLocator(): RoleLocator = role
+  def getRoleLocator: RoleLocator = role
 
   /**
    * An implementation of Expression must provide at least one of the methods evaluateItem(), iterate(), or process().

@@ -76,7 +76,7 @@ class NamespaceTest(var nodeKind: Int, var uri: String) extends NodeTest {
    * Get the namespace URI matched by this NamespaceTest
    * @return  the namespace URI matched by this NamespaceTest
    */
-  def getNamespaceURI(): String = uri
+  def getNamespaceURI: String = uri
 
   override def toString(): String = '{' + uri + "}:*"
 

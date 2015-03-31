@@ -45,13 +45,13 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * Get the start expression (the left-hand operand)
    * @return the first operand
    */
-  def getControllingExpression(): Expression = start
+  def getControllingExpression: Expression = start
 
   /**
    * Get the step expression (the right-hand operand)
    * @return the second operand
    */
-  def getControlledExpression(): Expression = step
+  def getControlledExpression: Expression = step
 
   /**
    * Determine whether this expression is capable (as far as static analysis is concerned)
@@ -59,7 +59,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * at run time
    * @return true if the static type allows both nodes and atomic values
    */
-  def isHybrid(): Boolean = true
+  def isHybrid: Boolean = true
 
   /**
    * Simplify an expression
@@ -311,7 +311,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * the first step is A
    * @return the first step in the expression, after expanding any nested path expressions
    */
-  def getFirstStep(): Expression = {
+  def getFirstStep: Expression = {
     if (start.isInstanceOf[SlashExpression]) {
       start.asInstanceOf[SlashExpression].getFirstStep
     } else {
@@ -326,7 +326,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * @return a path expression containing all steps in this path expression other than the first,
    * after expanding any nested path expressions
    */
-  def getRemainingSteps(): Expression = {
+  def getRemainingSteps: Expression = {
     if (start.isInstanceOf[SlashExpression]) {
       val rem = new SlashExpression(start.asInstanceOf[PathExpression].getRemainingSteps, step)
       ExpressionTool.copyLocationInfo(start, rem)
@@ -340,7 +340,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * Get the last step of the path expression
    * @return the last step in the expression, after expanding any nested path expressions
    */
-  def getLastStep(): Expression = {
+  def getLastStep: Expression = {
     if (step.isInstanceOf[SlashExpression]) {
       step.asInstanceOf[SlashExpression].getLastStep
     } else {
@@ -353,7 +353,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * @return a path expression containing all steps in this path expression other than the last,
    * after expanding any nested path expressions
    */
-  def getLeadingSteps(): Expression = {
+  def getLeadingSteps: Expression = {
     if (step.isInstanceOf[SlashExpression]) {
       val rem = new SlashExpression(start, step.asInstanceOf[SlashExpression].getLeadingSteps)
       ExpressionTool.copyLocationInfo(start, rem)

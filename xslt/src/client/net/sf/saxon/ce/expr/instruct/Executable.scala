@@ -255,7 +255,7 @@ class Executable(config: Configuration) {
    *                              error should be reported
    */
   def reportError(err: XPathException): Unit = {
-    if (!err.hasBeenReported()) {
+    if (!err.hasBeenReported) {
       errorCount += 1
       config.getErrorListener.error(err)
       err.setHasBeenReported(true)

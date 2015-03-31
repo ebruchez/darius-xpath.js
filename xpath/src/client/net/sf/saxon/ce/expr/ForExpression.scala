@@ -100,7 +100,7 @@ class ForExpression extends Assignation {
    * @return the cardinality of the range variable (StaticProperty.EXACTLY_ONE). Can be overridden
    * in a subclass
    */
-  protected def getRangeVariableCardinality(): Int = StaticProperty.EXACTLY_ONE
+  protected def getRangeVariableCardinality: Int = StaticProperty.EXACTLY_ONE
 
   /**
    * Optimize the expression

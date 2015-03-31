@@ -33,7 +33,7 @@ class NamespaceBinding(@BeanProperty var prefix: String, var uri: String) {
    * default namespace (prefix="") this indicates that the prefix refers to names in no namespace; for other
    * prefixes, it indicates that the prefix is not bound to any namespace and therefore cannot be used.
    */
-  def getURI(): String = uri
+  def getURI: String = uri
 
   /**
    * Test if this namespace binding is the same as another

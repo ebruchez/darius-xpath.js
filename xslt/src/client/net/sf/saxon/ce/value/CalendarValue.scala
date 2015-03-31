@@ -81,7 +81,7 @@ abstract class CalendarValue extends AtomicValue {
    *
    * @return true if there is a timezone in the value, false if not
    */
-  def hasTimezone(): Boolean = tzMinutes != NO_TIMEZONE
+  def hasTimezone: Boolean = tzMinutes != NO_TIMEZONE
 
   /**
    * Modify the timezone value held in this object. This must be done only while the value is being
@@ -196,7 +196,7 @@ abstract class CalendarValue extends AtomicValue {
     if (ordered && !this.isInstanceOf[Comparable[_]]) {
       return null
     }
-    if (hasTimezone()) this else adjustTimezone(implicitTimezone)
+    if (hasTimezone) this else adjustTimezone(implicitTimezone)
   }
 
   /**
@@ -218,7 +218,7 @@ abstract class CalendarValue extends AtomicValue {
    *           representation
    */
   def appendTimezone(sb: FastStringBuffer): Unit = {
-    if (hasTimezone()) {
+    if (hasTimezone) {
       var tz = getTimezoneInMinutes
       if (tz == 0) {
         sb.append("Z")

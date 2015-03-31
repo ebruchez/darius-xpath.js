@@ -69,7 +69,7 @@ class BooleanValue private (var value: Boolean) extends AtomicValue with Compara
    * Get the value
    * @return true or false, the actual boolean value of this BooleanValue
    */
-  def getBooleanValue(): Boolean = value
+  def getBooleanValue: Boolean = value
 
   /**
    * Get the effective boolean value of this expression

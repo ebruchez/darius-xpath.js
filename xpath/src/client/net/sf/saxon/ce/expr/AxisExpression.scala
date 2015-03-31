@@ -186,7 +186,7 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
    *
    * @return the node test, or null if all nodes are returned
    */
-  def getNodeTest(): NodeTest = test
+  def getNodeTest: NodeTest = test
 
   /**
    * Evaluate the path-expression in a given context to return a NodeSet

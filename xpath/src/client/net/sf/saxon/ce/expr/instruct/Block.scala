@@ -107,7 +107,7 @@ class Block extends Instruction {
 
   def getChildren = _children
 
-  def getExpressionName(): String = "sequence"
+  def getExpressionName: String = "sequence"
 
   override def computeSpecialProperties(): Int = {
     if (_children.length == 0) {

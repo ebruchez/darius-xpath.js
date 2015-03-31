@@ -23,21 +23,21 @@ object Version {
    *
    * @return the string "SAXON"
    */
-  def getProductName(): String = "Saxon-" + Configuration.getEditionCode
+  def getProductName: String = "Saxon-" + Configuration.getEditionCode
 
   /**
    * Return the edition of this product - anticipated to remain 'CE'
    *
    * @return the string "CE" - used by Verifier
    */
-  def getProductEdition(): String = Configuration.getEditionCode
+  def getProductEdition: String = Configuration.getEditionCode
 
   /**
    * Get the version number of the schema-aware version of the product
    *
    * @return the version number of this version of Saxon, as a string
    */
-  def getProductVariantAndVersion(): String = {
+  def getProductVariantAndVersion: String = {
     val edition = Configuration.getEditionCode
     edition + " " + getProductVersion
   }
@@ -47,7 +47,7 @@ object Version {
    *
    * @return the version number of this version of Saxon, as a string: for example "9.0.1"
    */
-  def getProductVersion(): String = {
+  def getProductVersion: String = {
     val prefixSeparator = if (VERSION_PREFIX == "") "" else " "
     VERSION_PREFIX + prefixSeparator + MAJOR_VERSION + "." + 
       MINOR_VERSION
@@ -58,7 +58,7 @@ object Version {
    *
    * @return the suffix, as a string: for example "R2" for Release 2.3
    */
-  def getLicenseFileName(): String = {
+  def getLicenseFileName: String = {
     val prefix = if (VERSION_PREFIX == "") "" else Character toString VERSION_PREFIX.charAt(0)
     "saxonce-license-" + prefix + MAJOR_VERSION + ".txt"
   }
@@ -68,7 +68,7 @@ object Version {
    *
    * @return the string 2.0
    */
-  def getXSLVersionString(): String = "2.0"
+  def getXSLVersionString: String = "2.0"
 
   /**
    * Get a message used to identify this product when a transformation is run using the -t option
@@ -76,7 +76,7 @@ object Version {
    * @return A string containing both the product name and the product
    *         version
    */
-  def getProductTitle(): String = {
+  def getProductTitle: String = {
     getProductName + ' ' + getProductVersion + " from Saxonica"
   }
 
@@ -85,7 +85,7 @@ object Version {
    *
    * @return the string "http://www.saxonica.com/"
    */
-  def getWebSiteAddress(): String = "http://www.saxonica.com/ce"
+  def getWebSiteAddress: String = "http://www.saxonica.com/ce"
 
   /**
    * Invoking client.net.sf.saxon.ce.Version from the command line outputs the build number

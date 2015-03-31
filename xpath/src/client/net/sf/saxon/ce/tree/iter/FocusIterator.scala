@@ -24,7 +24,7 @@ class FocusIterator(var base: SequenceIterator) extends SequenceIterator {
    * Get the underlying iterator
    * @return the iterator underlying this FocusIterator
    */
-  def getUnderlyingIterator(): SequenceIterator = base
+  def getUnderlyingIterator: SequenceIterator = base
 
   /**
    * Get the next item in the sequence. This method changes the state of the

@@ -39,7 +39,7 @@ abstract class SimpleNodeConstructor extends Instruction {
    * Get the expression that determines the string value of the constructed node
    * @return the select expression
    */
-  def getContentExpression(): Expression = select
+  def getContentExpression: Expression = select
 
   /**
    * Determine whether this instruction creates new nodes.
@@ -100,7 +100,7 @@ abstract class SimpleNodeConstructor extends Instruction {
       }
       if (select.isInstanceOf[StringFn]) {
         val fn = select.asInstanceOf[StringFn]
-        val arg = fn.getArguments()(0)
+        val arg = fn.getArguments(0)
         if (arg.getItemType == AtomicType.UNTYPED_ATOMIC && !Cardinality.allowsMany(arg.getCardinality)) {
           select = arg
         }

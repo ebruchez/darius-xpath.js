@@ -31,7 +31,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
    * Get the expression defining the sequence being sorted
    * @return the expression whose result is to be sorted
    */
-  def getBaseExpression(): Expression = select
+  def getBaseExpression: Expression = select
 
   /**
    * Get the immediate sub-expressions of this expression. Default implementation

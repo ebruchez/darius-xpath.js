@@ -56,5 +56,5 @@ trait SequenceIterator {
    *     positioned before the first item
    * @since 8.4
    */
-  def getAnother(): SequenceIterator
+  def getAnother: SequenceIterator
 }

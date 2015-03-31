@@ -20,7 +20,7 @@ class ItemChecker(sequence: Expression, var requiredItemType: ItemType, var role
    * Get the required type
    * @return the required type of the items in the sequence
    */
-  def getRequiredType(): ItemType = requiredItemType
+  def getRequiredType: ItemType = requiredItemType
 
   /**
    * Simplify an expression

@@ -89,7 +89,7 @@ abstract class AtomicValue extends Item with ConversionResult {
    *
    * @return the primitive type
    */
-  def getItemType(): AtomicType
+  def getItemType: AtomicType
 
   /**
    * Convert a value to either (a) another primitive type, or (b) another built-in type derived
@@ -109,7 +109,7 @@ abstract class AtomicValue extends Item with ConversionResult {
    * Test whether the value is the special value NaN
    * @return true if the value is float NaN or double NaN or precisionDecimal NaN; otherwise false
    */
-  def isNaN(): Boolean = false
+  def isNaN: Boolean = false
 
   /**
    * Get the length of the sequence
@@ -138,7 +138,7 @@ abstract class AtomicValue extends Item with ConversionResult {
    * Convert the value to a string, using the serialization rules for the primitive type.
    * @return the value converted to a string according to the rules for the primitive type
    */
-  protected def getPrimitiveStringValue(): CharSequence
+  protected def getPrimitiveStringValue: CharSequence
 
   /**
    * Get the typed value of this item

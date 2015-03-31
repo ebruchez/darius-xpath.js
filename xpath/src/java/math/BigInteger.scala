@@ -694,7 +694,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
    *
    * @return position of lowest bit if {@code this != 0}, {@code -1} otherwise
    */
-  def getLowestSetBit(): Int = {
+  def getLowestSetBit: Int = {
     if (sign == 0) {
       return -1
     }
@@ -1119,7 +1119,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
    *
    * @return two's complement representation of {@code this}.
    */
-  def toByteArray(): Array[Byte] = {
+  def toByteArray: Array[Byte] = {
     if (this.sign == 0) {
       return Array[Byte](0)
     }
@@ -1258,7 +1258,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     i < 0
   }
 
-  def getFirstNonzeroDigit(): Int = {
+  def getFirstNonzeroDigit: Int = {
     if (firstNonzeroDigit == -2) {
       var i: Int = 0
       if (this.sign == 0) {
@@ -1277,7 +1277,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
   /**
    * Tests if {@code this.abs()} is equals to {@code ONE}.
    */
-  def isOne(): Boolean = {
+  def isOne: Boolean = {
     (numberLength == 1) && (digits(0) == 1)
   }
 

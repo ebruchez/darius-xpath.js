@@ -29,7 +29,7 @@ object BooleanFn {
     val th = TypeHierarchy.getInstance
     if (exp.isInstanceOf[BooleanFn] && 
       exp.asInstanceOf[BooleanFn].operation == BooleanFn.BOOLEAN) {
-      exp.asInstanceOf[BooleanFn].getArguments()(0)
+      exp.asInstanceOf[BooleanFn].getArguments(0)
     } else if (th.isSubType(exp.getItemType, AtomicType.BOOLEAN) && exp.getCardinality == StaticProperty.EXACTLY_ONE) {
       exp
     } else if (exp.isInstanceOf[Count]) {

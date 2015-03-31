@@ -82,7 +82,7 @@ object Xslt20ProcessorImpl {
     if (err.isInstanceOf[XPathException]) {
       excName = "XPathException"
       val xe = err.asInstanceOf[XPathException]
-      logException = !xe.hasBeenReported()
+      logException = !xe.hasBeenReported
     } else {
       excName = "Exception " + err.getClass.getName
     }

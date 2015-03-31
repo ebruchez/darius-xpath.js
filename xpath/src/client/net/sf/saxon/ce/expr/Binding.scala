@@ -17,7 +17,7 @@ trait Binding {
    * Get the declared type of the variable
    * @return the declared type
    */
-  def getRequiredType(): SequenceType
+  def getRequiredType: SequenceType
 
   /**
    * Evaluate the variable
@@ -31,18 +31,18 @@ trait Binding {
    * value for the life of a query or transformation; any other binding is local.
    * @return true if the binding is global
    */
-  def isGlobal(): Boolean
+  def isGlobal: Boolean
 
   /**
    * If this is a local variable held on the local stack frame, return the corresponding slot number.
    * In other cases, return -1.
    * @return the slot number on the local stack frame
    */
-  def getLocalSlotNumber(): Int
+  def getLocalSlotNumber: Int
 
   /**
    * Get the name of the variable
    * @return the name of the variable, as a structured QName
    */
-  def getVariableQName(): StructuredQName
+  def getVariableQName: StructuredQName
 }

@@ -73,7 +73,7 @@ object FormatDate {
   private val componentPattern = RegExp.compile("([YMDdWwFHhmsfZzPCE])\\s*(.*)")
 
   private def formatComponent(value: CalendarValue, specifier: CharSequence, numberer: Numberer): CharSequence = {
-    val dtvalue = value.toDateTime()
+    val dtvalue = value.toDateTime
     val matcher = componentPattern.exec(specifier.toString)
     if (matcher == null) {
       throw new XPathException("Unrecognized date/time component [" + specifier + ']', "XTDE1340")

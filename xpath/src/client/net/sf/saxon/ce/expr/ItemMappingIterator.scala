@@ -38,9 +38,9 @@ class ItemMappingIterator(var base: SequenceIterator, var action: ItemMappingFun
   def this(base: SequenceIterator, action: ItemMappingFunction) =
     this(base, action, oneToOne = false)
 
-  protected def getBaseIterator(): SequenceIterator = base
+  protected def getBaseIterator: SequenceIterator = base
 
-  protected def getMappingFunction(): ItemMappingFunction = action
+  protected def getMappingFunction: ItemMappingFunction = action
 
   def next(): Item = {
     while (true) {

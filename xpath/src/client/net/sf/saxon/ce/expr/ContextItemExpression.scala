@@ -26,7 +26,7 @@ class ContextItemExpression extends Expression {
     cie2
   }
 
-  protected def getErrorCodeForUndefinedContext(): String = "XPDY0002"
+  protected def getErrorCodeForUndefinedContext: String = "XPDY0002"
 
   /**
    * Type-check the expression.
