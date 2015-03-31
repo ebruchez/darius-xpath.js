@@ -154,7 +154,7 @@ object DateTimeValue {
    * @return the xs:dateTime value corresponding to the Julian instant. This will always be in timezone Z.
    */
   def fromJulianInstant(instant: BigDecimal): DateTimeValue = {
-    val julianSecond = instant.toBigInteger()
+    val julianSecond = instant.toBigInteger
     val microseconds = instant.subtract(new BigDecimal(julianSecond)).multiply(DecimalValue.BIG_DECIMAL_ONE_MILLION)
     var js = julianSecond.longValue()
     val jd = js / (24L * 60L * 60L)

@@ -51,7 +51,7 @@ object DayTimeDurationValue {
       seconds = seconds.negate()
     }
     val microseconds = seconds.multiply(DecimalValue.BIG_DECIMAL_ONE_MILLION)
-    val intMicros = microseconds.toBigInteger()
+    val intMicros = microseconds.toBigInteger
     val parts = intMicros.divideAndRemainder(BigInteger.valueOf(1000000))
     sdv.seconds = parts(0).longValue()
     sdv.microseconds = parts(1).intValue()

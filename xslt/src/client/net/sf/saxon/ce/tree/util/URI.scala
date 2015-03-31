@@ -1320,7 +1320,7 @@ class URI extends Serializable {
     if (!isConformantSchemeName(p_scheme)) {
       throw new URISyntaxException("The scheme is not conformant.")
     }
-    m_scheme = p_scheme.toLowerCase()
+    m_scheme = p_scheme.toLowerCase
   }
 
   /**

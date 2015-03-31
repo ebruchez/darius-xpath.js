@@ -661,7 +661,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    *             of a big decimal.
    */
   def this(sVal: String) {
-    this(sVal.toCharArray(), 0, sVal.length)
+    this(sVal.toCharArray, 0, sVal.length)
   }
 
   /**
@@ -680,7 +680,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    *             within the given precision without rounding.
    */
   def this(sVal: String, mc: MathContext) {
-    this(sVal.toCharArray(), 0, sVal.length)
+    this(sVal.toCharArray, 0, sVal.length)
     this.inplaceRound(mc)
   }
 

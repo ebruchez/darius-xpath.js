@@ -312,7 +312,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
         (localController.getApiCommand == APIcommand.UPDATE_HTML || 
         (successCallback != null))) {
         asyncSourceURI = SaxonceApi.getAsyncUri(inSourceDoc)
-        if (asyncSourceURI != null && asyncSourceURI.toLowerCase().startsWith("file:")) {
+        if (asyncSourceURI != null && asyncSourceURI.toLowerCase.startsWith("file:")) {
           asyncSourceURI = null
         }
       }

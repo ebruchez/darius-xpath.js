@@ -15,7 +15,7 @@ class Concat extends SystemFunction {
   /**
    * Get the required type of the nth argument
    */
-  override protected def getRequiredType(arg: Int): SequenceType = getDetails().argumentTypes(0)
+  override protected def getRequiredType(arg: Int): SequenceType = getDetails.argumentTypes(0)
 
   /**
    * Evaluate the function in a string context
