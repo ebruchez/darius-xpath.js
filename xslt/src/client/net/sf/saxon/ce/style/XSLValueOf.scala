@@ -66,7 +66,7 @@ class XSLValueOf extends XSLLeafNodeConstructor {
   def compile(exec: Executable, decl: Declaration): Expression = {
     val th = TypeHierarchy.getInstance
     if (separator == null && select != null && xPath10ModeIsEnabled()) {
-      if (!(select.getItemType.isInstanceOf[AtomicType])) {
+      if (!select.getItemType.isInstanceOf[AtomicType]) {
         select = new Atomizer(select)
         select = makeExpressionVisitor().simplify(select)
       }

@@ -118,5 +118,5 @@ class FocusIterator(var base: SequenceIterator) extends SequenceIterator {
    *          if any error occurs
    * @since 8.4
    */
-  def getAnother(): SequenceIterator = new FocusIterator((base.getAnother))
+  def getAnother(): SequenceIterator = new FocusIterator(base.getAnother)
 }

@@ -59,7 +59,7 @@ object Conversion {
     }
     var bitsForRadixDigit: Double = 0.0
     bitsForRadixDigit = Math.log(radix) / Math.log(2)
-    val resLengthInChars = (bi.abs().bitLength() / bitsForRadixDigit + (if ((sign < 0)) 1 else 0)).toInt +
+    val resLengthInChars = (bi.abs().bitLength() / bitsForRadixDigit + (if (sign < 0) 1 else 0)).toInt +
       1
     val result = new Array[Char](resLengthInChars)
     var currentChar = resLengthInChars
@@ -78,7 +78,8 @@ object Conversion {
         do {
           currentChar -= 1
           result(currentChar) = java.lang.Character.forDigit(resDigit % radix, radix)
-        } while ( ( {(resDigit /= radix); resDigit} != 0)  && (currentChar != 0))
+        } while ( ( {
+          resDigit /= radix; resDigit} != 0)  && (currentChar != 0))
 
         val delta = charsPerInt - previous + currentChar
         i = 0
@@ -208,7 +209,8 @@ object Conversion {
         do {
           currentChar -= 1
           result(currentChar) = (0x0030 + (resDigit % 10)).toChar
-        } while (( {(resDigit /= 10);resDigit} != 0) && (currentChar != 0));
+        } while (( {
+          resDigit /= 10;resDigit} != 0) && (currentChar != 0));
         val delta = 9 - previous + currentChar
         var i = 0
         while ((i < delta) && (currentChar > 0)) {
@@ -231,7 +233,7 @@ object Conversion {
       }
     }
 
-    val negNumber = (sign < 0)
+    val negNumber = sign < 0
     val exponent = resLengthInChars - currentChar - scale - 1
     if (scale == 0) {
       if (negNumber) {
@@ -318,7 +320,7 @@ object Conversion {
         } else {
           result1.append("0E")
         }
-        result1.append(if ((scale == java.lang.Integer.MIN_VALUE)) "2147483648" else java.lang.Integer.toString(-scale))
+        result1.append(if (scale == java.lang.Integer.MIN_VALUE) "2147483648" else java.lang.Integer.toString(-scale))
         return result1.toString
 
     }
@@ -408,8 +410,8 @@ object Conversion {
 
     if (a >= 0) {
       val bLong = 1000000000L
-      quot = (a / bLong)
-      rem = (a % bLong)
+      quot = a / bLong
+      rem = a % bLong
     } else {
       /*
        * Make the dividend positive shifting it right by 1 bit then get
@@ -421,7 +423,7 @@ object Conversion {
       rem = aPos % bPos
       rem = (rem << 1) + (a & 1)
     }
-    ((rem << 32) | (quot & 0xFFFFFFFFL))
+    (rem << 32) | (quot & 0xFFFFFFFFL)
   }
 
   def bigInteger2Double(bi: BigInteger): Double = {
@@ -430,7 +432,7 @@ object Conversion {
       return bi.longValue()
     }
     if (bi.numberLength > 32) {
-      return (if ((bi.sign > 0)) java.lang.Double.POSITIVE_INFINITY else java.lang.Double.NEGATIVE_INFINITY)
+      return if ((bi.sign > 0)) java.lang.Double.POSITIVE_INFINITY else java.lang.Double.NEGATIVE_INFINITY
     }
     val bitLen = bi.abs().bitLength()
     var exponent:Long = bitLen - 1
@@ -439,10 +441,10 @@ object Conversion {
     var mantissa = lVal & 0x1FFFFFFFFFFFFFL
     if (exponent == 1023) {
       if (mantissa == 0X1FFFFFFFFFFFFFL) {
-        return (if ((bi.sign > 0)) java.lang.Double.POSITIVE_INFINITY else java.lang.Double.NEGATIVE_INFINITY)
+        return if ((bi.sign > 0)) java.lang.Double.POSITIVE_INFINITY else java.lang.Double.NEGATIVE_INFINITY
       }
       if (mantissa == 0x1FFFFFFFFFFFFEL) {
-        return (if ((bi.sign > 0)) java.lang.Double.MAX_VALUE else -java.lang.Double.MAX_VALUE)
+        return if ((bi.sign > 0)) java.lang.Double.MAX_VALUE else -java.lang.Double.MAX_VALUE
       }
     }
     if (((mantissa & 1) == 1) &&
@@ -450,7 +452,7 @@ object Conversion {
       mantissa += 2
     }
     mantissa >>= 1
-    val resSign = if ((bi.sign < 0)) 0x8000000000000000L else 0
+    val resSign = if (bi.sign < 0) 0x8000000000000000L else 0
     exponent = ((1023 + exponent) << 52) & 0x7FF0000000000000L
     val result = resSign | exponent | mantissa
     java.lang.Double.longBitsToDouble(result)

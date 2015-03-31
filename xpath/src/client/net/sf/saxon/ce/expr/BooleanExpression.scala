@@ -29,11 +29,11 @@ class BooleanExpression(p1: Expression, operator: Int, p2: Expression) extends B
         throw err1
       }
       if (operand0.isInstanceOf[Literal] && 
-        !(operand0.asInstanceOf[Literal].getValue.isInstanceOf[BooleanValue])) {
+        !operand0.asInstanceOf[Literal].getValue.isInstanceOf[BooleanValue]) {
         operand0 = Literal.makeLiteral(BooleanValue.get(operand0.effectiveBooleanValue(null)))
       }
       if (operand1.isInstanceOf[Literal] && 
-        !(operand1.asInstanceOf[Literal].getValue.isInstanceOf[BooleanValue])) {
+        !operand1.asInstanceOf[Literal].getValue.isInstanceOf[BooleanValue]) {
         operand1 = Literal.makeLiteral(BooleanValue.get(operand1.effectiveBooleanValue(null)))
       }
     }

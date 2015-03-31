@@ -43,7 +43,7 @@ class Template extends Procedure {
    */
   def setBody(body: Expression): Unit = {
     super.setBody(body)
-    bodyIsTailCallReturner = (body.isInstanceOf[TailCallReturner])
+    bodyIsTailCallReturner = body.isInstanceOf[TailCallReturner]
   }
 
   /**

@@ -60,8 +60,11 @@ object GenericSorter {
         n = med3(n - 2 * s, n - s, n, comp)
       }
       val c = comp.compare(m, n)
-      m = (if (comp.compare(l, m) < 0) (if (c < 0) m else if (comp.compare(l, n) < 0) n else l) else (if (c > 0) m else if (comp.compare(l,
-        n) > 0) n else l))
+      m = if (comp.compare(l, m) < 0) (if (c < 0) m else if (comp.compare(l, n) < 0) n else l)
+      else (if (c > 0) m
+      else if (comp.compare(l,
+        n) > 0) n
+      else l)
     }
     var a = off
     var b = a
@@ -132,8 +135,11 @@ object GenericSorter {
       c: Int, 
       comp: Sortable): Int = {
     val bc = comp.compare(b, c)
-    (if (comp.compare(a, b) < 0) (if (bc < 0) b else if (comp.compare(a, c) < 0) c else a) else (if (bc > 0) b else if (comp.compare(a,
-      c) > 0) c else a))
+    if (comp.compare(a, b) < 0) (if (bc < 0) b else if (comp.compare(a, c) < 0) c else a)
+    else (if (bc > 0) b
+    else if (comp.compare(a,
+      c) > 0) c
+    else a)
   }
 }
 

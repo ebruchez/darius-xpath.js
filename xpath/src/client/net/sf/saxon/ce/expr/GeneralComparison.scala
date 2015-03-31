@@ -135,10 +135,10 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
             return NumberFn.convert(item.asInstanceOf[AtomicValue])
           }
         }
-        if (!(v0.isInstanceOf[DoubleValue])) {
+        if (!v0.isInstanceOf[DoubleValue]) {
           s0 = new ItemMappingIterator(s0, map, true)
         }
-        if (!(v1.isInstanceOf[DoubleValue])) {
+        if (!v1.isInstanceOf[DoubleValue]) {
           s1 = new ItemMappingIterator(s1, map, true)
         }
       }

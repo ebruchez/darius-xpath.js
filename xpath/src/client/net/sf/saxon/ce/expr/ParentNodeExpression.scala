@@ -46,7 +46,7 @@ class ParentNodeExpression extends SingleNodeExpression {
    * Is this expression the same as another expression?
    */
   override def equals(other: Any): Boolean = {
-    (other.isInstanceOf[ParentNodeExpression])
+    other.isInstanceOf[ParentNodeExpression]
   }
 
   /**

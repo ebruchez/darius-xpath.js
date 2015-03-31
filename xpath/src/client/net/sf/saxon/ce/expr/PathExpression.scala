@@ -111,11 +111,11 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
       st = new PathExpression(cie, stax)
       ExpressionTool.copyLocationInfo(this, st)
     }
-    if (!(st.isInstanceOf[PathExpression])) {
+    if (!st.isInstanceOf[PathExpression]) {
       return null
     }
     val startPath = st.asInstanceOf[PathExpression]
-    if (!(startPath.step.isInstanceOf[AxisExpression])) {
+    if (!startPath.step.isInstanceOf[AxisExpression]) {
       return null
     }
     val mid = startPath.step.asInstanceOf[AxisExpression]
@@ -133,7 +133,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
       }
       underlyingStep = underlyingStep.asInstanceOf[FilterExpression].getControllingExpression
     }
-    if (!(underlyingStep.isInstanceOf[AxisExpression])) {
+    if (!underlyingStep.isInstanceOf[AxisExpression]) {
       return null
     }
     val underlyingAxis = underlyingStep.asInstanceOf[AxisExpression]
@@ -328,10 +328,10 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
    *         document order
    */
   private def testNaturallyReverseSorted(): Boolean = {
-    if (!Cardinality.allowsMany(start.getCardinality) && (step.isInstanceOf[AxisExpression])) {
+    if (!Cardinality.allowsMany(start.getCardinality) && step.isInstanceOf[AxisExpression]) {
       return !Axis.isForwards(step.asInstanceOf[AxisExpression].getAxis)
     }
-    !Cardinality.allowsMany(step.getCardinality) && (start.isInstanceOf[AxisExpression]) && 
+    !Cardinality.allowsMany(step.getCardinality) && start.isInstanceOf[AxisExpression] &&
       !Axis.isForwards(start.asInstanceOf[AxisExpression].getAxis)
   }
 

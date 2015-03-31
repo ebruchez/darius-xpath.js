@@ -189,7 +189,7 @@ class FloatValue(var value: Float) extends NumericValue {
   }
 
   override def compareTo(other: AnyRef): Int = {
-    if (!(other.isInstanceOf[NumericValue])) {
+    if (!other.isInstanceOf[NumericValue]) {
       throw new ClassCastException("Numeric values are not comparable to " + other.getClass)
     }
     if (other.isInstanceOf[FloatValue]) {

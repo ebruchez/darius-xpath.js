@@ -43,7 +43,7 @@ object EscapeURI {
     for (i <- 0 until s.length) {
       val c = s.charAt(i)
       if (c >= 0x7f || !allowedASCII(c.toInt)) {
-        escapeChar(c, (if ((i + 1) < s.length) s.charAt(i + 1) else ' '), sb)
+        escapeChar(c, if ((i + 1) < s.length) s.charAt(i + 1) else ' ', sb)
       } else {
         sb.append(c)
       }
@@ -78,7 +78,7 @@ object EscapeURI {
       if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
         sb.append(c)
       } else if (c <= 0x20 || c >= 0x7f) {
-        escapeChar(c, (if ((i + 1) < s.length) s.charAt(i + 1) else ' '), sb)
+        escapeChar(c, if ((i + 1) < s.length) s.charAt(i + 1) else ' ', sb)
       } else if (allowedPunctuation.indexOf(c) >= 0) {
         sb.append(c)
       } else {

@@ -52,13 +52,13 @@ object Navigator {
           val parent = node.getParent
           if (parent == null) {
             val base = new URI(node.getSystemId)
-            val resolved = (if (xmlBase.length == 0) base else base.resolve(baseURI.toString))
+            val resolved = if (xmlBase.length == 0) base else base.resolve(baseURI.toString)
             return resolved.toString
           }
           val startSystemId = node.getSystemId
           val parentSystemId = parent.getSystemId
           val base = new URI(if (startSystemId == parentSystemId) parent.getBaseURI else startSystemId)
-          baseURI = (if (xmlBase.length == 0) base else base.resolve(baseURI.toString))
+          baseURI = if (xmlBase.length == 0) base else base.resolve(baseURI.toString)
         }
       } catch {
         case e: URISyntaxException => return xmlBase
@@ -118,7 +118,7 @@ object Navigator {
             }
           }
           try {
-            val index = (if (count == 1) "" else "[" + position + "]")
+            val index = if (count == 1) "" else "[" + position + "]"
             pre + '/' + node.getDisplayName + index
           } catch {
             case e: UnsupportedOperationException => pre + '/' + node.getDisplayName
@@ -857,7 +857,7 @@ object Navigator {
       if (nextAnc != null) {
         siblingEnum = if (nextAnc.getNodeKind == Type.DOCUMENT) EmptyIterator.getInstance else nextAnc.iterateAxis(Axis.PRECEDING_SIBLING, 
           AnyNodeTest.getInstance)
-        (if (includeAncestors) nextAnc else next())
+        if (includeAncestors) nextAnc else next()
       } else {
         null
       }

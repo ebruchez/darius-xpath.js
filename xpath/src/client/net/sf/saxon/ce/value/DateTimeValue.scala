@@ -104,7 +104,7 @@ object DateTimeValue {
     val frac = `match`.getGroup(7)
     if (frac != null && frac.length > 0) {
       val fractionalSeconds = frac.toDouble
-      dt.microsecond = (Math.round(fractionalSeconds * 1000000)).toInt
+      dt.microsecond = Math.round(fractionalSeconds * 1000000).toInt
     }
     val tz = `match`.getGroup(8)
     val tzmin = CalendarValue.parseTimezone(tz)
@@ -155,8 +155,8 @@ object DateTimeValue {
     js = js % (24L * 60L * 60L)
     val hour = (js / (60L * 60L)).toByte
     js = js % (60L * 60L)
-    val minute = (js / (60L)).toByte
-    js = js % (60L)
+    val minute = (js / 60L).toByte
+    js = js % 60L
     new DateTimeValue(date.getYear, date.getMonth, date.getDay, hour, minute, js.toByte, microseconds.intValue(), 
       0)
   }
@@ -367,7 +367,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
         sb.append('-')
       }
     }
-    CalendarValue.appendString(sb, yr, (if (yr > 9999) (yr + "").length else 4))
+    CalendarValue.appendString(sb, yr, if (yr > 9999) (yr + "").length else 4)
     sb.append('-')
     CalendarValue.appendTwoDigits(sb, month)
     sb.append('-')
@@ -497,7 +497,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
    *          for example if one value is a date and the other is a time
    */
   override def subtract(other: CalendarValue, context: XPathContext): DayTimeDurationValue = {
-    if (!(other.isInstanceOf[DateTimeValue])) {
+    if (!other.isInstanceOf[DateTimeValue]) {
       throw new XPathException("First operand of '-' is a dateTime, but the second is not", "XPTY0004")
     }
     super.subtract(other, context)
@@ -547,7 +547,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
    *                            is declared as CalendarValue to satisfy the interface)
    */
   def compareTo(other: CalendarValue, implicitTimezone: Int): Int = {
-    if (!(other.isInstanceOf[DateTimeValue])) {
+    if (!other.isInstanceOf[DateTimeValue]) {
       throw new ClassCastException("DateTime values are not comparable to " + other.getClass)
     }
     var v1 = (if (hasTimezone()) this else adjustTimezone(implicitTimezone)).asInstanceOf[DateTimeValue]

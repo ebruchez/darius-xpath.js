@@ -95,7 +95,7 @@ class AtomicSortComparer protected (@BeanProperty var collator: StringCollator, 
     } else if (b.isInstanceOf[UntypedAtomicValue]) {
       -b.asInstanceOf[UntypedAtomicValue].compareTo(a, collator)
     } else if (a.isNaN) {
-      (if (b.isNaN) 0 else -1)
+      if (b.isNaN) 0 else -1
     } else if (b.isNaN) {
       +1
     } else if (a.isInstanceOf[StringValue] && b.isInstanceOf[StringValue]) {

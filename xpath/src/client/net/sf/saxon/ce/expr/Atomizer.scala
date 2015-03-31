@@ -191,7 +191,7 @@ class Atomizer(sequence: Expression) extends UnaryExpression(sequence) {
    */
   override def evaluateItem(context: XPathContext): Item = {
     val i = operand.evaluateItem(context)
-    (if (i == null) null else i.getTypedValue)
+    if (i == null) null else i.getTypedValue
   }
 
   /**

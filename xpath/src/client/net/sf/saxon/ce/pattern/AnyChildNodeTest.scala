@@ -30,8 +30,8 @@ class AnyChildNodeTest private () extends NodeTest {
    * @param qName identifies the expanded name of the node to be matched
    */
   def matches(nodeKind: Int, qName: StructuredQName): Boolean = {
-    (nodeKind == Type.ELEMENT || nodeKind == Type.TEXT || nodeKind == Type.COMMENT || 
-      nodeKind == Type.PROCESSING_INSTRUCTION)
+    nodeKind == Type.ELEMENT || nodeKind == Type.TEXT || nodeKind == Type.COMMENT ||
+      nodeKind == Type.PROCESSING_INSTRUCTION
   }
 
   /**
@@ -42,8 +42,8 @@ class AnyChildNodeTest private () extends NodeTest {
    */
   override def matches(node: NodeInfo): Boolean = {
     val nodeKind = node.getNodeKind
-    (nodeKind == Type.ELEMENT || nodeKind == Type.TEXT || nodeKind == Type.COMMENT || 
-      nodeKind == Type.PROCESSING_INSTRUCTION)
+    nodeKind == Type.ELEMENT || nodeKind == Type.TEXT || nodeKind == Type.COMMENT ||
+      nodeKind == Type.PROCESSING_INSTRUCTION
   }
 
   /**

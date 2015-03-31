@@ -46,15 +46,16 @@ object Elementary {
         return if (valueHi == 0) new BigInteger(op1Sign, valueLo) else new BigInteger(op1Sign, 2,
           Array(valueLo, valueHi))
       }
-      return BigInteger.valueOf(if (op1Sign < 0) (b - a) else (a - b))
+      return BigInteger.valueOf(if (op1Sign < 0) b - a else a - b)
     } else if (op1Sign == op2Sign) {
       resSign = op1Sign
       // an augend should not be shorter than addend
-      resDigits = if ((op1Len >= op2Len)) add(op1.digits, op1Len, op2.digits, op2Len) else add(op2.digits,
+      resDigits = if (op1Len >= op2Len) add(op1.digits, op1Len, op2.digits, op2Len) else add(op2.digits,
         op2Len, op1.digits, op1Len)
     } else {// signs are different
-      val cmp = (if ((op1Len != op2Len)) (if ((op1Len > op2Len)) 1 else -1) else compareArrays(op1.digits,
-        op2.digits, op1Len))
+      val cmp = if ((op1Len != op2Len)) (if ((op1Len > op2Len)) 1 else -1)
+      else compareArrays(op1.digits,
+        op2.digits, op1Len)
       if (cmp == BigInteger.EQUALS) {
         return BigInteger.ZERO
       }
@@ -78,7 +79,7 @@ object Elementary {
     while ((i >= 0) && (a(i) == b(i))) {
       i -= 1
     }
-    (if ((i < 0)) BigInteger.EQUALS else if ((a(i) & 0xFFFFFFFFL) < (b(i) & 0xFFFFFFFFL)) BigInteger.LESS else BigInteger.GREATER)
+    if ((i < 0)) BigInteger.EQUALS else if ((a(i) & 0xFFFFFFFFL) < (b(i) & 0xFFFFFFFFL)) BigInteger.LESS else BigInteger.GREATER
   }
 
 
@@ -221,8 +222,8 @@ object Elementary {
     val op1Len = op1.numberLength
     val op2Len = op2.numberLength
     if (op1Len + op2Len == 2) {
-      var a = (op1.digits(0) & 0xFFFFFFFFL)
-      var b = (op2.digits(0) & 0xFFFFFFFFL)
+      var a = op1.digits(0) & 0xFFFFFFFFL
+      var b = op2.digits(0) & 0xFFFFFFFFL
       if (op1Sign < 0) {
         a = -a
       }
@@ -231,11 +232,12 @@ object Elementary {
       }
       return BigInteger.valueOf(a - b)
     }
-    val cmp = (if ((op1Len != op2Len)) (if ((op1Len > op2Len)) 1 else -1) else Elementary.compareArrays(op1.digits,
-      op2.digits, op1Len))
+    val cmp = if ((op1Len != op2Len)) (if ((op1Len > op2Len)) 1 else -1)
+    else Elementary.compareArrays(op1.digits,
+      op2.digits, op1Len)
     if (cmp == BigInteger.LESS) {
       resSign = -op2Sign
-      resDigits = if ((op1Sign == op2Sign)) subtract(op2.digits, op2Len, op1.digits, op1Len) else add(op2.digits,
+      resDigits = if (op1Sign == op2Sign) subtract(op2.digits, op2Len, op1.digits, op1Len) else add(op2.digits,
         op2Len, op1.digits, op1Len)
     } else {
       resSign = op1Sign
@@ -417,7 +419,7 @@ object Elementary {
       while (i >= 0 && a(i) == b(i)) {
         i -= 1
       }
-      if (i < 0) BigInteger.EQUALS else (if ((a(i) & 0xFFFFFFFFL) < (b(i) & 0xFFFFFFFFL)) BigInteger.LESS else BigInteger.GREATER)
+      if (i < 0) BigInteger.EQUALS else if ((a(i) & 0xFFFFFFFFL) < (b(i) & 0xFFFFFFFFL)) BigInteger.LESS else BigInteger.GREATER
     }
   }
 }

@@ -71,7 +71,7 @@ abstract class NumericValue extends AtomicValue with Comparable[AnyRef] {
    */
   def getFloatValue(): Float = {
     try {
-      (convert(AtomicType.FLOAT).asAtomic()).asInstanceOf[FloatValue]
+      convert(AtomicType.FLOAT).asAtomic().asInstanceOf[FloatValue]
         .getFloatValue
     } catch {
       case err: XPathException => Float.NaN

@@ -205,7 +205,7 @@ class ComplexContentOutputter extends SequenceReceiver {
         }
       }
     }
-    if (((nsBinding.getPrefix.isEmpty)) && !nsBinding.getURI.isEmpty) {
+    if (nsBinding.getPrefix.isEmpty && !nsBinding.getURI.isEmpty) {
       declaresDefaultNamespace = true
       if (elementIsInNullNamespace == null) {
         elementIsInNullNamespace = pendingStartTag.getNamespaceURI == NamespaceConstant.NULL
@@ -273,7 +273,7 @@ class ComplexContentOutputter extends SequenceReceiver {
     val nsprefix = nameCode.getPrefix
     val nsuri = nameCode.getNamespaceURI
     for (i <- 0 until pendingNSListSize if nsprefix == pendingNSList(i).getPrefix) {
-      if ((nsuri == pendingNSList(i).getURI)) {
+      if (nsuri == pendingNSList(i).getURI) {
         return nameCode
       } else {
         val prefix = getSubstitutePrefix(nsprefix, seq)

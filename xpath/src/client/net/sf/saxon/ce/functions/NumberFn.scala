@@ -29,7 +29,7 @@ object NumberFn {
           return result.asInstanceOf[DoubleValue]
         }
       }
-      if (value.isInstanceOf[StringValue] && !(value.isInstanceOf[AnyURIValue])) {
+      if (value.isInstanceOf[StringValue] && !value.isInstanceOf[AnyURIValue]) {
         val d = StringToDouble.stringToNumber(value.getStringValue)
         return new DoubleValue(d)
       }
@@ -89,7 +89,7 @@ class NumberFn extends SystemFunction {
         return result.asInstanceOf[AtomicValue]
       }
     }
-    if (arg0.isInstanceOf[StringValue] && !(arg0.isInstanceOf[AnyURIValue])) {
+    if (arg0.isInstanceOf[StringValue] && !arg0.isInstanceOf[AnyURIValue]) {
       val s = arg0.getStringValue
       try {
         return new DoubleValue(StringToDouble.stringToNumber(s))

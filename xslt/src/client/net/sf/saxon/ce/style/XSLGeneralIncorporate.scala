@@ -102,7 +102,7 @@ class XSLGeneralIncorporate extends StyleElement {
           includedDoc = outermost.asInstanceOf[LiteralResultElement].makeStylesheet(getPreparedStylesheet)
           outermost = includedDoc.getDocumentElement
         }
-        if (!(outermost.isInstanceOf[XSLStylesheet])) {
+        if (!outermost.isInstanceOf[XSLStylesheet]) {
           compileError("Included document " + href + " is not a stylesheet", "XTSE0165")
           return null
         }
@@ -135,7 +135,7 @@ class XSLGeneralIncorporate extends StyleElement {
   }
 
   private def reportCycle(): Unit = {
-    compileError("A stylesheet cannot " + getLocalPart + " itself", (if (getLocalPart == "include") "XTSE0180" else "XTSE0210"))
+    compileError("A stylesheet cannot " + getLocalPart + " itself", if (getLocalPart == "include") "XTSE0180" else "XTSE0210")
   }
 
   def compile(exec: Executable, decl: Declaration): Expression = null

@@ -137,7 +137,7 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
             role)
         } else if ("static-base-uri" == local && staticArgs.length == 0) {
           val baseURI = env.getBaseURI
-          return (if (baseURI == null) Literal.makeEmptySequence() else new Literal(new AnyURIValue(baseURI)))
+          return if (baseURI == null) Literal.makeEmptySequence() else new Literal(new AnyURIValue(baseURI))
         } else if ("trace" == local && staticArgs.length == 2) {
           return staticArgs(0)
         } else if ("unordered" == local && staticArgs.length == 1) {

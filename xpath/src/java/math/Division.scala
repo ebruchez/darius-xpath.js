@@ -66,7 +66,7 @@ object Division {
         // set guessDigit to the largest unsigned int value
         guessDigit = -1
       } else {
-        val product: Long = (((normA(j) & 0xffffffffL) << 32) + (normA(j - 1) & 0xffffffffL))
+        val product: Long = ((normA(j) & 0xffffffffL) << 32) + (normA(j - 1) & 0xffffffffL)
         val res: Long = Division.divideLongByInt(product, firstDivisorDigit)
         guessDigit = res.toInt // the quotient of divideLongByInt
         var rem = (res >> 32).toInt // the remainder of divideLongByInt
@@ -100,7 +100,7 @@ object Division {
             } else {
               rem = longR.toInt
             }
-          } while (((leftHand ^ 0x8000000000000000L) > (rightHand ^ 0x8000000000000000L)))
+          } while ((leftHand ^ 0x8000000000000000L) > (rightHand ^ 0x8000000000000000L))
         }
          loop
         }
@@ -152,8 +152,8 @@ object Division {
     val valLen = bi.numberLength
     val valSign = bi.sign
     if (valLen == 1) {
-      val a: Long = (valDigits(0) & 0xffffffffL)
-      val b: Long = (divisor & 0xffffffffL)
+      val a: Long = valDigits(0) & 0xffffffffL
+      val b: Long = divisor & 0xffffffffL
       var quo: Long = a / b
       var rem: Long = a % b
       if (valSign != divisorSign) {
@@ -165,7 +165,7 @@ object Division {
       return Array(BigInteger.valueOf(quo), BigInteger.valueOf(rem))
     }
     val quotientLength = valLen
-    val quotientSign = (if ((valSign == divisorSign)) 1 else -1)
+    val quotientSign = if ((valSign == divisorSign)) 1 else -1
     val quotientDigits = new Array[Int](quotientLength)
     var remainderDigits: Array[Int] = Array()
     remainderDigits = Array(Division.divideArrayByInt(quotientDigits, valDigits, valLen, divisor))
@@ -197,8 +197,8 @@ object Division {
       val temp: Long = (rem << 32) | (src(i) & 0xffffffffL)
       var quot: Long = 0l
       if (temp >= 0) {
-        quot = (temp / bLong)
-        rem = (temp % bLong)
+        quot = temp / bLong
+        rem = temp % bLong
       } else {
         /*
          * make the dividend positive shifting it right by 1 bit then get the
@@ -245,8 +245,8 @@ object Division {
     var rem: Long = 0l
     val bLong: Long = b & 0xffffffffL
     if (a >= 0) {
-      quot = (a / bLong)
-      rem = (a % bLong)
+      quot = a / bLong
+      rem = a % bLong
     } else {
       /*
        * Make the dividend positive shifting it right by 1 bit then get the
@@ -298,7 +298,7 @@ object Division {
 
     // STEP 4: Compute q^(-1) (mod 2^j) and y := (x2-x1) * q^(-1) (mod 2^j)
     val qInv = modPow2Inverse(q, j)
-    var y = (x2.subtract(x1)).multiply(qInv)
+    var y = x2.subtract(x1).multiply(qInv)
     inplaceModPow2(y, j)
     if (y.sign < 0) {
       y = y.add(BigInteger.getPowerOfTwo(j))
@@ -436,7 +436,7 @@ object Division {
         op2 >>>= java.lang.Long.numberOfTrailingZeros(op2)
       }
     } while (op1 != 0);
-    (op2 << pow2Count)
+    op2 << pow2Count
   }
 
   /**
@@ -453,7 +453,7 @@ object Division {
     }
     leadingZeros = 32 - (n & 31)
     x.numberLength = fd + 1
-    x.digits(fd) &= (if ((leadingZeros < 32)) (-1 >>> leadingZeros) else 0)
+    x.digits(fd) &= (if (leadingZeros < 32) -1 >>> leadingZeros else 0)
     x.cutOffLeadingZeroes()
   }
 
@@ -718,7 +718,7 @@ object Division {
    *      int)
    */
   def oddModPow(base: BigInteger, exponent: BigInteger, modulus: BigInteger): BigInteger = {
-    val k = (modulus.numberLength << 5)
+    val k = modulus.numberLength << 5
     // n-residue of base [base * r (mod modulus)]
     val a2 = base.shiftLeft(k).mod(modulus)
     // n-residue of base [1 * r (mod modulus)]

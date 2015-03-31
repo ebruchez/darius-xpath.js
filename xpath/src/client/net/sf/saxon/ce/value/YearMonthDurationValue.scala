@@ -41,8 +41,8 @@ object YearMonthDurationValue {
    */
   def fromMonths(months: Int): YearMonthDurationValue = {
     val mdv = new YearMonthDurationValue()
-    mdv.negative = (months < 0)
-    mdv.months = (if (months < 0) -months else months)
+    mdv.negative = months < 0
+    mdv.months = if (months < 0) -months else months
     mdv.seconds = 0
     mdv.microseconds = 0
     mdv
@@ -89,7 +89,7 @@ class YearMonthDurationValue private () extends DurationValue with Comparable[An
    *
    * @return the number of months in the duration
    */
-  def getLengthInMonths(): Int = (months) * (if (negative) -1 else +1)
+  def getLengthInMonths(): Int = months * (if (negative) -1 else +1)
 
   /**
    * Multiply duration by a number. Also used when dividing a duration by a number

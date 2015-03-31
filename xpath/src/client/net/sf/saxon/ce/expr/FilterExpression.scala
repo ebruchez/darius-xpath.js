@@ -90,11 +90,11 @@ object FilterExpression {
     if (`type` == AtomicType.BOOLEAN) {
       return isExplicitlyPositional(exp)
     }
-    (`type` == AtomicType.ANY_ATOMIC || `type`.isInstanceOf[AnyItemType] || 
-      `type` == AtomicType.INTEGER || 
-      `type` == AtomicType.NUMERIC || 
-      th.isSubType(`type`, AtomicType.NUMERIC) || 
-      isExplicitlyPositional(exp))
+    `type` == AtomicType.ANY_ATOMIC || `type`.isInstanceOf[AnyItemType] ||
+      `type` == AtomicType.INTEGER ||
+      `type` == AtomicType.NUMERIC ||
+      th.isSubType(`type`, AtomicType.NUMERIC) ||
+      isExplicitlyPositional(exp)
   }
 
   /**
@@ -293,7 +293,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
           return Literal.makeEmptySequence()
         }
       } else {
-        return (if (ExpressionTool.effectiveBooleanValue(`val`.iterate())) start else Literal.makeEmptySequence())
+        return if (ExpressionTool.effectiveBooleanValue(`val`.iterate())) start else Literal.makeEmptySequence()
       }
     }
     if (filter.isInstanceOf[ComparisonExpression]) {
@@ -338,7 +338,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
       }
     } else if (filter.isInstanceOf[IntegerRangeTest]) {
       val `val` = filter.asInstanceOf[IntegerRangeTest].getValueExpression
-      if (!(`val`.isInstanceOf[Position])) {
+      if (!`val`.isInstanceOf[Position]) {
         return null
       }
       var min = filter.asInstanceOf[IntegerRangeTest].getMinValueExpression
@@ -454,7 +454,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
   override def equals(other: Any): Boolean = {
     if (other.isInstanceOf[FilterExpression]) {
       val f = other.asInstanceOf[FilterExpression]
-      return (start == f.start && filter == f.filter)
+      return start == f.start && filter == f.filter
     }
     false
   }
@@ -524,10 +524,10 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    * @return the dependencies
    */
   override def computeDependencies(): Int = {
-    (start.getDependencies | 
-      (filter.getDependencies & 
-      (StaticProperty.DEPENDS_ON_XSLT_CONTEXT | StaticProperty.DEPENDS_ON_LOCAL_VARIABLES | 
-      StaticProperty.DEPENDS_ON_USER_FUNCTIONS)))
+    start.getDependencies |
+      (filter.getDependencies &
+        (StaticProperty.DEPENDS_ON_XSLT_CONTEXT | StaticProperty.DEPENDS_ON_LOCAL_VARIABLES |
+          StaticProperty.DEPENDS_ON_USER_FUNCTIONS))
   }
 
   /**

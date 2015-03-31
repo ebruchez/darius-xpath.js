@@ -512,7 +512,7 @@ abstract class Expression {
    * Get the systemId of the module containing the expression
    */
   def getSystemId(): String = {
-    if ((sourceLocator == null)) null else sourceLocator.getSystemId
+    if (sourceLocator == null) null else sourceLocator.getSystemId
   }
 
   /**

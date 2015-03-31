@@ -48,7 +48,7 @@ class XSLPerformSort extends StyleElement {
   /**
    * Specify that xsl:sort is a permitted child
    */
-  protected def isPermittedChild(child: StyleElement): Boolean = (child.isInstanceOf[XSLSort])
+  protected def isPermittedChild(child: StyleElement): Boolean = child.isInstanceOf[XSLSort]
 
   def prepareAttributes(): Unit = {
     select = checkAttribute("select", "e1").asInstanceOf[Expression]

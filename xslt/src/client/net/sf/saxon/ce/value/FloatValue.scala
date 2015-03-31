@@ -64,7 +64,7 @@ class FloatValue(var value: Float) extends NumericValue {
    * Get the effective boolean value
    * @return true unless the value is zero or NaN
    */
-  def effectiveBooleanValue(): Boolean = (value != 0.0 && !Float.isNaN(value))
+  def effectiveBooleanValue(): Boolean = value != 0.0 && !Float.isNaN(value)
 
   /**
    * Convert to target data type
@@ -196,7 +196,7 @@ class FloatValue(var value: Float) extends NumericValue {
   }
 
   def compareTo(other: AnyRef): Int = {
-    if (!(other.isInstanceOf[NumericValue])) {
+    if (!other.isInstanceOf[NumericValue]) {
       throw new ClassCastException("Numeric values are not comparable to " + other.getClass)
     }
     if (other.isInstanceOf[FloatValue]) {

@@ -100,7 +100,7 @@ object AttributeValueTemplate {
    */
   def makeFirstItem(exp: Expression): Expression = {
     val th = TypeHierarchy.getInstance
-    if ((!(exp.getItemType.isInstanceOf[AtomicType]))) {
+    if (!(exp.getItemType.isInstanceOf[AtomicType])) {
       exp = new Atomizer(exp)
     }
     if (Cardinality.allowsMany(exp.getCardinality)) {

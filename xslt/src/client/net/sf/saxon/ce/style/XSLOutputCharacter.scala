@@ -22,7 +22,7 @@ class XSLOutputCharacter extends StyleElement {
 
   def validate(decl: Declaration): Unit = {
     checkEmpty()
-    if (!(getParent.isInstanceOf[XSLCharacterMap])) {
+    if (!getParent.isInstanceOf[XSLCharacterMap]) {
       compileError("xsl:output-character may appear only as a child of xsl:character-map", "XTSE0010")
     }
   }

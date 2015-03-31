@@ -27,7 +27,7 @@ class Exists(_operation: Int) extends Aggregate {
    * @return the negation of the expression
    */
   def negate(): Expression = {
-    val fc = SystemFunction.makeSystemFunction((if (operation == EXISTS) "empty" else "exists"), getArguments)
+    val fc = SystemFunction.makeSystemFunction(if (operation == EXISTS) "empty" else "exists", getArguments)
     fc.setSourceLocator(getSourceLocator)
     fc
   }
@@ -44,6 +44,6 @@ class Exists(_operation: Int) extends Aggregate {
    */
   override def effectiveBooleanValue(c: XPathContext): Boolean = {
     val next = argument(0).iterate(c).next()
-    (if (operation == EXISTS) next != null else next == null)
+    if (operation == EXISTS) next != null else next == null
   }
 }

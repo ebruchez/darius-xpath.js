@@ -60,7 +60,7 @@ class HTMLAttributeNode(
   def getURI(): String = uri
 
   def getDisplayName(): String = {
-    if ((prefix.length == 0)) name else prefix + ':' + name
+    if (prefix.length == 0) name else prefix + ':' + name
   }
 
   def getParent(): NodeInfo = element

@@ -77,7 +77,7 @@ class KeyFn extends SystemFunction {
    */
   def simplify(visitor: ExpressionVisitor): Expression = {
     if (!internal && 
-      !(visitor.getStaticContext.isInstanceOf[ExpressionContext])) {
+      !visitor.getStaticContext.isInstanceOf[ExpressionContext]) {
       throw new XPathException("The key() function is available only in XPath expressions within an XSLT stylesheet")
     }
     val f = super.simplify(visitor).asInstanceOf[KeyFn]

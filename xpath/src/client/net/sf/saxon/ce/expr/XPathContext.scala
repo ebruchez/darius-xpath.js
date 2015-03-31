@@ -268,7 +268,7 @@ class XPathContext(var controller: Controller) {
    * @return the context item, or null if the context item is undefined
    */
   def getContextItem(): Item = {
-    (if (currentIterator == null) null else currentIterator.current())
+    if (currentIterator == null) null else currentIterator.current()
   }
 
   /**

@@ -82,7 +82,7 @@ object Multiplication {
       val res: Long = unsignedMultAddAdd(aDigits(0), factor, 0, 0)
       val resLo = res.toInt
       val resHi = (res >>> 32).toInt
-      return (if ((resHi == 0)) new BigInteger(resSign, resLo) else new BigInteger(resSign, 2, Array(resLo, resHi)))
+      return if ((resHi == 0)) new BigInteger(resSign, resLo) else new BigInteger(resSign, 2, Array(resLo, resHi))
     }
     val resLength = aNumberLength + 1
     val resDigits = new Array[Int](resLength)
@@ -320,12 +320,12 @@ object Multiplication {
     val aLen = a.numberLength
     val bLen = b.numberLength
     val resLength = aLen + bLen
-    val resSign = if ((a.sign != b.sign)) -1 else 1
+    val resSign = if (a.sign != b.sign) -1 else 1
     if (resLength == 2) {
       val v = unsignedMultAddAdd(a.digits(0), b.digits(0), 0, 0)
       val valueLo = v.toInt
       val valueHi = (v >>> 32).toInt
-      return (if ((valueHi == 0)) new BigInteger(resSign, valueLo) else new BigInteger(resSign, 2, Array(valueLo, valueHi)))
+      return if ((valueHi == 0)) new BigInteger(resSign, valueLo) else new BigInteger(resSign, 2, Array(valueLo, valueHi))
     }
     val aDigits = a.digits
     val bDigits = b.digits

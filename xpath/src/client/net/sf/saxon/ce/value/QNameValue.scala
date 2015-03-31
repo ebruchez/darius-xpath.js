@@ -162,7 +162,7 @@ class QNameValue(protected var qName: StructuredQName) extends AtomicValue {
    * @param implicitTimezone
    */
   def getXPathComparable(ordered: Boolean, collator: StringCollator, implicitTimezone: Int): AnyRef = {
-    (if (ordered) null else this)
+    if (ordered) null else this
   }
 
   override def hashCode(): Int = qName.hashCode

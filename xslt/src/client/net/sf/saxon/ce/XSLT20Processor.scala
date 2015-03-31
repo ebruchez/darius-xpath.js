@@ -60,7 +60,7 @@ class XSLT20Processor extends Exportable {
    * @return the string value of the parameter
    */
   def getParameter(namespaceURI: String, localName: String): AnyRef = {
-    val ns = if ((namespaceURI == null)) "" else namespaceURI
+    val ns = if (namespaceURI == null) "" else namespaceURI
     try {
       val qn = new StructuredQName("", ns, localName)
       val vr = controller.getParameter(qn)
@@ -93,7 +93,7 @@ class XSLT20Processor extends Exportable {
    * @param localName the local name of the parameter
    */
   def removeParameter(namespaceURI: String, localName: String): Unit = {
-    val ns = if ((namespaceURI == null)) "" else namespaceURI
+    val ns = if (namespaceURI == null) "" else namespaceURI
     try {
       val qn = new StructuredQName("", ns, localName)
       controller.removeParameter(qn)
@@ -111,7 +111,7 @@ class XSLT20Processor extends Exportable {
   }
 
   def setParameter(namespaceURI: String, localName: String, value: AnyRef): Unit = {
-    val ns = if ((namespaceURI == null)) "" else namespaceURI
+    val ns = if (namespaceURI == null) "" else namespaceURI
     try {
       val qn = new StructuredQName("", ns, localName)
       controller.setParameter(qn, getValue(value))

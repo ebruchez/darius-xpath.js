@@ -51,7 +51,7 @@ class EmptySequence private () extends Sequence {
    * @throws ClassCastException if the values are not comparable
    */
   override def equals(other: Any): Boolean = {
-    if (!(other.isInstanceOf[EmptySequence])) {
+    if (!other.isInstanceOf[EmptySequence]) {
       throw new ClassCastException("Cannot compare " + other.getClass + " to empty sequence")
     }
     true

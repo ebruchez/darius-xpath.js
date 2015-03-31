@@ -391,7 +391,7 @@ abstract class AbstractNumberer extends Numberer {
    *
    * @param year the proleptic gregorian year, using "0" for the year before 1AD
    */
-  def getEraName(year: Int): String = (if (year > 0) "AD" else "BC")
+  def getEraName(year: Int): String = if (year > 0) "AD" else "BC"
 
   /**
    * Get the name of a calendar

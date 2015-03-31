@@ -37,7 +37,7 @@ class LetExpression extends Assignation with TailCallReturner {
     val role = new RoleLocator(RoleLocator.VARIABLE, getVariableQName, 0)
     val th = TypeHierarchy.getInstance
     val actualItemType = sequence.getItemType
-    refineTypeInformation(actualItemType, sequence.getCardinality, (if (sequence.isInstanceOf[Literal]) sequence.asInstanceOf[Literal].getValue else null), 
+    refineTypeInformation(actualItemType, sequence.getCardinality, if (sequence.isInstanceOf[Literal]) sequence.asInstanceOf[Literal].getValue else null,
       sequence.getSpecialProperties, visitor, this)
     action = visitor.typeCheck(action, contextItemType)
     this

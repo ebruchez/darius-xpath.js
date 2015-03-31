@@ -104,7 +104,7 @@ object Primality {
     }
     // To check if 'n' exists in the table (it fit in 10 bits)
     if ((n.numberLength == 1) && ((n.digits(0) & 0XFFFFFC00) == 0)) {
-      return (Arrays.binarySearch(primes, n.digits(0)) >= 0)
+      return Arrays.binarySearch(primes, n.digits(0)) >= 0
     }
     // To check if 'n' is divisible by some prime of the table
     for (i <- 1 until primes.length) {
@@ -189,7 +189,7 @@ object Primality {
       i = 0
       while (i < primes.length) {
         modules(i) = (modules(i) + gapSize) % primes(i)
-        j = if ((modules(i) == 0)) 0 else (primes(i) - modules(i))
+        j = if (modules(i) == 0) 0 else primes(i) - modules(i)
         while (j < gapSize) {
           isDivisible(j) = true
           j += primes(i)

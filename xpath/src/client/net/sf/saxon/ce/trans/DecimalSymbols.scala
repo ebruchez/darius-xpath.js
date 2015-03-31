@@ -90,7 +90,7 @@ class DecimalSymbols {
    * @return false if it is not a valid zero-digit
    */
   def isValidZeroDigit(): Boolean = {
-    (Arrays.binarySearch(zeroDigits, zeroDigit) >= 0)
+    Arrays.binarySearch(zeroDigits, zeroDigit) >= 0
   }
 
   /**
@@ -99,7 +99,7 @@ class DecimalSymbols {
    * @return true if the same characters/strings are assigned to each role in both sets of symbols
    */
   override def equals(obj: Any): Boolean = {
-    if (!(obj.isInstanceOf[DecimalSymbols])) {
+    if (!obj.isInstanceOf[DecimalSymbols]) {
       return false
     }
     val o = obj.asInstanceOf[DecimalSymbols]

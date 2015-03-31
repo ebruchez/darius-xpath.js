@@ -14,7 +14,7 @@ abstract class AbstractIntSet extends IntSet {
    * @return true if every item in the other set is also in this set
    */
   def containsAll(other: IntSet): Boolean = {
-    if (other == IntUniversalSet.getInstance || (other.isInstanceOf[IntComplementSet])) {
+    if (other == IntUniversalSet.getInstance || other.isInstanceOf[IntComplementSet]) {
       return false
     }
     val it = other.iterator()

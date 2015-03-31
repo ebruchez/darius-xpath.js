@@ -93,7 +93,7 @@ class SetAttribute(var content: AttributeCreator, var action: Int) extends Instr
     if (att.isInstanceOf[NodeInfo] && 
       att.asInstanceOf[NodeInfo].getNodeKind == Type.ATTRIBUTE) {
       pul.add(new SetAttributeAction(parent, att.asInstanceOf[NodeInfo].getURI, att.asInstanceOf[NodeInfo].getLocalPart, 
-        (if (action == SET) att.getStringValue else null)))
+        if (action == SET) att.getStringValue else null))
     }
     null
   }

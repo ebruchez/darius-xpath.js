@@ -24,7 +24,7 @@ class RootExpression extends SingleNodeExpression {
   /**
    * Is this expression the same as another expression?
    */
-  override def equals(other: Any): Boolean = (other.isInstanceOf[RootExpression])
+  override def equals(other: Any): Boolean = other.isInstanceOf[RootExpression]
 
   /**
    * Specify that the expression returns a singleton

@@ -141,7 +141,7 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
       (if (Axis.isForwards(axis)) StaticProperty.ORDERED_NODESET else StaticProperty.REVERSE_DOCUMENT_ORDER) | 
       (if (Axis.isPeerAxis(axis)) StaticProperty.PEER_NODESET else 0) | 
       (if (Axis.isSubtreeAxis(axis)) StaticProperty.SUBTREE_NODESET else 0) | 
-      (if ((axis == Axis.ATTRIBUTE || axis == Axis.NAMESPACE)) StaticProperty.ATTRIBUTE_NS_NODESET else 0)
+      (if (axis == Axis.ATTRIBUTE || axis == Axis.NAMESPACE) StaticProperty.ATTRIBUTE_NS_NODESET else 0)
   }
 
   /**
@@ -203,9 +203,9 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
       }
     } else {
       val cName = toString
-      val isAtomic = (item.isInstanceOf[AtomicValue])
-      val appendText = " is " + (if ((isAtomic)) "not a node" else "undefined")
-      val code = if ((isAtomic)) "XPTY0020" else "XPDY0002"
+      val isAtomic = item.isInstanceOf[AtomicValue]
+      val appendText = " is " + (if (isAtomic) "not a node" else "undefined")
+      val code = if (isAtomic) "XPTY0020" else "XPDY0002"
       val err = new XPathException("The context item for axis step " + cName + appendText)
       err.setErrorCode(code)
       err.setLocator(getSourceLocator)

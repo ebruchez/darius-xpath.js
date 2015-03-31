@@ -53,8 +53,8 @@ class QNameValue(prefix: String, uri: String, localName: String) extends AtomicV
       err.setErrorCode("FORG0001")
       throw err
     }
-    prefix = (if (prefix == null) "" else prefix)
-    uri = (if ("" == uri) null else uri)
+    prefix = if (prefix == null) "" else prefix
+    uri = if ("" == uri) null else uri
     if (uri == null && prefix.length != 0) {
       val err = new XPathException("QName has null namespace but non-empty prefix")
       err.setErrorCode("FOCA0002")
@@ -161,7 +161,7 @@ class QNameValue(prefix: String, uri: String, localName: String) extends AtomicV
    * @param implicitTimezone
    */
   def getXPathComparable(ordered: Boolean, collator: StringCollator, implicitTimezone: Int): AnyRef = {
-    (if (ordered) null else this)
+    if (ordered) null else this
   }
 
   override def hashCode(): Int = qName.hashCode

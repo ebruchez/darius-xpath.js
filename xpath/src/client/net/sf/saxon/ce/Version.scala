@@ -48,7 +48,7 @@ object Version {
    * @return the version number of this version of Saxon, as a string: for example "9.0.1"
    */
   def getProductVersion(): String = {
-    val prefixSeparator = if ((VERSION_PREFIX == "")) "" else " "
+    val prefixSeparator = if (VERSION_PREFIX == "") "" else " "
     VERSION_PREFIX + prefixSeparator + MAJOR_VERSION + "." + 
       MINOR_VERSION
   }
@@ -59,7 +59,7 @@ object Version {
    * @return the suffix, as a string: for example "R2" for Release 2.3
    */
   def getLicenseFileName(): String = {
-    val prefix = if ((VERSION_PREFIX == "")) "" else Character toString VERSION_PREFIX.charAt(0)
+    val prefix = if (VERSION_PREFIX == "") "" else Character toString VERSION_PREFIX.charAt(0)
     "saxonce-license-" + prefix + MAJOR_VERSION + ".txt"
   }
 

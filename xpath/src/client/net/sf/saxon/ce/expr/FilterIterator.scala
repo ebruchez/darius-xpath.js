@@ -60,7 +60,7 @@ class FilterIterator(_base: SequenceIterator, protected var filter: Expression, 
       if (first.isInstanceOf[BooleanValue]) {
         first.asInstanceOf[BooleanValue].getBooleanValue
       } else if (first.isInstanceOf[StringValue]) {
-        (first.getStringValue.length != 0)
+        first.getStringValue.length != 0
       } else if (first.isInstanceOf[NumericValue]) {
         first.asInstanceOf[NumericValue].compareTo(base.position()) == 
           0

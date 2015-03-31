@@ -87,7 +87,7 @@ class BooleanFn(_operation: Int) extends SystemFunction {
     if (e == this) {
       if (operation == BOOLEAN) {
         val ebv = rewriteEffectiveBooleanValue(argument(0), visitor, contextItemType)
-        return (if (ebv == null) this else ebv.optimize(visitor, contextItemType))
+        return if (ebv == null) this else ebv.optimize(visitor, contextItemType)
       } else {
         val ebv = rewriteEffectiveBooleanValue(argument(0), visitor, contextItemType)
         if (ebv != null) {
@@ -111,6 +111,6 @@ class BooleanFn(_operation: Int) extends SystemFunction {
    */
   override def effectiveBooleanValue(c: XPathContext): Boolean = {
     val b = argument(0).effectiveBooleanValue(c)
-    (if (operation == BOOLEAN) b else !b)
+    if (operation == BOOLEAN) b else !b
   }
 }

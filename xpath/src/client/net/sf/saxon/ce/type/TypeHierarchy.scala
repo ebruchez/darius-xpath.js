@@ -83,7 +83,7 @@ class TypeHierarchy {
    */
   def isSubType(subtype: ItemType, supertype: ItemType): Boolean = {
     val relation = relationship(subtype, supertype)
-    (relation == SAME_TYPE || relation == SUBSUMED_BY)
+    relation == SAME_TYPE || relation == SUBSUMED_BY
   }
 
   /**
@@ -186,7 +186,7 @@ class TypeHierarchy {
           if (t2.isInstanceOf[NameTest]) {
             n2 = t2.asInstanceOf[NameTest].getRequiredNodeName
           }
-          nodeNameRelationship = if (n1 == null) (if (n2 == null) SAME_TYPE else SUBSUMES) else if (n2 == null) SUBSUMED_BY else (if (n1 == n2) SAME_TYPE else DISJOINT)
+          nodeNameRelationship = if (n1 == null) if (n2 == null) SAME_TYPE else SUBSUMES else if (n2 == null) SUBSUMED_BY else if (n1 == n2) SAME_TYPE else DISJOINT
           if (nodeKindRelationship == SAME_TYPE && nodeNameRelationship == SAME_TYPE) {
             SAME_TYPE
           } else if ((nodeKindRelationship == SAME_TYPE || nodeKindRelationship == SUBSUMES) && 

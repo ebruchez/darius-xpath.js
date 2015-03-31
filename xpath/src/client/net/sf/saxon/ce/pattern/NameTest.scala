@@ -45,7 +45,7 @@ class NameTest(var nodeKind: Int, var qName: StructuredQName) extends NodeTest {
       return false
     }
     val name = node.getNodeName
-    (if (name == null) qName == null else name == qName)
+    if (name == null) qName == null else name == qName
   }
 
   /**
@@ -54,7 +54,7 @@ class NameTest(var nodeKind: Int, var qName: StructuredQName) extends NodeTest {
    * @return true if the name matches
    */
   def matches(name: StructuredQName): Boolean = {
-    (if (name == null) qName == null else name == qName)
+    if (name == null) qName == null else name == qName
   }
 
   /**

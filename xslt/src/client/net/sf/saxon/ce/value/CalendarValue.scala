@@ -193,10 +193,10 @@ abstract class CalendarValue extends AtomicValue {
    * @return an Object whose equals() and hashCode() methods implement the XPath comparison semantics
    */
   def getXPathComparable(ordered: Boolean, collator: StringCollator, implicitTimezone: Int): AnyRef = {
-    if (ordered && !(this.isInstanceOf[Comparable[_]])) {
+    if (ordered && !this.isInstanceOf[Comparable[_]]) {
       return null
     }
-    (if (hasTimezone()) this else adjustTimezone(implicitTimezone))
+    if (hasTimezone()) this else adjustTimezone(implicitTimezone)
   }
 
   /**

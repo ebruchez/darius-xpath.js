@@ -232,11 +232,11 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * Is this expression the same as another expression?
    */
   override def equals(other: Any): Boolean = {
-    if (!(other.isInstanceOf[SlashExpression])) {
+    if (!other.isInstanceOf[SlashExpression]) {
       return false
     }
     val p = other.asInstanceOf[SlashExpression]
-    (start == p.start && step == p.step)
+    start == p.start && step == p.step
   }
 
   /**

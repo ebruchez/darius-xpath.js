@@ -117,7 +117,7 @@ class ElementImpl extends ParentNodeImpl {
    */
   def getSystemId(): String = {
     val root = getPhysicalRoot
-    (if (root == null) null else root.getSystemId(getRawSequenceNumber))
+    if (root == null) null else root.getSystemId(getRawSequenceNumber)
   }
 
   /**
@@ -238,7 +238,7 @@ class ElementImpl extends ParentNodeImpl {
    *         <p>For a node other than an element, the method returns null.</p>
    */
   def getDeclaredNamespaces(buffer: Array[NamespaceBinding]): Array[NamespaceBinding] = {
-    (if (namespaceList == null) NamespaceBinding.EMPTY_ARRAY else namespaceList)
+    if (namespaceList == null) NamespaceBinding.EMPTY_ARRAY else namespaceList
   }
 
   /**
@@ -248,7 +248,7 @@ class ElementImpl extends ParentNodeImpl {
    * replaced by URIs
    */
   def getAttributeList(): AttributeCollection = {
-    (if (attributeList == null) AttributeCollection.EMPTY_ATTRIBUTE_COLLECTION else attributeList)
+    if (attributeList == null) AttributeCollection.EMPTY_ATTRIBUTE_COLLECTION else attributeList
   }
 
   /**
@@ -258,6 +258,6 @@ class ElementImpl extends ParentNodeImpl {
    *  @return the attribute value if it exists or null if not
    */
   def getAttributeValue(uri: String, localName: String): String = {
-    (if (attributeList == null) null else attributeList.getValue(uri, localName))
+    if (attributeList == null) null else attributeList.getValue(uri, localName)
   }
 }

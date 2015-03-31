@@ -19,7 +19,7 @@ object Insert {
 
     private var current: Item = null
 
-    private var inserting: Boolean = (insertPosition == 1)
+    private var inserting: Boolean = insertPosition == 1
 
     def next(): Item = {
       var nextItem: Item = null

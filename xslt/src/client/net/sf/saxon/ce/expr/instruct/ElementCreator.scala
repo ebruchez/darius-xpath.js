@@ -116,7 +116,7 @@ abstract class ElementCreator extends ParentNodeConstructor {
       if (out.getSystemId == null) {
         out.setSystemId(getNewBaseURI(context, copiedNode))
       }
-      val properties = (if (inheritNamespaces) 0 else ReceiverOptions.DISINHERIT_NAMESPACES)
+      val properties = if (inheritNamespaces) 0 else ReceiverOptions.DISINHERIT_NAMESPACES
       out.startElement(nameCode, properties)
       outputNamespaceNodes(context, out, nameCode, copiedNode)
       content.process(context)
@@ -155,7 +155,7 @@ abstract class ElementCreator extends ParentNodeConstructor {
         seq.setSystemId(getNewBaseURI(c2, copiedNode))
       }
       seq.open()
-      val properties = (if (inheritNamespaces) 0 else ReceiverOptions.DISINHERIT_NAMESPACES)
+      val properties = if (inheritNamespaces) 0 else ReceiverOptions.DISINHERIT_NAMESPACES
       seq.startElement(nameCode, properties)
       outputNamespaceNodes(c2, seq, nameCode, null)
       content.process(c2)

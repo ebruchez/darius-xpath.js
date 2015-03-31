@@ -66,7 +66,7 @@ object Xslt20ProcessorImpl {
   /* native */ def bindTemplateToWindowEvent(eventName: String, target: JavaScriptObject): String
 
   def relayNonDomEvent(name: String, obj: JavaScriptObject, eventArg: JavaScriptObject): Unit = {
-    val event = if ((eventArg == null)) getWindowEvent else eventArg
+    val event = if (eventArg == null) getWindowEvent else eventArg
     Controller.relayNonDomEvent(name, obj, event)
   }
 
@@ -77,7 +77,7 @@ object Xslt20ProcessorImpl {
       return
     }
     var excName: String = null
-    prefix = if ((prefix == null || prefix.length == 0)) "" else " in " + prefix + ":"
+    prefix = if (prefix == null || prefix.length == 0) "" else " in " + prefix + ":"
     var logException = true
     if (err.isInstanceOf[XPathException]) {
       excName = "XPathException"
@@ -211,7 +211,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
       var absSourceURI: String = null
       if (sourceURI != null && sourceURI.length != 0) {
         val pageHref = Window.Location.getHref
-        absSourceURI = (new URI(pageHref).resolve(sourceURI)).toString
+        absSourceURI = new URI(pageHref).resolve(sourceURI).toString
         if (pageHref == absSourceURI) {
           throw new XPathException("Cannot load XML with same URI as the host page")
         }
@@ -219,14 +219,14 @@ class Xslt20ProcessorImpl extends EntryPoint {
       } else if (initialTemplate == null) {
         throw new XPathException("No data-source attribute or data-initial-template value found - one is required")
       }
-      val absStyleURI = (new URI(Window.Location.getHref).resolve(styleURI))
+      val absStyleURI = new URI(Window.Location.getHref).resolve(styleURI)
         .toString
       var styleDoc: DocumentInfo = null
       try {
         styleDoc = config.buildDocument(absStyleURI)
       } catch {
         case e: XPathException => {
-          val reportURI = if ((absSourceURI != null)) absSourceURI else styleURI
+          val reportURI = if (absSourceURI != null) absSourceURI else styleURI
           throw new XPathException("Failed to load XSLT stylesheet " + reportURI + ": " + 
             e.getMessage)
         }
@@ -271,7 +271,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
   }
 
   def transformToFragment(sourceDoc: JavaScriptObject, ownerDocument: Document): Node = {
-    val owner = if ((ownerDocument == null)) XMLDOM.createDocument(localController.getBaseOutputURI) else ownerDocument
+    val owner = if (ownerDocument == null) XMLDOM.createDocument(localController.getBaseOutputURI) else ownerDocument
     val targetDocumentFragment = HTMLDocumentWrapper.createDocumentFragment(owner)
     localController.setTargetNode(owner)
     localController.setApiCommand(APIcommand.TRANSFORM_TO_FRAGMENT)
@@ -367,7 +367,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
         logger.log(Level.FINE, "Stylesheet compiled OK")
       }
       if (asyncSourceURI == null && inSourceDoc != null) {
-        val nodeType = if ((Node.is(inSourceDoc))) inSourceDoc.asInstanceOf[Node].getNodeType else 0
+        val nodeType = if (Node.is(inSourceDoc)) inSourceDoc.asInstanceOf[Node].getNodeType else 0
         if (nodeType > 0 && nodeType != Node.DOCUMENT_NODE) {
           val sourceNode = inSourceDoc.asInstanceOf[Node]
           val sourceDoc = sourceNode.getOwnerDocument

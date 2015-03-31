@@ -389,7 +389,7 @@ class Controller {
     if (allOutputDestinations == null) {
       allOutputDestinations = new HashSet[DocumentURI](20)
     }
-    !(allOutputDestinations.contains(uri))
+    !allOutputDestinations.contains(uri)
   }
 
   /**
@@ -413,7 +413,7 @@ class Controller {
   }
 
   def getResultDocumentCount(): Int = {
-    if ((resultDocumentPool == null)) 0 else resultDocumentPool.size
+    if (resultDocumentPool == null) 0 else resultDocumentPool.size
   }
 
   def importResults(ctrl: Controller): Unit = {
@@ -481,7 +481,7 @@ class Controller {
    * @return true if the transformation has evaluated an xsl:result-document instruction
    */
   def hasThereBeenAnExplicitResultDocument(): Boolean = {
-    (resultDocumentPool != null && resultDocumentPool.size > 0)
+    resultDocumentPool != null && resultDocumentPool.size > 0
   }
 
   /**

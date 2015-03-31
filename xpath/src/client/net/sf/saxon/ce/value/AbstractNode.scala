@@ -22,7 +22,7 @@ abstract class AbstractNode extends Item with Sequence {
    * SequenceValues, but its real benefits come for a SequenceValue stored extensionally
    * (or for a MemoClosure, once all the values have been read)
    */
-  def itemAt(n: Int): Item = (if (n == 0) this else null)
+  def itemAt(n: Int): Item = if (n == 0) this else null
 
   /**
    * Return an enumeration of this nodeset value.

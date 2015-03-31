@@ -189,7 +189,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
 
   protected def getFunctionDeclaration(name: StructuredQName, arity: Int): Declaration = {
     val m = functionIndex.get(arity)
-    (if (m == null) null else m.get(name))
+    if (m == null) null else m.get(name)
   }
 
   /**
@@ -211,7 +211,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
       null
     } else {
       val decl = getFunctionDeclaration(name, arity)
-      (if (decl == null) null else decl.getSourceElement.asInstanceOf[XSLFunction])
+      if (decl == null) null else decl.getSourceElement.asInstanceOf[XSLFunction]
     }
   }
 
@@ -269,7 +269,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
    */
   def getGlobalVariable(qName: StructuredQName): XSLVariableDeclaration = {
     val decl = globalVariableIndex.get(qName)
-    (if (decl == null) null else decl.getSourceElement.asInstanceOf[XSLVariableDeclaration])
+    if (decl == null) null else decl.getSourceElement.asInstanceOf[XSLVariableDeclaration]
   }
 
   /**
@@ -327,7 +327,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
    */
   def getNamedTemplate(name: StructuredQName): XSLTemplate = {
     val decl = templateIndex.get(name)
-    (if (decl == null) null else decl.getSourceElement.asInstanceOf[XSLTemplate])
+    if (decl == null) null else decl.getSourceElement.asInstanceOf[XSLTemplate]
   }
 
   protected def addNamespaceAlias(node: Declaration): Unit = {
@@ -427,7 +427,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
       for (i <- 0 until topLevel.size) {
         val decl = topLevel.get(i)
         val node = decl.getSourceElement
-        if (node.isInstanceOf[StylesheetProcedure] && !(node.isInstanceOf[XSLFunction]) && 
+        if (node.isInstanceOf[StylesheetProcedure] && !node.isInstanceOf[XSLFunction] &&
           !node.isActionCompleted(StyleElement.ACTION_OPTIMIZE)) {
           node.setActionCompleted(StyleElement.ACTION_OPTIMIZE)
           node.asInstanceOf[StylesheetProcedure].optimize(decl)

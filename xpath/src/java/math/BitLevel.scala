@@ -56,7 +56,7 @@ object BitLevel {
     if (bi.sign == 0) {
       return 0
     }
-    var bLength = (bi.numberLength << 5)
+    var bLength = bi.numberLength << 5
     var highDigit = bi.digits(bi.numberLength - 1)
     if (bi.sign < 0) {
       val i = bi.getFirstNonzeroDigit
@@ -78,7 +78,7 @@ object BitLevel {
    * @param n the bit to flip
    */
   def flipBit(bi: BigInteger, n: Int): BigInteger = {
-    val resSign = if ((bi.sign == 0)) 1 else bi.sign
+    val resSign = if (bi.sign == 0) 1 else bi.sign
     val intCount = n >> 5
     val bitN = n & 31
     val resLength = Math.max(intCount + 1, bi.numberLength) + 1
@@ -178,7 +178,7 @@ object BitLevel {
     while ((i < intCount) && (digits(i) == 0)) {
       i += 1
     }
-    ((i != intCount) || (digits(i) << (32 - bitCount) != 0))
+    (i != intCount) || (digits(i) << (32 - bitCount) != 0)
   }
 
   /**
@@ -190,7 +190,7 @@ object BitLevel {
   def shiftLeft(source: BigInteger, count: Int): BigInteger = {
     val intCount: Int = count >> 5
     val andCount: Int = count & 31
-    val resLength: Int = source.numberLength + intCount + (if ((andCount == 0)) 0 else 1)
+    val resLength: Int = source.numberLength + intCount + (if (andCount == 0) 0 else 1)
     val resDigits = new Array[Int](resLength)
     shiftLeft(resDigits, source.digits, intCount, andCount)
     val result = new BigInteger(source.sign, resLength, resDigits)
@@ -219,7 +219,7 @@ object BitLevel {
       var i = result.length - 1
       while (i > intCount) {
         result(i) |= (source(i - intCount - 1) >>> rightShiftCount)
-        result(i - 1) = (source(i - intCount - 1) << count)
+        result(i - 1) = source(i - intCount - 1) << count
         i -= 1
       }
     }
@@ -272,7 +272,7 @@ object BitLevel {
     val intCount: Int = count >> 5
     val andCount: Int = count & 31 // count of remaining bits
     if (intCount >= source.numberLength) {
-      return (if ((source.sign < 0)) BigInteger.MINUS_ONE else BigInteger.ZERO)
+      return if ((source.sign < 0)) BigInteger.MINUS_ONE else BigInteger.ZERO
     }
     var i: Int = 0
     var resLength:Int = source.numberLength - intCount
@@ -338,7 +338,7 @@ object BitLevel {
         result(i) = (source(i + intCount) >>> count) | (source(i + intCount + 1) << leftShiftCount)
         i += 1
       }
-      result(i) = (source(i + intCount) >>> count)
+      result(i) = source(i + intCount) >>> count
       i += 1
     }
     allZero
@@ -349,6 +349,6 @@ object BitLevel {
    * must be in the range {@code [0, val.bitLength()-1]}
    */
   def testBit(bi: BigInteger, n: Int): Boolean = {
-    ((bi.digits(n >> 5) & (1 << (n & 31))) != 0)
+    (bi.digits(n >> 5) & (1 << (n & 31))) != 0
   }
 }

@@ -19,7 +19,7 @@ abstract class SingleNodeExpression extends Expression {
    * Type-check the expression.
    */
   override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
-    if (contextItemType == null || (contextItemType.isInstanceOf[AtomicType])) {
+    if (contextItemType == null || contextItemType.isInstanceOf[AtomicType]) {
       var message = ""
       var code = ""
       if (LogConfiguration.loggingIsEnabled()) {

@@ -64,8 +64,8 @@ object Literal {
   def isConstantBoolean(exp: Expression, value: Boolean): Boolean = {
     if (exp.isInstanceOf[Literal]) {
       val b = exp.asInstanceOf[Literal].getValue
-      return (b.isInstanceOf[BooleanValue] && 
-        b.asInstanceOf[BooleanValue].getBooleanValue == value)
+      return b.isInstanceOf[BooleanValue] &&
+        b.asInstanceOf[BooleanValue].getBooleanValue == value
     }
     false
   }
@@ -79,7 +79,7 @@ object Literal {
     try {
       if (exp.isInstanceOf[Literal]) {
         val v = exp.asInstanceOf[Literal].getValue
-        return (v.isInstanceOf[IntegerValue] && v.asInstanceOf[IntegerValue].intValue() == 1)
+        return v.isInstanceOf[IntegerValue] && v.asInstanceOf[IntegerValue].intValue() == 1
       }
       false
     } catch {
@@ -225,7 +225,7 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
    * because the two expressions are not interchangeable.
    */
   override def equals(obj: Any): Boolean = {
-    if (!(obj.isInstanceOf[Literal])) {
+    if (!obj.isInstanceOf[Literal]) {
       return false
     }
     val v0 = value
@@ -242,8 +242,8 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
         if (m0 == null || m1 == null) {
           return false
         }
-        val n0 = (m0.isInstanceOf[NodeInfo])
-        val n1 = (m1.isInstanceOf[NodeInfo])
+        val n0 = m0.isInstanceOf[NodeInfo]
+        val n1 = m1.isInstanceOf[NodeInfo]
         if (n0 != n1) {
           return false
         }

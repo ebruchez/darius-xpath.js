@@ -60,7 +60,7 @@ class ParameterSet(capacity: Int) {
       return
     }
     if (used + 1 > keys.length) {
-      val newlength = (if (used <= 5) 10 else used * 2)
+      val newlength = if (used <= 5) 10 else used * 2
       val newkeys = new Array[Int](newlength)
       val newChecked = new Array[Boolean](newlength)
       val newvalues = new Array[Sequence](newlength)

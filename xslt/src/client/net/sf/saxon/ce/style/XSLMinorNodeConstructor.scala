@@ -39,7 +39,7 @@ class XSLMinorNodeConstructor extends XSLLeafNodeConstructor {
    * @return the error code defined for this condition, for this particular instruction
    */
   protected def getErrorCodeForSelectPlusContent(): String = {
-    (if (getLocalPart == "namespace") "XTSE0910" else "XTSE0880")
+    if (getLocalPart == "namespace") "XTSE0910" else "XTSE0880"
   }
 
   def compile(exec: Executable, decl: Declaration): Expression = {

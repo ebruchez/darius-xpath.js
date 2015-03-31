@@ -46,7 +46,7 @@ class CopyOf(var select: Expression, var copyNamespaces: Boolean) extends Instru
    * The result depends on the type of the select expression.
    */
   def createsNewNodes(): Boolean = {
-    !(select.getItemType.isInstanceOf[AtomicType])
+    !select.getItemType.isInstanceOf[AtomicType]
   }
 
   /**
@@ -96,7 +96,7 @@ class CopyOf(var select: Expression, var copyNamespaces: Boolean) extends Instru
    */
   def processLeavingTail(context: XPathContext): TailCall = {
     val out = context.getReceiver
-    val copyBaseURI = (out.getSystemId == null)
+    val copyBaseURI = out.getSystemId == null
     var copyOptions = CopyOptions.TYPE_ANNOTATIONS
     if (copyNamespaces) {
       copyOptions |= CopyOptions.ALL_NAMESPACES

@@ -46,7 +46,7 @@ object DayTimeDurationValue {
    */
   def fromSeconds(seconds: BigDecimal): DayTimeDurationValue = {
     val sdv = new DayTimeDurationValue()
-    sdv.negative = (seconds.signum() < 0)
+    sdv.negative = seconds.signum() < 0
     if (sdv.negative) {
       seconds = seconds.negate()
     }
@@ -127,7 +127,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
       Long.MAX_VALUE) {
       throw new IllegalArgumentException("Duration seconds limit exceeded")
     }
-    negative = (sign < 0)
+    negative = sign < 0
     months = 0
     val h = days.toLong * 24L + hours.toLong
     val m = h * 60L + minutes.toLong
@@ -207,7 +207,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
    */
   def getLengthInSeconds(): Double = {
     val a = seconds + (microseconds.toDouble / 1000000)
-    (if (negative) -a else a)
+    if (negative) -a else a
   }
 
   /**
@@ -217,7 +217,7 @@ class DayTimeDurationValue private () extends DurationValue with Comparable[_] {
    */
   def getLengthInMicroseconds(): Long = {
     val a = seconds * 1000000 + microseconds
-    (if (negative) -a else a)
+    if (negative) -a else a
   }
 
   /**

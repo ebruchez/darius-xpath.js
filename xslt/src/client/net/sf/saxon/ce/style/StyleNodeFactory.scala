@@ -40,7 +40,7 @@ class StyleNodeFactory(protected var config: Configuration) extends NodeFactory 
       pipe: PipelineConfiguration, 
       baseURI: String, 
       sequence: Int): ElementImpl = {
-    val toplevel = (parent.isInstanceOf[XSLStylesheet])
+    val toplevel = parent.isInstanceOf[XSLStylesheet]
     if (parent.isInstanceOf[DataElement]) {
       val d = new DataElement()
       d.setNamespaceDeclarations(namespaces, namespacesUsed)
@@ -85,7 +85,7 @@ class StyleNodeFactory(protected var config: Configuration) extends NodeFactory 
     } else {
       val localname = nameCode.getLocalName
       var temp: StyleElement = null
-      if (uriCode == NamespaceConstant.XSLT && (parent.isInstanceOf[XSLStylesheet]) && 
+      if (uriCode == NamespaceConstant.XSLT && parent.isInstanceOf[XSLStylesheet] &&
         parent.asInstanceOf[XSLStylesheet].getEffectiveVersion
         .compareTo(DecimalValue.TWO) <= 
         0) {

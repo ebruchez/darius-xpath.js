@@ -133,7 +133,7 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
 
   private var mostRecentModuleHash: Int = _
 
-  private var isDefault: Boolean = (usage == UNNAMED_MODE)
+  private var isDefault: Boolean = usage == UNNAMED_MODE
 
   private var hasRules: Boolean = false
 
@@ -235,7 +235,7 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
     mostRecentRule = newRule
     mostRecentModuleHash = moduleHash
     val kind = pattern.getNodeKind
-    val nodeName = (if (pattern.getNodeTest.isInstanceOf[NameTest]) pattern.getNodeTest.asInstanceOf[NameTest].getRequiredNodeName else null)
+    val nodeName = if (pattern.getNodeTest.isInstanceOf[NameTest]) pattern.getNodeTest.asInstanceOf[NameTest].getRequiredNodeName else null
     kind match {
       case Type.ELEMENT => {
         if (nodeName == null) {
@@ -409,7 +409,7 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
           //break
         } else if (rank == 0) {
           if (head.isAlwaysMatches || head.getPattern.matches(node, context)) {
-            bestRule = (if (bestRule.getSequence > head.getSequence) bestRule else head)
+            bestRule = if (bestRule.getSequence > head.getSequence) bestRule else head
             //break
           } else {
           }
@@ -486,7 +486,7 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
             //break
           } else if (rank == 0) {
             if (head.isAlwaysMatches || head.getPattern.matches(node, context)) {
-              bestRule = (if (bestRule.getSequence > head.getSequence) bestRule else head)
+              bestRule = if (bestRule.getSequence > head.getSequence) bestRule else head
               //break
             } else {
             }

@@ -24,7 +24,7 @@ object StringToDouble {
         case _ => //break
       }
     }
-    val n = (if (containsWhitespace) Whitespace.trimWhitespace(s).toString else s.toString)
+    val n = if (containsWhitespace) Whitespace.trimWhitespace(s).toString else s.toString
     if ("INF" == n) {
       Double.PositiveInfinity
     } else if ("-INF" == n) {

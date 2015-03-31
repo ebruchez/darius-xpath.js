@@ -18,7 +18,7 @@ object RangeExpression {
 
     def step(current: Item): Item = {
       val curr = current.asInstanceOf[IntegerValue].intValue()
-      (if (curr >= limit) null else new IntegerValue(curr + 1))
+      if (curr >= limit) null else new IntegerValue(curr + 1)
     }
 
     def conforms(current: Item): Boolean = true

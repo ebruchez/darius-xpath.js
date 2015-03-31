@@ -28,7 +28,7 @@ object FormatDate {
    */
   def formatDate(value: CalendarValue, format: String, _language: String): CharSequence = {
     var language = _language
-    val languageDefaulted = (language == null)
+    val languageDefaulted = language == null
     if (language == null) {
       language = "en"
     }
@@ -58,7 +58,7 @@ object FormatDate {
         sb.append('[')
         i += 1
       } else {
-        val close = (if (i < format.length) format.indexOf("]", i) else -1)
+        val close = if (i < format.length) format.indexOf("]", i) else -1
         if (close == -1) {
           throw new XPathException("Date format contains a '[' with no matching ']'", "XTDE1340")
         }
@@ -175,8 +175,8 @@ object FormatDate {
       primary = primary.substring(0, primary.length - 1)
       modifier = "o"
     }
-    val letterValue = (if ("t" == modifier) "traditional" else null)
-    val ordinal = (if ("o" == modifier) numberer.getOrdinalSuffixForDateTime(component) else null)
+    val letterValue = if ("t" == modifier) "traditional" else null
+    val ordinal = if ("o" == modifier) numberer.getOrdinalSuffixForDateTime(component) else null
     var widths: String = matcher.getGroup(2)
     if (widths == null) {
       widths = ""
@@ -330,7 +330,7 @@ class FormatDate extends SystemFunction {
       languageVal = argument(2).evaluateItem(context).asInstanceOf[StringValue]
       calendarVal = argument(3).evaluateItem(context).asInstanceOf[StringValue]
     }
-    val language = (if (languageVal == null) null else languageVal.getStringValue)
+    val language = if (languageVal == null) null else languageVal.getStringValue
     var result = formatDate(value, format, language)
     if (calendarVal != null) {
       val cal = calendarVal.getStringValue

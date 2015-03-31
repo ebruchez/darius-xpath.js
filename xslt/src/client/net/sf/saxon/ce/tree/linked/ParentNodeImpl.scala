@@ -53,7 +53,7 @@ abstract class ParentNodeImpl extends NodeImpl {
   /**
    * Determine if the node has any children.
    */
-  def hasChildNodes(): Boolean = (children != null)
+  def hasChildNodes(): Boolean = children != null
 
   /**
    * Get all children of this node, as an array
@@ -98,7 +98,7 @@ abstract class ParentNodeImpl extends NodeImpl {
   protected def getNthChild(n: Int): NodeImpl = {
     if (children == null) return null
     if (children.isInstanceOf[NodeImpl]) {
-      return (if (n == 0) children.asInstanceOf[NodeImpl] else null)
+      return if (n == 0) children.asInstanceOf[NodeImpl] else null
     }
     val nodes = children.asInstanceOf[Array[NodeImpl]]
     if (n < 0 || n >= nodes.length) return null

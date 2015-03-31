@@ -37,7 +37,7 @@ class StylesheetModule(@BeanProperty var sourceElement: XSLStylesheet, var prece
   def getPrincipalStylesheetModule(): PrincipalStylesheetModule = importer.getPrincipalStylesheetModule
 
   def getPrecedence(): Int = {
-    (if (wasIncluded) importer.getPrecedence else precedence)
+    if (wasIncluded) importer.getPrecedence else precedence
   }
 
   /**

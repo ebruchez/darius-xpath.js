@@ -185,7 +185,7 @@ object StringValue {
 
   def isValidLanguageCode(`val`: CharSequence): Boolean = {
     val regex = "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*"
-    (`val`.toString.matches(regex))
+    `val`.toString.matches(regex)
   }
 
   /**
@@ -232,7 +232,7 @@ class StringValue protected () extends AtomicValue {
    */
   def this(value: CharSequence) {
     this()
-    this.value = (if (value == null) "" else value)
+    this.value = if (value == null) "" else value
   }
 
   /**
@@ -306,7 +306,7 @@ class StringValue protected () extends AtomicValue {
    * @return true if the string contains any non-BMP characters
    */
   def containsSurrogatePairs(): Boolean = {
-    (if (noSurrogates) false else getStringLength != value.length)
+    if (noSurrogates) false else getStringLength != value.length
   }
 
   /**

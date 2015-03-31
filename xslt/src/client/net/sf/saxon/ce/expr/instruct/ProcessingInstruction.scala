@@ -125,7 +125,7 @@ class ProcessingInstruction(var name: Expression) extends SimpleNodeConstructor 
   }
 
   private def checkName(expandedName: String, context: XPathContext): Unit = {
-    if (!(NameChecker.isValidNCName(expandedName))) {
+    if (!NameChecker.isValidNCName(expandedName)) {
       dynamicError("Processing instruction name " + Err.wrap(expandedName) + 
         " is not a valid NCName", "XTDE0890")
     }

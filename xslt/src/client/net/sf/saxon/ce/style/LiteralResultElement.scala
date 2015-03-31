@@ -119,7 +119,7 @@ class LiteralResultElement extends StyleElement {
    * @param decl
    */
   def validate(decl: Declaration): Unit = {
-    toplevel = (getParent.isInstanceOf[XSLStylesheet])
+    toplevel = getParent.isInstanceOf[XSLStylesheet]
     resultNameCode = getNodeName
     val elementURI = getURI
     if (toplevel) {
@@ -161,7 +161,7 @@ class LiteralResultElement extends StyleElement {
           val attURI = anameCode.getNamespaceURI
           if (!attURI.isEmpty) {
             val newNSCode = sheet.getNamespaceAlias(attURI)
-            if ((newNSCode != null && newNSCode.getURI != attURI)) {
+            if (newNSCode != null && newNSCode.getURI != attURI) {
               alias = new StructuredQName(newNSCode.getPrefix, newNSCode.getURI, getAttributeList.getLocalName(i))
             }
           }

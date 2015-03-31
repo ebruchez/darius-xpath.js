@@ -382,7 +382,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
    * @return {@code abs(this)}.
    */
   def abs(): BigInteger = {
-    (if ((sign < 0)) new BigInteger(1, numberLength, digits) else this)
+    if ((sign < 0)) new BigInteger(1, numberLength, digits) else this
   }
 
   /**
@@ -515,7 +515,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     }
     val divisorSign = divisor.sign
     if (divisor.isOne) {
-      return (if ((divisor.sign > 0)) this else this.negate())
+      return if ((divisor.sign > 0)) this else this.negate()
     }
     val thisSign = sign
     val thisLen = numberLength
@@ -527,17 +527,18 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
       }
       return valueOf(bi)
     }
-    val cmp = (if ((thisLen != divisorLen)) (if ((thisLen > divisorLen)) 1 else -1) else Elementary.compareArrays(digits,
-      divisor.digits, thisLen))
+    val cmp = if ((thisLen != divisorLen)) (if ((thisLen > divisorLen)) 1 else -1)
+    else Elementary.compareArrays(digits,
+      divisor.digits, thisLen)
     if (cmp == EQUALS) {
-      return (if ((thisSign == divisorSign)) ONE else MINUS_ONE)
+      return if ((thisSign == divisorSign)) ONE else MINUS_ONE
     }
     if (cmp == LESS) {
       return ZERO
     }
     val resLength = thisLen - divisorLen + 1
     val resDigits = new Array[Int](resLength)
-    val resSign = (if ((thisSign == divisorSign)) 1 else -1)
+    val resSign = if ((thisSign == divisorSign)) 1 else -1
     if (divisorLen == 1) {
       Division.divideArrayByInt(resDigits, digits, thisLen, divisor.digits(0))
     } else {
@@ -573,7 +574,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     // res[0] is a quotient and res[1] is a remainder:
     val thisDigits = digits
     val thisLen = numberLength
-    val cmp = if ((thisLen != divisorLen)) (if ((thisLen > divisorLen)) 1 else -1) else Elementary.compareArrays(thisDigits,
+    val cmp = if (thisLen != divisorLen) if ((thisLen > divisorLen)) 1 else -1 else Elementary.compareArrays(thisDigits,
       divisorDigits, thisLen)
     if (cmp < 0) {
       return Array(ZERO, this)
@@ -581,7 +582,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     val thisSign = sign
     val quotientLength = thisLen - divisorLen + 1
     val remainderLength = divisorLen
-    val quotientSign = (if ((thisSign == divisorSign)) 1 else -1)
+    val quotientSign = if ((thisSign == divisorSign)) 1 else -1
     val quotientDigits = new Array[Int](quotientLength)
     val remainderDigits = Division.divide(quotientDigits, quotientLength, thisDigits, thisLen, divisorDigits,
       divisorLen)
@@ -699,7 +700,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     }
     // (sign != 0) implies that exists some non zero digit
     val i = getFirstNonzeroDigit
-    ((i << 5) + java.lang.Integer.numberOfTrailingZeros(digits(i)))
+    (i << 5) + java.lang.Integer.numberOfTrailingZeros(digits(i))
   }
 
   /**
@@ -712,7 +713,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
       return _hashCode
     }
     for (i <- 0 until digits.length) {
-      _hashCode = (_hashCode * 33 + (digits(i) & 0xffffffff))
+      _hashCode = _hashCode * 33 + (digits(i) & 0xffffffff)
     }
     _hashCode = _hashCode * sign
     _hashCode
@@ -725,7 +726,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
    *
    * @return this {@code BigInteger} as an int value.
    */
-  override def intValue(): Int = (sign * digits(0))
+  override def intValue(): Int = sign * digits(0)
 
   /**
    * Tests whether this {@code BigInteger} is probably prime. If {@code true} is
@@ -749,8 +750,8 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
    * @return this {@code BigInteger} as a long value.
    */
   override def longValue(): Long = {
-    val value = if ((numberLength > 1)) (digits(1).toLong << 32) | (digits(0) & 0xFFFFFFFFL) else (digits(0) & 0xFFFFFFFFL)
-    (sign * value)
+    val value = if (numberLength > 1) (digits(1).toLong << 32) | (digits(0) & 0xFFFFFFFFL) else digits(0) & 0xFFFFFFFFL
+    sign * value
   }
 
 
@@ -828,7 +829,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
       // math.19=BigInteger not invertible.
       throw new ArithmeticException("BigInteger not invertible.")
     }
-    res = (if ((sign < 0)) m.subtract(res) else res)
+    res = if ((sign < 0)) m.subtract(res) else res
     res
   }
 
@@ -866,7 +867,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
       _exponent = _exponent.negate()
     }
     // From now on: (m > 0) and (exponent >= 0)
-    var res = if ((m.testBit(0))) Division.oddModPow(base.abs(), _exponent, m) else Division.evenModPow(base.abs(),
+    var res = if (m.testBit(0)) Division.oddModPow(base.abs(), _exponent, m) else Division.evenModPow(base.abs(),
       _exponent, m)
     if ((base.sign < 0) && _exponent.testBit(0)) {
       res = m.subtract(BigInteger.ONE).multiply(res).mod(m)
@@ -897,7 +898,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
    * @return {@code -this}.
    */
   def negate(): BigInteger = {
-    (if ((sign == 0)) this else new BigInteger(-sign, numberLength, digits))
+    if ((sign == 0)) this else new BigInteger(-sign, numberLength, digits)
   }
 
   /**
@@ -985,7 +986,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     }
     val thisLen = numberLength
     val divisorLen = divisor.numberLength
-    if ((if ((thisLen != divisorLen)) (if ((thisLen > divisorLen)) 1 else -1) else Elementary.compareArrays(digits,
+    if ((if (thisLen != divisorLen) if ((thisLen > divisorLen)) 1 else -1 else Elementary.compareArrays(digits,
       divisor.digits, thisLen)) ==
       LESS) {
       return this
@@ -1039,7 +1040,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     if ((n == 0) || (sign == 0)) {
       return this
     }
-    (if ((n > 0)) BitLevel.shiftLeft(this, n) else BitLevel.shiftRight(this, -n))
+    if ((n > 0)) BitLevel.shiftLeft(this, n) else BitLevel.shiftRight(this, -n)
   }
 
   /**
@@ -1057,7 +1058,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     if ((n == 0) || (sign == 0)) {
       return this
     }
-    (if ((n > 0)) BitLevel.shiftRight(this, n) else BitLevel.shiftLeft(this, -n))
+    if ((n > 0)) BitLevel.shiftRight(this, n) else BitLevel.shiftLeft(this, -n)
   }
 
   /**
@@ -1092,24 +1093,24 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
   def testBit(n: Int): Boolean = {
     var _n = n
     if (_n == 0) {
-      return ((digits(0) & 1) != 0)
+      return (digits(0) & 1) != 0
     }
     if (_n < 0) {
       throw new ArithmeticException("Negative bit address")
     }
     val intCount = _n >> 5
     if (intCount >= numberLength) {
-      return (sign < 0)
+      return sign < 0
     }
     var digit = digits(intCount)
-    _n = (1 << (_n & 31))
+    _n = 1 << (_n & 31)
     if (sign < 0) {
       val firstNonZeroDigit = getFirstNonzeroDigit
       if (intCount < firstNonZeroDigit) {
         return false
       } else digit = if (firstNonZeroDigit == intCount) -digit else ~digit
     }
-    ((digit & _n) != 0)
+    (digit & _n) != 0
   }
 
   /**
@@ -1139,12 +1140,12 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     var hB: Int = 0
 
     if (bytesLen - (numberLength << 2) == 1) {
-      bytes(0) = (if ((sign < 0)) -1 else 0).toByte
+      bytes(0) = (if (sign < 0) -1 else 0).toByte
       highBytes = 4
       firstByteNumber += 1
     } else {
       hB = bytesLen & 3
-      highBytes = if ((hB == 0)) 4 else hB
+      highBytes = if (hB == 0) 4 else hB
     }
     digitIndex = iThis
     bytesLen -= iThis << 2
@@ -1277,11 +1278,11 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
    * Tests if {@code this.abs()} is equals to {@code ONE}.
    */
   def isOne(): Boolean = {
-    ((numberLength == 1) && (digits(0) == 1))
+    (numberLength == 1) && (digits(0) == 1)
   }
 
   def shiftLeftOneBit(): BigInteger = {
-    if ((sign == 0)) this else BitLevel.shiftLeftOneBit(this)
+    if (sign == 0) this else BitLevel.shiftLeftOneBit(this)
   }
 
   def unCache(): Unit = {
@@ -1294,7 +1295,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
   private def putBytesNegativeToIntegers(byteValues: Array[Byte]): Unit = {
     var bytesLen = byteValues.length
     val highBytes = bytesLen & 3
-    numberLength = (bytesLen >> 2) + (if ((highBytes == 0)) 0 else 1)
+    numberLength = (bytesLen >> 2) + (if (highBytes == 0) 0 else 1)
     digits = new Array[Int](numberLength)
     var i = 0
     // Setting the sign
@@ -1348,7 +1349,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
   private def putBytesPositiveToIntegers(byteValues: Array[Byte]): Unit = {
     var bytesLen = byteValues.length
     val highBytes = bytesLen & 3
-    numberLength = (bytesLen >> 2) + (if ((highBytes == 0)) 0 else 1)
+    numberLength = (bytesLen >> 2) + (if (highBytes == 0) 0 else 1)
     digits = new Array[Int](numberLength)
 
     // Put bytes to the int array starting from the end of the byte array
@@ -1402,7 +1403,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     _digits = new Array[Int](bigRadixDigitsLength)
     val bigRadix = Conversion.bigRadices(radix - 2)
     var digitIndex = 0
-    var substrEnd = startChar + (if ((topChars == 0)) charsPerInt else topChars)
+    var substrEnd = startChar + (if (topChars == 0) charsPerInt else topChars)
     var newDigit: Int = 0
     var substrStart = startChar
     while (substrStart < endChar) {

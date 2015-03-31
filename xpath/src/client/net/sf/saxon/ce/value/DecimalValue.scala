@@ -289,7 +289,7 @@ class DecimalValue(_value: Either[BigDecimal, Double]) extends NumericValue {
     } else if (requiredType == AtomicType.STRING) {
       new StringValue(getStringValue)
     } else if (requiredType == AtomicType.UNTYPED_ATOMIC) {
-      new UntypedAtomicValue((getStringValue))
+      new UntypedAtomicValue(getStringValue)
     } else {
       new ValidationFailure("Cannot convert decimal to " + requiredType.getDisplayName, "XPTY0004")
     }

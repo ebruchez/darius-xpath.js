@@ -76,38 +76,38 @@ class XSLDecimalFormat extends StyleElement {
   def makeDecimalFormatSymbols(): DecimalSymbols = {
     val d = new DecimalSymbols()
     if (decimalSeparator != null) {
-      d.decimalSeparator = (toChar(decimalSeparator))
+      d.decimalSeparator = toChar(decimalSeparator)
     }
     if (groupingSeparator != null) {
-      d.groupingSeparator = (toChar(groupingSeparator))
+      d.groupingSeparator = toChar(groupingSeparator)
     }
     if (infinity != null) {
-      d.infinity = (infinity)
+      d.infinity = infinity
     }
     if (minusSign != null) {
-      d.minusSign = (toChar(minusSign))
+      d.minusSign = toChar(minusSign)
     }
     if (NaN != null) {
-      d.NaN = (NaN)
+      d.NaN = NaN
     }
     if (percent != null) {
-      d.percent = (toChar(percent))
+      d.percent = toChar(percent)
     }
     if (perMille != null) {
-      d.permill = (toChar(perMille))
+      d.permill = toChar(perMille)
     }
     if (zeroDigit != null) {
-      d.zeroDigit = (toChar(zeroDigit))
-      if (!(d.isValidZeroDigit)) {
+      d.zeroDigit = toChar(zeroDigit)
+      if (!d.isValidZeroDigit) {
         compileError("The value of the zero-digit attribute must be a Unicode digit with value zero", 
           "XTSE1295")
       }
     }
     if (digit != null) {
-      d.digit = (toChar(digit))
+      d.digit = toChar(digit)
     }
     if (patternSeparator != null) {
-      d.patternSeparator = (toChar(patternSeparator))
+      d.patternSeparator = toChar(patternSeparator)
     }
     try {
       d.checkDistinctRoles()

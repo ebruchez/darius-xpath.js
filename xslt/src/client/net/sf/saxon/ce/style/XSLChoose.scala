@@ -60,7 +60,7 @@ class XSLChoose extends StyleElement {
           otherwise = child.asInstanceOf[StyleElement]
         }
       } else {
-        val se = (if (child.isInstanceOf[StyleElement]) child.asInstanceOf[StyleElement] else this)
+        val se = if (child.isInstanceOf[StyleElement]) child.asInstanceOf[StyleElement] else this
         se.compileError("Only xsl:when and xsl:otherwise are allowed within xsl:choose", "XTSE0010")
       }
     }
@@ -100,8 +100,9 @@ class XSLChoose extends StyleElement {
       } else {
       }
       if (conditionTests != null) {
-        conditionTests(w) = (if (child.isInstanceOf[XSLWhen]) child.asInstanceOf[XSLWhen].getAttributeValue("", 
-          "test") else "")
+        conditionTests(w) = if (child.isInstanceOf[XSLWhen]) child.asInstanceOf[XSLWhen].getAttributeValue("",
+          "test")
+        else ""
       }
       w += 1
     }

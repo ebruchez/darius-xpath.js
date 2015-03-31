@@ -28,7 +28,7 @@ class XSLParam extends XSLVariableDeclaration {
 
   var conversion: Expression = null
 
-  protected def allowsValue(): Boolean = !(getParent.isInstanceOf[XSLFunction])
+  protected def allowsValue(): Boolean = !getParent.isInstanceOf[XSLFunction]
 
   protected def allowsRequired(): Boolean = {
     getParent.asInstanceOf[StyleElement].mayContainParam("required")
@@ -38,8 +38,8 @@ class XSLParam extends XSLVariableDeclaration {
 
   def validate(decl: Declaration): Unit = {
     val parent = getParent
-    global = (parent.isInstanceOf[XSLStylesheet])
-    if (!((parent.isInstanceOf[StyleElement]) && 
+    global = parent.isInstanceOf[XSLStylesheet]
+    if (!(parent.isInstanceOf[StyleElement] &&
       parent.asInstanceOf[StyleElement].mayContainParam(null))) {
       compileError("xsl:param must be immediately within a template, function or stylesheet", "XTSE0010")
     }

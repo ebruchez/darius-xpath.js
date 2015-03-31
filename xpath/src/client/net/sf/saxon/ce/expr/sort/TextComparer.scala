@@ -37,7 +37,7 @@ class TextComparer(@BeanProperty var baseComparer: AtomicComparer) extends Atomi
     if (a.isInstanceOf[StringValue]) {
       a.asInstanceOf[StringValue]
     } else {
-      new StringValue((if (a == null) "" else a.getStringValue))
+      new StringValue(if (a == null) "" else a.getStringValue)
     }
   }
 

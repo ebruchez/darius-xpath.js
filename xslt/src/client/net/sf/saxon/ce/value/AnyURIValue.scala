@@ -27,7 +27,7 @@ object AnyURIValue {
  */
 class AnyURIValue(value: CharSequence) extends StringValue {
 
-  this.value = (if (value == null) "" else Whitespace.collapseWhitespace(value).toString)
+  this.value = if (value == null) "" else Whitespace.collapseWhitespace(value).toString
 
   def getItemType(): AtomicType = AtomicType.ANY_URI
 

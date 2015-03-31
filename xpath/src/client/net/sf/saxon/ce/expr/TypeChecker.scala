@@ -65,7 +65,7 @@ object TypeChecker {
     val allowsMany = Cardinality.allowsMany(reqCard)
     var suppliedItemType: ItemType = null
     var suppliedCard = -1
-    var cardOK = (reqCard == StaticProperty.ALLOWS_ZERO_OR_MORE)
+    var cardOK = reqCard == StaticProperty.ALLOWS_ZERO_OR_MORE
     if (!cardOK) {
       suppliedCard = exp.getCardinality
       cardOK = Cardinality.subsumes(reqCard, suppliedCard)
@@ -110,7 +110,7 @@ object TypeChecker {
     }
     if (!itemTypeOK) {
       if (reqItemType.isInstanceOf[AtomicType]) {
-        if (!(suppliedItemType.isInstanceOf[AtomicType]) && !(suppliedCard == StaticProperty.EMPTY)) {
+        if (!suppliedItemType.isInstanceOf[AtomicType] && !(suppliedCard == StaticProperty.EMPTY)) {
           exp = new Atomizer(exp)
           suppliedItemType = exp.getItemType
           suppliedCard = exp.getCardinality
@@ -128,9 +128,9 @@ object TypeChecker {
           0) {
           exp = new UntypedAtomicConverter(exp, reqItemType.asInstanceOf[AtomicType], false, role)
         }
-        if ((reqItemType == AtomicType.DOUBLE && 
-          th.relationship(suppliedItemType, AtomicType.NUMERIC) != 
-          TypeHierarchy.DISJOINT)) {
+        if (reqItemType == AtomicType.DOUBLE &&
+          th.relationship(suppliedItemType, AtomicType.NUMERIC) !=
+            TypeHierarchy.DISJOINT) {
           exp = new PromoteToDouble(exp)
           suppliedItemType = AtomicType.DOUBLE
           suppliedCard = -1
@@ -139,7 +139,7 @@ object TypeChecker {
           TypeHierarchy.DISJOINT && 
           !th.isSubType(suppliedItemType, AtomicType.DOUBLE)) {
           exp = new PromoteToFloat(exp)
-          suppliedItemType = (if (reqItemType == AtomicType.DOUBLE) AtomicType.DOUBLE else AtomicType.FLOAT)
+          suppliedItemType = if (reqItemType == AtomicType.DOUBLE) AtomicType.DOUBLE else AtomicType.FLOAT
           suppliedCard = -1
         }
         if (reqItemType == AtomicType.STRING && th.isSubType(suppliedItemType, AtomicType.ANY_URI)) {
@@ -166,8 +166,9 @@ object TypeChecker {
       err.setIsTypeError(true)
       throw err
     }
-    val relation = (if (itemTypeOK) TypeHierarchy.SUBSUMED_BY else th.relationship(suppliedItemType, 
-      reqItemType))
+    val relation = if (itemTypeOK) TypeHierarchy.SUBSUMED_BY
+    else th.relationship(suppliedItemType,
+      reqItemType)
     if (relation == TypeHierarchy.DISJOINT) {
       if (Cardinality.allowsZero(suppliedCard) && Cardinality.allowsZero(reqCard)) {
       } else {
@@ -233,8 +234,8 @@ object TypeChecker {
         }
         count += 1
         if (!reqItemType.matchesItem(item)) {
-          return ("Required type is " + reqItemType + "; supplied value includes an item of type " +
-            SequenceTool.getItemType(item))
+          return "Required type is " + reqItemType + "; supplied value includes an item of type " +
+            SequenceTool.getItemType(item)
         }
       }
     }

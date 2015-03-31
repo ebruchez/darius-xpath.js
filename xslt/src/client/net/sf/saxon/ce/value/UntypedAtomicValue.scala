@@ -21,7 +21,7 @@ class UntypedAtomicValue(value: CharSequence) extends StringValue {
 
   var doubleValue: DoubleValue = null
 
-  this.value = (if (value == null) "" else value)
+  this.value = if (value == null) "" else value
 
   /**
    * Determine the primitive type of the value. This delivers the same answer as

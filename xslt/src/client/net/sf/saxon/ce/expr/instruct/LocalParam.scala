@@ -59,8 +59,8 @@ class LocalParam extends GeneralVariable {
    * Process the local parameter declaration
    */
   def processLeavingTail(context: XPathContext): TailCall = {
-    val params = (if (isTunnelParam) context.getTunnelParameters else context.getLocalParameters)
-    val index = (if (params == null) -1 else params.getIndex(getParameterId))
+    val params = if (isTunnelParam) context.getTunnelParameters else context.getLocalParameters
+    val index = if (params == null) -1 else params.getIndex(getParameterId)
     if (index < 0) {
       if (isImplicitlyRequiredParam) {
         val name = "$" + getVariableQName.getDisplayName

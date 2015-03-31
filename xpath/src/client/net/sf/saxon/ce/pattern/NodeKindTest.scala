@@ -38,14 +38,14 @@ object NodeKindTest {
   }
 
   def toString(kind: Int): String = kind match {
-    case Type.DOCUMENT => ("document-node()")
-    case Type.ELEMENT => ("element()")
-    case Type.ATTRIBUTE => ("attribute()")
-    case Type.COMMENT => ("comment()")
-    case Type.TEXT => ("text()")
-    case Type.PROCESSING_INSTRUCTION => ("processing-instruction()")
-    case Type.NAMESPACE => ("namespace()")
-    case _ => ("** error **")
+    case Type.DOCUMENT => "document-node()"
+    case Type.ELEMENT => "element()"
+    case Type.ATTRIBUTE => "attribute()"
+    case Type.COMMENT => "comment()"
+    case Type.TEXT => "text()"
+    case Type.PROCESSING_INSTRUCTION => "processing-instruction()"
+    case Type.NAMESPACE => "namespace()"
+    case _ => "** error **"
   }
 
   /**
@@ -54,14 +54,14 @@ object NodeKindTest {
    * @return the name of the node kind, for example "element" or "attribute"
    */
   def nodeKindName(kind: Int): String = kind match {
-    case Type.DOCUMENT => ("document")
-    case Type.ELEMENT => ("element")
-    case Type.ATTRIBUTE => ("attribute")
-    case Type.COMMENT => ("comment")
-    case Type.TEXT => ("text")
-    case Type.PROCESSING_INSTRUCTION => ("processing-instruction")
-    case Type.NAMESPACE => ("namespace")
-    case _ => ("** error **")
+    case Type.DOCUMENT => "document"
+    case Type.ELEMENT => "element"
+    case Type.ATTRIBUTE => "attribute"
+    case Type.COMMENT => "comment"
+    case Type.TEXT => "text"
+    case Type.PROCESSING_INSTRUCTION => "processing-instruction"
+    case Type.NAMESPACE => "namespace"
+    case _ => "** error **"
   }
 }
 

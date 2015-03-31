@@ -39,7 +39,7 @@ class XSLWhen extends StyleElement {
   def mayContainSequenceConstructor(): Boolean = true
 
   def validate(decl: Declaration): Unit = {
-    if (!(getParent.isInstanceOf[XSLChoose])) {
+    if (!getParent.isInstanceOf[XSLChoose]) {
       compileError("xsl:when must be immediately within xsl:choose", "XTSE0010")
     }
     test = typeCheck(test)

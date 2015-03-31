@@ -127,7 +127,7 @@ class UseAttributeSets(var attributeSets: Array[AttributeSet]) extends Instructi
    * @param obj the other expression
    */
   override def equals(obj: Any): Boolean = {
-    if (!(obj.isInstanceOf[UseAttributeSets])) {
+    if (!obj.isInstanceOf[UseAttributeSets]) {
       return false
     }
     if (attributeSets.length != 

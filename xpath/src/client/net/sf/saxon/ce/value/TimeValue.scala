@@ -40,7 +40,7 @@ object TimeValue {
     val frac = `match`.getGroup(4)
     if (frac != null && frac.length > 0) {
       val fractionalSeconds = frac.toDouble
-      dt.microsecond = (Math.round(fractionalSeconds * 1000000)).toInt
+      dt.microsecond = Math.round(fractionalSeconds * 1000000).toInt
     }
     val tz = `match`.getGroup(5)
     val tzmin = CalendarValue.parseTimezone(tz)
@@ -283,7 +283,7 @@ class TimeValue private () extends CalendarValue with Comparable[TimeValue] {
    * @throws XPathException for example if one value is a date and the other is a time
    */
   override def subtract(other: CalendarValue, context: XPathContext): DayTimeDurationValue = {
-    if (!(other.isInstanceOf[TimeValue])) {
+    if (!other.isInstanceOf[TimeValue]) {
       throw new XPathException("First operand of '-' is a time, but the second is not", "XPTY0004")
     }
     super.subtract(other, context)

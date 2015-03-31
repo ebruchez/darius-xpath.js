@@ -158,7 +158,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
     }
     if (!Literal.isConstantBoolean(conditions(conditions.length - 1), true) && 
       !Cardinality.allowsZero(req.getCardinality)) {
-      val cond = (if (conditions.length == 1) "the condition is not" else "none of the conditions is")
+      val cond = if (conditions.length == 1) "the condition is not" else "none of the conditions is"
       val err = new XPathException("Conditional expression: If " + cond + " satisfied, an empty sequence will be returned, " + 
         "but this is not allowed as the " + 
         role.getMessage)
@@ -401,7 +401,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    */
   override def evaluateItem(context: XPathContext): Item = {
     val i = choose(context)
-    (if (i < 0) null else actions(i).evaluateItem(context))
+    if (i < 0) null else actions(i).evaluateItem(context)
   }
 
   /**

@@ -84,7 +84,7 @@ object Base64BinaryValue {
       val in_length = in.length
       for (i <- 0 until in_length) {
         buf = if (buf_bytes == 0) (buf & 0x00FFFF) | (in(i) << 16) else if (buf_bytes == 1) (buf & 0xFF00FF) | ((in(i) << 8) & 0x00FFFF) else (buf & 0xFFFF00) | (in(i) & 0x0000FF)
-        if ((buf_bytes) == 3) {
+        if (buf_bytes == 3) {
           encode_token()
           if (line_length >= 72) {
             flush_line()
@@ -143,8 +143,8 @@ object Base64BinaryValue {
     private var token_length: Int = 0
 
     private def decode_token(): Unit = {
-      val num = ((token(0) << 18) | (token(1) << 12) | (token(2) << 6) | 
-        (token(3)))
+      val num = (token(0) << 18) | (token(1) << 12) | (token(2) << 6) |
+        (token(3))
       bytes(0) = (0xFF & (num >> 16)).toByte
       bytes(1) = (0xFF & (num >> 8)).toByte
       bytes(2) = (0xFF & num).toByte
@@ -184,7 +184,7 @@ object Base64BinaryValue {
       if (eq_count == 1 && (b2 & 0x03) != 0) {
         throw new IllegalArgumentException("In base64, if the value ends with '=' then the last character must be one of [AEIMQUYcgkosw048]")
       }
-      val num = ((b0 << 18) | (b1 << 12) | (b2 << 6) | (b3))
+      val num = (b0 << 18) | (b1 << 12) | (b2 << 6) | (b3)
       ensureCapacity(1)
       out(used) = (num >> 16).toByte
       used += 1
@@ -353,7 +353,7 @@ class Base64BinaryValue(val binaryValue: Array[Byte]) extends AtomicValue {
    * @param implicitTimezone
    */
   def getXPathComparable(ordered: Boolean, collator: StringCollator, implicitTimezone: Int): AnyRef = {
-    (if (ordered) null else this)
+    if (ordered) null else this
   }
 
   /**

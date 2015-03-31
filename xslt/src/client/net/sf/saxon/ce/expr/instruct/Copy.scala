@@ -180,7 +180,7 @@ class Copy(var select: Expression, var copyNamespaces: Boolean, inheritNamespace
   def processLeavingTail(context: XPathContext): TailCall = {
     val out = context.getReceiver
     val item = select.evaluateItem(context)
-    if (!(item.isInstanceOf[NodeInfo])) {
+    if (!item.isInstanceOf[NodeInfo]) {
       out.append(item, NodeInfo.ALL_NAMESPACES)
       return null
     }

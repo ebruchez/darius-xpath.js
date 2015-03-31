@@ -43,7 +43,7 @@ class XSLForEachGroup extends StyleElement {
   /**
    * Specify that xsl:sort is a permitted child
    */
-  protected def isPermittedChild(child: StyleElement): Boolean = (child.isInstanceOf[XSLSort])
+  protected def isPermittedChild(child: StyleElement): Boolean = child.isInstanceOf[XSLSort]
 
   /**
    * Determine whether this type of element is allowed to contain a template-body
@@ -130,7 +130,7 @@ class XSLForEachGroup extends StyleElement {
         select = TypeChecker.staticTypeCheck(select, SequenceType.NODE_SEQUENCE, false, role)
       } catch {
         case err: XPathException => {
-          val prefix = (if (starting != null) "With group-starting-with attribute: " else "With group-ending-with attribute: ")
+          val prefix = if (starting != null) "With group-starting-with attribute: " else "With group-ending-with attribute: "
           compileError(prefix + err.getMessage, err.getErrorCodeQName)
         }
       }

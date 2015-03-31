@@ -129,7 +129,7 @@ class ApplyImports(var operation: Int) extends Instruction {
       throw new XPathException("There is no context item", "XTDE0565")
     }
     val currentItem = context.getContextItem
-    if (!(currentItem.isInstanceOf[NodeInfo])) {
+    if (!currentItem.isInstanceOf[NodeInfo]) {
       dynamicError("The context item is not a node", "XTDE0565")
     }
     if (operation == APPLY_IMPORTS) {

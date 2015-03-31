@@ -29,7 +29,7 @@ class HexBinaryValue(in: CharSequence) extends AtomicValue {
   }
 
   for (i <- 0 until binaryValue.length) {
-    binaryValue(i) = ((fromHex(s.charAt(2 * i)) << 4) + (fromHex(s.charAt(2 * i + 1)))).toByte
+    binaryValue(i) = ((fromHex(s.charAt(2 * i)) << 4) + fromHex(s.charAt(2 * i + 1))).toByte
   }
 
   /**
@@ -122,7 +122,7 @@ class HexBinaryValue(in: CharSequence) extends AtomicValue {
    * @param implicitTimezone
    */
   def getXPathComparable(ordered: Boolean, collator: StringCollator, implicitTimezone: Int): AnyRef = {
-    (if (ordered) null else this)
+    if (ordered) null else this
   }
 
   /**

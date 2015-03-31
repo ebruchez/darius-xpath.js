@@ -326,7 +326,7 @@ object BigDecimal {
   }
 
   private def longCompareTo(value1: Long, value2: Long): Int = {
-    if (value1 > value2) 1 else (if (value1 < value2) -1 else 0)
+    if (value1 > value2) 1 else if (value1 < value2) -1 else 0
   }
 
   /**
@@ -710,7 +710,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     // Extracting the exponent, note that the bias is 1023
     _scale = 1075 - ((bits >> 52) & 0x7FFL).toInt
     // Extracting the 52 bits of the mantissa.
-    mantissa = if ((_scale == 1075)) (bits & 0xFFFFFFFFFFFFFL) << 1 else (bits & 0xFFFFFFFFFFFFFL) | 0x10000000000000L
+    mantissa = if (_scale == 1075) (bits & 0xFFFFFFFFFFFFFL) << 1 else (bits & 0xFFFFFFFFFFFFFL) | 0x10000000000000L
     if (mantissa == 0) {
       _scale = 0
       _precision = 1
@@ -952,7 +952,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     var tempBI: BigInteger = null
     val diffScale = this._scale.toLong - augend._scale
     var largerSignum: Int = 0
-    if ((augend.isZero) || (this.isZero) || (mc.precision == 0)) {
+    if (augend.isZero || this.isZero || (mc.precision == 0)) {
       return add(augend).round(mc)
     }
     // Cases where there is room for optimizations
@@ -1055,7 +1055,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     var leftOperand: BigDecimal = null // it will be only the left operand (this)
     var tempBI: BigInteger = null
     // Some operand is zero or the precision is infinity
-    if ((subtrahend.isZero) || (this.isZero) || (mc.precision == 0)) {
+    if (subtrahend.isZero || this.isZero || (mc.precision == 0)) {
       return subtract(subtrahend).round(mc)
     }
     // Now:   this != 0   and   subtrahend != 0
@@ -1092,7 +1092,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    */
   def multiply(multiplicand: BigDecimal): BigDecimal = {
     val newScale = this._scale.toLong + multiplicand._scale
-    if ((this.isZero) || (multiplicand.isZero)) {
+    if (this.isZero || multiplicand.isZero) {
       return zeroScaledBy(newScale)
     }
     if (this._bitLength + multiplicand._bitLength < 64) {
@@ -1336,7 +1336,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     newScale = safeLongToInt(diffScale + Math.max(k, l))
     // k >= 0  and  l >= 0  implies that  k - l  is in the 32-bit range
     i = k - l
-    p = if ((i > 0)) Multiplication.multiplyByFivePow(p, i) else p.shiftLeft(-i)
+    p = if (i > 0) Multiplication.multiplyByFivePow(p, i) else p.shiftLeft(-i)
     new BigDecimal(p, newScale)
   }
 
@@ -1371,7 +1371,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     var integerQuot: BigInteger = null
     var quotAndRem:Array[BigInteger] = Array(getUnscaledValue)
     // In special cases it reduces the problem to call the dual method
-    if ((mc.precision == 0) || (this.isZero) || (divisor.isZero)) {
+    if ((mc.precision == 0) || this.isZero || divisor.isZero) {
       return this.divide(divisor)
     }
     if (trailingZeros > 0) {
@@ -1438,7 +1438,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
       throw new ArithmeticException("Division by zero")
     }
     if ((divisor.approxPrecision() + newScale > this.approxPrecision() + 1L) ||
-      (this.isZero)) {
+      this.isZero) {
       /* If the divisor's integer part is greater than this's integer part,
        * the result must be zero with the appropriate scale */
       integralValue = BigInteger.ZERO
@@ -1471,7 +1471,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
       loop
       newScale = tempScale
     }
-    (if ((integralValue.signum() == 0)) zeroScaledBy(newScale) else new BigDecimal(integralValue, safeLongToInt(newScale)))
+    if ((integralValue.signum() == 0)) zeroScaledBy(newScale) else new BigDecimal(integralValue, safeLongToInt(newScale))
   }
 
   /**
@@ -1504,7 +1504,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     val quotPrecision = diffPrecision - diffScale + 1
     var quotAndRem = new Array[BigInteger](2)
     // In special cases it call the dual method
-    if ((mcPrecision == 0) || (this.isZero) || (divisor.isZero)) {
+    if ((mcPrecision == 0) || this.isZero || divisor.isZero) {
       return this.divideToIntegralValue(divisor)
     }
     if (quotPrecision <= 0) {
@@ -1527,7 +1527,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
       exp = -newScale// The remaining power of ten
       // If after division there is a remainder...
       if ((quotAndRem(1).signum() != 0) && (exp > 0)) {
-        compRemDiv = (new BigDecimal(quotAndRem(1))).precision() + exp - divisor.precision()
+        compRemDiv = new BigDecimal(quotAndRem(1)).precision() + exp - divisor.precision()
         if (compRemDiv == 0) {
           quotAndRem(1) = quotAndRem(1).multiply(Multiplication.powerOf10(exp))
             .divide(divisor.getUnscaledValue)
@@ -1712,7 +1712,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     var newPrecision = mc
 
     // In particular cases, it reduces the problem to call the other 'pow()'
-    if ((n == 0) || ((isZero) && (n > 0))) {
+    if ((n == 0) || (isZero && (n > 0))) {
       return pow(n)
     }
     if ((m > 999999999) || ((mcPrecision == 0) && (n < 0)) || ((mcPrecision > 0) && (elength > mcPrecision))) {
@@ -1756,7 +1756,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    * {@code mc}.
    */
   def abs(mc: MathContext): BigDecimal = {
-    val result = if ((signum() < 0)) negate() else new BigDecimal(getUnscaledValue, _scale)
+    val result = if (signum() < 0) negate() else new BigDecimal(getUnscaledValue, _scale)
     result.inplaceRound(mc)
     result
   }
@@ -1860,7 +1860,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
       19 // special case required because abs(MIN_VALUE) == MIN_VALUE
     } else {
       val index = Arrays.binarySearch(LONG_POWERS_OF_TEN, Math.abs(value))
-      if ((index < 0)) (-index - 1) else (index + 1)
+      if (index < 0) -index - 1 else index + 1
     }
   }
 
@@ -2135,7 +2135,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     val valueSign = bi.signum()
     if (thisSign == valueSign) {
       if (this._scale == bi._scale && this._bitLength < 64 && bi._bitLength < 64) {
-        return if ((_smallValue < bi._smallValue)) -1 else if ((_smallValue > bi._smallValue)) 1 else 0
+        return if (_smallValue < bi._smallValue) -1 else if (_smallValue > bi._smallValue) 1 else 0
       }
       val diffScale = this._scale.toLong - bi._scale
       val diffPrecision = this.approxPrecision() - bi.approxPrecision()
@@ -2169,7 +2169,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    */
   override def equals(x: Any): Boolean = x match{
     case that: BigDecimal => that._scale == this._scale &&
-      (if (_bitLength < 64) (that._smallValue == this._smallValue) else this.intVal == that.intVal)
+      (if (_bitLength < 64) that._smallValue == this._smallValue else this.intVal == that.intVal)
     case _ => false
   }
 
@@ -2181,7 +2181,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    * @throws NullPointerException  if {@code val == null}.
    */
   def min(bd: BigDecimal): BigDecimal = {
-    (if ((compareTo(bd) <= 0)) this else bd)
+    if ((compareTo(bd) <= 0)) this else bd
   }
 
   /**
@@ -2192,7 +2192,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    * @throws NullPointerException  if {@code val == null}.
    */
   def max(bd: BigDecimal): BigDecimal = {
-    (if ((compareTo(bd) >= 0)) this else bd)
+    if ((compareTo(bd) >= 0)) this else bd
   }
 
   /**
@@ -2237,7 +2237,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     if (_scale == 0) {
       return intString
     }
-    val begin = if ((getUnscaledValue.signum() < 0)) 2 else 1
+    val begin = if (getUnscaledValue.signum() < 0) 2 else 1
     var end = intString.length
     val exponent:Long = -_scale.toLong + end - begin
     val result = new java.lang.StringBuilder()
@@ -2283,7 +2283,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     if (_scale == 0) {
       return intString
     }
-    var begin = if ((getUnscaledValue.signum() < 0)) 2 else 1
+    var begin = if (getUnscaledValue.signum() < 0) 2 else 1
     var end:Int = intString.length
     var exponent:Long = -_scale.toLong + end - begin
     val result = new java.lang.StringBuilder(intString)
@@ -2299,10 +2299,10 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
       var rem = (exponent % 3).toInt
       if (rem != 0) {
         if (getUnscaledValue.signum() == 0) {
-          rem = if ((rem < 0)) -rem else 3 - rem
+          rem = if (rem < 0) -rem else 3 - rem
           exponent += rem
         } else {
-          rem = if ((rem < 0)) rem + 3 else rem
+          rem = if (rem < 0) rem + 3 else rem
           exponent -= rem
           begin += rem
         }
@@ -2349,10 +2349,10 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    */
   def toPlainString(): String = {
     val intStr = getUnscaledValue.toString
-    if ((_scale == 0) || ((isZero) && (_scale < 0))) {
+    if ((_scale == 0) || (isZero && (_scale < 0))) {
       return intStr
     }
-    val begin = if ((signum() < 0)) 1 else 0
+    val begin = if (signum() < 0) 1 else 0
     var delta = _scale
     // We take space for all digits, plus a possible decimal point, plus 'scale'
     val result = new java.lang.StringBuilder(intStr.length + 1 + Math.abs(_scale))
@@ -2396,7 +2396,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    * @return this {@code BigDecimal} as a big integer instance.
    */
   def toBigInteger(): BigInteger = {
-    if ((_scale == 0) || (isZero)) {
+    if ((_scale == 0) || isZero) {
       getUnscaledValue
     } else if (_scale < 0) {
       getUnscaledValue.multiply(Multiplication.powerOf10(-_scale.toLong))
@@ -2415,7 +2415,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
      *             if rounding is necessary.
    */
   def toBigIntegerExact(): BigInteger = {
-    if ((_scale == 0) || (isZero)) {
+    if ((_scale == 0) || isZero) {
       getUnscaledValue
     } else if (_scale < 0) {
       getUnscaledValue.multiply(Multiplication.powerOf10(-_scale.toLong))
@@ -2445,7 +2445,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
      * 10^(-scale). If the scale is positive and very large the long value
      * could be zero.
      */
-    (if ((_scale <= -64) || (_scale > approxPrecision())) 0L else toBigInteger().longValue())
+    if ((_scale <= -64) || (_scale > approxPrecision())) 0L else toBigInteger().longValue()
   }
 
   /**
@@ -2469,7 +2469,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
      * 10^(-scale). If the scale is positive and very large the long value
      * could be zero.
      */
-    (if ((_scale <= -32) || (_scale > approxPrecision())) 0 else toBigInteger().intValue())
+    if ((_scale <= -32) || (_scale > approxPrecision())) 0 else toBigInteger().intValue()
   }
 
   /**
@@ -2569,10 +2569,10 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
 
     if ((powerOfTwo < -1074) || (sign == 0)) {
       // Cases which 'this' is very small
-      return (sign * 0.0d)
+      return sign * 0.0d
     } else if (powerOfTwo > 1025) {
       // Cases which 'this' is very large
-      return (sign * java.lang.Double.POSITIVE_INFINITY)
+      return sign * java.lang.Double.POSITIVE_INFINITY
     }
     mantissa = getUnscaledValue.abs()
     if (_scale <= 0) {
@@ -2623,11 +2623,11 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     }
     // To test if the 53-bits number fits in 'double'
     if (exponent > 2046) {// (exponent - bias > 1023)
-      return (sign * java.lang.Double.POSITIVE_INFINITY)
+      return sign * java.lang.Double.POSITIVE_INFINITY
     } else if (exponent <= 0) {// (exponent - bias <= -1023)
       // Denormalized numbers (having exponent == 0)
        if (exponent < -53) {
-        return (sign * 0.0d)
+        return sign * 0.0d
       }
       // -1076 <= exponent - bias <= -1023
       // To discard '- exponent + 1' bits
@@ -2682,7 +2682,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     }
     val discardedPrecision = precision() - mcPrecision
     // If no rounding is necessary it returns immediately
-    if ((discardedPrecision <= 0)) {
+    if (discardedPrecision <= 0) {
       return
     }
     // When the number is small perform an efficient rounding
@@ -2698,7 +2698,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
     // If the discarded fraction is non-zero, perform rounding
     if (integerAndFraction(1).signum() != 0) {
       // To check if the discarded fraction >= 0.5
-      compRem = (integerAndFraction(1).abs().shiftLeftOneBit().compareTo(sizeOfFraction))
+      compRem = integerAndFraction(1).abs().shiftLeftOneBit().compareTo(sizeOfFraction)
       // To look if there is a carry
       compRem = roundingBehavior(if (integerAndFraction(0).testBit(0)) 1 else 0, integerAndFraction(1).signum() * (5 + compRem),
         mc.roundingMode)

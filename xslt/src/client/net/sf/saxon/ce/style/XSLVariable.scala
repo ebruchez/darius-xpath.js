@@ -47,7 +47,7 @@ class XSLVariable extends XSLVariableDeclaration {
    */
   def getRequiredType(): SequenceType = {
     val th = TypeHierarchy.getInstance
-    val defaultType = (if (requiredType == null) SequenceType.ANY_SEQUENCE else requiredType)
+    val defaultType = if (requiredType == null) SequenceType.ANY_SEQUENCE else requiredType
     if (requiredType != null) {
       requiredType
     } else if (select != null) {

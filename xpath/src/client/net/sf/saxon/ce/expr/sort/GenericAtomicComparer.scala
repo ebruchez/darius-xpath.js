@@ -90,7 +90,7 @@ class GenericAtomicComparer(@BeanProperty var collator: StringCollator, var impl
    */
   def compareAtomicValues(a: AtomicValue, b: AtomicValue): Int = {
     if (a == null) {
-      return (if (b == null) 0 else -1)
+      return if (b == null) 0 else -1
     } else if (b == null) {
       return +1
     }

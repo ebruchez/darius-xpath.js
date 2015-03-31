@@ -101,8 +101,8 @@ class XSLAnalyzeString extends StyleElement {
     }
     try {
       val visitor = makeExpressionVisitor()
-      new AnalyzeString(select, regex, flags, (if (matchingBlock == null) null else matchingBlock.simplify(visitor)), 
-        (if (nonMatchingBlock == null) null else nonMatchingBlock.simplify(visitor)))
+      new AnalyzeString(select, regex, flags, if (matchingBlock == null) null else matchingBlock.simplify(visitor),
+        if (nonMatchingBlock == null) null else nonMatchingBlock.simplify(visitor))
     } catch {
       case e: XPathException => {
         compileError(e)

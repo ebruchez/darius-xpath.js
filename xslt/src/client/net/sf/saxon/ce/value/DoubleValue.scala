@@ -72,7 +72,7 @@ class DoubleValue(var value: Double) extends NumericValue {
    *
    * @return the effective boolean value (true unless the value is zero or NaN)
    */
-  def effectiveBooleanValue(): Boolean = (value != 0.0 && !Double.isNaN(value))
+  def effectiveBooleanValue(): Boolean = value != 0.0 && !Double.isNaN(value)
 
   /**
    * Convert to target data type
@@ -121,7 +121,7 @@ class DoubleValue(var value: Double) extends NumericValue {
     if (Double.isNaN(value)) {
       return "NaN"
     } else if (Double.isInfinite(value)) {
-      return (if (value > 0) "INF" else "-INF")
+      return if (value > 0) "INF" else "-INF"
     }
     val a = Math.abs(value)
     if (isWholeNumber && a < 1e6) {

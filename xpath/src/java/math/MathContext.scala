@@ -147,7 +147,7 @@ case class MathContext(precision: Int, roundingMode: RoundingMode) extends Seria
    *         {@code x} argument; {@code false} otherwise.
    */
   override def equals(x: Any): Boolean = {
-    (x.isInstanceOf[MathContext]) &&
+    x.isInstanceOf[MathContext] &&
       (x.asInstanceOf[MathContext].precision == precision) &&
       (x.asInstanceOf[MathContext].roundingMode == roundingMode)
   }

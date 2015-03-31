@@ -203,7 +203,7 @@ class Executable(config: Configuration) {
     if (topnode.isInstanceOf[LiteralResultElement]) {
       styleDoc = topnode.asInstanceOf[LiteralResultElement].makeStylesheet(this)
     }
-    if (!(styleDoc.getDocumentElement.isInstanceOf[XSLStylesheet])) {
+    if (!styleDoc.getDocumentElement.isInstanceOf[XSLStylesheet]) {
       throw new XPathException("Outermost element of stylesheet is not xsl:stylesheet or xsl:transform or literal result element")
     }
     val top = styleDoc.getDocumentElement.asInstanceOf[XSLStylesheet]

@@ -22,11 +22,11 @@ object NoOpenStartTagException {
     var message: String = null
     var errorCode: String = null
     if (parentIsDocument) {
-      val kind = (if (nodeKind == Type.ATTRIBUTE) "an attribute" else "a namespace")
+      val kind = if (nodeKind == Type.ATTRIBUTE) "an attribute" else "a namespace"
       message = "Cannot create " + kind + " node (" + name + ") whose parent is a document node"
       errorCode = "XTDE0420"
     } else {
-      val kind = (if (nodeKind == Type.ATTRIBUTE) "An attribute" else "A namespace")
+      val kind = if (nodeKind == Type.ATTRIBUTE) "An attribute" else "A namespace"
       message = kind + " node (" + name + 
         ") cannot be created after the children of the containing element"
       errorCode = "XTDE0410"

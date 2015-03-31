@@ -127,7 +127,7 @@ object DeepEqual {
               d2 = c2.next().asInstanceOf[NodeInfo]
             }
             if (d1 == null || d2 == null) {
-              return (d1 == d2)
+              return d1 == d2
             }
             if (!deepEquals(d1, d2, comparer)) {
               false
@@ -149,7 +149,7 @@ object DeepEqual {
             d2 = c2.next().asInstanceOf[NodeInfo]
           }
           if (d1 == null || d2 == null) {
-            return (d1 == d2)
+            return d1 == d2
           }
           if (!deepEquals(d1, d2, comparer)) {
             return false
@@ -160,8 +160,8 @@ object DeepEqual {
       case Type.ATTRIBUTE | Type.PROCESSING_INSTRUCTION | Type.NAMESPACE | Type.TEXT | Type.COMMENT => 
         val s1 = n1.getNodeName
         val s2 = n2.getNodeName
-        ((if (s1 == null) s2 == null else s1 == s2) && 
-          comparer.comparesEqual(n1.getTypedValue, n2.getTypedValue))
+        (if (s1 == null) s2 == null else s1 == s2) &&
+          comparer.comparesEqual(n1.getTypedValue, n2.getTypedValue)
 
       case _ =>
         throw new IllegalArgumentException("Unknown node type")

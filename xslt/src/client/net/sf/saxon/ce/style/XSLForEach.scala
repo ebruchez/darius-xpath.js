@@ -33,7 +33,7 @@ class XSLForEach extends StyleElement {
   /**
    * Specify that xsl:sort is a permitted child
    */
-  protected def isPermittedChild(child: StyleElement): Boolean = (child.isInstanceOf[XSLSort])
+  protected def isPermittedChild(child: StyleElement): Boolean = child.isInstanceOf[XSLSort]
 
   /**
    * Determine the type of item returned by this instruction (only relevant if

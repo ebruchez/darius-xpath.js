@@ -14,7 +14,7 @@ object Numberer_en {
   private val englishOrdinalUnits: Array[String] = Array("", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth", "Eleventh", "Twelfth")
 
   private def abbreviate(name: String, max: Int): String = {
-    (if (name.length > max) name.substring(0, 3) else name)
+    if (name.length > max) name.substring(0, 3) else name
   }
 
   private val englishMonths: Array[String] = Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")

@@ -203,7 +203,7 @@ class SortKeyDefinition {
       val languageX = sortProperties(LANG).evaluateAsString(context).toString
       val props = new HashMap[String, String]()
       if (languageX.length != 0 && 
-        !(sortProperties(LANG).isInstanceOf[StringLiteral])) {
+        !sortProperties(LANG).isInstanceOf[StringLiteral]) {
         if (!StringValue.isValidLanguageCode(sortProperties(LANG).asInstanceOf[StringLiteral].getStringValue)) {
           throw new XPathException("The lang attribute of xsl:sort must be a valid language code", "XTDE0030")
         }

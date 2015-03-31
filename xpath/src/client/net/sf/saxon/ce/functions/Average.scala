@@ -60,7 +60,7 @@ class Average extends Aggregate {
         count += 1
         if (next.isInstanceOf[UntypedAtomicValue]) {
           next = next.convert(AtomicType.DOUBLE).asAtomic()
-        } else if (!(next.isInstanceOf[NumericValue])) {
+        } else if (!next.isInstanceOf[NumericValue]) {
           badMix(context)
         }
         item = ArithmeticExpression.compute(item, Token.PLUS, next, context)
@@ -73,7 +73,7 @@ class Average extends Aggregate {
           return item.asInstanceOf[DurationValue].multiply(1.0 / count)
         }
         count += 1
-        if (!(next.isInstanceOf[DurationValue])) {
+        if (!next.isInstanceOf[DurationValue]) {
           badMix(context)
         }
         item = item.asInstanceOf[DurationValue].add(next.asInstanceOf[DurationValue])

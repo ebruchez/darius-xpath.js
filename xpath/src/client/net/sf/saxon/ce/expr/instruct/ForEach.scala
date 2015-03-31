@@ -61,7 +61,7 @@ class ForEach extends Instruction with ContextMappingFunction {
    */
   override def createsNewNodes(): Boolean = {
     val props = action.getSpecialProperties
-    ((props & StaticProperty.NON_CREATIVE) == 0)
+    (props & StaticProperty.NON_CREATIVE) == 0
   }
 
   /**

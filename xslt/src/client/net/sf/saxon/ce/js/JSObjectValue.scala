@@ -40,7 +40,7 @@ class JSObjectValue(var jsObject: JavaScriptObject) extends Item {
    * @return the n'th item in the sequence, where the first item in the sequence is
    *         numbered zero. If n is negative or >= the length of the sequence, returns null.
    */
-  def itemAt(n: Int): Item = (if (n == 0) this else null)
+  def itemAt(n: Int): Item = if (n == 0) this else null
 
   /**
    * Get the length of the sequence

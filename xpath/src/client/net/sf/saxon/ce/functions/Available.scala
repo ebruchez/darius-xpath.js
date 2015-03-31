@@ -63,7 +63,7 @@ class Available(_operation: Int) extends SystemFunction {
         try {
           val qName = StructuredQName.fromLexicalQName(lexicalQName, env.getDefaultFunctionNamespace, 
             env.getNamespaceResolver)
-          (env.getFunctionLibrary.hasFunctionSignature(qName, arity.toInt))
+          env.getFunctionLibrary.hasFunctionSignature(qName, arity.toInt)
         } catch {
           case e2: XPathException => {
             e2.setErrorCode("XTDE1400")

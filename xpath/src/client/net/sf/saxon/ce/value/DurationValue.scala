@@ -232,7 +232,7 @@ class DurationValue protected () extends AtomicValue {
     } else if (requiredType == AtomicType.YEAR_MONTH_DURATION) {
       YearMonthDurationValue.fromMonths(months * (if (negative) -1 else +1))
     } else if (requiredType == AtomicType.DAY_TIME_DURATION) {
-      new DayTimeDurationValue((if (negative) -1 else +1), 0, 0, 0, seconds, microseconds)
+      new DayTimeDurationValue(if (negative) -1 else +1, 0, 0, 0, seconds, microseconds)
     } else {
       new ValidationFailure("Cannot convert duration to " + requiredType.getDisplayName, "XPTY0004")
     }
@@ -367,7 +367,7 @@ class DurationValue protected () extends AtomicValue {
   def getLengthInSeconds(): Double = {
     val a = months * (365.242199 / 12.0) * 24 * 60 * 60 + seconds + 
       (microseconds.toDouble / 1000000)
-    (if (negative) -a else a)
+    if (negative) -a else a
   }
 
   /**
@@ -375,35 +375,35 @@ class DurationValue protected () extends AtomicValue {
    */
   override def getComponent(component: Int): AtomicValue = component match {
     case Component.YEAR =>
-      var value5 = (if (negative) -getYears else getYears)
+      var value5 = if (negative) -getYears else getYears
       new IntegerValue(value5)
 
     case Component.MONTH =>
-      var value4 = (if (negative) -getMonths else getMonths)
+      var value4 = if (negative) -getMonths else getMonths
       new IntegerValue(value4)
 
     case Component.DAY =>
-      var value3 = (if (negative) -getDays else getDays)
+      var value3 = if (negative) -getDays else getDays
       new IntegerValue(value3)
 
     case Component.HOURS =>
-      var value2 = (if (negative) -getHours else getHours)
+      var value2 = if (negative) -getHours else getHours
       new IntegerValue(value2)
 
     case Component.MINUTES =>
-      var value1 = (if (negative) -getMinutes else getMinutes)
+      var value1 = if (negative) -getMinutes else getMinutes
       new IntegerValue(value1)
 
     case Component.SECONDS =>
       var sb = new FastStringBuffer(FastStringBuffer.TINY)
-      var ms = ("000000" + microseconds)
+      var ms = "000000" + microseconds
       ms = ms.substring(ms.length - 6)
       sb.append((if (negative) "-" else "") + getSeconds + '.' + ms)
       DecimalValue.makeDecimalValue(sb).asInstanceOf[AtomicValue]
 
     case Component.WHOLE_SECONDS => new IntegerValue(new BigDecimal(if (negative) -seconds else seconds))
     case Component.MICROSECONDS =>
-      var value = (if (negative) -microseconds else microseconds)
+      var value = if (negative) -microseconds else microseconds
       new IntegerValue(value)
 
     case _ => throw new IllegalArgumentException("Unknown component for duration: " + component)
@@ -425,7 +425,7 @@ class DurationValue protected () extends AtomicValue {
    * @param implicitTimezone not used when comparing durations
    */
   def getXPathComparable(ordered: Boolean, collator: StringCollator, implicitTimezone: Int): AnyRef = {
-    (if (ordered) null else this)
+    if (ordered) null else this
   }
 
   /**

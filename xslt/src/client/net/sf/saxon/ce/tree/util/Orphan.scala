@@ -136,7 +136,7 @@ class Orphan extends AbstractNode with NodeInfo {
     if (this.isSameNodeInfo(other)) {
       return 0
     }
-    (if (this.hashCode < other.hashCode) -1 else +1)
+    if (this.hashCode < other.hashCode) -1 else +1
   }
 
   /**
@@ -164,7 +164,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * @return the local part of the name. For an unnamed node, returns "".
    */
   def getLocalPart(): String = {
-    (if (qName == null) "" else qName.getLocalName)
+    if (qName == null) "" else qName.getLocalName
   }
 
   /**
@@ -174,7 +174,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * For a node with an empty prefix, return an empty string.
    */
   def getURI(): String = {
-    (if (qName == null) "" else qName.getNamespaceURI)
+    if (qName == null) "" else qName.getNamespaceURI
   }
 
   /**
@@ -184,7 +184,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * For a node with no name, return an empty string.
    */
   def getDisplayName(): String = {
-    (if (qName == null) "" else qName.getDisplayName)
+    if (qName == null) "" else qName.getDisplayName
   }
 
   /**

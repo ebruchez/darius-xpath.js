@@ -212,7 +212,7 @@ class LinkedTreeBuilder extends Builder {
       nslist = NamespaceBinding.EMPTY_ARRAY
     }
     val elem = nodeFactory.makeElementNode(currentNode, elementNameCode, attributes, nslist, namespacesUsed, 
-      pipe, getSystemId, (if (allocateSequenceNumbers) nextNodeNumber += 1 else -1))
+      pipe, getSystemId, if (allocateSequenceNumbers) nextNodeNumber += 1 else -1)
     namespacesUsed = 0
     attributes = null
     while (depth >= arrays.size) {

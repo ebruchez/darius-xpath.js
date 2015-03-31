@@ -282,7 +282,7 @@ object URI {
         }
       }
     }
-    (numDots == 3)
+    numDots == 3
   }
 
   /**
@@ -312,7 +312,7 @@ object URI {
     if (index == -1) {
       return false
     } else if (index == end) {
-      return (counter(0) == 8)
+      return counter(0) == 8
     }
     if (index + 1 < end && address.charAt(index) == ':') {
       if (address.charAt(index + 1) == ':') {
@@ -334,7 +334,7 @@ object URI {
     index = scanHexSequence(address, index, end, counter)
     (index == end) || 
       (index != -1 && 
-      isWellFormedIPv4Address(address.substring(if ((counter(0) > prevCount)) index + 1 else index, end)))
+      isWellFormedIPv4Address(address.substring(if (counter(0) > prevCount) index + 1 else index, end)))
   }
 
   /**
@@ -373,7 +373,7 @@ object URI {
       } else if (!isHex(testChar)) {
         if (testChar == '.' && numDigits < 4 && numDigits > 0 && counter(0) <= 6) {
           val back = index - numDigits - 1
-          return if ((back >= start)) back else (back + 1)
+          return if (back >= start) back else back + 1
         }
         return -1
       } else if (numDigits > 4) {
@@ -381,7 +381,7 @@ object URI {
       }
       index
     }
-    if ((numDigits > 0 && counter(0) <= 8)) end else -1
+    if (numDigits > 0 && counter(0) <= 8) end else -1
   }
 
   /**
@@ -398,8 +398,8 @@ object URI {
    *         or 'A' and 'F', false otherwise
    */
   private def isHex(p_char: Char): Boolean = {
-    (p_char <= 'f' && 
-      (fgLookupTable(p_char) & ASCII_HEX_CHARACTERS) != 0)
+    p_char <= 'f' &&
+      (fgLookupTable(p_char) & ASCII_HEX_CHARACTERS) != 0
   }
 
   /**
@@ -408,7 +408,7 @@ object URI {
    * @return true if the char is alphabetic, false otherwise
    */
   private def isAlpha(p_char: Char): Boolean = {
-    ((p_char >= 'a' && p_char <= 'z') || (p_char >= 'A' && p_char <= 'Z'))
+    (p_char >= 'a' && p_char <= 'z') || (p_char >= 'A' && p_char <= 'Z')
   }
 
   /**
@@ -417,7 +417,7 @@ object URI {
    * @return true if the char is alphanumeric, false otherwise
    */
   private def isAlphanum(p_char: Char): Boolean = {
-    (p_char <= 'z' && (fgLookupTable(p_char) & MASK_ALPHA_NUMERIC) != 0)
+    p_char <= 'z' && (fgLookupTable(p_char) & MASK_ALPHA_NUMERIC) != 0
   }
 
   /**
@@ -427,7 +427,7 @@ object URI {
    * @return true if the string contains any reserved characters
    */
   private def isReservedCharacter(p_char: Char): Boolean = {
-    (p_char <= ']' && (fgLookupTable(p_char) & RESERVED_CHARACTERS) != 0)
+    p_char <= ']' && (fgLookupTable(p_char) & RESERVED_CHARACTERS) != 0
   }
 
   /**
@@ -436,8 +436,8 @@ object URI {
    * @return true if the char is unreserved, false otherwise
    */
   private def isUnreservedCharacter(p_char: Char): Boolean = {
-    (p_char <= '~' && 
-      (fgLookupTable(p_char) & MASK_UNRESERVED_MASK) != 0)
+    p_char <= '~' &&
+      (fgLookupTable(p_char) & MASK_UNRESERVED_MASK) != 0
   }
 
   /**
@@ -447,7 +447,7 @@ object URI {
    * @return true if the char is a URI character, false otherwise
    */
   private def isURICharacter(p_char: Char): Boolean = {
-    (p_char <= '~' && (fgLookupTable(p_char) & MASK_URI_CHARACTER) != 0)
+    p_char <= '~' && (fgLookupTable(p_char) & MASK_URI_CHARACTER) != 0
   }
 
   /**
@@ -456,8 +456,8 @@ object URI {
    * @return true if the char is a scheme character, false otherwise
    */
   private def isSchemeCharacter(p_char: Char): Boolean = {
-    (p_char <= 'z' && 
-      (fgLookupTable(p_char) & MASK_SCHEME_CHARACTER) != 0)
+    p_char <= 'z' &&
+      (fgLookupTable(p_char) & MASK_SCHEME_CHARACTER) != 0
   }
 
   /**
@@ -466,8 +466,8 @@ object URI {
    * @return true if the char is a userinfo character, false otherwise
    */
   private def isUserinfoCharacter(p_char: Char): Boolean = {
-    (p_char <= 'z' && 
-      (fgLookupTable(p_char) & MASK_USERINFO_CHARACTER) != 0)
+    p_char <= 'z' &&
+      (fgLookupTable(p_char) & MASK_USERINFO_CHARACTER) != 0
   }
 
   /**
@@ -476,7 +476,7 @@ object URI {
    * @return true if the char is a path character, false otherwise
    */
   private def isPathCharacter(p_char: Char): Boolean = {
-    (p_char <= '~' && (fgLookupTable(p_char) & MASK_PATH_CHARACTER) != 0)
+    p_char <= '~' && (fgLookupTable(p_char) & MASK_PATH_CHARACTER) != 0
   }
 
   /**
@@ -722,7 +722,7 @@ class URI extends Serializable {
    */
   private def initialize(p_base: URI, p_uriSpec: String, allowNonAbsoluteURI: Boolean): Unit = {
     val uriSpec = p_uriSpec
-    val uriSpecLen = if ((uriSpec != null)) uriSpec.length else 0
+    val uriSpecLen = if (uriSpec != null) uriSpec.length else 0
     if (p_base == null && uriSpecLen == 0) {
       if (allowNonAbsoluteURI) {
         m_path = ""
@@ -800,7 +800,7 @@ class URI extends Serializable {
    */
   private def initialize(p_base: URI, p_uriSpec: String): Unit = {
     val uriSpec = p_uriSpec
-    val uriSpecLen = if ((uriSpec != null)) uriSpec.length else 0
+    val uriSpecLen = if (uriSpec != null) uriSpec.length else 0
     if (p_base == null && uriSpecLen == 0) {
       throw new URISyntaxException("Cannot initialize URI with empty parameters.")
     }
@@ -999,7 +999,7 @@ class URI extends Serializable {
     if (index < end) {
       if (p_uriSpec.charAt(start) == '[') {
         val bracketIndex = p_uriSpec.indexOf(']', start)
-        index = if ((bracketIndex != -1)) bracketIndex else end
+        index = if (bracketIndex != -1) bracketIndex else end
         if (index + 1 < end && p_uriSpec.charAt(index + 1) == ':') {
           index
           hasPort = true
@@ -1008,8 +1008,8 @@ class URI extends Serializable {
         }
       } else {
         val colonIndex = p_uriSpec.lastIndexOf(':', end)
-        index = if ((colonIndex > start)) colonIndex else end
-        hasPort = (index != end)
+        index = if (colonIndex > start) colonIndex else end
+        hasPort = index != end
       }
     }
     host = p_uriSpec.substring(start, index)
@@ -1237,7 +1237,7 @@ class URI extends Serializable {
       }
     }
     if (m_path != null) {
-      schemespec.append((m_path))
+      schemespec.append(m_path)
     }
     if (m_queryString != null) {
       schemespec.append('?')
@@ -1375,5 +1375,5 @@ class URI extends Serializable {
    * @return true if this URI represents an absolute URI, false
    *         otherwise
    */
-  def isAbsolute(): Boolean = (m_scheme != null)
+  def isAbsolute(): Boolean = m_scheme != null
 }

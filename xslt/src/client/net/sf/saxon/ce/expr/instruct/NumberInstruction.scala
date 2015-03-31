@@ -98,7 +98,7 @@ class NumberInstruction(config: Configuration,
   val th = TypeHierarchy.getInstance
 
   if (arguments(VALUE) != null && 
-    !(arguments(VALUE).getItemType.isInstanceOf[AtomicType])) {
+    !arguments(VALUE).getItemType.isInstanceOf[AtomicType]) {
     arguments(VALUE) = new Atomizer(arguments(VALUE))
   }
 
@@ -224,7 +224,7 @@ class NumberInstruction(config: Configuration,
    *         dependencies. The flags are documented in class client.net.sf.saxon.ce.value.StaticProperty
    */
   def getIntrinsicDependencies(): Int = {
-    (if ((arguments(SELECT) == null && arguments(VALUE) == null)) StaticProperty.DEPENDS_ON_CONTEXT_ITEM else 0)
+    if ((arguments(SELECT) == null && arguments(VALUE) == null)) StaticProperty.DEPENDS_ON_CONTEXT_ITEM else 0
   }
 
   def getItemType(): ItemType = AtomicType.STRING
@@ -318,7 +318,7 @@ class NumberInstruction(config: Configuration,
         source = arguments(SELECT).evaluateItem(context).asInstanceOf[NodeInfo]
       } else {
         val item = context.getContextItem
-        if (!(item.isInstanceOf[NodeInfo])) {
+        if (!item.isInstanceOf[NodeInfo]) {
           val err = new XPathException("context item for xsl:number must be a node", "XTTE0990")
           err.setIsTypeError(true)
           throw err

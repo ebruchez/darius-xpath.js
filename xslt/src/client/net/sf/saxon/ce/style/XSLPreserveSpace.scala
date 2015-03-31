@@ -42,7 +42,7 @@ class XSLPreserveSpace extends StyleElement {
   }
 
   def compile(exec: Executable, decl: Declaration): Expression = {
-    val preserve = (if (getLocalPart == "preserve-space") StripSpaceRules.PRESERVE else StripSpaceRules.STRIP)
+    val preserve = if (getLocalPart == "preserve-space") StripSpaceRules.PRESERVE else StripSpaceRules.STRIP
     val stripperRules = getExecutable.getStripperRules
     val resolver = new InscopeNamespaceResolver(this)
     for (s <- Whitespace.tokenize(elements)) {

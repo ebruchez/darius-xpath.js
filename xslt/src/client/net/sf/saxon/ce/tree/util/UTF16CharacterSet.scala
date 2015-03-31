@@ -63,7 +63,7 @@ object UTF16CharacterSet {
    * @return true if the character is the first character in a surrogate pair
    */
   def isHighSurrogate(ch: Int): Boolean = {
-    (SURROGATE1_MIN <= ch && ch <= SURROGATE1_MAX)
+    SURROGATE1_MIN <= ch && ch <= SURROGATE1_MAX
   }
 
   /**
@@ -72,6 +72,6 @@ object UTF16CharacterSet {
    * @return true if the character is the second character in a surrogate pair
    */
   def isLowSurrogate(ch: Int): Boolean = {
-    (SURROGATE2_MIN <= ch && ch <= SURROGATE2_MAX)
+    SURROGATE2_MIN <= ch && ch <= SURROGATE2_MAX
   }
 }

@@ -79,7 +79,7 @@ class ContextItemExpression extends Expression {
    * Is this expression the same as another expression?
    */
   override def equals(other: Any): Boolean = {
-    (other.isInstanceOf[ContextItemExpression])
+    other.isInstanceOf[ContextItemExpression]
   }
 
   /**

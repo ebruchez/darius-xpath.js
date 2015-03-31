@@ -130,11 +130,11 @@ object Minimax {
       return FloatValue.NaN
     }
     if (foundDouble) {
-      if (!(min.isInstanceOf[DoubleValue])) {
+      if (!min.isInstanceOf[DoubleValue]) {
         min = min.convert(AtomicType.DOUBLE).asAtomic()
       }
     } else if (foundFloat) {
-      if (!(min.isInstanceOf[FloatValue])) {
+      if (!min.isInstanceOf[FloatValue]) {
         min = min.convert(AtomicType.FLOAT).asAtomic()
       }
     }

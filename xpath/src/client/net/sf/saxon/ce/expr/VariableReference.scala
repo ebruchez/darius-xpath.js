@@ -204,9 +204,9 @@ class VariableReference extends Expression {
    * have the same static and dynamic context).
    */
   override def equals(other: Any): Boolean = {
-    (other.isInstanceOf[VariableReference] && 
-      binding == other.asInstanceOf[VariableReference].binding && 
-      binding != null)
+    other.isInstanceOf[VariableReference] &&
+      binding == other.asInstanceOf[VariableReference].binding &&
+      binding != null
   }
 
   /**

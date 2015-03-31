@@ -44,8 +44,8 @@ object NamePart {
    * @return true if exp is a call on generate-id(), else false
    */
   def isGenerateIdFunction(exp: Expression): Boolean = {
-    ((exp.isInstanceOf[NamePart]) && 
-      exp.asInstanceOf[NamePart].operation == GENERATE_ID)
+    (exp.isInstanceOf[NamePart]) &&
+      exp.asInstanceOf[NamePart].operation == GENERATE_ID
   }
 }
 
@@ -95,7 +95,7 @@ class NamePart(_operation: Int) extends SystemFunction {
       case LOCAL_NAME => s = node.getLocalPart
       case NAMESPACE_URI => 
         var uri = node.getURI
-        s = (if (uri == null) "" else uri)
+        s = if (uri == null) "" else uri
         return new AnyURIValue(s)
 
       case GENERATE_ID => 
@@ -107,7 +107,7 @@ class NamePart(_operation: Int) extends SystemFunction {
       case DOCUMENT_URI => return getDocumentURI(node, c)
       case NODE_NAME => 
         var nodeName = node.getNodeName
-        return (if (nodeName == null) null else new QNameValue(nodeName))
+        return if (nodeName == null) null else new QNameValue(nodeName)
 
       case _ => throw new UnsupportedOperationException("Unknown name operation")
     }

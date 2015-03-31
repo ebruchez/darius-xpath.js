@@ -277,7 +277,7 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
       }
     }
     try {
-      if ((operand0.isInstanceOf[Literal]) && (operand1.isInstanceOf[Literal])) {
+      if (operand0.isInstanceOf[Literal] && operand1.isInstanceOf[Literal]) {
         return new Literal(evaluateItem(new EarlyEvaluationContext(visitor.getConfiguration)))
       }
     } catch {

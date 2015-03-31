@@ -45,7 +45,7 @@ object Sum {
         }
         if (next.isInstanceOf[UntypedAtomicValue]) {
           next = next.convert(AtomicType.DOUBLE).asAtomic()
-        } else if (!(next.isInstanceOf[NumericValue])) {
+        } else if (!next.isInstanceOf[NumericValue]) {
           throw new XPathException("Input to sum() contains a mix of numeric and non-numeric values", 
             "FORG0006", location)
         }
@@ -56,7 +56,7 @@ object Sum {
       }
       throw new IllegalStateException
     } else if (sum.isInstanceOf[DurationValue]) {
-      if (!((sum.isInstanceOf[DayTimeDurationValue]) || (sum.isInstanceOf[YearMonthDurationValue]))) {
+      if (!(sum.isInstanceOf[DayTimeDurationValue] || sum.isInstanceOf[YearMonthDurationValue])) {
         throw new XPathException("Input to sum() contains a duration that is neither a dayTimeDuration nor a yearMonthDuration", 
           "FORG0006", location)
       }
@@ -65,7 +65,7 @@ object Sum {
         if (next == null) {
           return sum
         }
-        if (!(next.isInstanceOf[DurationValue])) {
+        if (!next.isInstanceOf[DurationValue]) {
           throw new XPathException("Input to sum() contains a mix of duration and non-duration values", 
             "FORG0006", location)
         }

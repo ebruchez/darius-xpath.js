@@ -46,7 +46,7 @@ class XSLStylesheet extends StyleElement {
    * @return the owning PreparedStylesheet object. Exceptionally returns null during early construction.
    */
   def getPreparedStylesheet(): Executable = {
-    (if (principalStylesheetModule == null) null else principalStylesheetModule.getExecutable)
+    if (principalStylesheetModule == null) null else principalStylesheetModule.getExecutable
   }
 
   def setPrincipalStylesheetModule(module: PrincipalStylesheetModule): Unit = {

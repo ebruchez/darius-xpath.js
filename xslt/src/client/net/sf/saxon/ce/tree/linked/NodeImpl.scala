@@ -224,7 +224,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    */
   def getURI(): String = {
     val qName = getNodeName
-    (if (qName == null) "" else qName.getNamespaceURI)
+    if (qName == null) "" else qName.getNamespaceURI
   }
 
   /**
@@ -236,7 +236,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    */
   def getDisplayName(): String = {
     val qName = getNodeName
-    (if (qName == null) "" else qName.getDisplayName)
+    if (qName == null) "" else qName.getDisplayName
   }
 
   /**
@@ -247,7 +247,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    */
   def getLocalPart(): String = {
     val qName = getNodeName
-    (if (qName == null) "" else qName.getLocalName)
+    if (qName == null) "" else qName.getLocalName
   }
 
   /**
@@ -427,7 +427,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    */
   def getPhysicalRoot(): DocumentImpl = {
     var up = parent
-    while (up != null && !(up.isInstanceOf[DocumentImpl])) {
+    while (up != null && !up.isInstanceOf[DocumentImpl]) {
       up = up.getRawParent
     }
     up.asInstanceOf[DocumentImpl]

@@ -76,7 +76,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
   /**
    * Specify that xsl:param is a permitted child
    */
-  protected def isPermittedChild(child: StyleElement): Boolean = (child.isInstanceOf[XSLParam])
+  protected def isPermittedChild(child: StyleElement): Boolean = child.isInstanceOf[XSLParam]
 
   /**
    * Return the name of this template. Note that this may
@@ -178,7 +178,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
         compileError(err)
       }
     }
-    prioritySpecified = (priorityAtt != null)
+    prioritySpecified = priorityAtt != null
     if (prioritySpecified) {
       try {
         if (!DecimalValue.castableAsDecimal(priorityAtt)) {

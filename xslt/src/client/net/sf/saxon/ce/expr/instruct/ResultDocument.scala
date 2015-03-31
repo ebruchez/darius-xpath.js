@@ -47,7 +47,7 @@ object ResultDocument {
    * Return a valid URI - event if base URI is not set
    */
   def getValidAbsoluteURI(controller: Controller, href: String): String = {
-    val baseURI = if ((controller.getBaseOutputURI != null && controller.getBaseOutputURI.length > 0)) controller.getBaseOutputURI else Document.get.getURL
+    val baseURI = if (controller.getBaseOutputURI != null && controller.getBaseOutputURI.length > 0) controller.getBaseOutputURI else Document.get.getURL
     ResolveURI.makeAbsolute(href, baseURI).toString
   }
 }
@@ -219,7 +219,7 @@ class ResultDocument(var href: Expression,
       var currentContextItem: NodeInfo = null
       currentContextItem = if (cItem.isInstanceOf[JSObjectValue]) null else cItem.asInstanceOf[NodeInfo]
       var useCurrentContext: Boolean = false
-      useCurrentContext = if (currentContextItem == null) false else (currentContextItem.getBaseURI == page.getURL)
+      useCurrentContext = if (currentContextItem == null) false else currentContextItem.getBaseURI == page.getURL
       var contextItem: NodeInfo = null
       if (useCurrentContext) {
         contextItem = currentContextItem
@@ -230,13 +230,13 @@ class ResultDocument(var href: Expression,
         contextItem = new HTMLDocumentWrapper(page, page.getURL, context.getConfiguration, DocType.UNKNOWN)
       }
       if (LogConfiguration.loggingIsEnabled()) {
-        contextNodeName = (if (contextNodeName == "") "" else " context node: " + contextNodeName)
+        contextNodeName = if (contextNodeName == "") "" else " context node: " + contextNodeName
       }
       c3.setSingletonFocus(contextItem)
       val iter = expr.iterate(c3)
       val resultItem = iter.next()
       if (resultItem == null) {
-      } else if (!(resultItem.isInstanceOf[NodeInfo])) {
+      } else if (!resultItem.isInstanceOf[NodeInfo]) {
         throw new XPathException("non-node returned by result-document href: " + hrefValue)
       } else {
         target = resultItem.asInstanceOf[NodeInfo]

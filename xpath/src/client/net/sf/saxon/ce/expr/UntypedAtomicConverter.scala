@@ -30,7 +30,7 @@ class UntypedAtomicConverter(sequence: Expression,
    */
   override def getItemType(): ItemType = {
     val it = operand.getItemType
-    singleton = (it.isInstanceOf[AtomicType]) && !Cardinality.allowsMany(operand.getCardinality)
+    singleton = it.isInstanceOf[AtomicType] && !Cardinality.allowsMany(operand.getCardinality)
     if (allConverted) {
       requiredItemType
     } else {
@@ -61,7 +61,7 @@ class UntypedAtomicConverter(sequence: Expression,
     if (`type`.isInstanceOf[NodeTest]) {
       return this
     }
-    singleton = (`type`.isInstanceOf[AtomicType]) && !Cardinality.allowsMany(operand.getCardinality)
+    singleton = `type`.isInstanceOf[AtomicType] && !Cardinality.allowsMany(operand.getCardinality)
     if (operand.isInstanceOf[Atomizer] && `type` == AtomicType.UNTYPED_ATOMIC && 
       requiredItemType == AtomicType.STRING && 
       operand.asInstanceOf[Atomizer].getBaseExpression.getItemType.isInstanceOf[NodeTest]) {

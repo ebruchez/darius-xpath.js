@@ -49,7 +49,7 @@ class AttributeImpl(element: ElementImpl, index: Int) extends NodeImpl {
    * same node in the tree.
    */
   def isSameNodeInfo(other: NodeInfo): Boolean = {
-    if (!(other.isInstanceOf[AttributeImpl])) {
+    if (!other.isInstanceOf[AttributeImpl]) {
       return false
     }
     if (this == other) {

@@ -92,7 +92,7 @@ class AnalyzeString(var select: Expression,
       adoptChildExpression(nonMatching)
     }
     var role = new RoleLocator(RoleLocator.INSTRUCTION, "analyze-string/select", 0)
-    val required = (SequenceType.SINGLE_STRING)
+    val required = SequenceType.SINGLE_STRING
     select = TypeChecker.staticTypeCheck(select, required, false, role)
     role = new RoleLocator(RoleLocator.INSTRUCTION, "analyze-string/regex", 0)
     regex = TypeChecker.staticTypeCheck(regex, SequenceType.SINGLE_STRING, false, role)

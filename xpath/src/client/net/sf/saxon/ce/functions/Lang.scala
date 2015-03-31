@@ -75,13 +75,13 @@ class Lang extends SystemFunction {
       if (current == null) {
         dynamicError("The context item for lang() is undefined", "XPDY0002")
       }
-      if (!(current.isInstanceOf[NodeInfo])) {
+      if (!current.isInstanceOf[NodeInfo]) {
         dynamicError("The context item for lang() is not a node", "XPDY0002")
       }
       target = current.asInstanceOf[NodeInfo]
     }
     val arg0Val = argument(0).evaluateItem(c)
-    val testLang = (if (arg0Val == null) "" else arg0Val.getStringValue)
+    val testLang = if (arg0Val == null) "" else arg0Val.getStringValue
     val b = isLang(testLang, target)
     BooleanValue.get(b)
   }
@@ -90,6 +90,6 @@ class Lang extends SystemFunction {
    * Determine the dependencies
    */
   override def getIntrinsicDependencies(): Int = {
-    (if (argument.length == 1) StaticProperty.DEPENDS_ON_CONTEXT_ITEM else 0)
+    if (argument.length == 1) StaticProperty.DEPENDS_ON_CONTEXT_ITEM else 0
   }
 }

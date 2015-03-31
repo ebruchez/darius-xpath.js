@@ -64,7 +64,7 @@ object StyleElement {
    * @return a wrapper instruction that performs the tracing (if activated at run-time)
    */
   def makeTraceInstruction(source: StyleElement, child: Expression): Expression = {
-    if (child.isInstanceOf[TraceExpression] && !(source.isInstanceOf[StylesheetProcedure])) {
+    if (child.isInstanceOf[TraceExpression] && !source.isInstanceOf[StylesheetProcedure]) {
       return child
     }
     val injector = LogController.getTraceListener.asInstanceOf[XSLTTraceListener]
@@ -179,7 +179,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param circumstances a code identifying the circumstances under which the error is to be reported
    */
   def setValidationError(reason: XPathException, circumstances: Int): Unit = {
-    validationError = (reason)
+    validationError = reason
     reportingCircumstances = circumstances
   }
 
@@ -257,7 +257,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
   def getContainingStylesheet(): XSLStylesheet = {
     if (containingStylesheet == null) {
       var node = this
-      while (node != null && !(node.isInstanceOf[XSLStylesheet])) {
+      while (node != null && !node.isInstanceOf[XSLStylesheet]) {
         node = node.getParent
       }
       containingStylesheet = node.asInstanceOf[XSLStylesheet]
@@ -309,7 +309,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @throws XPathException in the event of a static error being detected
    */
   protected def processAllAttributes(): Unit = {
-    if (!(this.isInstanceOf[LiteralResultElement])) {
+    if (!this.isInstanceOf[LiteralResultElement]) {
       processDefaultCollationAttribute("")
     }
     getStaticContext
@@ -413,11 +413,11 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     val attributeURI = nc.getNamespaceURI
     val elementURI = getURI
     val localName = nc.getLocalName
-    if ((localName == "default-collation" || localName == "xpath-default-namespace" || 
-      localName == "extension-element-prefixes" || 
-      localName == "exclude-result-prefixes" || 
-      localName == "version" || 
-      localName == "use-when")) {
+    if (localName == "default-collation" || localName == "xpath-default-namespace" ||
+      localName == "extension-element-prefixes" ||
+      localName == "exclude-result-prefixes" ||
+      localName == "version" ||
+      localName == "use-when") {
       if (elementURI == NamespaceConstant.XSLT) {
         if ("" == attributeURI) {
           return
@@ -982,7 +982,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    */
   def getPreparedStylesheet(): Executable = {
     val xss = getContainingStylesheet
-    (if (xss == null) null else xss.getPreparedStylesheet)
+    if (xss == null) null else xss.getPreparedStylesheet
   }
 
   /**
@@ -1028,8 +1028,8 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @throws XPathException if not at top level
    */
   def checkTopLevel(errorCode: String): Unit = {
-    if (!(getParent.isInstanceOf[XSLStylesheet])) {
-      compileError("Element must be used only at top level of stylesheet", (if (errorCode == null) "XTSE0010" else errorCode))
+    if (!getParent.isInstanceOf[XSLStylesheet]) {
+      compileError("Element must be used only at top level of stylesheet", if (errorCode == null) "XTSE0010" else errorCode)
     }
   }
 
@@ -1145,7 +1145,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
       } else if (node.isInstanceOf[StyleElement]) {
         val snode = node.asInstanceOf[StyleElement]
         var child: Expression = null
-        if (snode.validationError != null && !(this.isInstanceOf[AbsentExtensionElement])) {
+        if (snode.validationError != null && !this.isInstanceOf[AbsentExtensionElement]) {
           child = fallbackProcessing(exec, decl, snode)
         } else {
           child = snode.compile(exec, decl)
@@ -1362,7 +1362,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * Test whether this is a top-level element
    * @return true if the element is a child of the xsl:stylesheet element
    */
-  def isTopLevel(): Boolean = (getParent.isInstanceOf[XSLStylesheet])
+  def isTopLevel(): Boolean = getParent.isInstanceOf[XSLStylesheet]
 
   /**
    * Bind a variable used in this element to the compiled form of the XSLVariable element in which it is

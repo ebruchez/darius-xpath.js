@@ -170,12 +170,15 @@ object Logical {
             else -shorter.digits(i) & -longer.digits(i)
     if (digit == 0) {
       i += 1
-      while (i < shorter.numberLength && {(digit = ~(longer.digits(i) | shorter.digits(i)));digit} == 0) {
+      while (i < shorter.numberLength && {
+        digit = ~(longer.digits(i) | shorter.digits(i));digit} == 0) {
         i += 1
       }
       if (digit == 0) {
         // shorter has only the remaining virtual sign bits
-        while (i < longer.numberLength && ( {digit = ~longer.digits(i);digit}) == 0) {i += 1
+        while (i < longer.numberLength && {
+          digit = ~longer.digits(i); digit
+        } == 0) {i += 1
         }
         if (digit == 0) {
           resLength = longer.numberLength + 1
@@ -316,13 +319,19 @@ object Logical {
         limit = Math.min(positive.numberLength, negative.numberLength)
         i += 1
         while (i < limit &&
-          ({digit = ~(negative.digits(i) | positive.digits(i));digit}) ==
+          {
+            digit = ~(negative.digits(i) | positive.digits(i)); digit
+          } ==
             0) {i += 1
         }
         if (digit == 0) {
-          while (i < positive.numberLength && ({digit = ~positive.digits(i);digit}) == 0) {i += 1
+          while (i < positive.numberLength && {
+            digit = ~positive.digits(i); digit
+          } == 0) {i += 1
           }
-          while (i < negative.numberLength && ({digit = ~negative.digits(i);digit}) == 0) {i += 1
+          while (i < negative.numberLength && {
+            digit = ~negative.digits(i); digit
+          } == 0) {i += 1
           }
           if (digit == 0) {
             resLength += 1
@@ -725,13 +734,19 @@ object Logical {
         limit = Math.min(positive.numberLength, negative.numberLength)
         i += 1
         while (i < limit &&
-          ({digit = positive.digits(i) ^ ~negative.digits(i);digit}) == 0) {i += 1
+          {
+            digit = positive.digits(i) ^ ~negative.digits(i); digit
+          } == 0) {i += 1
         }
         if (digit == 0) {
           // shorter has only the remaining virtual sign bits
-          while (i < positive.numberLength && ({digit = ~positive.digits(i);digit}) == 0) {i += 1
+          while (i < positive.numberLength && {
+            digit = ~positive.digits(i); digit
+          } == 0) {i += 1
           }
-          while (i < negative.numberLength && ({digit = ~negative.digits(i);digit}) == 0) {i += 1
+          while (i < negative.numberLength && {
+            digit = ~negative.digits(i); digit
+          } == 0) {i += 1
           }
           if (digit == 0) {
             resLength = resLength + 1

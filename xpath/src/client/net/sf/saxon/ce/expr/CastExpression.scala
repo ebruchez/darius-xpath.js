@@ -316,7 +316,7 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
    * Get the static cardinality of the expression
    */
   override def computeCardinality(): Int = {
-    (if (allowEmpty && Cardinality.allowsZero(operand.getCardinality)) StaticProperty.ALLOWS_ZERO_OR_ONE else StaticProperty.EXACTLY_ONE)
+    if (allowEmpty && Cardinality.allowsZero(operand.getCardinality)) StaticProperty.ALLOWS_ZERO_OR_ONE else StaticProperty.EXACTLY_ONE
   }
 
   /**
@@ -352,7 +352,7 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
     if (result.isInstanceOf[ValidationFailure]) {
       val err = result.asInstanceOf[ValidationFailure]
       val code = err.getErrorCodeQName
-      var lcode = (if (code == null) null else code.getLocalName)
+      var lcode = if (code == null) null else code.getLocalName
       if (lcode == null) {
         lcode = "FORG0001"
       }

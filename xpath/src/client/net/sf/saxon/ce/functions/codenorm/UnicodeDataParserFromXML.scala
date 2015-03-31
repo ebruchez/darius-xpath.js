@@ -128,7 +128,7 @@ object UnicodeDataParserFromXML {
         c += 1
         val code = ("0123456789abcdef".indexOf(h0) << 12) + ("0123456789abcdef".indexOf(h1) << 8) + 
           ("0123456789abcdef".indexOf(h2) << 4) + 
-          ("0123456789abcdef".indexOf(h3))
+          "0123456789abcdef".indexOf(h3)
         value += code.toChar
       }
       values.add(value)

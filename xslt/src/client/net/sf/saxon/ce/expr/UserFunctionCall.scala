@@ -151,7 +151,7 @@ class UserFunctionCall extends FunctionCall {
    */
   def markTailFunctionCalls(qName: StructuredQName, arity: Int): Int = {
     tailCall = true
-    (if (getFunctionName == qName && arity == getNumberOfArguments) 2 else 1)
+    if (getFunctionName == qName && arity == getNumberOfArguments) 2 else 1
   }
 
   def getImplementationMethod(): Int = {

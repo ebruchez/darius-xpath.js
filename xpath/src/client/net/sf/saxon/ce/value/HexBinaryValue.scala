@@ -48,7 +48,7 @@ class HexBinaryValue(private val binaryValue: Array[Byte]) extends AtomicValue {
         }
 
         for (i <- 0 until binaryValue.length) {
-          binaryValue(i) = ((HexBinaryValue.fromHex(s.charAt(2 * i)) << 4) + (HexBinaryValue.fromHex(s.charAt(2 * i + 1)))).toByte
+          binaryValue(i) = ((HexBinaryValue.fromHex(s.charAt(2 * i)) << 4) + HexBinaryValue.fromHex(s.charAt(2 * i + 1))).toByte
         }
 
         binaryValue
@@ -115,7 +115,7 @@ class HexBinaryValue(private val binaryValue: Array[Byte]) extends AtomicValue {
    * @param implicitTimezone
    */
   def getXPathComparable(ordered: Boolean, collator: StringCollator, implicitTimezone: Int): AnyRef = {
-    (if (ordered) null else this)
+    if (ordered) null else this
   }
 
   /**

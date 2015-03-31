@@ -212,7 +212,7 @@ class XPathException(message: String) extends Exception() {
    * @return the local part of the name of the error code
    */
   def getErrorCodeLocalPart(): String = {
-    (if (errorCode == null) null else errorCode.getLocalName)
+    if (errorCode == null) null else errorCode.getLocalName
   }
 
   /**
@@ -220,7 +220,7 @@ class XPathException(message: String) extends Exception() {
    * @return the namespace URI part of the name of the error code
    */
   def getErrorCodeNamespace(): String = {
-    (if (errorCode == null) null else errorCode.getNamespaceURI)
+    if (errorCode == null) null else errorCode.getNamespaceURI
   }
 
   /**

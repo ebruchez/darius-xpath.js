@@ -140,7 +140,7 @@ class Trace extends SystemFunction {
           traceItem(null, label)
         }
       } else {
-        traceItem(n, label + " [" + (pos) + ']')
+        traceItem(n, label + " [" + pos + ']')
         empty = false
       }
       n

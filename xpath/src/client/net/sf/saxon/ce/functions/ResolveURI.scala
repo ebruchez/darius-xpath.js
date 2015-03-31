@@ -68,7 +68,7 @@ object ResolveURI {
         baseURI = new URI(base)
       }
       new URI(relativeURI)//ORBEON true
-      absoluteURI = (if (relativeURI.length == 0) baseURI else baseURI.resolve(relativeURI))
+      absoluteURI = if (relativeURI.length == 0) baseURI else baseURI.resolve(relativeURI)
     }
     absoluteURI
   }

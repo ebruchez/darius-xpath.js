@@ -34,7 +34,7 @@ abstract class CollatingFunction extends SystemFunction {
   private def preEvaluateCollation(env: StaticContext): Unit = {
     if (getNumberOfArguments == getDetails.maxArguments) {
       val collationExp = argument(getNumberOfArguments - 1)
-      val collationVal = (if (collationExp.isInstanceOf[Literal]) collationExp.asInstanceOf[Literal].getValue else null)
+      val collationVal = if (collationExp.isInstanceOf[Literal]) collationExp.asInstanceOf[Literal].getValue else null
       if (collationVal.isInstanceOf[AtomicValue]) {
         var collationName = collationVal.asInstanceOf[AtomicValue].getStringValue
         collationName = resolveCollationURI(collationName)

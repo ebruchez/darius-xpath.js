@@ -150,7 +150,7 @@ object DateValue {
     if (firstDay > 4 && (firstDay + d) <= 8) {
       return getWeekNumber(year - 1, 12, 31)
     }
-    val inc = (if (firstDay < 5) 1 else 0)
+    val inc = if (firstDay < 5) 1 else 0
     ((d + firstDay - 2) / 7) + inc
   }
 
@@ -168,7 +168,7 @@ object DateValue {
    */
   def getWeekNumberWithinMonth(year: Int, month: Int, day: Int): Int = {
     val firstDay = getDayOfWeek(year, month, 1)
-    val inc = (if (firstDay < 5) 1 else 0)
+    val inc = if (firstDay < 5) 1 else 0
     ((day + firstDay - 2) / 7) + inc
   }
 }
@@ -294,7 +294,7 @@ class DateValue private () extends GDateValue with Comparable[_] {
   def add(duration: DurationValue): DateValue = {
     if (duration.isInstanceOf[DayTimeDurationValue]) {
       var microseconds = duration.asInstanceOf[DayTimeDurationValue].getLengthInMicroseconds
-      val negative = (microseconds < 0)
+      val negative = microseconds < 0
       microseconds = Math.abs(microseconds)
       val days = Math.floor(microseconds.toDouble / (1000000L * 60L * 60L * 24L)).toInt
       val partDay = (microseconds % (1000000L * 60L * 60L * 24L)) > 0
@@ -336,7 +336,7 @@ class DateValue private () extends GDateValue with Comparable[_] {
    * @throws XPathException for example if one value is a date and the other is a time
    */
   def subtract(other: CalendarValue, context: XPathContext): DayTimeDurationValue = {
-    if (!(other.isInstanceOf[DateValue])) {
+    if (!other.isInstanceOf[DateValue]) {
       throw new XPathException("First operand of '-' is a date, but the second is not", "XPTY0004")
     }
     super.subtract(other, context)

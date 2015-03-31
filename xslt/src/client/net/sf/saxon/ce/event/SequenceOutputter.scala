@@ -319,7 +319,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
         outputter.characters(item.getStringValue)
         previousAtomic = true
       } else {
-        item.asInstanceOf[NodeInfo].copy(outputter, (CopyOptions.ALL_NAMESPACES | CopyOptions.TYPE_ANNOTATIONS))
+        item.asInstanceOf[NodeInfo].copy(outputter, CopyOptions.ALL_NAMESPACES | CopyOptions.TYPE_ANNOTATIONS)
         previousAtomic = false
       }
     }

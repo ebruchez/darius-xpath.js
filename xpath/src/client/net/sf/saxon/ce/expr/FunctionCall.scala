@@ -114,7 +114,7 @@ abstract class FunctionCall extends Expression {
         adoptChildExpression(exp)
         argument(i) = exp
       }
-      if (!(argument(i).isInstanceOf[Literal])) {
+      if (!argument(i).isInstanceOf[Literal]) {
         fixed = false
       }
     }
@@ -149,7 +149,7 @@ abstract class FunctionCall extends Expression {
         adoptChildExpression(exp)
         argument(i) = exp
       }
-      if (fixed && !(argument(i).isInstanceOf[Literal])) {
+      if (fixed && !argument(i).isInstanceOf[Literal]) {
         fixed = false
       }
     }
@@ -240,7 +240,7 @@ abstract class FunctionCall extends Expression {
    */
   def getDisplayName(): String = {
     val fName = getFunctionName
-    (if (fName == null) "(anonymous)" else fName.getDisplayName)
+    if (fName == null) "(anonymous)" else fName.getDisplayName
   }
 
   /**
@@ -266,7 +266,7 @@ abstract class FunctionCall extends Expression {
    * Determine whether two expressions are equivalent
    */
   override def equals(o: Any): Boolean = {
-    if (!(o.isInstanceOf[FunctionCall])) {
+    if (!o.isInstanceOf[FunctionCall]) {
       return false
     }
     val f = o.asInstanceOf[FunctionCall]

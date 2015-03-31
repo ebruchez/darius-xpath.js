@@ -73,7 +73,7 @@ abstract class XSLVariableDeclaration extends XSLGeneralVariable with VariableDe
           properties = select.getSpecialProperties
         }
       }
-      (reference).setStaticType(`type`, constantValue, properties)
+      reference.setStaticType(`type`, constantValue, properties)
     }
     super.fixupReferences()
   }
@@ -97,7 +97,7 @@ abstract class XSLVariableDeclaration extends XSLGeneralVariable with VariableDe
    */
   protected def fixupBinding(binding: Binding): Unit = {
     for (reference <- references) {
-      (reference).fixup(binding)
+      reference.fixup(binding)
     }
   }
 

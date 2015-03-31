@@ -105,7 +105,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
   /**
    * Specify that xsl:param is a permitted child
    */
-  protected def isPermittedChild(child: StyleElement): Boolean = (child.isInstanceOf[XSLParam])
+  protected def isPermittedChild(child: StyleElement): Boolean = child.isInstanceOf[XSLParam]
 
   /**
    * Is override="yes"?.
@@ -135,7 +135,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
    */
   def fixupReferences(): Unit = {
     for (reference <- references) {
-      (reference).setStaticType(resultType)
+      reference.setStaticType(resultType)
     }
     super.fixupReferences()
   }

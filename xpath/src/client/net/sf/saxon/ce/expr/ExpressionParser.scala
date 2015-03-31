@@ -105,7 +105,7 @@ class ExpressionParser {
    *     supplied message
    */
   def grumble(message: String): Nothing = {
-    grumble(message, (if (language == XSLT_PATTERN) "XTSE0340" else "XPST0003"))
+    grumble(message, if (language == XSLT_PATTERN) "XTSE0340" else "XPST0003")
   }
 
   /**
@@ -804,7 +804,7 @@ class ExpressionParser {
       }
       var test = parseNodeTest(Type.ELEMENT)
       if (test.isInstanceOf[AnyNodeTest]) {
-        test = (if (defaultAxis == Axis.CHILD) AnyChildNodeTest.getInstance else NodeKindTest.ATTRIBUTE)
+        test = if (defaultAxis == Axis.CHILD) AnyChildNodeTest.getInstance else NodeKindTest.ATTRIBUTE
       }
       val ae = new AxisExpression(defaultAxis, test)
       setLocation(ae)
@@ -916,7 +916,7 @@ class ExpressionParser {
     tok match {
       case Token.NAME =>
         nextToken()
-        val nameCode = makeStructuredQName(tokv, (if (nodeType == Type.ELEMENT) env.getDefaultElementNamespace else ""))
+        val nameCode = makeStructuredQName(tokv, if (nodeType == Type.ELEMENT) env.getDefaultElementNamespace else "")
         new NameTest(nodeType, nameCode)
 
       case Token.PREFIX =>
@@ -1003,7 +1003,7 @@ class ExpressionParser {
         if (!empty) {
           if (t.currentToken == Token.STAR || t.currentToken == Token.MULT) {
           } else if (t.currentToken == Token.NAME) {
-            val nodeQName = makeStructuredQName(t.currentTokenValue, (if (primaryType == Type.ELEMENT) env.getDefaultElementNamespace else ""))
+            val nodeQName = makeStructuredQName(t.currentTokenValue, if (primaryType == Type.ELEMENT) env.getDefaultElementNamespace else "")
             result = new NameTest(primaryType, nodeQName)
           } else {
             grumble("Unexpected " + Token.tokens(t.currentToken) + " in SequenceType")

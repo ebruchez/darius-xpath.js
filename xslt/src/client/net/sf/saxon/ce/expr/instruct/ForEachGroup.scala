@@ -166,8 +166,8 @@ class ForEachGroup(var select: Expression,
         dependencies |= (skd.getSortKey.getDependencies & ~StaticProperty.DEPENDS_ON_FOCUS)
         for (i <- 0 until SortKeyDefinition.N) {
           val e = skd.getSortProperty(i)
-          if (e != null && !(e.isInstanceOf[Literal])) {
-            dependencies |= (e.getDependencies)
+          if (e != null && !e.isInstanceOf[Literal]) {
+            dependencies |= e.getDependencies
           }
         }
       }
@@ -185,7 +185,7 @@ class ForEachGroup(var select: Expression,
    */
   def createsNewNodes(): Boolean = {
     val props = action.getSpecialProperties
-    ((props & StaticProperty.NON_CREATIVE) == 0)
+    (props & StaticProperty.NON_CREATIVE) == 0
   }
 
   /**

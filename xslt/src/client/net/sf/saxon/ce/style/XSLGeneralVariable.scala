@@ -124,7 +124,7 @@ abstract class XSLGeneralVariable extends StyleElement {
     if (select != null && !allowsValue()) {
       compileError("Function parameters cannot have a default value", "XTSE0760")
     }
-    if (tunnel && this.isInstanceOf[XSLParam] && !(getParent.isInstanceOf[XSLTemplate])) {
+    if (tunnel && this.isInstanceOf[XSLParam] && !getParent.isInstanceOf[XSLTemplate]) {
       compileError("For attribute 'tunnel' within an " + getParent.getDisplayName + 
         " parameter, the only permitted value is 'no'", "XTSE0020")
     }
@@ -176,7 +176,7 @@ abstract class XSLGeneralVariable extends StyleElement {
             constantText = first.getStringValue
           }
         }
-        textonly = (getCommonChildItemType == NodeKindTest.TEXT)
+        textonly = getCommonChildItemType == NodeKindTest.TEXT
       }
     }
     select = typeCheck(select)

@@ -260,7 +260,7 @@ object ExpressionTool {
       if (first.isInstanceOf[BooleanValue]) {
         first.asInstanceOf[BooleanValue].getBooleanValue
       } else if (first.isInstanceOf[StringValue]) {
-        (!first.asInstanceOf[StringValue].isZeroLength)
+        !first.asInstanceOf[StringValue].isZeroLength
       } else if (first.isInstanceOf[NumericValue]) {
         first.asInstanceOf[NumericValue].effectiveBooleanValue()
       } else {
@@ -288,8 +288,8 @@ object ExpressionTool {
    * @return true if the value of the expression depends on the context item, position, or size
    */
   def dependsOnFocus(exp: Expression): Boolean = {
-    ((exp.getDependencies & StaticProperty.DEPENDS_ON_FOCUS) != 
-      0)
+    (exp.getDependencies & StaticProperty.DEPENDS_ON_FOCUS) !=
+      0
   }
 
   /**

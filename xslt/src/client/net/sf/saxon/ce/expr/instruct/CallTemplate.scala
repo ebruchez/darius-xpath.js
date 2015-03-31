@@ -227,6 +227,6 @@ class CallTemplate(var template: Template, var useTailRecursion: Boolean) extend
   def getTargetTemplate(): Template = template
 
   def getObjectName(): StructuredQName = {
-    (if (template == null) null else template.getTemplateName)
+    if (template == null) null else template.getTemplateName
   }
 }

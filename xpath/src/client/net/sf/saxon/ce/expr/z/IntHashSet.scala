@@ -120,7 +120,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
     values
   }
 
-  def contains(value: Int): Boolean = (_values(indexOf(value)) != ndv)
+  def contains(value: Int): Boolean = _values(indexOf(value)) != ndv
 
   def remove(value: Int): Boolean = {
     var i = indexOf(value)

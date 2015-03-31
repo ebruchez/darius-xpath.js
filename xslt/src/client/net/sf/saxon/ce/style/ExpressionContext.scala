@@ -62,7 +62,7 @@ class ExpressionContext(var element: StyleElement) extends StaticContext {
       err.setIsStaticError(true)
       throw err
     }
-    val `var` = (if (xslVariableDeclaration.isGlobal) new VariableReference() else new LocalVariableReference())
+    val `var` = if (xslVariableDeclaration.isGlobal) new VariableReference() else new LocalVariableReference()
     xslVariableDeclaration.registerReference(`var`)
     `var`
   }

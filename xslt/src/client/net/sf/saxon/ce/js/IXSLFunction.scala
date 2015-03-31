@@ -102,7 +102,7 @@ object IXSLFunction {
       return SingletonIterator.makeIterator(new DoubleValue(jsValue.asInstanceOf[java.lang.Double]))
     } else if (jsValue.isInstanceOf[java.lang.Boolean]) {
       return SingletonIterator.makeIterator(BooleanValue.get(jsValue.asInstanceOf[java.lang.Boolean]))
-    } else if (!(jsValue.isInstanceOf[JavaScriptObject])) {
+    } else if (!jsValue.isInstanceOf[JavaScriptObject]) {
       return EmptyIterator.getInstance
     }
     val jsObj = jsValue.asInstanceOf[JavaScriptObject]
@@ -117,11 +117,11 @@ object IXSLFunction {
     val page = jsValue.asInstanceOf[Node].getOwnerDocument
     if (page == null) {
       val doc = jsValue.asInstanceOf[Document]
-      val jsDocType = if ((doc == Document.get)) DocType.UNKNOWN else DocType.NONHTML
+      val jsDocType = if (doc == Document.get) DocType.UNKNOWN else DocType.NONHTML
       val docWrapper = new HTMLDocumentWrapper(doc, doc.getURL, config, jsDocType)
       SingletonIterator.makeIterator(docWrapper)
     } else {
-      val jsDocType = if ((page == Document.get)) DocType.UNKNOWN else DocType.NONHTML
+      val jsDocType = if (page == Document.get) DocType.UNKNOWN else DocType.NONHTML
       val htmlDoc = new HTMLDocumentWrapper(page, page.getURL, config, jsDocType)
       val htmlNode = htmlDoc.wrap(jsValue.asInstanceOf[Node])
       SingletonIterator.makeIterator(htmlNode)
@@ -271,15 +271,15 @@ class IXSLFunction(var localName: String, arguments: Array[Expression]) extends 
                   case e2: Exception => 
                 }
               }
-              throw (new XPathException("JavaScriptException in ixsl:call(): Object does not support property or method '" + 
-                method + 
-                "' with " + 
-                (argument.length - 2) + 
-                " argument(s)."))
+              throw new XPathException("JavaScriptException in ixsl:call(): Object does not support property or method '" +
+                method +
+                "' with " +
+                (argument.length - 2) +
+                " argument(s).")
             }
           }
         } else {
-          throw (new XPathException("JavaScriptException in ixsl:call(): Call target object is null or undefined"))
+          throw new XPathException("JavaScriptException in ixsl:call(): Call target object is null or undefined")
         }
       } else if (localName == "get") {
         val itemVal = argument(0).evaluateItem(context)
@@ -290,7 +290,7 @@ class IXSLFunction(var localName: String, arguments: Array[Expression]) extends 
           result = getValueFromTypeValuePair(jsSplitPropertyTypeAndValue(target, property))
           convertFromJavaScript(result, context.getConfiguration)
         } else {
-          throw (new XPathException("JavaScriptException in ixsl:get(): Get target object is null or undefined"))
+          throw new XPathException("JavaScriptException in ixsl:get(): Get target object is null or undefined")
         }
       } else if (localName == "page") {
         SingletonIterator.makeIterator(context.getConfiguration.getHostPage)

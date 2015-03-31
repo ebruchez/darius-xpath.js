@@ -38,7 +38,7 @@ object ValueComparison {
         Type.displayTypeName(v1), "XPTY0004")
     }
     if (v0.isNaN || v1.isNaN) {
-      return (op == Token.FNE)
+      return op == Token.FNE
     }
     try op match {
       case Token.FEQ => comparer.comparesEqual(v0, v1)

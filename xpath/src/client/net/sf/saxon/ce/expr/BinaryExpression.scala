@@ -17,14 +17,14 @@ object BinaryExpression {
    * @return true if the operator is commutative
    */
   protected def isCommutative(operator: Int): Boolean = {
-    (operator == Token.AND || operator == Token.OR || operator == Token.UNION || 
-      operator == Token.INTERSECT || 
-      operator == Token.PLUS || 
-      operator == Token.MULT || 
-      operator == Token.EQUALS || 
-      operator == Token.FEQ || 
-      operator == Token.NE || 
-      operator == Token.FNE)
+    operator == Token.AND || operator == Token.OR || operator == Token.UNION ||
+      operator == Token.INTERSECT ||
+      operator == Token.PLUS ||
+      operator == Token.MULT ||
+      operator == Token.EQUALS ||
+      operator == Token.FEQ ||
+      operator == Token.NE ||
+      operator == Token.FNE
   }
 
   /**
@@ -33,10 +33,10 @@ object BinaryExpression {
    * @return true if the operator is associative
    */
   protected def isAssociative(operator: Int): Boolean = {
-    (operator == Token.AND || operator == Token.OR || operator == Token.UNION || 
-      operator == Token.INTERSECT || 
-      operator == Token.PLUS || 
-      operator == Token.MULT)
+    operator == Token.AND || operator == Token.OR || operator == Token.UNION ||
+      operator == Token.INTERSECT ||
+      operator == Token.PLUS ||
+      operator == Token.MULT
   }
 
   /**
@@ -101,7 +101,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
     operand0 = visitor.optimize(operand0, contextItemType)
     operand1 = visitor.optimize(operand1, contextItemType)
     try {
-      if ((operand0.isInstanceOf[Literal]) && (operand1.isInstanceOf[Literal])) {
+      if (operand0.isInstanceOf[Literal] && operand1.isInstanceOf[Literal]) {
         val v = evaluateItem(new EarlyEvaluationContext(visitor.getConfiguration))
         return Literal.makeLiteral(v)
       }

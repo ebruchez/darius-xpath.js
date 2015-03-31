@@ -98,14 +98,14 @@ object FormatNumber {
    * @return the result of conversion to a double
    */
   def adjustToDecimal(value: Double, precision: Int): BigDecimal = {
-    val zeros = (if (precision == 1) "00000" else "000000000")
-    val nines = (if (precision == 1) "99999" else "999999999")
+    val zeros = if (precision == 1) "00000" else "000000000"
+    val nines = if (precision == 1) "99999" else "999999999"
     val initial = new BigDecimal(value)
     var trial: BigDecimal = null
     val fsb = new FastStringBuffer(FastStringBuffer.TINY)
     DecimalValue.decimalToString(initial, fsb)
     val s = fsb.toString
-    val start = (if (s.charAt(0) == '-') 1 else 0)
+    val start = if (s.charAt(0) == '-') 1 else 0
     val p = s.indexOf(".")
     var i = s.lastIndexOf(zeros)
     if (i > 0) {
@@ -222,8 +222,8 @@ object FormatNumber {
         if (isPercent || isPerMille) {
           grumble("Cannot have more than one percent or per-mille character in a sub-picture")
         }
-        isPercent = (c == percentSign)
-        isPerMille = (c == perMilleSign)
+        isPercent = c == percentSign
+        isPerMille = c == perMilleSign
         phase match {
           case 0 => prefix += unicodeChar(c)
           case 1 | 2 | 3 | 4 | 5 =>
@@ -380,7 +380,7 @@ object FormatNumber {
         for (i <- 0 until ibused) {
           val c = ib(i)
           if (c >= '0' && c <= '9') {
-            ib(i) = (c - '0' + newZero)
+            ib(i) = c - '0' + newZero
           }
         }
       }

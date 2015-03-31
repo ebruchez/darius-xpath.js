@@ -32,7 +32,7 @@ object BooleanValue {
    *     required
    * @return the BooleanValue requested
    */
-  def get(value: Boolean): BooleanValue = (if (value) TRUE else FALSE)
+  def get(value: Boolean): BooleanValue = if (value) TRUE else FALSE
 
   /**
    * Convert a string to a boolean value, using the XML Schema rules (including
@@ -104,14 +104,14 @@ class BooleanValue private (var value: Boolean) extends AtomicValue with Compara
     } else if (requiredType == AtomicType.UNTYPED_ATOMIC) {
       new UntypedAtomicValue(getStringValue)
     } else if (requiredType == AtomicType.STRING) {
-      (if (value) StringValue.TRUE else StringValue.FALSE)
+      if (value) StringValue.TRUE else StringValue.FALSE
     } else if (requiredType == AtomicType.NUMERIC || requiredType == AtomicType.INTEGER || 
       requiredType == AtomicType.DECIMAL) {
-      (if (value) IntegerValue.PLUS_ONE else IntegerValue.ZERO)
+      if (value) IntegerValue.PLUS_ONE else IntegerValue.ZERO
     } else if (requiredType == AtomicType.DOUBLE) {
-      (if (value) DoubleValue.ONE else DoubleValue.ZERO)
+      if (value) DoubleValue.ONE else DoubleValue.ZERO
     } else if (requiredType == AtomicType.FLOAT) {
-      (if (value) FloatValue.ONE else FloatValue.ZERO)
+      if (value) FloatValue.ONE else FloatValue.ZERO
     } else {
       new ValidationFailure("Cannot convert boolean to " + requiredType.getDisplayName, "XPTY0004")
     }
@@ -121,7 +121,7 @@ class BooleanValue private (var value: Boolean) extends AtomicValue with Compara
    * Convert to string
    * @return "true" or "false"
    */
-  def getPrimitiveStringValue(): String = (if (value) "true" else "false")
+  def getPrimitiveStringValue(): String = if (value) "true" else "false"
 
   /**
    * Get a Comparable value that implements the XPath ordering comparison semantics for this value.
@@ -147,7 +147,7 @@ class BooleanValue private (var value: Boolean) extends AtomicValue with Compara
    *     one is the higher. False is considered to be less than true.
    */
   def compareTo(other: AnyRef): Int = {
-    if (!(other.isInstanceOf[BooleanValue])) {
+    if (!other.isInstanceOf[BooleanValue]) {
       throw new ClassCastException("Boolean values are not comparable to " + other.getClass)
     }
     if (value == other.asInstanceOf[BooleanValue].value) return 0
@@ -164,7 +164,7 @@ class BooleanValue private (var value: Boolean) extends AtomicValue with Compara
    * @throws ClassCastException if other value is not xs:boolean or derived therefrom
    */
   override def equals(other: Any): Boolean = {
-    (other.isInstanceOf[BooleanValue] && value == other.asInstanceOf[BooleanValue].value)
+    other.isInstanceOf[BooleanValue] && value == other.asInstanceOf[BooleanValue].value
   }
 
   /**
@@ -172,7 +172,7 @@ class BooleanValue private (var value: Boolean) extends AtomicValue with Compara
    *
    * @return the hash code
    */
-  override def hashCode(): Int = (if (value) 0 else 1)
+  override def hashCode(): Int = if (value) 0 else 1
 
   /**
    * Diagnostic display of this value as a string

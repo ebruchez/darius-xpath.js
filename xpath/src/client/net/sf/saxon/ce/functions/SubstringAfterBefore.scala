@@ -27,7 +27,7 @@ class SubstringAfterBefore(_operation: Int) extends CollatingFunction {
    * Evaluate the function
    */
   override def evaluateItem(context: XPathContext): Item = {
-    if (!(stringCollator.isInstanceOf[CodepointCollator])) {
+    if (!stringCollator.isInstanceOf[CodepointCollator]) {
       doesNotSupportSubstringMatching(context)
     }
     var result: String = null

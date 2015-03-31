@@ -100,12 +100,12 @@ class NamespaceReducer extends ProxyReceiver with NamespaceResolver {
       if (namespaces(i) == nscode) {
         return false
       }
-      if ((namespaces(i).getPrefix == nscode.getPrefix)) {
+      if (namespaces(i).getPrefix == nscode.getPrefix) {
         return true
       }
       i -= 1
     }
-    (nscode != NamespaceBinding.DEFAULT_UNDECLARATION)
+    nscode != NamespaceBinding.DEFAULT_UNDECLARATION
   }
 
   /**
@@ -159,20 +159,20 @@ class NamespaceReducer extends ProxyReceiver with NamespaceResolver {
    * @return the uri for the namespace, or null if the prefix is not in scope
    */
   def getURIForPrefix(prefix: String, useDefault: Boolean): String = {
-    if ((prefix.isEmpty) && !useDefault) {
+    if (prefix.isEmpty && !useDefault) {
       return NamespaceConstant.NULL
     } else if ("xml" == prefix) {
       return NamespaceConstant.XML
     } else {
       var i = namespacesSize - 1
       while (i >= 0) {
-        if ((namespaces(i).getPrefix == prefix)) {
+        if (namespaces(i).getPrefix == prefix) {
           return namespaces(i).getURI
         }
         i -= 1
       }
     }
-    (if (prefix.isEmpty) NamespaceConstant.NULL else null)
+    if (prefix.isEmpty) NamespaceConstant.NULL else null
   }
 
   /**

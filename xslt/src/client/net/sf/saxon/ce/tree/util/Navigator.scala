@@ -57,13 +57,13 @@ object Navigator {
           val parent = node.getParent
           if (parent == null) {
             val base = new URI(node.getSystemId)
-            val resolved = (if (xmlBase.length == 0) base else base.resolve(baseURI.toString))
+            val resolved = if (xmlBase.length == 0) base else base.resolve(baseURI.toString)
             return resolved.toString
           }
           val startSystemId = node.getSystemId
           val parentSystemId = parent.getSystemId
           val base = new URI(if (startSystemId == parentSystemId) parent.getBaseURI else startSystemId)
-          baseURI = (if (xmlBase.length == 0) base else base.resolve(baseURI.toString))
+          baseURI = if (xmlBase.length == 0) base else base.resolve(baseURI.toString)
         }
       } catch {
         case e: URI.URISyntaxException => return xmlBase
@@ -120,7 +120,7 @@ object Navigator {
             }
           }
           try {
-            val index = (if (count == 1) "" else "[" + position + "]")
+            val index = if (count == 1) "" else "[" + position + "]"
             pre + '/' + node.getDisplayName + index
           } catch {
             case e: UnsupportedOperationException => pre + '/' + node.getDisplayName
@@ -215,7 +215,7 @@ object Navigator {
       }
     }
     val preceding = target.iterateAxis(Axis.PRECEDING_SIBLING, count.getNodeTest)
-    val alreadyChecked = (count.isInstanceOf[NodeTestPattern])
+    val alreadyChecked = count.isInstanceOf[NodeTestPattern]
     var i = 1
     while (true) {
       val p = preceding.next().asInstanceOf[NodeInfo]
@@ -633,7 +633,7 @@ object Navigator {
     val umf = new ItemMappingFunction() {
 
       def mapItem(item: Item): Item = {
-        return (if (test.matchesItem(item)) item else null)
+        return if (test.matchesItem(item)) item else null
       }
     }
     new UnfailingItemMappingIterator(base, umf)
@@ -843,7 +843,7 @@ object Navigator {
       if (nextAnc != null) {
         siblingEnum = if (nextAnc.getNodeKind == Type.DOCUMENT) EmptyIterator.getInstance else nextAnc.iterateAxis(Axis.PRECEDING_SIBLING, 
           AnyNodeTest.getInstance)
-        (if (includeAncestors) nextAnc else next())
+        if (includeAncestors) nextAnc else next()
       } else {
         null
       }

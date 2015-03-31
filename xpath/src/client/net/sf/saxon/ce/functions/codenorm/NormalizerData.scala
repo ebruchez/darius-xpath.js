@@ -29,7 +29,7 @@ class NormalizerData(var canonicalClass: Map[Int, Integer],
    */
   def getCanonicalClass(ch: Int): Int = {
     val i = canonicalClass.get(ch)
-    (if (i == null) 0 else i.intValue())
+    if (i == null) 0 else i.intValue()
   }
 
   /**
@@ -43,7 +43,7 @@ class NormalizerData(var canonicalClass: Map[Int, Integer],
   def getPairwiseComposition(first: Int, second: Int): Char = {
     if (first < 0 || first > 0x10FFFF || second < 0 || second > 0x10FFFF) return NOT_COMPOSITE
     val i = compose.get((first << 16) | second)
-    (if (i == null) NormalizerData.NOT_COMPOSITE else i.intValue().toChar)
+    if (i == null) NormalizerData.NOT_COMPOSITE else i.intValue().toChar
   }
 
   /**

@@ -31,7 +31,7 @@ class Error extends SystemFunction {
       qname = argument(0).evaluateItem(context).asInstanceOf[QNameValue]
     }
     if (qname == null) {
-      qname = new QNameValue("err", NamespaceConstant.ERR, (if (argument.length == 1) "FOTY0004" else "FOER0000"))
+      qname = new QNameValue("err", NamespaceConstant.ERR, if (argument.length == 1) "FOTY0004" else "FOER0000")
     }
     var description: String = null
     description = if (argument.length > 1) argument(1).evaluateItem(context).getStringValue else "Error signalled by application call on error()"

@@ -44,7 +44,7 @@ class BMPString(val src: CharSequence) extends UnicodeString {
 
   def length(): Int = src.length
 
-  def isEnd(pos: Int): Boolean = (pos >= src.length)
+  def isEnd(pos: Int): Boolean = pos >= src.length
 
   override def toString(): String = src.toString
 

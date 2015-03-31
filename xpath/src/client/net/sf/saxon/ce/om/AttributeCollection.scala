@@ -37,7 +37,7 @@ class AttributeCollection {
       used = 0
     }
     if (values.length == used) {
-      val newsize = (if (used == 0) 5 else used * 2)
+      val newsize = if (used == 0) 5 else used * 2
       val v2 = new Array[String](newsize)
       val c2 = new Array[StructuredQName](newsize)
       System.arraycopy(values, 0, v2, 0, used)
