@@ -23,10 +23,12 @@ object ArithmeticExpression {
    * @param context  the XPath dynamic evaluation context
    * @return the result of the arithmetic operation
    */
-  def compute(_value0: AtomicValue,
-      operator: Int, 
-      _value1: AtomicValue,
-      context: XPathContext): AtomicValue = {
+  def compute(
+    _value0  : AtomicValue,
+    operator : Int,
+    _value1  : AtomicValue,
+    context  : XPathContext
+  ): AtomicValue = {
 
     var value0 = _value0
     var value1 = _value1
@@ -203,8 +205,7 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
     }
     simplified = true
     val e = super.simplify(visitor)
-    if (e == this && 
-      visitor.getStaticContext.isInBackwardsCompatibleMode) {
+    if (e == this && visitor.getStaticContext.isInBackwardsCompatibleMode) {
       new ArithmeticExpression10(operand0, operator, operand1)
     } else {
       if (operator == Token.NEGATE && Literal.isAtomic(operand1)) {
@@ -324,10 +325,9 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
     try {
       compute(v0, operator, v1, context)
     } catch {
-      case e: XPathException ⇒ {
+      case e: XPathException ⇒
         e.maybeSetLocation(getSourceLocator)
         throw e
-      }
     }
   }
 }
