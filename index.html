@@ -10,47 +10,25 @@
         </style>
     </head>
     <body>
-
-        <!--<nav class="navbar navbar-inverse navbar-fixed-top">-->
-        <!--<div class="container">-->
-        <!--<div class="navbar-header">-->
-        <!--<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">-->
-        <!--<span class="sr-only">Toggle navigation</span>-->
-        <!--<span class="icon-bar"></span>-->
-        <!--<span class="icon-bar"></span>-->
-        <!--<span class="icon-bar"></span>-->
-        <!--</button>-->
-        <!--<a class="navbar-brand" href="#">Saxon in Scala</a>-->
-        <!--</div>-->
-        <!--<div id="navbar" class="collapse navbar-collapse">-->
-        <!--<ul class="nav navbar-nav">-->
-        <!--<li class="active"><a href="#">Home</a></li>-->
-        <!--<li><a href="#about">About</a></li>-->
-        <!--</ul>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</nav>-->
-
         <div class="container-fluid">
 
             <div class="starter-template">
                 <h1>Saxon.scala.js</h1>
-
-                <p class="lead">The Saxon XPath 2.0 processor running in the web browser via Scala.js.</p>
+                <p class="lead">
+                    The <a href="http://www.saxonica.com/ce/index.xml">Saxon</a> XPath 2.0 processor running in the web browser
+                    via <a href="http://www.scala-js.org/">Scala.js</a>.
+                </p>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="expression-textarea">Expression</label>
-                        <textarea id="expression-textarea" class="form-control" rows="5" placeholder="XPath expression">for $book in //book[lower-case(language) = 'italian']
+                        <textarea id="expression-textarea" class="form-control" rows="5" placeholder="XPath expression">for $book in //book[lower-case(language) = ('italian', 'german')]
   return concat($book/title, ' (', $book/book-id, ')')</textarea>
                         <div class="alert alert-danger hidden" role="alert"></div>
                     </div>
 
-                    <!--<div class="form-group">-->
-                    <!--<button class="btn btn-primary try-button">Run expression</button>-->
-                    <!--</div>-->
                     <div class="form-group">
                         <label for="input-textarea">Source XML</label>
                         <textarea id="input-textarea" class="form-control" rows="20" placeholder="Input XML"><books>
@@ -343,8 +321,6 @@
                     <div class="form-group">
                         <label for="result-list">Expression result</label>
                         <ul id="result-list" class="list-group"></ul>
-                        <!--<label for="result-textarea">Expression result</label>-->
-                        <!--<textarea id="result-textarea" class="form-control" readonly rows="30"></textarea>-->
                     </div>
                 </div>
             </div>
@@ -354,7 +330,7 @@
         <!--<script type="text/javascript" src="./target/scala-2.11/saxon-ce-scala-fastopt.js"></script>-->
         <script type="text/javascript" src="./target/scala-2.11/saxon-ce-scala-opt.js"></script>
         <script type="text/javascript">
-            client.net.sf.saxon.ce.XPathProcessor().initialize();
+            client.net.sf.saxon.ce.orbeon.XPathProcessor().initialize();
         </script>
 
     </body>
