@@ -47,7 +47,7 @@ abstract class SystemFunction extends FunctionCall {
   /**
    * Method called during static type checking
    */
-  def checkArguments(visitor: ExpressionVisitor) {
+  def checkArguments(visitor: ExpressionVisitor): Unit = {
     checkArgumentCount(details.minArguments, details.maxArguments, visitor)
     for (i <- 0 until argument.length) {
       checkArgument(i, visitor)
@@ -61,7 +61,7 @@ abstract class SystemFunction extends FunctionCall {
    * @param visitor an expression visitor
    * @throws XPathException if type checking fails
    */
-  private def checkArgument(arg: Int, visitor: ExpressionVisitor) {
+  private def checkArgument(arg: Int, visitor: ExpressionVisitor): Unit = {
     val role = new RoleLocator(RoleLocator.FUNCTION, getFunctionName, arg)
     role.setErrorCode(getErrorCodeForTypeErrors)
     argument(arg) = TypeChecker.staticTypeCheck(argument(arg), getRequiredType(arg), visitor.getStaticContext.isInBackwardsCompatibleMode, 
@@ -142,7 +142,7 @@ abstract class SystemFunction extends FunctionCall {
   /**
    * Set "." as the default value for the first and only argument. Called from subclasses.
    */
-  protected def useContextItemAsDefault() {
+  protected def useContextItemAsDefault(): Unit = {
     if (argument.length == 0) {
       argument = new Array[Expression](1)
       argument(0) = new ContextItemExpression()
@@ -161,7 +161,7 @@ abstract class SystemFunction extends FunctionCall {
    * function name is used for the new function call.
    * @throws XPathException if an error occurs
    */
-  protected def addContextDocumentArgument(pos: Int, augmentedName: String) {
+  protected def addContextDocumentArgument(pos: Int, augmentedName: String): Unit = {
     if (argument.length > pos) {
       return
     }

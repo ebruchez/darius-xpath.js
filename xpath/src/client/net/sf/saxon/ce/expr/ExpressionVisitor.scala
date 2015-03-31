@@ -167,7 +167,7 @@ class ExpressionVisitor {
    * This should be done whenever the expression is changed in a way that might
    * affect the properties. It causes the properties to be recomputed next time they are needed.
    */
-  def resetStaticProperties() {
+  def resetStaticProperties(): Unit = {
     val up = stack.iterator()
     while (up.hasNext) {
       val exp = up.next()

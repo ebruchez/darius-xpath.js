@@ -97,7 +97,7 @@ object EscapeURI {
    * @param c2 the second character of a surrogate pair
    * @param sb the buffer to contain the escaped result
    */
-  private def escapeChar(c: Char, c2: Char, sb: FastStringBuffer) {
+  private def escapeChar(c: Char, c2: Char, sb: FastStringBuffer): Unit = {
     val array = new Array[Byte](4)
     val used = UTF8CharacterSet.getUTF8Encoding(c, c2, array)
     for (b <- 0 until used) {

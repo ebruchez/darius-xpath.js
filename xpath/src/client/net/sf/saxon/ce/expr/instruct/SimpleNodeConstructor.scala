@@ -30,7 +30,7 @@ abstract class SimpleNodeConstructor extends Instruction {
    * of an attribute against the schema-defined type)
    * @throws XPathException
    */
-  def setSelect(select: Expression, config: Configuration) {
+  def setSelect(select: Expression, config: Configuration): Unit = {
     this.select = select
     adoptChildExpression(select)
   }
@@ -197,7 +197,7 @@ abstract class SimpleNodeConstructor extends Instruction {
    *     the containing expression
    * @throws XPathException if any error is detected
    */
-  override protected def promoteInst(offer: PromotionOffer) {
+  override protected def promoteInst(offer: PromotionOffer): Unit = {
     if (select != null) {
       select = doPromotion(select, offer)
     }

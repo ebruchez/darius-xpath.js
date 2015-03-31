@@ -40,7 +40,7 @@ class ProcessingInstruction(var name: Expression) extends SimpleNodeConstructor 
     super.simplify(visitor)
   }
 
-  def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType) {
+  def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Unit = {
     name = visitor.typeCheck(name, contextItemType)
     adoptChildExpression(name)
     val role = new RoleLocator(RoleLocator.INSTRUCTION, "processing-instruction/name", 0)
@@ -66,7 +66,7 @@ class ProcessingInstruction(var name: Expression) extends SimpleNodeConstructor 
    *     the containing expression
    * @exception XPathException if any error is detected
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     name = doPromotion(name, offer)
     super.promoteInst(offer)
   }
@@ -77,7 +77,7 @@ class ProcessingInstruction(var name: Expression) extends SimpleNodeConstructor 
    * @param context the dynamic evaluation context
    * @throws XPathException
    */
-  def processValue(value: CharSequence, context: XPathContext) {
+  def processValue(value: CharSequence, context: XPathContext): Unit = {
     val expandedName = evaluateName(context)
     if (expandedName != null) {
       val data = checkContent(value.toString, context)
@@ -124,7 +124,7 @@ class ProcessingInstruction(var name: Expression) extends SimpleNodeConstructor 
     expandedName
   }
 
-  private def checkName(expandedName: String, context: XPathContext) {
+  private def checkName(expandedName: String, context: XPathContext): Unit = {
     if (!(NameChecker.isValidNCName(expandedName))) {
       dynamicError("Processing instruction name " + Err.wrap(expandedName) + 
         " is not a valid NCName", "XTDE0890")

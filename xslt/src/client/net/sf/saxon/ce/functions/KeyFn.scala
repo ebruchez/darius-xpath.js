@@ -87,7 +87,7 @@ class KeyFn extends SystemFunction {
     f
   }
 
-  def checkArguments(visitor: ExpressionVisitor) {
+  def checkArguments(visitor: ExpressionVisitor): Unit = {
     if (checked) return
     checked = true
     super.checkArguments(visitor)

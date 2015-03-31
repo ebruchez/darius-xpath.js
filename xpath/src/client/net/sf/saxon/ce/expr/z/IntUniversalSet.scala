@@ -19,7 +19,7 @@ class IntUniversalSet private () extends IntSet {
 
   def mutableCopy(): IntSet = new IntComplementSet(new IntHashSet())
 
-  def clear() {
+  def clear(): Unit = {
     throw new UnsupportedOperationException("IntUniversalSet is immutable")
   }
 

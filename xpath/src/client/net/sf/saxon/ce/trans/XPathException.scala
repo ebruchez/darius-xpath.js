@@ -106,7 +106,7 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
    * as a prefix to the error message if desired. (It is not concatenated with the message, because
    * it may be superfluous in an IDE environment.)
    */
-  def setAdditionalLocationText(text: String) {
+  def setAdditionalLocationText(text: String): Unit = {
     locationText = text
   }
 
@@ -126,7 +126,7 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
    * Mark this exception to indicate that it represents (or does not represent) a static error
    * @param is true if this exception is a static error
    */
-  def setIsStaticError(is: Boolean) {
+  def setIsStaticError(is: Boolean): Unit = {
     isStaticError = is
   }
 
@@ -134,7 +134,7 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
    * Mark this exception to indicate that it represents (or does not represent) a type error
    * @param is true if this exception is a type error
    */
-  def setIsTypeError(is: Boolean) {
+  def setIsTypeError(is: Boolean): Unit = {
     isTypeError = is
   }
 
@@ -143,7 +143,7 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
    * setting the namespace of the error code to the standard system namespace [[client.net.sf.saxon.ce.lib.NamespaceConstant.ERR]]
    * @param code The local part of the name of the error code
    */
-  def setErrorCode(code: String) {
+  def setErrorCode(code: String): Unit = {
     if (code != null) {
       errorCode = new StructuredQName("err", NamespaceConstant.ERR, code)
     }
@@ -155,7 +155,7 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
    * setting the namespace of the error code to the standard system namespace [[NamespaceConstant.ERR]]
    * @param code The local part of the name of the error code
    */
-  def maybeSetErrorCode(code: String) {
+  def maybeSetErrorCode(code: String): Unit = {
     if (errorCode == null && code != null) {
       errorCode = new StructuredQName("err", NamespaceConstant.ERR, code)
     }
@@ -165,7 +165,7 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
    * Set the error code. The error code is a QName; this method sets both parts of the name.
    * @param code The error code as a QName
    */
-  def setErrorCodeQName(code: StructuredQName) {
+  def setErrorCodeQName(code: StructuredQName): Unit = {
     errorCode = code
   }
 
@@ -196,7 +196,7 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
    * reported again
    * @param reported true if the error has been reported to the error listener
    */
-  def setHasBeenReported(reported: Boolean) {
+  def setHasBeenReported(reported: Boolean): Unit = {
     _hasBeenReported = reported
   }
 
@@ -204,7 +204,7 @@ class XPathException(_message: String, _throwable: Throwable) extends Exception(
    * Set the location of a message, only if it is not already set
    * @param locator the current location (or null)
    */
-  def maybeSetLocation(locator: SourceLocator) {
+  def maybeSetLocation(locator: SourceLocator): Unit = {
     if (this.locator == null) {
       this.locator = locator
     }

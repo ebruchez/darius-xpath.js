@@ -30,16 +30,16 @@ class XSLGeneralIncorporate extends StyleElement {
    */
   override def isDeclaration(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     href = checkAttribute("href", "w1").asInstanceOf[String]
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     validateInstruction()
   }
 
-  def validateInstruction() {
+  def validateInstruction(): Unit = {
     checkEmpty()
     checkTopLevel(if (getLocalPart == "import") "XTSE0190" else "XTSE0170")
   }
@@ -134,7 +134,7 @@ class XSLGeneralIncorporate extends StyleElement {
     }
   }
 
-  private def reportCycle() {
+  private def reportCycle(): Unit = {
     compileError("A stylesheet cannot " + getLocalPart + " itself", (if (getLocalPart == "include") "XTSE0180" else "XTSE0210"))
   }
 

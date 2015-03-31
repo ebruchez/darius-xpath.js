@@ -49,7 +49,7 @@ class XSLStylesheet extends StyleElement {
     (if (principalStylesheetModule == null) null else principalStylesheetModule.getExecutable)
   }
 
-  def setPrincipalStylesheetModule(module: PrincipalStylesheetModule) {
+  def setPrincipalStylesheetModule(module: PrincipalStylesheetModule): Unit = {
     this.principalStylesheetModule = module
     this.exec = module.getExecutable
   }
@@ -70,7 +70,7 @@ class XSLStylesheet extends StyleElement {
   /**
    * Prepare the attributes on the stylesheet element
    */
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     checkAttribute("version", "s1")
     checkAttribute("id", "s")
     checkAttribute("extension-element-prefixes", "s")
@@ -116,7 +116,7 @@ class XSLStylesheet extends StyleElement {
    * Validate this element
    * @param decl
    */
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     if (validationError != null) {
       compileError(validationError)
     }
@@ -144,7 +144,7 @@ class XSLStylesheet extends StyleElement {
   /**
    * Process the attributes of every node in the stylesheet
    */
-  def processAllAttributes() {
+  def processAllAttributes(): Unit = {
     processDefaultCollationAttribute("")
     prepareAttributes()
     for (child <- allChildren() if child.isInstanceOf[StyleElement]) {

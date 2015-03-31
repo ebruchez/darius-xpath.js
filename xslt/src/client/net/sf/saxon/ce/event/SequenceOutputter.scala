@@ -49,7 +49,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
   /**
    * Clear the contents of the SequenceOutputter and make it available for reuse
    */
-  def reset() {
+  def reset(): Unit = {
     list = new ArrayList[Item](Math.max(list.size + 10, 50))
     if (controller != null && adviseReuse()) {
       controller.reuseSequenceOutputter(this)
@@ -93,7 +93,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
   /**
    * Start of a document node.
    */
-  def startDocument() {
+  def startDocument(): Unit = {
     if (outputter == null) {
       createTree()
     }
@@ -106,7 +106,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
    * Create a tree to hold a document or element node.
    * @throws client.net.sf.saxon.ce.trans.XPathException
    */
-  private def createTree() {
+  private def createTree(): Unit = {
     val pipe = getPipelineConfiguration
     builder = pipe.getController.makeBuilder()
     builder.setPipelineConfiguration(pipe)
@@ -132,7 +132,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
   /**
    * Notify the end of a document node
    */
-  def endDocument() {
+  def endDocument(): Unit = {
     if (level == 0) {
       outputter.endDocument()
       val doc = builder.getCurrentRoot.asInstanceOf[DocumentInfo]
@@ -146,7 +146,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
    * @param qName The element name code - a code held in the Name Pool
    * @param properties bit-significant flags indicating any special information
    */
-  def startElement(qName: StructuredQName, properties: Int) {
+  def startElement(qName: StructuredQName, properties: Int): Unit = {
     if (inStartTag) {
       startContent()
     }
@@ -162,7 +162,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
   /**
    * Output an element end tag.
    */
-  def endElement() {
+  def endElement(): Unit = {
     if (inStartTag) {
       startContent()
     }
@@ -186,7 +186,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
    * @throws client.net.sf.saxon.ce.trans.XPathException if there is no start tag to write to (created using writeStartTag),
    * or if character content has been written since the start tag was written.
    */
-  def namespace(nsBinding: NamespaceBinding, properties: Int) {
+  def namespace(nsBinding: NamespaceBinding, properties: Int): Unit = {
     if (level == 0) {
       val o = new Orphan()
       o.setNodeKind(Type.NAMESPACE)
@@ -207,7 +207,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
    * @throws client.net.sf.saxon.ce.trans.XPathException if there is no start tag to write to (created using writeStartTag),
    * or if character content has been written since the start tag was written.
    */
-  def attribute(nameCode: StructuredQName, value: CharSequence) {
+  def attribute(nameCode: StructuredQName, value: CharSequence): Unit = {
     if (level == 0) {
       val o = new Orphan()
       o.setNodeKind(Type.ATTRIBUTE)
@@ -225,7 +225,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
    * have been notified, and before any child nodes are notified.
    * @throws client.net.sf.saxon.ce.trans.XPathException for any failure
    */
-  def startContent() {
+  def startContent(): Unit = {
     inStartTag = false
     outputter.startContent()
     previousAtomic = false
@@ -236,7 +236,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
    * @param s The String to be output
    * @throws client.net.sf.saxon.ce.trans.XPathException for any failure
    */
-  def characters(s: CharSequence) {
+  def characters(s: CharSequence): Unit = {
     if (level == 0) {
       val o = new Orphan()
       o.setNodeKind(Type.TEXT)
@@ -256,7 +256,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
   /**
    * Write a comment.
    */
-  def comment(comment: CharSequence) {
+  def comment(comment: CharSequence): Unit = {
     if (inStartTag) {
       startContent()
     }
@@ -275,7 +275,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
    * Write a processing instruction
    * No-op in this implementation
    */
-  def processingInstruction(target: String, data: CharSequence) {
+  def processingInstruction(target: String, data: CharSequence): Unit = {
     if (inStartTag) {
       startContent()
     }
@@ -294,7 +294,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
   /**
    * Close the output
    */
-  def close() {
+  def close(): Unit = {
     previousAtomic = false
     if (outputter != null) {
       outputter.close()
@@ -304,7 +304,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
   /**
    * Append an item to the sequence, performing any necessary type-checking and conversion
    */
-  def append(item: Item, copyNamespaces: Int) {
+  def append(item: Item, copyNamespaces: Int): Unit = {
     if (item == null) {
       return
     }

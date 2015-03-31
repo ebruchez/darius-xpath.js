@@ -43,7 +43,7 @@ class XSLSequence extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = false
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     select = checkAttribute("select", "e1").asInstanceOf[Expression]
     checkForUnknownAttributes()
     if (LogConfiguration.loggingIsEnabled() && LogController.traceIsEnabled()) {
@@ -51,7 +51,7 @@ class XSLSequence extends StyleElement {
     }
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     onlyAllow("fallback")
     select = typeCheck(select)
   }

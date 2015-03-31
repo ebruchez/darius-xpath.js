@@ -23,7 +23,7 @@ class XSLMatchingSubstring extends StyleElement {
    */
   protected def getReturnedItemType(): ItemType = getCommonChildItemType
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     checkForUnknownAttributes()
   }
 
@@ -33,7 +33,7 @@ class XSLMatchingSubstring extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     if (!(getParent.isInstanceOf[XSLAnalyzeString])) {
       compileError(getDisplayName + " must be immediately within xsl:analyze-string", "XTSE0010")
     }

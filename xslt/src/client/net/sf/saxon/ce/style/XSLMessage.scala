@@ -33,7 +33,7 @@ class XSLMessage extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     terminate = checkAttribute("terminate", "a").asInstanceOf[Expression]
     select = checkAttribute("select", "e").asInstanceOf[Expression]
     if (terminate == null) {
@@ -41,7 +41,7 @@ class XSLMessage extends StyleElement {
     }
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     select = typeCheck(select)
     terminate = typeCheck(terminate)
   }

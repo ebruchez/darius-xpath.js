@@ -32,7 +32,7 @@ class NamespaceConstructor(var name: Expression) extends SimpleNodeConstructor {
 
   def getCardinality(): Int = StaticProperty.EXACTLY_ONE
 
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     if (select != null) {
       select = doPromotion(select, offer)
     }
@@ -40,7 +40,7 @@ class NamespaceConstructor(var name: Expression) extends SimpleNodeConstructor {
     super.promoteInst(offer)
   }
 
-  def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType) {
+  def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Unit = {
     name = visitor.typeCheck(name, contextItemType)
   }
 
@@ -62,7 +62,7 @@ class NamespaceConstructor(var name: Expression) extends SimpleNodeConstructor {
     new StructuredQName("", "", prefix)
   }
 
-  def processValue(value: CharSequence, context: XPathContext) {
+  def processValue(value: CharSequence, context: XPathContext): Unit = {
     val prefix = evaluatePrefix(context)
     val uri = value.toString
     checkPrefixAndUri(prefix, uri, context)
@@ -83,7 +83,7 @@ class NamespaceConstructor(var name: Expression) extends SimpleNodeConstructor {
     node
   }
 
-  private def checkPrefixAndUri(prefix: String, uri: String, context: XPathContext) {
+  private def checkPrefixAndUri(prefix: String, uri: String, context: XPathContext): Unit = {
     if (prefix == "xml" != uri == NamespaceConstant.XML) {
       dynamicError("Namespace prefix 'xml' and namespace uri " + NamespaceConstant.XML + 
         " must only be used together", "XTDE0925")

@@ -50,7 +50,7 @@ class XSLDecimalFormat extends StyleElement {
    */
   override def isDeclaration(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     if (prepared) {
       return
     }
@@ -68,7 +68,7 @@ class XSLDecimalFormat extends StyleElement {
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkTopLevel(null)
     checkEmpty()
   }
@@ -123,7 +123,7 @@ class XSLDecimalFormat extends StyleElement {
    * except in cases where one module is imported several times with different precedence.)
    * @param top  the outermost XSLStylesheet element
    */
-  def index(decl: Declaration, top: PrincipalStylesheetModule) {
+  def index(decl: Declaration, top: PrincipalStylesheetModule): Unit = {
     prepareAttributes()
     val d = makeDecimalFormatSymbols()
     val dfm = getPreparedStylesheet.getDecimalFormatManager

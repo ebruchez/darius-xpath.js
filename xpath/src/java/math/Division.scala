@@ -445,7 +445,7 @@ object Division {
    * @param x a positive number, it will store the result.
    * @param n a positive exponent of {@code 2}.
    */
-  def inplaceModPow2(x: BigInteger, n: Int) {
+  def inplaceModPow2(x: BigInteger, n: Int): Unit = {
     val fd = n >> 5
     var leadingZeros: Int = 0
     if ((x.numberLength < fd) || (x.bitLength() <= n)) {
@@ -934,7 +934,7 @@ object Division {
     result
   }
 
-  private def monReduction(res: Array[Int], modulus: BigInteger, n2: Int) {
+  private def monReduction(res: Array[Int], modulus: BigInteger, n2: Int): Unit = {
     val modulusDigits = modulus.digits
     val modulusLen = modulus.numberLength
     var outerCarry:Long = 0

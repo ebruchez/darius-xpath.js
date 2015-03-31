@@ -20,7 +20,7 @@ class Comment extends SimpleNodeConstructor {
 
   def getCardinality(): Int = StaticProperty.EXACTLY_ONE
 
-  def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType) {
+  def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Unit = {
   }
 
   /**
@@ -29,7 +29,7 @@ class Comment extends SimpleNodeConstructor {
    * @param context the dynamic evaluation context
    * @throws XPathException
    */
-  def processValue(value: CharSequence, context: XPathContext) {
+  def processValue(value: CharSequence, context: XPathContext): Unit = {
     val comment = checkContent(value.toString, context)
     val out = context.getReceiver
     out.comment(comment)

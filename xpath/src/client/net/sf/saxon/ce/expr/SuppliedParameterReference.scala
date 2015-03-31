@@ -24,7 +24,7 @@ class SuppliedParameterReference(var slotNumber: Int) extends Expression {
    * Set the type of the supplied value if known
    * @param type of the supplied value
    */
-  def setSuppliedType(`type`: SequenceType) {
+  def setSuppliedType(`type`: SequenceType): Unit = {
     this.`type` = `type`
   }
 

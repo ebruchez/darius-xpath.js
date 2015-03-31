@@ -32,7 +32,7 @@ class CommentImpl(content: String) extends NodeImpl {
   /**
    * Copy this node to a given outputter
    */
-  def copy(out: Receiver, copyOptions: Int) {
+  def copy(out: Receiver, copyOptions: Int): Unit = {
     out.comment(comment)
   }
 }

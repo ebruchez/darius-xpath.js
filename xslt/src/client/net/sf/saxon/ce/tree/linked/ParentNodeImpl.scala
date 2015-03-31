@@ -37,7 +37,7 @@ abstract class ParentNodeImpl extends NodeImpl {
 
   protected def getRawSequenceNumber(): Int = sequence
 
-  protected def setRawSequenceNumber(seq: Int) {
+  protected def setRawSequenceNumber(seq: Int): Unit = {
     sequence = seq
   }
 
@@ -46,7 +46,7 @@ abstract class ParentNodeImpl extends NodeImpl {
    * @param children null if there are no children, a single NodeInfo if there is one child, an array of NodeInfo
    * if there are multiple children
    */
-  protected def setChildren(children: AnyRef) {
+  protected def setChildren(children: AnyRef): Unit = {
     this.children = children
   }
 
@@ -134,7 +134,7 @@ abstract class ParentNodeImpl extends NodeImpl {
    * parent property and sibling position)
    * @param index the position where the child is to be added
    */
-  protected def addChild(node: NodeImpl, index: Int) {
+  protected def addChild(node: NodeImpl, index: Int): Unit = {
     synchronized {
       var c: Array[NodeImpl] = null
       if (children == null) {
@@ -161,7 +161,7 @@ abstract class ParentNodeImpl extends NodeImpl {
    * Compact the space used by this node
    * @param size the number of actual children
    */
-  def compact(size: Int) {
+  def compact(size: Int): Unit = {
     synchronized {
       if (size == 0) {
         children = null

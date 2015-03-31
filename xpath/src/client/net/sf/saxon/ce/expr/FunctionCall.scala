@@ -44,7 +44,7 @@ abstract class FunctionCall extends Expression {
    * Set the name of the function being called
    * @param name the name of the function
    */
-  def setFunctionName(name: StructuredQName) {
+  def setFunctionName(name: StructuredQName): Unit = {
     this.name = name
   }
 
@@ -64,7 +64,7 @@ abstract class FunctionCall extends Expression {
    * Method called by the expression parser when all arguments have been supplied
    * @param args the expressions contained in the argument list of the function call
    */
-  def setArguments(args: Array[Expression]) {
+  def setArguments(args: Array[Expression]): Unit = {
     argument = args
     for (a <- 0 until args.length) {
       adoptChildExpression(args(a))

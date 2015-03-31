@@ -119,7 +119,7 @@ object SequenceTool {
    * @param context The dynamic context, giving access to the current node,
    * the current variables, etc.
    */
-  def process(iterator: SequenceIterator, context: XPathContext) {
+  def process(iterator: SequenceIterator, context: XPathContext): Unit = {
     val out = context.getReceiver
     while (true) {
       val it = iterator.next()

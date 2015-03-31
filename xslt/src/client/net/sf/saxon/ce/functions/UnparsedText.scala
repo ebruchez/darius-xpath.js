@@ -32,7 +32,7 @@ class UnparsedText(operation: Int) extends SystemFunction {
 
   var expressionBaseURI: String = null
 
-  def checkArguments(visitor: ExpressionVisitor) {
+  def checkArguments(visitor: ExpressionVisitor): Unit = {
     if (expressionBaseURI == null) {
       super.checkArguments(visitor)
       expressionBaseURI = visitor.getStaticContext.getBaseURI

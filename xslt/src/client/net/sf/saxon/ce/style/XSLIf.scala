@@ -44,12 +44,12 @@ class XSLIf extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     test = checkAttribute("test", "e1").asInstanceOf[Expression]
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     test = typeCheck(test)
   }
 

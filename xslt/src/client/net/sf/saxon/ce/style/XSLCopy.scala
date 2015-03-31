@@ -38,7 +38,7 @@ class XSLCopy extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     var b = checkAttribute("copy-namespaces", "b").asInstanceOf[java.lang.Boolean]
     if (b != null) {
       copyNamespaces = b
@@ -53,7 +53,7 @@ class XSLCopy extends StyleElement {
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     if (use != null) {
       attributeSets = getAttributeSets(use, null)
     }

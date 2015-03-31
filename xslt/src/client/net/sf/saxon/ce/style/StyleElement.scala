@@ -159,7 +159,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * contain a reference to its parent; and it will have no children.
    * @param temp the element which this one is substituting for
    */
-  def substituteFor(temp: StyleElement) {
+  def substituteFor(temp: StyleElement): Unit = {
     setRawParent(temp.getRawParent)
     setAttributeList(temp.getAttributeList)
     setNamespaceList(temp.getNamespaceList)
@@ -178,7 +178,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param reason        the details of the error
    * @param circumstances a code identifying the circumstances under which the error is to be reported
    */
-  def setValidationError(reason: XPathException, circumstances: Int) {
+  def setValidationError(reason: XPathException, circumstances: Int): Unit = {
     validationError = (reason)
     reportingCircumstances = circumstances
   }
@@ -308,7 +308,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * Process the attributes of this element and all its children
    * @throws XPathException in the event of a static error being detected
    */
-  protected def processAllAttributes() {
+  protected def processAllAttributes(): Unit = {
     if (!(this.isInstanceOf[LiteralResultElement])) {
       processDefaultCollationAttribute("")
     }
@@ -324,7 +324,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param namespace either "" to find the attributes in the null namespace,
    *                  or NamespaceConstant.XSLT to find them in the XSLT namespace
    */
-  def processStandardAttributes(namespace: String) {
+  def processStandardAttributes(namespace: String): Unit = {
     processDefaultCollationAttribute(namespace)
     processExtensionElementAttribute(namespace)
     processExcludedNamespaces(namespace)
@@ -336,7 +336,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * Process the attribute list for the element. This is a wrapper method that calls
    * prepareAttributes (provided in the subclass) and traps any exceptions
    */
-  protected def processAttributes() {
+  protected def processAttributes(): Unit = {
     try {
       prepareAttributes()
     } catch {
@@ -390,7 +390,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     null
   }
 
-  protected def checkForUnknownAttributes() {
+  protected def checkForUnknownAttributes(): Unit = {
     val atts = getAttributeList
     for (a <- 0 until atts.getLength) {
       val qn = atts.getStructuredQName(a)
@@ -406,7 +406,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @throws XPathException (and reports the error) if this is an attribute
    *                        that is not permitted on the containing element
    */
-  private def checkUnknownAttribute(nc: StructuredQName) {
+  private def checkUnknownAttribute(nc: StructuredQName): Unit = {
     if (forwardsCompatibleModeIsEnabled()) {
       return
     }
@@ -531,7 +531,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param ns the namespace URI of the attribute - either the XSLT namespace or "" for the null namespace
    * @throws XPathException in the event of a bad prefix
    */
-  protected def processExtensionElementAttribute(ns: String) {
+  protected def processExtensionElementAttribute(ns: String): Unit = {
     val ext = getAttributeValue(ns, "extension-element-prefixes")
     if (ext != null) {
       extensionNamespaces = processPrefixList(ext, false)
@@ -543,7 +543,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param ns the namespace URI of the attribute required, either the XSLT namespace or ""
    * @throws XPathException in the event of a bad prefix
    */
-  protected def processExcludedNamespaces(ns: String) {
+  protected def processExcludedNamespaces(ns: String): Unit = {
     val ext = getAttributeValue(ns, "exclude-result-prefixes")
     if (ext != null) {
       excludedNamespaces = processPrefixList(ext, true)
@@ -592,7 +592,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param ns the namespace URI of the attribute required, either the XSLT namespace or ""
    * @throws XPathException if the value is invalid
    */
-  protected def processVersionAttribute(ns: String) {
+  protected def processVersionAttribute(ns: String): Unit = {
     val v = Whitespace.trim(getAttributeValue(ns, "version"))
     if (v != null) {
       val `val` = DecimalValue.makeDecimalValue(v)
@@ -644,7 +644,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param ns the namespace of the attribute required, either the XSLT namespace or ""
    * @throws XPathException if the value is invalid
    */
-  protected def processDefaultCollationAttribute(ns: String) {
+  protected def processDefaultCollationAttribute(ns: String): Unit = {
     val v = getAttributeValue(ns, "default-collation")
     if (v != null) {
       for (uri <- Whitespace.tokenize(v)) {
@@ -761,7 +761,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * Process the [xsl:]xpath-default-namespace attribute if there is one
    * @param ns the namespace URI of the attribute required  (the default namespace or the XSLT namespace.)
    */
-  protected def processDefaultXPathNamespaceAttribute(ns: String) {
+  protected def processDefaultXPathNamespaceAttribute(ns: String): Unit = {
     val v = getAttributeValue(ns, "xpath-default-namespace")
     if (v != null) {
       defaultXPathNamespace = v
@@ -792,14 +792,14 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * in subclasses.
    * @param decl
    */
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
   }
 
   /**
    * Hook to allow additional validation of a parent element immediately after its
    * children have been validated.
    */
-  def postValidate() {
+  def postValidate(): Unit = {
   }
 
   /**
@@ -808,7 +808,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * except in cases where one module is imported several times with different precedence.)
    * @param top  the outermost XSLStylesheet element
    */
-  protected def index(decl: Declaration, top: PrincipalStylesheetModule) {
+  protected def index(decl: Declaration, top: PrincipalStylesheetModule): Unit = {
   }
 
   def typeCheck(exp: Expression): Expression = {
@@ -848,7 +848,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * entire stylesheet.
    * @param slots the number of slots required
    */
-  def allocatePatternSlots(slots: Int) {
+  def allocatePatternSlots(slots: Int): Unit = {
     getPrincipalStylesheetModule.allocatePatternSlots(slots)
   }
 
@@ -907,7 +907,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * Fix up references from XPath expressions. Overridden for function declarations
    * and variable declarations
    */
-  def fixupReferences() {
+  def fixupReferences(): Unit = {
     for (child <- allChildren() if child.isInstanceOf[StyleElement]) {
       child.asInstanceOf[StyleElement].fixupReferences()
     }
@@ -917,7 +917,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * Recursive walk through the stylesheet to validate all nodes
    * @param decl
    */
-  def validateSubtree(decl: Declaration) {
+  def validateSubtree(decl: Declaration): Unit = {
     if (isActionCompleted(StyleElement.ACTION_VALIDATE)) {
       return
     }
@@ -954,7 +954,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * data elements.
    * @param decl
    */
-  protected def validateChildren(decl: Declaration) {
+  protected def validateChildren(decl: Declaration): Unit = {
     val containsInstructions = mayContainSequenceConstructor()
     for (child <- allChildren() if child.isInstanceOf[StyleElement]) {
       if (containsInstructions && !child.asInstanceOf[StyleElement].isInstruction && 
@@ -998,7 +998,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param sortRequired true if there must be at least one xsl:sort element
    * @throws XPathException if invalid
    */
-  protected def checkSortComesFirst(sortRequired: Boolean) {
+  protected def checkSortComesFirst(sortRequired: Boolean): Unit = {
     var sortFound = false
     var nonSortFound = false
     for (child <- allChildren()) {
@@ -1027,7 +1027,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    *                  if the value is null
    * @throws XPathException if not at top level
    */
-  def checkTopLevel(errorCode: String) {
+  def checkTopLevel(errorCode: String): Unit = {
     if (!(getParent.isInstanceOf[XSLStylesheet])) {
       compileError("Element must be used only at top level of stylesheet", (if (errorCode == null) "XTSE0010" else errorCode))
     }
@@ -1037,7 +1037,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * Convenience method to check that the stylesheet element is empty
    * @throws XPathException if it is not empty
    */
-  def checkEmpty() {
+  def checkEmpty(): Unit = {
     if (hasChildNodes()) {
       compileError("Element must be empty", "XTSE0260")
     }
@@ -1048,7 +1048,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param localName the allowed local names, which must be in alphabetical order
    * @throws XPathException
    */
-  def onlyAllow(localName: String*) {
+  def onlyAllow(localName: String*): Unit = {
     for (child <- allChildren()) {
       if (Arrays.binarySearch(localName, child.getLocalPart) >= 0) {
       } else if (child.getNodeKind == Type.TEXT) {
@@ -1067,7 +1067,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param attribute the name of the attribute whose absence is to be reported
    * @throws XPathException if the attribute is missing
    */
-  def reportAbsence(attribute: String) {
+  def reportAbsence(attribute: String): Unit = {
     compileError("Element must have an @" + attribute + " attribute", "XTSE0010")
   }
 
@@ -1299,7 +1299,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param error contains information about the error
    * @throws XPathException always, after reporting the error to the ErrorListener
    */
-  protected def compileError(error: XPathException) {
+  protected def compileError(error: XPathException): Unit = {
     error.setIsStaticError(true)
     if (error.getLocator == null) {
       error.setLocator(this)
@@ -1317,7 +1317,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param message the error message
    * @throws XPathException always, after reporting the error to the ErrorListener
    */
-  protected def compileError(message: String) {
+  protected def compileError(message: String): Unit = {
     val tce = new XPathException(message)
     tce.setLocator(this)
     compileError(tce)
@@ -1329,7 +1329,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param errorCode the error code. May be null if not known or not defined
    * @throws XPathException
    */
-  protected def compileError(message: String, errorCode: StructuredQName) {
+  protected def compileError(message: String, errorCode: StructuredQName): Unit = {
     var tce: XPathException = null
     tce = if (LogConfiguration.loggingIsEnabled()) new XPathException(message) else new XPathException("")
     tce.setErrorCodeQName(errorCode)
@@ -1343,7 +1343,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * @param errorCode the error code. May be null if not known or not defined
    * @throws XPathException
    */
-  protected def compileError(message: String, errorCode: String) {
+  protected def compileError(message: String, errorCode: String): Unit = {
     var tce: XPathException = null
     tce = if (LogConfiguration.loggingIsEnabled()) new XPathException(message) else new XPathException("")
     tce.setErrorCode(errorCode)
@@ -1351,7 +1351,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     compileError(tce)
   }
 
-  protected def undeclaredNamespaceError(prefix: String, errorCode: String) {
+  protected def undeclaredNamespaceError(prefix: String, errorCode: String): Unit = {
     if (errorCode == null) {
       errorCode = "XTSE0280"
     }
@@ -1436,7 +1436,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * Set the object name, for example the name of a function, variable, or template declared on this element
    * @param qName the object name as a QName
    */
-  def setObjectName(qName: StructuredQName) {
+  def setObjectName(qName: StructuredQName): Unit = {
     objectName = qName
   }
 
@@ -1469,7 +1469,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
    * Say that an action on this StyleElement has been completed
    * @param action for example ACTION_VALIDATE
    */
-  def setActionCompleted(action: Int) {
+  def setActionCompleted(action: Int): Unit = {
     actionsCompleted |= action
   }
 }

@@ -60,7 +60,7 @@ abstract class XSLLeafNodeConstructor extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     if (select != null && hasChildNodes()) {
       val errorCode = getErrorCodeForSelectPlusContent
       compileError("An " + getDisplayName + " element with a select attribute must be empty", errorCode)
@@ -76,7 +76,7 @@ abstract class XSLLeafNodeConstructor extends StyleElement {
   protected def compileContent(exec: Executable, 
       decl: Declaration, 
       inst: SimpleNodeConstructor, 
-      separator: Expression) {
+      separator: Expression): Unit = {
     if (separator == null) {
       separator = new StringLiteral(StringValue.SINGLE_SPACE)
     }

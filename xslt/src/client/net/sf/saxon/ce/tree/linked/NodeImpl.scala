@@ -87,7 +87,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * Set the index position. For internal use only
    * @param index the position of the node among its siblings, counting from zero.
    */
-  protected def setSiblingPosition(index: Int) {
+  protected def setSiblingPosition(index: Int): Unit = {
     this.index = index
   }
 
@@ -103,7 +103,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * implements the javax.xml.transform.Source interface, allowing a node to be
    * used directly as the Source of a transformation
    */
-  def setSystemId(uri: String) {
+  def setSystemId(uri: String): Unit = {
     getParent.asInstanceOf[NodeImpl].setSystemId(uri)
   }
 
@@ -142,7 +142,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * Get a character string that uniquely identifies this node within this document
    * (The calling code will prepend a document identifier)
    */
-  def generateId(buffer: FastStringBuffer) {
+  def generateId(buffer: FastStringBuffer): Unit = {
     parent.generateId(buffer)
     buffer.append(NODE_LETTER(getNodeKind))
     buffer.append(Integer toString index)
@@ -272,7 +272,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
   /**
    * Set the raw parent pointer
    */
-  protected def setRawParent(parent: ParentNodeImpl) {
+  protected def setRawParent(parent: ParentNodeImpl): Unit = {
     this.parent = parent
   }
 

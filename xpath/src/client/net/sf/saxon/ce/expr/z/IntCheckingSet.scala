@@ -8,7 +8,7 @@ package client.net.sf.saxon.ce.expr.z
  */
 abstract class IntCheckingSet extends IntSet {
 
-  def clear() {
+  def clear(): Unit = {
     throw new UnsupportedOperationException("IntCheckingSet is immutable")
   }
 

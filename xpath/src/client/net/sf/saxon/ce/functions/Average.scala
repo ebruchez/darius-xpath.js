@@ -85,7 +85,7 @@ class Average extends Aggregate {
     }
   }
 
-  private def badMix(context: XPathContext) {
+  private def badMix(context: XPathContext): Unit = {
     dynamicError("Input to avg() contains invalid or mixed data types", "FORG0006")
   }
 }

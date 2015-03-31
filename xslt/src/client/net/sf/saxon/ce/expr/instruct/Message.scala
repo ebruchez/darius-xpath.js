@@ -91,7 +91,7 @@ class Message(var select: Expression, var terminate: Expression) extends Instruc
    * @param offer The type of rewrite being offered
    * @throws XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     if (select != null) {
       select = doPromotion(select, offer)
     }

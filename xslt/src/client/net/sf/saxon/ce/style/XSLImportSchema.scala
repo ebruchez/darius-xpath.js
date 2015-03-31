@@ -22,13 +22,13 @@ class XSLImportSchema extends StyleElement {
    */
   override def isDeclaration(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     checkAttribute("schema-location", "s")
     checkAttribute("namespace", "s")
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkTopLevel(null)
     compileError("This XSLT processor is not schema-aware")
   }

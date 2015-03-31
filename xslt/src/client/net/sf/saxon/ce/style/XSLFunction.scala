@@ -45,7 +45,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
    * subsequent fixup.
    * @param ref the UserFunctionCall to be registered
    */
-  def registerReference(ref: UserFunctionCall) {
+  def registerReference(ref: UserFunctionCall): Unit = {
     references.add(ref)
   }
 
@@ -56,7 +56,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
    */
   override def isDeclaration(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     if (prepared) {
       return
     }
@@ -125,7 +125,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
     override
   }
 
-  protected def index(decl: Declaration, top: PrincipalStylesheetModule) {
+  protected def index(decl: Declaration, top: PrincipalStylesheetModule): Unit = {
     top.indexFunction(decl)
   }
 
@@ -133,14 +133,14 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
    * Notify all references to this function of the data type.
    * @throws XPathException
    */
-  def fixupReferences() {
+  def fixupReferences(): Unit = {
     for (reference <- references) {
       (reference).setStaticType(resultType)
     }
     super.fixupReferences()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkTopLevel(null)
     getNumberOfArguments
   }
@@ -170,7 +170,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
    * @param decl
    * @throws XPathException
    */
-  private def compileAsExpression(exec: Executable, decl: Declaration) {
+  private def compileAsExpression(exec: Executable, decl: Declaration): Unit = {
     var exp = compileSequenceConstructor(exec, decl)
     if (exp == null) {
       exp = Literal.makeEmptySequence()
@@ -195,7 +195,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
     fixupInstruction(fn)
   }
 
-  def typeCheckBody() {
+  def typeCheckBody(): Unit = {
     val exp = compiledFunction.getBody
     var exp2 = exp
     val visitor = makeExpressionVisitor()
@@ -217,7 +217,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
     }
   }
 
-  def optimize(declaration: Declaration) {
+  def optimize(declaration: Declaration): Unit = {
     val exp = compiledFunction.getBody
     val visitor = makeExpressionVisitor()
     var exp2 = exp
@@ -246,7 +246,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
    * @param compiledFunction the Instruction representing this function in the compiled code
    * @throws XPathException if an error occurs.
    */
-  private def fixupInstruction(compiledFunction: UserFunction) {
+  private def fixupInstruction(compiledFunction: UserFunction): Unit = {
     val visitor = makeExpressionVisitor()
     try {
       for (call <- references) {
@@ -280,7 +280,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
    * Set the definitions of the parameters in the compiled function, as an array.
    * @param fn the compiled object representing the user-written function
    */
-  def setParameterDefinitions(fn: UserFunction) {
+  def setParameterDefinitions(fn: UserFunction): Unit = {
     val params = Array.ofDim[UserFunctionParameter](getNumberOfArguments)
     fn.setParameterDefinitions(params)
     val count = 0

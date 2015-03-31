@@ -26,7 +26,7 @@ abstract class ParentNodeConstructor extends Instruction {
    * Set the expression that constructs the content of the element
    * @param content the content expression
    */
-  def setContentExpression(content: Expression) {
+  def setContentExpression(content: Expression): Unit = {
     this.content = content
     adoptChildExpression(content)
   }
@@ -70,7 +70,7 @@ abstract class ParentNodeConstructor extends Instruction {
    * @param offer The type of rewrite being offered
    * @throws client.net.sf.saxon.ce.trans.XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     if (offer.action != PromotionOffer.UNORDERED) {
       content = doPromotion(content, offer)
     }

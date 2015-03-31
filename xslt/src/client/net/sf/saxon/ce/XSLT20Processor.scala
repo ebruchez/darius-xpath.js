@@ -42,14 +42,14 @@ class XSLT20Processor extends Exportable {
    * Keep instance of the JavaScript wrapped version - to
    * be used when making a callback
    */
-  def setThis(jsObj: JavaScriptObject) {
+  def setThis(jsObj: JavaScriptObject): Unit = {
     jsThis = jsObj
   }
 
   /**
    * Erases any parameter values set using setParameter method
    */
-  def clearParameters() {
+  def clearParameters(): Unit = {
     controller.clearParameters()
   }
 
@@ -71,17 +71,17 @@ class XSLT20Processor extends Exportable {
     null
   }
 
-  def importStylesheet(stylesheet: JavaScriptObject) {
+  def importStylesheet(stylesheet: JavaScriptObject): Unit = {
     processor.importStylesheet(stylesheet)
   }
 
-  def setSuccess(success: JavaScriptObject) {
+  def setSuccess(success: JavaScriptObject): Unit = {
     processor.setSuccess(success, this)
   }
 
   def getSuccess(): JavaScriptObject = processor.getSuccess
 
-  def invokeSuccess(callback: JavaScriptObject) {
+  def invokeSuccess(callback: JavaScriptObject): Unit = {
     executeSuccessCallback(callback, jsThis)
   }
 
@@ -92,7 +92,7 @@ class XSLT20Processor extends Exportable {
    * @param namespaceURI the parameter namespace
    * @param localName the local name of the parameter
    */
-  def removeParameter(namespaceURI: String, localName: String) {
+  def removeParameter(namespaceURI: String, localName: String): Unit = {
     val ns = if ((namespaceURI == null)) "" else namespaceURI
     try {
       val qn = new StructuredQName("", ns, localName)
@@ -105,12 +105,12 @@ class XSLT20Processor extends Exportable {
   /**
    * Restore the XSLTProcessor20 instance to its default state
    */
-  def reset() {
+  def reset(): Unit = {
     controller.reset()
     processor.deregisterEventHandlers()
   }
 
-  def setParameter(namespaceURI: String, localName: String, value: AnyRef) {
+  def setParameter(namespaceURI: String, localName: String, value: AnyRef): Unit = {
     val ns = if ((namespaceURI == null)) "" else namespaceURI
     try {
       val qn = new StructuredQName("", ns, localName)
@@ -129,11 +129,11 @@ class XSLT20Processor extends Exportable {
     }
   }
 
-  def updateHTMLDocument(sourceObject: JavaScriptObject, targetDocument: Document) {
+  def updateHTMLDocument(sourceObject: JavaScriptObject, targetDocument: Document): Unit = {
     processor.updateHTMLDocument(sourceObject, targetDocument, APIcommand.UPDATE_HTML)
   }
 
-  def transformToHTMLFragment(sourceObject: JavaScriptObject, targetDocument: Document) {
+  def transformToHTMLFragment(sourceObject: JavaScriptObject, targetDocument: Document): Unit = {
     processor.updateHTMLDocument(sourceObject, targetDocument, APIcommand.TRANSFORM_TO_HTML_FRAGMENT)
   }
 
@@ -149,7 +149,7 @@ class XSLT20Processor extends Exportable {
 
   def getInitialTemplate(): String = controller.getInitialTemplate
 
-  def setInitialMode(mode: String) {
+  def setInitialMode(mode: String): Unit = {
     try {
       controller.setInitialMode(mode)
     } catch {
@@ -157,7 +157,7 @@ class XSLT20Processor extends Exportable {
     }
   }
 
-  def setInitialTemplate(template: String) {
+  def setInitialTemplate(template: String): Unit = {
     try {
       controller.setInitialTemplate(template)
     } catch {
@@ -165,7 +165,7 @@ class XSLT20Processor extends Exportable {
     }
   }
 
-  def setBaseOutputURI(URI: String) {
+  def setBaseOutputURI(URI: String): Unit = {
     controller.setBaseOutputURI(URI)
   }
 
@@ -178,6 +178,6 @@ class XSLT20Processor extends Exportable {
 
   def getResultDocument(URI: String): JavaScriptObject = controller.getResultDocument(URI)
 
-  def setCollation() {
+  def setCollation(): Unit = {
   }
 }

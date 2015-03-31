@@ -46,7 +46,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * Append the contents of a String to the buffer
    * @param s the String to be appended
    */
-  def append(s: String) {
+  def append(s: String): Unit = {
     val len = s.length
     ensureCapacity(len)
     s.getChars(0, len, array, used)
@@ -57,7 +57,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * Append the contents of a FastStringBuffer to the buffer
    * @param s the FastStringBuffer to be appended
    */
-  def append(s: FastStringBuffer) {
+  def append(s: FastStringBuffer): Unit = {
     val len = s.length
     ensureCapacity(len)
     s.getChars(0, len, array, used)
@@ -68,7 +68,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * Append the contents of a StringBuffer to the buffer
    * @param s the StringBuffer to be appended
    */
-  def append(s: StringBuffer) {
+  def append(s: StringBuffer): Unit = {
     val len = s.length
     ensureCapacity(len)
     s.getChars(0, len, array, used)
@@ -79,7 +79,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * Append the contents of a general CharSequence to the buffer
    * @param s the CharSequence to be appended
    */
-  def append(s: CharSequence) {
+  def append(s: CharSequence): Unit = {
     val len = s.length
     ensureCapacity(len)
     if (s.isInstanceOf[String]) {
@@ -98,7 +98,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * @param start the offset of the first character in the array to be copied
    * @param length the number of characters to be copied
    */
-  def append(srcArray: Array[Char], start: Int, length: Int) {
+  def append(srcArray: Array[Char], start: Int, length: Int): Unit = {
     ensureCapacity(length)
     System.arraycopy(srcArray, start, array, used, length)
     used += length
@@ -108,7 +108,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * Append the entire contents of a character array to the buffer
    * @param srcArray the array whose contents are to be added
    */
-  def append(srcArray: Array[Char]) {
+  def append(srcArray: Array[Char]): Unit = {
     val length = srcArray.length
     ensureCapacity(length)
     System.arraycopy(srcArray, 0, array, used, length)
@@ -119,7 +119,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * Append a character to the buffer
    * @param ch the character to be added
    */
-  def append(ch: Char) {
+  def append(ch: Char): Unit = {
     ensureCapacity(1)
     array(used += 1) = ch
   }
@@ -143,7 +143,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * Prepend a wide character to the buffer (as a surrogate pair if necessary)
    * @param ch the character, as a 32-bit Unicode codepoint
    */
-  def prependWideChar(ch: Int) {
+  def prependWideChar(ch: Int): Unit = {
     if (ch > 0xffff) {
       prepend(UTF16CharacterSet.lowSurrogate(ch))
       prepend(UTF16CharacterSet.highSurrogate(ch))
@@ -232,7 +232,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
   def getChars(srcBegin: Int, 
       srcEnd: Int, 
       dst: Array[Char], 
-      dstBegin: Int) {
+      dstBegin: Int): Unit = {
     if (srcBegin < 0) {
       throw new StringIndexOutOfBoundsException(srcBegin)
     }
@@ -294,7 +294,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * @param ch the new character to overwrite the existing character at that location
    * @throws IndexOutOfBoundsException if int<0 or int>=length()
    */
-  def setCharAt(index: Int, ch: Char) {
+  def setCharAt(index: Int, ch: Char): Unit = {
     if (index < 0 || index > used) {
       throw new IndexOutOfBoundsException("" + index)
     }
@@ -307,7 +307,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * @param ch the new character to insert at that location
    * @throws IndexOutOfBoundsException if int<0 or int>=length()
    */
-  def insertCharAt(index: Int, ch: Char) {
+  def insertCharAt(index: Int, ch: Char): Unit = {
     if (index < 0 || index > used) {
       throw new IndexOutOfBoundsException("" + index)
     }
@@ -327,7 +327,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * @param ch the character, as a 32-bit Unicode codepoint
    * @throws IndexOutOfBoundsException if int<0 or int>=length()
    */
-  def insertWideCharAt(index: Int, ch: Int) {
+  def insertWideCharAt(index: Int, ch: Int): Unit = {
     if (index < 0 || index > used) {
       throw new IndexOutOfBoundsException("" + index)
     }
@@ -358,7 +358,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * @param index the index of the character to be set
    * @throws IndexOutOfBoundsException if int<0 or int>=length()
    */
-  def removeCharAt(index: Int) {
+  def removeCharAt(index: Int): Unit = {
     if (index < 0 || index > used) {
       throw new IndexOutOfBoundsException("" + index)
     }
@@ -370,7 +370,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * Insert a given character at the start of the buffer
    * @param ch the character to insert
    */
-  def prepend(ch: Char) {
+  def prepend(ch: Char): Unit = {
     val a2 = Array.ofDim[Char](array.length + 1)
     System.arraycopy(array, 0, a2, 1, used)
     a2(0) = ch
@@ -384,7 +384,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * @param repeat the number of occurrences required. Supplying 0 or a negative number is OK,
    * and is treated as a no-op.
    */
-  def prependRepeated(ch: Char, repeat: Int) {
+  def prependRepeated(ch: Char, repeat: Int): Unit = {
     if (repeat > 0) {
       val a2 = Array.ofDim[Char](array.length + repeat)
       System.arraycopy(array, 0, a2, repeat, used)
@@ -400,7 +400,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * are deleted.
    * @param length the new length
    */
-  def setLength(length: Int) {
+  def setLength(length: Int): Unit = {
     if (length < 0 || length > used) {
       return
     }
@@ -411,7 +411,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * Expand the character array if necessary to ensure capacity for appended data
    * @param extra the amount of additional capacity needed, in characters
    */
-  def ensureCapacity(extra: Int) {
+  def ensureCapacity(extra: Int): Unit = {
     if (used + extra > array.length) {
       var newlen = array.length * 2
       if (newlen < used + extra) {

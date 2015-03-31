@@ -44,14 +44,14 @@ class StylesheetModule(@BeanProperty var sourceElement: XSLStylesheet, var prece
    * Indicate that this stylesheet was included (by its "importer") using an xsl:include
    * statement as distinct from xsl:import
    */
-  def setWasIncluded() {
+  def setWasIncluded(): Unit = {
     wasIncluded = true
   }
 
   /**
    * Process xsl:include and xsl:import elements.
    */
-  def spliceIncludes() {
+  def spliceIncludes(): Unit = {
     var foundNonImport = false
     topLevel = new ArrayList[Declaration](50)
     minImportPrecedence = precedence
@@ -126,7 +126,7 @@ class StylesheetModule(@BeanProperty var sourceElement: XSLStylesheet, var prece
    * @param annotations the value of the input-type-annotations attribute, for this module combined with that
    * of all included/imported modules.
    */
-  def setInputTypeAnnotations(annotations: Int) {
+  def setInputTypeAnnotations(annotations: Int): Unit = {
     inputTypeAnnotations |= annotations
     if (inputTypeAnnotations == 
       (XSLStylesheet.ANNOTATION_STRIP | XSLStylesheet.ANNOTATION_PRESERVE)) {

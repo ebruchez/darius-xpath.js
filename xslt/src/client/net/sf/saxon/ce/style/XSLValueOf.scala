@@ -40,7 +40,7 @@ class XSLValueOf extends XSLLeafNodeConstructor {
    */
   protected def getReturnedItemType(): ItemType = NodeKindTest.TEXT
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     select = checkAttribute("select", "e").asInstanceOf[Expression]
     separator = checkAttribute("separator", "a").asInstanceOf[Expression]
     checkAttribute("disable-output-escaping", "b")
@@ -50,7 +50,7 @@ class XSLValueOf extends XSLLeafNodeConstructor {
     }
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     super.validate(decl)
     select = typeCheck(select)
     separator = typeCheck(separator)

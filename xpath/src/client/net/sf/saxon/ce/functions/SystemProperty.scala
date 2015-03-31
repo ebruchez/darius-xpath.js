@@ -57,7 +57,7 @@ class SystemProperty extends SystemFunction {
 
   private var staticContext: StaticContext = _
 
-  override def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor): Unit = {
     if (staticContext == null) {
       staticContext = visitor.getStaticContext
     }

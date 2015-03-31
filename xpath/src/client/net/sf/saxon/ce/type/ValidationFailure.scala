@@ -36,7 +36,7 @@ class ValidationFailure(val message: String, private var errorCode: StructuredQN
     "ValidationException" + (if (message == null) "" else ": " + message)
   }
 
-  def setErrorCode(errorCode: String) {
+  def setErrorCode(errorCode: String): Unit = {
     this.errorCode = new StructuredQName("err", NamespaceConstant.ERR, errorCode)
   }
 

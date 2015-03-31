@@ -46,7 +46,7 @@ object Base64BinaryValue {
 
     private var line_length: Int = 0
 
-    private def encode_token() {
+    private def encode_token(): Unit = {
       val i = line_length
       line(i) = map(0x3F & (buf >> 18))
       line(i + 1) = map(0x3F & (buf >> 12))
@@ -57,7 +57,7 @@ object Base64BinaryValue {
       buf_bytes = 0
     }
 
-    private def encode_partial_token() {
+    private def encode_partial_token(): Unit = {
       val i = line_length
       line(i) = map(0x3F & (buf >> 18))
       line(i + 1) = map(0x3F & (buf >> 12))
@@ -68,7 +68,7 @@ object Base64BinaryValue {
       buf_bytes = 0
     }
 
-    private def flush_line() {
+    private def flush_line(): Unit = {
       out.append(line, 0, line_length)
       line_length = 0
     }
@@ -80,7 +80,7 @@ object Base64BinaryValue {
      * first if that's desired.
      * @param in the octet sequence to be encoded in Base64
      */
-    def translate(in: Array[Byte]) {
+    def translate(in: Array[Byte]): Unit = {
       val in_length = in.length
       for (i <- 0 until in_length) {
         buf = if (buf_bytes == 0) (buf & 0x00FFFF) | (in(i) << 16) else if (buf_bytes == 1) (buf & 0xFF00FF) | ((in(i) << 8) & 0x00FFFF) else (buf & 0xFFFF00) | (in(i) & 0x0000FF)
@@ -142,7 +142,7 @@ object Base64BinaryValue {
 
     private var token_length: Int = 0
 
-    private def decode_token() {
+    private def decode_token(): Unit = {
       val num = ((token(0) << 18) | (token(1) << 12) | (token(2) << 6) | 
         (token(3)))
       bytes(0) = (0xFF & (num >> 16)).toByte
@@ -153,7 +153,7 @@ object Base64BinaryValue {
       used += 3
     }
 
-    private def decode_final_token() {
+    private def decode_final_token(): Unit = {
       var b0 = token(0)
       var b1 = token(1)
       var b2 = token(2)
@@ -200,7 +200,7 @@ object Base64BinaryValue {
       }
     }
 
-    private def ensureCapacity(size: Int) {
+    private def ensureCapacity(size: Int): Unit = {
       if (used + size >= out.length) {
         val o2 = new Array[Byte](out.length * 2)
         System.arraycopy(out, 0, o2, 0, used)
@@ -213,7 +213,7 @@ object Base64BinaryValue {
      * @param str the base 64 string
      * @throws IllegalArgumentException if the base64 string is incorrectly formatted
      */
-    def translate(str: CharSequence) {
+    def translate(str: CharSequence): Unit = {
       if (token == null) return
       val length = str.length
       var lengthAtEOF: Int = 0
@@ -262,7 +262,7 @@ object Base64BinaryValue {
       }
     }
 
-    private def eof() {
+    private def eof(): Unit = {
       if (token != null && token_length != 0) {
         while (token_length < 4) {
           token(token_length) = EOF

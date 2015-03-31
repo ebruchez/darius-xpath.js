@@ -38,7 +38,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    * @param name the name of the property
    * @param value the value of the property
    */
-  def setProperty(name: String, value: AnyRef) {
+  def setProperty(name: String, value: AnyRef): Unit = {
     properties.put(name, value)
   }
 

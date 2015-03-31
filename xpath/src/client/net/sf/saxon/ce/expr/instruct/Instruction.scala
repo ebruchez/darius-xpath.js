@@ -115,7 +115,7 @@ abstract class Instruction extends Expression with TailCallReturner {
    * @param context The dynamic context, giving access to the current node,
    * the current variables, etc.
    */
-  override def process(context: XPathContext) {
+  override def process(context: XPathContext): Unit = {
     try {
       var tc = processLeavingTail(context)
       while (tc != null) {
@@ -167,7 +167,7 @@ abstract class Instruction extends Expression with TailCallReturner {
    * @param offer The type of rewrite being offered
    * @throws XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
   }
 
   /**

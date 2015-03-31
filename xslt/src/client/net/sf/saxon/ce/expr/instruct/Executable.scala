@@ -70,7 +70,7 @@ class Executable(config: Configuration) {
    * Allocate space in bindery for all the variables needed
    * @param bindery The bindery to be initialized
    */
-  def initializeBindery(bindery: Bindery) {
+  def initializeBindery(bindery: Bindery): Unit = {
     bindery.allocateGlobals(numberOfGlobals)
   }
 
@@ -78,7 +78,7 @@ class Executable(config: Configuration) {
    * Add a required parameter. Used in XSLT only.
    * @param qName the name of the required parameter
    */
-  def addRequiredParam(qName: StructuredQName) {
+  def addRequiredParam(qName: StructuredQName): Unit = {
     if (requiredParams == null) {
       requiredParams = new HashSet[StructuredQName](5)
     }
@@ -90,7 +90,7 @@ class Executable(config: Configuration) {
    * @param params the set of parameters that have been supplied
    * @throws XPathException if there is a required parameter for which no value has been supplied
    */
-  def checkAllRequiredParamsArePresent(params: HashMap[StructuredQName, Sequence]) {
+  def checkAllRequiredParamsArePresent(params: HashMap[StructuredQName, Sequence]): Unit = {
     if (requiredParams == null) {
       return
     }
@@ -104,7 +104,7 @@ class Executable(config: Configuration) {
    * to create secondary output documents
    * @param flag true if the executable uses xsl:result-document
    */
-  def setCreatesSecondaryResult(flag: Boolean) {
+  def setCreatesSecondaryResult(flag: Boolean): Unit = {
     createsSecondaryResult = flag
   }
 
@@ -124,7 +124,7 @@ class Executable(config: Configuration) {
    * Intended for internal use.
    * @param config the configuration to be used.
    */
-  def setConfiguration(config: Configuration) {
+  def setConfiguration(config: Configuration): Unit = {
     this.config = config
   }
 
@@ -133,7 +133,7 @@ class Executable(config: Configuration) {
    * @param doc the source document containing the stylesheet
    * @throws client.net.sf.saxon.ce.trans.XPathException if compilation of the stylesheet fails for any reason
    */
-  def prepare(doc: DocumentInfo) {
+  def prepare(doc: DocumentInfo): Unit = {
     var message = ""
     try {
       setStylesheetDocument(loadStylesheetModule(doc))
@@ -194,7 +194,7 @@ class Executable(config: Configuration) {
    * @throws client.net.sf.saxon.ce.trans.XPathException if the document supplied
    *                        is not a stylesheet
    */
-  protected def setStylesheetDocument(doc: DocumentImpl) {
+  protected def setStylesheetDocument(doc: DocumentImpl): Unit = {
     var styleDoc = doc
     val topnode = styleDoc.getDocumentElement.asInstanceOf[StyleElement]
     if (topnode == null) {
@@ -240,7 +240,7 @@ class Executable(config: Configuration) {
    * @param templateName the name of a named XSLT template
    * @param template the template
    */
-  def putNamedTemplate(templateName: StructuredQName, template: Template) {
+  def putNamedTemplate(templateName: StructuredQName, template: Template): Unit = {
     if (namedTemplateTable == null) {
       namedTemplateTable = new HashMap(32)
     }
@@ -254,7 +254,7 @@ class Executable(config: Configuration) {
    * @throws client.net.sf.saxon.ce.trans.XPathException if the ErrorListener decides that the
    *                              error should be reported
    */
-  def reportError(err: XPathException) {
+  def reportError(err: XPathException): Unit = {
     if (!err.hasBeenReported()) {
       errorCount += 1
       config.getErrorListener.error(err)

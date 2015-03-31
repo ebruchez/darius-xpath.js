@@ -206,7 +206,7 @@ class HTMLDocumentWrapper(
    * @param value The value to be set for the property. May be null, which effectively
    *              removes the existing value for the property.
    */
-  def setUserData(key: String, value: AnyRef) {
+  def setUserData(key: String, value: AnyRef): Unit = {
     if (userData == null) {
       userData = new HashMap(4)
     }

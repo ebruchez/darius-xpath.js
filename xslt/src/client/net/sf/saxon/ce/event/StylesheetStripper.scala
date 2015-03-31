@@ -62,13 +62,13 @@ class StylesheetStripper extends ProxyReceiver {
   /**
    * Callback interface for SAX: not for application use
    */
-  def open() {
+  def open(): Unit = {
     top = 0
     stripStack(top) = ALWAYS_PRESERVE
     super.open()
   }
 
-  def startElement(qName: StructuredQName, properties: Int) {
+  def startElement(qName: StructuredQName, properties: Int): Unit = {
     nextReceiver.startElement(qName, properties)
     val preserveParent = stripStack(top)
     var preserve = (preserveParent & PRESERVE_PARENT).toByte
@@ -87,7 +87,7 @@ class StylesheetStripper extends ProxyReceiver {
     stripStack(top) = preserve
   }
 
-  def attribute(nameCode: StructuredQName, value: CharSequence) {
+  def attribute(nameCode: StructuredQName, value: CharSequence): Unit = {
     if (nameCode == XML_SPACE) {
       if (value.toString == "preserve") {
         stripStack(top) |= PRESERVE_PARENT
@@ -101,7 +101,7 @@ class StylesheetStripper extends ProxyReceiver {
   /**
    * Handle an end-of-element event
    */
-  def endElement() {
+  def endElement(): Unit = {
     nextReceiver.endElement()
     top -= 1
   }
@@ -109,7 +109,7 @@ class StylesheetStripper extends ProxyReceiver {
   /**
    * Handle a text node
    */
-  def characters(chars: CharSequence) {
+  def characters(chars: CharSequence): Unit = {
     if (((((stripStack(top) & (ALWAYS_PRESERVE | PRESERVE_PARENT | CANNOT_STRIP)) != 
       0) && 
       (stripStack(top) & ALWAYS_STRIP) == 0) || 

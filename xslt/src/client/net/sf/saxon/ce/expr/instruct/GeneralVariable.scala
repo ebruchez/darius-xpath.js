@@ -43,7 +43,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * @param select the expression to which the variable is bound
    * @param qName the name of the variable
    */
-  def init(select: Expression, qName: StructuredQName) {
+  def init(select: Expression, qName: StructuredQName): Unit = {
     this.select = select
     variableQName = qName
     adoptChildExpression(select)
@@ -53,7 +53,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * Set the expression to which this variable is bound
    * @param select the initializing expression
    */
-  def setSelectExpression(select: Expression) {
+  def setSelectExpression(select: Expression): Unit = {
     this.select = select
     evaluationMode = ExpressionTool.UNDECIDED
     adoptChildExpression(select)
@@ -69,7 +69,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * Set the required type of this variable
    * @param required the required type
    */
-  def setRequiredType(required: SequenceType) {
+  def setRequiredType(required: SequenceType): Unit = {
     requiredType = required
   }
 
@@ -83,7 +83,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * Indicate that this variable represents a required parameter
    * @param requiredParam true if this is a required parameter
    */
-  def setRequiredParam(requiredParam: Boolean) {
+  def setRequiredParam(requiredParam: Boolean): Unit = {
     if (requiredParam) {
       properties |= REQUIRED
     } else {
@@ -96,7 +96,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * usable default value)
    * @param requiredParam true if this is an implicitly required parameter
    */
-  def setImplicitlyRequiredParam(requiredParam: Boolean) {
+  def setImplicitlyRequiredParam(requiredParam: Boolean): Unit = {
     if (requiredParam) {
       properties |= IMPLICITLY_REQUIRED
     } else {
@@ -108,7 +108,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * Indicate whether this variable represents a tunnel parameter
    * @param tunnel true if this is a tunnel parameter
    */
-  def setTunnel(tunnel: Boolean) {
+  def setTunnel(tunnel: Boolean): Unit = {
     if (tunnel) {
       properties |= TUNNEL
     } else {
@@ -206,7 +206,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * @param visitor an expression visitor
    * @throws XPathException
    */
-  private def checkAgainstRequiredType(visitor: ExpressionVisitor) {
+  private def checkAgainstRequiredType(visitor: ExpressionVisitor): Unit = {
     val role = new RoleLocator(RoleLocator.VARIABLE, variableQName, 0)
     val r = requiredType
     if (r != null && select != null) {
@@ -274,7 +274,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * @param offer The type of rewrite being offered
    * @throws XPathException
    */
-  override protected def promoteInst(offer: PromotionOffer) {
+  override protected def promoteInst(offer: PromotionOffer): Unit = {
     if (select != null) {
       val e2 = doPromotion(select, offer)
       if (e2 != select) {
@@ -301,7 +301,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * Set the slot number of this variable
    * @param s the slot number, that is, the position allocated to this variable on its stack frame
    */
-  def setSlotNumber(s: Int) {
+  def setSlotNumber(s: Int): Unit = {
     slotNumber = s
   }
 
@@ -309,7 +309,7 @@ abstract class GeneralVariable extends Instruction with Binding {
    * Set the name of the variable
    * @param s the name of the variable (a QName)
    */
-  def setVariableQName(s: StructuredQName) {
+  def setVariableQName(s: StructuredQName): Unit = {
     variableQName = s
   }
 

@@ -39,7 +39,7 @@ class UseWhenFilter(var startTag: StartTagBuffer, resolver: NamespaceResolver)
   /**
    * Start of document
    */
-  def open() {
+  def open(): Unit = {
     nextReceiver.open()
   }
 
@@ -49,7 +49,7 @@ class UseWhenFilter(var startTag: StartTagBuffer, resolver: NamespaceResolver)
    * @param qName    integer code identifying the name of the element within the name pool.
    * @param properties  bit-significant properties of the element node
    */
-  def startElement(qName: StructuredQName, properties: Int) {
+  def startElement(qName: StructuredQName, properties: Int): Unit = {
     defaultNamespaceStack.push(startTag.getAttribute("", "xpath-default-namespace"))
     if (emptyStylesheetElement) {
       depthOfHole += 1
@@ -113,7 +113,7 @@ class UseWhenFilter(var startTag: StartTagBuffer, resolver: NamespaceResolver)
    * @throws IllegalStateException: attempt to output a namespace when there is no open element
    *                                start tag
    */
-  def namespace(nsBinding: NamespaceBinding, properties: Int) {
+  def namespace(nsBinding: NamespaceBinding, properties: Int): Unit = {
     if (depthOfHole == 0) {
       nextReceiver.namespace(nsBinding, properties)
     }
@@ -128,7 +128,7 @@ class UseWhenFilter(var startTag: StartTagBuffer, resolver: NamespaceResolver)
    * @throws IllegalStateException: attempt to output an attribute when there is no open element
    *                                start tag
    */
-  def attribute(nameCode: StructuredQName, value: CharSequence) {
+  def attribute(nameCode: StructuredQName, value: CharSequence): Unit = {
     if (depthOfHole == 0) {
       nextReceiver.attribute(nameCode, value)
     }
@@ -140,7 +140,7 @@ class UseWhenFilter(var startTag: StartTagBuffer, resolver: NamespaceResolver)
    * it has to detect it itself. Note that this event is reported for every element even if it has
    * no attributes, no namespaces, and no content.
    */
-  def startContent() {
+  def startContent(): Unit = {
     if (depthOfHole == 0) {
       nextReceiver.startContent()
     }
@@ -149,7 +149,7 @@ class UseWhenFilter(var startTag: StartTagBuffer, resolver: NamespaceResolver)
   /**
    * End of element
    */
-  def endElement() {
+  def endElement(): Unit = {
     defaultNamespaceStack.pop()
     if (depthOfHole > 0) {
       depthOfHole -= 1
@@ -161,7 +161,7 @@ class UseWhenFilter(var startTag: StartTagBuffer, resolver: NamespaceResolver)
   /**
    * Character data
    */
-  def characters(chars: CharSequence) {
+  def characters(chars: CharSequence): Unit = {
     if (depthOfHole == 0) {
       nextReceiver.characters(chars)
     }
@@ -170,13 +170,13 @@ class UseWhenFilter(var startTag: StartTagBuffer, resolver: NamespaceResolver)
   /**
    * Processing Instruction
    */
-  def processingInstruction(target: String, data: CharSequence) {
+  def processingInstruction(target: String, data: CharSequence): Unit = {
   }
 
   /**
    * Output a comment
    */
-  def comment(chars: CharSequence) {
+  def comment(chars: CharSequence): Unit = {
   }
 
   /**

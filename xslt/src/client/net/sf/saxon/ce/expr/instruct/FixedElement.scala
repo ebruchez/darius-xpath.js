@@ -45,7 +45,7 @@ class FixedElement(var nameCode: StructuredQName, protected var namespaceCodes: 
   protected def outputNamespaceNodes(context: XPathContext, 
       out: Receiver, 
       nameCode: StructuredQName, 
-      copiedNode: NodeInfo) {
+      copiedNode: NodeInfo): Unit = {
     if (namespaceCodes != null) {
       for (namespaceCode <- namespaceCodes) {
         out.namespace(namespaceCode, 0)

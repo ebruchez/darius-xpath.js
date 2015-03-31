@@ -51,7 +51,7 @@ class XSLForEachGroup extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     select = checkAttribute("select", "e1").asInstanceOf[Expression]
     groupBy = checkAttribute("group-by", "e").asInstanceOf[Expression]
     groupAdjacent = checkAttribute("group-adjacent", "e").asInstanceOf[Expression]
@@ -98,7 +98,7 @@ class XSLForEachGroup extends StyleElement {
     }
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkSortComesFirst(false)
     select = typeCheck(select)
     val visitor = makeExpressionVisitor()

@@ -14,7 +14,7 @@ class IntComplementSet(_exclusions: IntSet) extends IntSet {
 
   def mutableCopy(): IntSet = copy()
 
-  def clear() {
+  def clear(): Unit = {
     throw new UnsupportedOperationException("IntComplementSet cannot be emptied")
   }
 

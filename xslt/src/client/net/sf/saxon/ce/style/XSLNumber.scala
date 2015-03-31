@@ -80,7 +80,7 @@ class XSLNumber extends StyleElement {
    */
   protected def getReturnedItemType(): ItemType = NodeKindTest.TEXT
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     var levelAtt: String = null
     select = checkAttribute("select", "e").asInstanceOf[Expression]
     value = checkAttribute("value", "e").asInstanceOf[Expression]
@@ -147,7 +147,7 @@ class XSLNumber extends StyleElement {
     }
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkEmpty()
     select = typeCheck(select)
     value = typeCheck(value)

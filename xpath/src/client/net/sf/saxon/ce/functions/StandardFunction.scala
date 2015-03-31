@@ -475,7 +475,7 @@ object StandardFunction {
      *
      * @param type          the sequence type of the argument
      */
-    def mandatoryArg(`type`: SequenceType) {
+    def mandatoryArg(`type`: SequenceType): Unit = {
       val e = this
       e.minArguments += 1
       e.maxArguments += 1
@@ -486,7 +486,7 @@ object StandardFunction {
       e.argumentTypes(argNr) = `type`
     }
 
-    def optionalArg(`type`: SequenceType) {
+    def optionalArg(`type`: SequenceType): Unit = {
       val e = this
       e.maxArguments += 1
       val argNr = e.argumentTypes.length

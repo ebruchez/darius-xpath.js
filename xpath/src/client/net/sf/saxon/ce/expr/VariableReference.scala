@@ -48,7 +48,7 @@ class VariableReference extends Expression {
    * @param value the value of the variable if this is a compile-time constant
    * @param properties static properties of the expression to which the variable is bound
    */
-  def setStaticType(`type`: SequenceType, value: Sequence, properties: Int) {
+  def setStaticType(`type`: SequenceType, value: Sequence, properties: Int): Unit = {
     staticType = `type`
     constantValue = value
     val dependencies = getDependencies
@@ -65,7 +65,7 @@ class VariableReference extends Expression {
    * return nodes, the identity of the nodes has no significance. This is called during type checking
    * of the parent expression. At present, only variable references take any notice of this notification.
    */
-  override def setFlattened(flattened: Boolean) {
+  override def setFlattened(flattened: Boolean): Unit = {
     super.setFlattened(flattened)
     this._flattened = flattened
   }
@@ -104,7 +104,7 @@ class VariableReference extends Expression {
    * Fix up this variable reference to a Binding object, which enables the value of the variable
    * to be located at run-time.
    */
-  def fixup(binding: Binding) {
+  def fixup(binding: Binding): Unit = {
     this.binding = binding
     resetLocalStaticProperties()
   }
@@ -122,7 +122,7 @@ class VariableReference extends Expression {
       cardinality: Int, 
       constantValue: Sequence, 
       properties: Int, 
-      visitor: ExpressionVisitor) {
+      visitor: ExpressionVisitor): Unit = {
     val th = TypeHierarchy.getInstance
     val oldItemType = getItemType
     var newItemType = oldItemType
@@ -283,7 +283,7 @@ class VariableReference extends Expression {
     }
   }
 
-  override def process(c: XPathContext) {
+  override def process(c: XPathContext): Unit = {
     try {
       val actual = evaluateVariable(c)
       SequenceTool.process(actual.iterate(), c)

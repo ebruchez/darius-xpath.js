@@ -36,7 +36,7 @@ class ApplyImports(var operation: Int) extends Instruction {
   /**
    * Set the actual parameters on the call
    */
-  def setActualParameters(actualParams: Array[WithParam], tunnelParams: Array[WithParam]) {
+  def setActualParameters(actualParams: Array[WithParam], tunnelParams: Array[WithParam]): Unit = {
     this.actualParams = actualParams
     this.tunnelParams = tunnelParams
   }
@@ -94,7 +94,7 @@ class ApplyImports(var operation: Int) extends Instruction {
    * @param offer The type of rewrite being offered
    * @throws XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     WithParam.promoteParams(this, actualParams, offer)
     WithParam.promoteParams(this, tunnelParams, offer)
   }

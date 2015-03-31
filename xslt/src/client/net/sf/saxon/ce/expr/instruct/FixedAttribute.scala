@@ -33,7 +33,7 @@ class FixedAttribute(var nameCode: StructuredQName) extends AttributeCreator {
    * @throws XPathException if the expression is a constant, and validation is requested, and
    * the constant doesn't match the required type.
    */
-  def setSelect(select: Expression, config: Configuration) {
+  def setSelect(select: Expression, config: Configuration): Unit = {
     super.setSelect(select, config)
     if (nameCode == StructuredQName.XML_ID) {
       select = SystemFunction.makeSystemFunction("normalize-space", Array(select))
@@ -41,7 +41,7 @@ class FixedAttribute(var nameCode: StructuredQName) extends AttributeCreator {
     }
   }
 
-  def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType) {
+  def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Unit = {
   }
 
   def getItemType(): ItemType = NodeKindTest.ATTRIBUTE

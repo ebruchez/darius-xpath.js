@@ -42,7 +42,7 @@ class LocalVariableReference(binding: Binding) extends VariableReference(binding
    * Set the slot number for this local variable, that is, its position in the local stack frame
    * @param slotNumber the slot number to be used
    */
-  def setSlotNumber(slotNumber: Int) {
+  def setSlotNumber(slotNumber: Int): Unit = {
     this.slotNumber = slotNumber
   }
 

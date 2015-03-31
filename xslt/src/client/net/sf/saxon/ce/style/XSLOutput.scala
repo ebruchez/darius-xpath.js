@@ -21,10 +21,10 @@ class XSLOutput extends StyleElement {
    */
   override def isDeclaration(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkTopLevel(null)
     checkEmpty()
   }

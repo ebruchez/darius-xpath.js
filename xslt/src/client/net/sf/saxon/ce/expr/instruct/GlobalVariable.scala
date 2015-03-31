@@ -37,7 +37,7 @@ class GlobalVariable extends GeneralVariable with Container {
    * @param numberOfSlots The space needed for local variables used while evaluating this global
    * variable.
    */
-  def setContainsLocals(numberOfSlots: Int) {
+  def setContainsLocals(numberOfSlots: Int): Unit = {
     this.numberOfSlots = numberOfSlots
   }
 

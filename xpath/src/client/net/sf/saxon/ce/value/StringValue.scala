@@ -229,7 +229,7 @@ class StringValue protected () extends AtomicValue {
   /**
    * Assert that the string is known to contain no surrogate pairs
    */
-  def setContainsNoSurrogates() {
+  def setContainsNoSurrogates(): Unit = {
     noSurrogates = true
   }
 

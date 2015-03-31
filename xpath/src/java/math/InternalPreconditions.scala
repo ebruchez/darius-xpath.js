@@ -8,59 +8,59 @@ import java.util.NoSuchElementException
 
 object InternalPreconditions {
 
-  def checkType(expression: Boolean) {
+  def checkType(expression: Boolean): Unit = {
     if (!expression) {
       throw new ClassCastException()
     }
   }
 
-  def checkArrayType(expression: Boolean) {
+  def checkArrayType(expression: Boolean): Unit = {
     if (!expression) {
       throw new ArrayStoreException()
     }
   }
 
-  def checkArrayType(expression: Boolean, errorMessage: AnyRef) {
+  def checkArrayType(expression: Boolean, errorMessage: AnyRef): Unit = {
     if (!expression) {
       throw new ArrayStoreException(String.valueOf(errorMessage))
     }
   }
 
-  def checkElement(expression: Boolean) {
+  def checkElement(expression: Boolean): Unit = {
     checkCriticalElement(expression)
   }
 
-  def checkElement(expression: Boolean, errorMessage: AnyRef) {
+  def checkElement(expression: Boolean, errorMessage: AnyRef): Unit = {
     if (!expression) {
       throw new NoSuchElementException(String.valueOf(errorMessage))
     }
   }
 
-  def checkCriticalElement(expression: Boolean) {
+  def checkCriticalElement(expression: Boolean): Unit = {
     if (!expression) {
       throw new NoSuchElementException()
     }
   }
 
-  def checkCriticalArgument(expression: Boolean) {
+  def checkCriticalArgument(expression: Boolean): Unit = {
     if (!expression) {
       throw new IllegalArgumentException()
     }
   }
 
-  def checkCriticalArgument(expression: Boolean, errorMessage: AnyRef) {
+  def checkCriticalArgument(expression: Boolean, errorMessage: AnyRef): Unit = {
     if (!expression) {
       throw new IllegalArgumentException(String.valueOf(errorMessage))
     }
   }
 
-  def checkState(expression: Boolean) {
+  def checkState(expression: Boolean): Unit = {
     if (!expression) {
       throw new IllegalStateException()
     }
   }
 
-  def checkState(expression: Boolean, errorMessage: AnyRef) {
+  def checkState(expression: Boolean, errorMessage: AnyRef): Unit = {
     if (!expression) {
       throw new IllegalStateException(String.valueOf(errorMessage))
     }
@@ -73,35 +73,35 @@ object InternalPreconditions {
     reference
   }
 
-  def checkNotNull(reference: AnyRef, errorMessage: AnyRef) {
+  def checkNotNull(reference: AnyRef, errorMessage: AnyRef): Unit = {
     if (reference == null) {
       throw new NullPointerException(String.valueOf(errorMessage))
     }
   }
 
-  def checkArraySize(size: Int) {
+  def checkArraySize(size: Int): Unit = {
     if (size < 0) {
       throw new NegativeArraySizeException("Negative array size: " + size)
     }
   }
 
-  def checkElementIndex(index: Int, size: Int) {
+  def checkElementIndex(index: Int, size: Int): Unit = {
     if (index < 0 || index >= size) {
       throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size)
     }
   }
 
-  def checkPositionIndex(index: Int, size: Int) {
+  def checkPositionIndex(index: Int, size: Int): Unit = {
     if (index < 0 || index > size) {
       throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size)
     }
   }
 
-  def checkPositionIndexes(start: Int, end: Int, size: Int) {
+  def checkPositionIndexes(start: Int, end: Int, size: Int): Unit = {
     checkCriticalPositionIndexes(start, end, size)
   }
 
-  def checkCriticalPositionIndexes(start: Int, end: Int, size: Int) {
+  def checkCriticalPositionIndexes(start: Int, end: Int, size: Int): Unit = {
     if (start < 0) {
       throw new IndexOutOfBoundsException("fromIndex: " + start + " < 0")
     }

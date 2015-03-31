@@ -114,7 +114,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
 
   def getSystemId(): String = docWrapper._baseURI
 
-  def setSystemId(uri: String) {
+  def setSystemId(uri: String): Unit = {
     docWrapper._baseURI = uri
   }
 
@@ -501,7 +501,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
 
   def getDocumentNumber(): Int = getDocumentRoot.getDocumentNumber
 
-  def copy(out: Receiver, copyOptions: Int) {
+  def copy(out: Receiver, copyOptions: Int): Unit = {
     ???
 //    Navigator.copy(this, out, copyOptions)
   }
@@ -519,7 +519,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     }
   }
 
-  def stripTextNode() {
+  def stripTextNode(): Unit = {
     var textNode = node
     if (span == 1) {
       textNode.parentNode.removeChild(textNode)

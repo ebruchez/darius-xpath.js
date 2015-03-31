@@ -97,7 +97,7 @@ abstract class XSLGeneralVariable extends StyleElement {
   /**
    * Mark this global variable as redundant. This is done before prepareAttributes is called.
    */
-  def setRedundant() {
+  def setRedundant(): Unit = {
     redundant = true
   }
 
@@ -108,7 +108,7 @@ abstract class XSLGeneralVariable extends StyleElement {
    */
   def getVariableQName(): StructuredQName = getObjectName
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     setObjectName(checkAttribute("name", "q1").asInstanceOf[StructuredQName])
     select = checkAttribute("select", "e").asInstanceOf[Expression]
     requiredType = checkAttribute("as", "z").asInstanceOf[SequenceType]
@@ -130,7 +130,7 @@ abstract class XSLGeneralVariable extends StyleElement {
     }
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     global = isTopLevel
     if (select != null && hasChildNodes()) {
       compileError("An " + getDisplayName + " element with a select attribute must be empty", "XTSE0620")
@@ -144,7 +144,7 @@ abstract class XSLGeneralVariable extends StyleElement {
    * Hook to allow additional validation of a parent element immediately after its
    * children have been validated.
    */
-  def postValidate() {
+  def postValidate(): Unit = {
     checkAgainstRequiredType(requiredType)
     if (select == null && allowsValue()) {
       textonly = true
@@ -187,7 +187,7 @@ abstract class XSLGeneralVariable extends StyleElement {
    * @param required The type required by the variable declaration, or in the case
    * of xsl:with-param, the signature of the called template
    */
-  def checkAgainstRequiredType(required: SequenceType) {
+  def checkAgainstRequiredType(required: SequenceType): Unit = {
     try {
       if (required != null) {
         if (select != null) {
@@ -221,7 +221,7 @@ abstract class XSLGeneralVariable extends StyleElement {
    * @param decl
    * @param var the representation of the variable declaration in the compiled executable
    */
-  protected def initializeInstruction(exec: Executable, decl: Declaration, `var`: GeneralVariable) {
+  protected def initializeInstruction(exec: Executable, decl: Declaration, `var`: GeneralVariable): Unit = {
     `var`.init(select, getVariableQName)
     `var`.setRequiredParam(requiredParam)
     `var`.setImplicitlyRequiredParam(implicitlyRequiredParam)

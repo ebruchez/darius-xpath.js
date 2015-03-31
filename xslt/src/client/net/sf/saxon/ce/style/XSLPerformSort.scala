@@ -50,12 +50,12 @@ class XSLPerformSort extends StyleElement {
    */
   protected def isPermittedChild(child: StyleElement): Boolean = (child.isInstanceOf[XSLSort])
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     select = checkAttribute("select", "e1").asInstanceOf[Expression]
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkSortComesFirst(true)
     if (select != null) {
       onlyAllow("fallback", "sort")

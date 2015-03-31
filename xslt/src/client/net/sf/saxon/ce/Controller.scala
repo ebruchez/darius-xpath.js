@@ -49,11 +49,11 @@ object Controller {
    *
    * @param proc The processor
    */
-  def addEventProcessor(proc: Xslt20ProcessorImpl) {
+  def addEventProcessor(proc: Xslt20ProcessorImpl): Unit = {
     eventProcessors = addProcessor(eventProcessors, proc)
   }
 
-  def relayEvent(node: Node, event: Event) {
+  def relayEvent(node: Node, event: Event): Unit = {
     if (eventProcessors != null) {
       for (p <- eventProcessors if p != null) {
         p.bubbleApplyTemplates(node, event)
@@ -69,11 +69,11 @@ object Controller {
     list
   }
 
-  def addNonDomEventProcessor(proc: Xslt20ProcessorImpl) {
+  def addNonDomEventProcessor(proc: Xslt20ProcessorImpl): Unit = {
     nonDomEventProcessors = addProcessor(nonDomEventProcessors, proc)
   }
 
-  def relayNonDomEvent(name: String, target: JavaScriptObject, event: JavaScriptObject) {
+  def relayNonDomEvent(name: String, target: JavaScriptObject, event: JavaScriptObject): Unit = {
     if (nonDomEventProcessors != null) {
       for (p <- nonDomEventProcessors if p != null) {
         val sqn = new StructuredQName("", NamespaceConstant.IXSL, name)
@@ -250,7 +250,7 @@ class Controller {
    *
    * @since 1.5
    */
-  def reset() {
+  def reset(): Unit = {
     bindery = new Bindery()
     if (errorListener.isInstanceOf[StandardErrorListener]) {
       val ps = errorListener.asInstanceOf[StandardErrorListener].getErrorOutput
@@ -273,7 +273,7 @@ class Controller {
     openHTMLWriter = null
   }
 
-  def importControllerSettings(lc: Controller) {
+  def importControllerSettings(lc: Controller): Unit = {
     this.setBaseOutputURI(lc.getBaseOutputURI)
     this.setInitialMode(lc.getInitialMode)
     this.setInitialTemplate(lc.getInitialTemplateName)
@@ -288,7 +288,7 @@ class Controller {
    * Reset variables that need to be reset for each transformation if the controller
    * is serially reused
    */
-  private def clearPerTransformationData() {
+  private def clearPerTransformationData(): Unit = {
     allOutputDestinations = null
     resultDocumentPool = null
     lastRememberedNode = null
@@ -304,7 +304,7 @@ class Controller {
    */
   def getConfiguration(): Configuration = config
 
-  def setApiCommand(command: APIcommand) {
+  def setApiCommand(command: APIcommand): Unit = {
     commandType = command
   }
 
@@ -325,7 +325,7 @@ class Controller {
    *     the initial mode is reset to the unnamed default mode.
    * @since 8.4
    */
-  def setInitialMode(expandedModeName: String) {
+  def setInitialMode(expandedModeName: String): Unit = {
     initialMode = if (expandedModeName == null || expandedModeName.length == 0) null else StructuredQName.fromClarkName(expandedModeName)
   }
 
@@ -355,7 +355,7 @@ class Controller {
    * @param uri the base output URI
    * @since 8.4
    */
-  def setBaseOutputURI(uri: String) {
+  def setBaseOutputURI(uri: String): Unit = {
     principalResultURI = uri
   }
 
@@ -397,14 +397,14 @@ class Controller {
    * they have already been written to, or because they have been read
    * @param uri A URI that is not available as an output destination
    */
-  def addUnavailableOutputDestination(uri: DocumentURI) {
+  def addUnavailableOutputDestination(uri: DocumentURI): Unit = {
     if (allOutputDestinations == null) {
       allOutputDestinations = new HashSet[DocumentURI](20)
     }
     allOutputDestinations.add(uri)
   }
 
-  def addToResultDocumentPool(uri: DocumentURI, doc: Node) {
+  def addToResultDocumentPool(uri: DocumentURI, doc: Node): Unit = {
     addUnavailableOutputDestination(uri)
     if (resultDocumentPool == null) {
       resultDocumentPool = new HashMap[DocumentURI, Node](20)
@@ -416,7 +416,7 @@ class Controller {
     if ((resultDocumentPool == null)) 0 else resultDocumentPool.size
   }
 
-  def importResults(ctrl: Controller) {
+  def importResults(ctrl: Controller): Unit = {
     this.resultDocumentPool = ctrl.resultDocumentPool
     this.principalOutputNode = ctrl.principalOutputNode
   }
@@ -466,7 +466,7 @@ class Controller {
    * Check whether an XSLT implicit result tree can be written. This is allowed only if no xsl:result-document
    * has been written for the principal output URI
    */
-  def checkImplicitResultTree() {
+  def checkImplicitResultTree(): Unit = {
     if (principalResultURI != null && 
       !checkUniqueOutputDestination(new DocumentURI(principalResultURI))) {
       val err = new XPathException("Cannot write an implicit result document if an explicit result document has been written to the same URI: " + 
@@ -506,7 +506,7 @@ class Controller {
    * Accept a SequenceOutputter that is now available for reuse
    * @param out the SequenceOutputter that is available for reuse
    */
-  def reuseSequenceOutputter(out: SequenceOutputter) {
+  def reuseSequenceOutputter(out: SequenceOutputter): Unit = {
     reusableSequenceOutputter = out
   }
 
@@ -526,7 +526,7 @@ class Controller {
    * @throws XPathException if there is no named template with this name
    * @since 8.4
    */
-  def setInitialTemplate(expandedName: String) {
+  def setInitialTemplate(expandedName: String): Unit = {
     if (expandedName == null || expandedName.length == 0) {
       initialTemplate = null
       initialTemplateName = null
@@ -587,7 +587,7 @@ class Controller {
    * Report a fatal error
    * @param err the error to be reported
    */
-  def reportFatalError(err: XPathException) {
+  def reportFatalError(err: XPathException): Unit = {
     if (!err.hasBeenReported()) {
       getErrorListener.error(err)
       err.setHasBeenReported(true)
@@ -623,7 +623,7 @@ class Controller {
    * @param item The initial context item.
    * @since 8.7
    */
-  def setInitialContextItem(item: Item) {
+  def setInitialContextItem(item: Item): Unit = {
     initialContextItem = item
     contextForGlobalVariables = item
   }
@@ -658,7 +658,7 @@ class Controller {
    * as defined by xsl:strip-space; false to suppress whitespace stripping
    * @since 9.3
    */
-  def setStripSourceTrees(strip: Boolean) {
+  def setStripSourceTrees(strip: Boolean): Unit = {
     stripSourceTrees = strip
   }
 
@@ -682,7 +682,7 @@ class Controller {
    * @param uri the document-URI property of this document. If non-null, the document is registered
    * in the document pool with this as its document URI.
    */
-  def registerDocument(doc: DocumentInfo, uri: DocumentURI) {
+  def registerDocument(doc: DocumentInfo, uri: DocumentURI): Unit = {
     if (doc == null) {
       throw new NullPointerException("null")
     }
@@ -698,7 +698,7 @@ class Controller {
    *
    * @param sheet the compiled stylesheet
    */
-  def setPreparedStylesheet(sheet: Executable) {
+  def setPreparedStylesheet(sheet: Executable): Unit = {
     executable = sheet
   }
 
@@ -709,7 +709,7 @@ class Controller {
    * users (it is done automatically when transform() is invoked). However, it is available as a low-level API
    * especially for use with XQuery.
    */
-  private def initializeController() {
+  private def initializeController(): Unit = {
     if (executable != null) {
       setRuleManager(executable.getRuleManager)
     }
@@ -726,7 +726,7 @@ class Controller {
    * <p>
    * This method is intended for internal use only
    */
-  def defineGlobalParameters() {
+  def defineGlobalParameters(): Unit = {
     executable.checkAllRequiredParamsArePresent(parameters)
     bindery.defineGlobalParameters(parameters)
   }
@@ -766,7 +766,7 @@ class Controller {
    * @param data the value of the required property. If null is supplied, any existing entry
    * for the key is removed.
    */
-  def setUserData(key: AnyRef, name: String, data: AnyRef) {
+  def setUserData(key: AnyRef, name: String, data: AnyRef): Unit = {
     val keyVal = key.hashCode + " " + name
     if (data == null) {
       userDataTable.remove(keyVal)
@@ -872,16 +872,16 @@ class Controller {
     }
   }
 
-  private def closeMessageEmitter() {
+  private def closeMessageEmitter(): Unit = {
   }
 
-  def closeResult(result: Receiver, initialContext: XPathContext) {
+  def closeResult(result: Receiver, initialContext: XPathContext): Unit = {
     val out = initialContext.getReceiver
     out.endDocument()
     out.close()
   }
 
-  private def checkPrincipalURI(result: Receiver, initialContext: XPathContext) {
+  private def checkPrincipalURI(result: Receiver, initialContext: XPathContext): Unit = {
     val out = initialContext.getReceiver
     if (out.isInstanceOf[ComplexContentOutputter] && 
       out.asInstanceOf[ComplexContentOutputter].contentHasBeenWritten()) {
@@ -932,14 +932,14 @@ class Controller {
    * @param qName The structured representation of the parameter name
    * @param value The value of the parameter, or null to remove a previously set value
    */
-  def setParameter(qName: StructuredQName, value: Sequence) {
+  def setParameter(qName: StructuredQName, value: Sequence): Unit = {
     if (parameters == null) {
       parameters = new HashMap[StructuredQName, Sequence]()
     }
     parameters.put(qName, value)
   }
 
-  def removeParameter(qName: StructuredQName) {
+  def removeParameter(qName: StructuredQName): Unit = {
     if (parameters != null) {
       parameters.remove(qName)
     }
@@ -948,7 +948,7 @@ class Controller {
   /**
    * Reset the parameters to a null list.
    */
-  def clearParameters() {
+  def clearParameters(): Unit = {
     parameters = null
   }
 
@@ -980,7 +980,7 @@ class Controller {
    * @throws IllegalStateException if a current date/time has already been
    * established by calling getCurrentDateTime(), or by a previous call on setCurrentDateTime()
    */
-  def setCurrentDateTime(dateTime: DateTimeValue) {
+  def setCurrentDateTime(dateTime: DateTimeValue): Unit = {
     if (currentDateTime == null) {
       if (dateTime.getComponent(Component.TIMEZONE) == null) {
         throw new XPathException("No timezone is present in supplied value of current date/time")
@@ -1009,7 +1009,7 @@ class Controller {
    * @param node the node in question
    * @param number the number of this node
    */
-  def setRememberedNumber(node: NodeInfo, number: Int) {
+  def setRememberedNumber(node: NodeInfo, number: Int): Unit = {
     lastRememberedNode = node
     lastRememberedNumber = number
   }
@@ -1061,7 +1061,7 @@ class Controller {
    */
   private var tracingPaused: Boolean = false
 
-  def pauseTracing(pause: Boolean) {
+  def pauseTracing(pause: Boolean): Unit = {
     tracingPaused = pause
   }
 
@@ -1077,7 +1077,7 @@ class Controller {
    * @param trace the trace listener. If null is supplied, the call has no effect.
    * @since 8.4
    */
-  def addTraceListener(trace: TraceListener) {
+  def addTraceListener(trace: TraceListener): Unit = {
     if (trace != null) {
     }
   }
@@ -1089,9 +1089,9 @@ class Controller {
    * @param trace the trace listener.
    * @since 8.4
    */
-  def removeTraceListener(trace: TraceListener) {
+  def removeTraceListener(trace: TraceListener): Unit = {
   }
 
-  def setOutputProperties(props: AnyRef) {
+  def setOutputProperties(props: AnyRef): Unit = {
   }
 }

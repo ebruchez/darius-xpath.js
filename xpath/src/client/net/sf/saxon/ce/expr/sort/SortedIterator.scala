@@ -102,7 +102,7 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
    * Create an array holding the items to be sorted and the values of their sort keys
    * @throws XPathException
    */
-  protected def buildArray() {
+  protected def buildArray(): Unit = {
     var allocated = -1
     if (base.getUnderlyingIterator.isInstanceOf[LastPositionFinder]) {
       allocated = base.last()
@@ -144,7 +144,7 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
     throw new IllegalStateException
   }
 
-  private def doSort() {
+  private def doSort(): Unit = {
     buildArray()
     if (count < 2) return
     try {
@@ -180,7 +180,7 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
   /**
    * Swap two items (needed to implement the Sortable interface)
    */
-  def swap(a: Int, b: Int) {
+  def swap(a: Int, b: Int): Unit = {
     val a1 = a * recordSize
     val b1 = b * recordSize
     for (i <- 0 until recordSize) {

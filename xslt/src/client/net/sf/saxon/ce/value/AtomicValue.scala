@@ -72,7 +72,7 @@ abstract class AtomicValue extends Item with ConversionResult {
    * @param context The dynamic context, giving access to the current node,
    *                the current variables, etc.
    */
-  def process(context: XPathContext) {
+  def process(context: XPathContext): Unit = {
     context.getReceiver.append(this, NodeInfo.ALL_NAMESPACES)
   }
 

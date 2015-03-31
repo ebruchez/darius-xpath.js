@@ -118,7 +118,7 @@ class ItemChecker(sequence: Expression, var requiredItemType: ItemType, var role
     item
   }
 
-  private def testConformance(_item: Item, context: XPathContext) {
+  private def testConformance(_item: Item, context: XPathContext): Unit = {
     var item = _item
     if (item.isInstanceOf[AnyURIValue]) {
       item = StringValue.EMPTY_STRING

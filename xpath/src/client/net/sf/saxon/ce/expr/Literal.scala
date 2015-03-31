@@ -199,7 +199,7 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
    * @param context The dynamic context, giving access to the current node,
    * the current variables, etc.
    */
-  override def process(context: XPathContext) {
+  override def process(context: XPathContext): Unit = {
     val iter = value.iterate()
     val out = context.getReceiver
     while (true) {

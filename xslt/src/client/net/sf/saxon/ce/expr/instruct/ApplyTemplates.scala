@@ -180,7 +180,7 @@ class ApplyTemplates protected () extends Instruction {
   protected def init(select: Expression, 
       useCurrentMode: Boolean, 
       useTailRecursion: Boolean, 
-      mode: Mode) {
+      mode: Mode): Unit = {
     this.select = select
     this.useCurrentMode = useCurrentMode
     this.useTailRecursion = useTailRecursion
@@ -193,7 +193,7 @@ class ApplyTemplates protected () extends Instruction {
    * @param actualParams represents the contained xsl:with-param elements having tunnel="no" (the default)
    * @param tunnelParams represents the contained xsl:with-param elements having tunnel="yes"
    */
-  def setActualParameters(actualParams: Array[WithParam], tunnelParams: Array[WithParam]) {
+  def setActualParameters(actualParams: Array[WithParam], tunnelParams: Array[WithParam]): Unit = {
     this.actualParams = actualParams
     this.tunnelParams = tunnelParams
   }
@@ -269,7 +269,7 @@ class ApplyTemplates protected () extends Instruction {
    */
   def createsNewNodes(): Boolean = true
 
-  def process(context: XPathContext) {
+  def process(context: XPathContext): Unit = {
     apply(context, false)
   }
 
@@ -369,7 +369,7 @@ class ApplyTemplates protected () extends Instruction {
    * @param offer The type of rewrite being offered
    * @throws XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     select = doPromotion(select, offer)
     WithParam.promoteParams(this, actualParams, offer)
     WithParam.promoteParams(this, tunnelParams, offer)

@@ -152,7 +152,7 @@ class DocumentFn extends SystemFunction {
   /**
    * Method called during static type checking
    */
-  def checkArguments(visitor: ExpressionVisitor) {
+  def checkArguments(visitor: ExpressionVisitor): Unit = {
     if (expressionBaseURI == null) {
       super.checkArguments(visitor)
       expressionBaseURI = visitor.getStaticContext.getBaseURI

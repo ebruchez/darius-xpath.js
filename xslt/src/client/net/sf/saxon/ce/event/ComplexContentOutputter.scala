@@ -55,7 +55,7 @@ class ComplexContentOutputter extends SequenceReceiver {
 
   private var started: Boolean = false
 
-  def setPipelineConfiguration(pipe: PipelineConfiguration) {
+  def setPipelineConfiguration(pipe: PipelineConfiguration): Unit = {
     if (pipelineConfiguration != pipe) {
       pipelineConfiguration = pipe
       if (nextReceiver != null) {
@@ -68,7 +68,7 @@ class ComplexContentOutputter extends SequenceReceiver {
    * Set the receiver (to handle the next stage in the pipeline) directly
    * @param receiver the receiver to handle the next stage in the pipeline
    */
-  def setReceiver(receiver: Receiver) {
+  def setReceiver(receiver: Receiver): Unit = {
     this.nextReceiver = receiver
   }
 
@@ -81,7 +81,7 @@ class ComplexContentOutputter extends SequenceReceiver {
   /**
    * Start the output process
    */
-  def open() {
+  def open(): Unit = {
     nextReceiver.open()
     previousAtomic = false
   }
@@ -89,7 +89,7 @@ class ComplexContentOutputter extends SequenceReceiver {
   /**
    * Start of a document node.
    */
-  def startDocument() {
+  def startDocument(): Unit = {
     level += 1
     if (level == 0) {
       nextReceiver.startDocument()
@@ -109,7 +109,7 @@ class ComplexContentOutputter extends SequenceReceiver {
   /**
    * Notify the end of a document node
    */
-  def endDocument() {
+  def endDocument(): Unit = {
     if (level == 0) {
       nextReceiver.endDocument()
     }
@@ -124,7 +124,7 @@ class ComplexContentOutputter extends SequenceReceiver {
    * @param s The String to be output
    * @exception XPathException for any failure
    */
-  def characters(s: CharSequence) {
+  def characters(s: CharSequence): Unit = {
     previousAtomic = false
     if (s == null) return
     val len = s.length
@@ -141,7 +141,7 @@ class ComplexContentOutputter extends SequenceReceiver {
    * using attribute().
    * @param qName The element name code
    */
-  def startElement(qName: StructuredQName, properties: Int) {
+  def startElement(qName: StructuredQName, properties: Int): Unit = {
     level += 1
     started = true
     if (pendingStartTagDepth >= 0) {
@@ -173,7 +173,7 @@ class ComplexContentOutputter extends SequenceReceiver {
    * @throws XPathException if there is no start tag to write to (created using writeStartTag),
    * or if character content has been written since the start tag was written.
    */
-  def namespace(nsBinding: NamespaceBinding, properties: Int) {
+  def namespace(nsBinding: NamespaceBinding, properties: Int): Unit = {
     if (pendingStartTagDepth < 0) {
       throw NoOpenStartTagException.makeNoOpenStartTagException(Type.NAMESPACE, nsBinding.getPrefix, 
         pendingStartTagDepth == -2)
@@ -235,7 +235,7 @@ class ComplexContentOutputter extends SequenceReceiver {
    * @throws XPathException if there is no start tag to write to (created using writeStartTag),
    * or if character content has been written since the start tag was written.
    */
-  def attribute(nameCode: StructuredQName, value: CharSequence) {
+  def attribute(nameCode: StructuredQName, value: CharSequence): Unit = {
     if (pendingStartTagDepth < 0) {
       throw NoOpenStartTagException.makeNoOpenStartTagException(Type.ATTRIBUTE, nameCode.getDisplayName, 
         level < 0 || currentLevelIsDocument(level))
@@ -300,7 +300,7 @@ class ComplexContentOutputter extends SequenceReceiver {
   /**
    * Output an element end tag.
    */
-  def endElement() {
+  def endElement(): Unit = {
     if (pendingStartTagDepth >= 0) {
       startContent()
     } else {
@@ -314,7 +314,7 @@ class ComplexContentOutputter extends SequenceReceiver {
   /**
    * Write a comment
    */
-  def comment(comment: CharSequence) {
+  def comment(comment: CharSequence): Unit = {
     if (pendingStartTagDepth >= 0) {
       startContent()
     }
@@ -325,7 +325,7 @@ class ComplexContentOutputter extends SequenceReceiver {
   /**
    * Write a processing instruction
    */
-  def processingInstruction(target: String, data: CharSequence) {
+  def processingInstruction(target: String, data: CharSequence): Unit = {
     if (pendingStartTagDepth >= 0) {
       startContent()
     }
@@ -340,7 +340,7 @@ class ComplexContentOutputter extends SequenceReceiver {
    * need to be copied. Values are [[client.net.sf.saxon.ce.om.NodeInfo#ALL_NAMESPACES]],
    * [[client.net.sf.saxon.ce.om.NodeInfo#LOCAL_NAMESPACES]], [[client.net.sf.saxon.ce.om.NodeInfo#NO_NAMESPACES]]
    */
-  def append(item: Item, copyNamespaces: Int) {
+  def append(item: Item, copyNamespaces: Int): Unit = {
     if (item == null) {
     } else if (item.isInstanceOf[AtomicValue]) {
       if (previousAtomic) {
@@ -373,7 +373,7 @@ class ComplexContentOutputter extends SequenceReceiver {
   /**
    * Close the output
    */
-  def close() {
+  def close(): Unit = {
     nextReceiver.close()
     previousAtomic = false
   }
@@ -381,7 +381,7 @@ class ComplexContentOutputter extends SequenceReceiver {
   /**
    * Flush out a pending start tag
    */
-  def startContent() {
+  def startContent(): Unit = {
     if (pendingStartTagDepth < 0) {
       return
     }

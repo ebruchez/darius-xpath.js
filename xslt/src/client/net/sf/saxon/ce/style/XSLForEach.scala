@@ -58,12 +58,12 @@ class XSLForEach extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     select = checkAttribute("select", "e1").asInstanceOf[Expression]
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkSortComesFirst(false)
     select = typeCheck(select)
   }

@@ -31,12 +31,12 @@ class XSLPreserveSpace extends StyleElement {
    */
   override def isDeclaration(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     elements = checkAttribute("elements", "s1").asInstanceOf[String]
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkEmpty()
     checkTopLevel(null)
   }

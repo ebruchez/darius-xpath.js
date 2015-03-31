@@ -171,7 +171,7 @@ class AnalyzeString(var select: Expression,
    * @param offer The type of rewrite being offered
    * @throws XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     select = doPromotion(select, offer)
     regex = doPromotion(regex, offer)
     flags = doPromotion(flags, offer)

@@ -108,7 +108,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
     }
   }
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     if (prepared) {
       return
     }
@@ -191,7 +191,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
     }
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkTopLevel(null)
     `match` = typeCheck("match", `match`)
     numberOfParams = 0
@@ -203,11 +203,11 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
     }
   }
 
-  def postValidate() {
+  def postValidate(): Unit = {
     markTailCalls()
   }
 
-  protected def index(decl: Declaration, top: PrincipalStylesheetModule) {
+  protected def index(decl: Declaration, top: PrincipalStylesheetModule): Unit = {
     top.indexNamedTemplate(decl)
   }
 
@@ -279,7 +279,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
    * element can be in a document that is imported more than once; these are separate declarations)
    * @throws XPathException
    */
-  def register(declaration: Declaration) {
+  def register(declaration: Declaration): Unit = {
     if (`match` != null) {
       val module = declaration.getModule
       val slots = `match`.allocateSlots(0)
@@ -306,7 +306,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
    * @param declaration Associates this template with a stylesheet module (in principle an xsl:template
    * element can be in a document that is imported more than once; these are separate declarations)
    */
-  def optimize(declaration: Declaration) {
+  def optimize(declaration: Declaration): Unit = {
     var contextItemType = Type.ITEM_TYPE
     if (getObjectName == null) {
       contextItemType = `match`.getNodeTest

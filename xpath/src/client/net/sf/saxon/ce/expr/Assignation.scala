@@ -28,7 +28,7 @@ abstract class Assignation extends Expression with Binding {
    * Set the required type (declared type) of the variable
    * @param requiredType the required type
    */
-  def setRequiredType(requiredType: SequenceType) {
+  def setRequiredType(requiredType: SequenceType): Unit = {
     this.requiredType = requiredType
   }
 
@@ -36,7 +36,7 @@ abstract class Assignation extends Expression with Binding {
    * Set the name of the variable
    * @param variableName the name of the variable
    */
-  def setVariableQName(variableName: StructuredQName) {
+  def setVariableQName(variableName: StructuredQName): Unit = {
     this.variableName = variableName
   }
 
@@ -77,7 +77,7 @@ abstract class Assignation extends Expression with Binding {
    *
    *
    */
-  def setAction(action: Expression) {
+  def setAction(action: Expression): Unit = {
     this.action = action
     adoptChildExpression(action)
   }
@@ -98,7 +98,7 @@ abstract class Assignation extends Expression with Binding {
    * Set the "sequence" expression - the one to which the variable is bound
    * @param sequence the expression to which the variable is bound
    */
-  def setSequence(sequence: Expression) {
+  def setSequence(sequence: Expression): Unit = {
     this.sequence = sequence
     adoptChildExpression(sequence)
   }
@@ -113,7 +113,7 @@ abstract class Assignation extends Expression with Binding {
    * Set the slot number for the range variable
    * @param nr the slot number to be used
    */
-  def setSlotNumber(nr: Int) {
+  def setSlotNumber(nr: Int): Unit = {
     slotNumber = nr
   }
 
@@ -199,7 +199,7 @@ abstract class Assignation extends Expression with Binding {
       constantValue: Sequence, 
       properties: Int, 
       visitor: ExpressionVisitor, 
-      currentExpression: Assignation) {
+      currentExpression: Assignation): Unit = {
     val references = new ArrayList[VariableReference]()
     ExpressionTool.gatherVariableReferences(currentExpression.getAction, this, references)
     for (ref <- references) {

@@ -26,7 +26,7 @@ class KeyDefinitionSet(var keyName: StructuredQName, var keySetNumber: Int) {
    * @param keyDef the key definition to be added
    * @throws XPathException if the key definition uses a different collation from others in the set
    */
-  def addKeyDefinition(keyDef: KeyDefinition) {
+  def addKeyDefinition(keyDef: KeyDefinition): Unit = {
     if (keyDefinitions.isEmpty) {
       collationName = keyDef.getCollationName
     } else {

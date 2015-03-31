@@ -17,12 +17,12 @@ import scala.collection.JavaConversions._
  */
 class XSLComment extends XSLLeafNodeConstructor {
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     select = checkAttribute("select", "e").asInstanceOf[Expression]
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     select = typeCheck(select)
     super.validate(decl)
   }

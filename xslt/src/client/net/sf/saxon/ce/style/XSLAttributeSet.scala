@@ -52,7 +52,7 @@ class XSLAttributeSet extends StyleElement with StylesheetProcedure {
    */
   def getInstruction(): AttributeSet = procedure
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     setObjectName(checkAttribute("name", "q1").asInstanceOf[StructuredQName])
     useAtt = checkAttribute("use-attribute-sets", "w").asInstanceOf[String]
     checkForUnknownAttributes()
@@ -80,7 +80,7 @@ class XSLAttributeSet extends StyleElement with StylesheetProcedure {
     o
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     if (validated) return
     checkTopLevel(null)
     onlyAllow("attribute")
@@ -101,7 +101,7 @@ class XSLAttributeSet extends StyleElement with StylesheetProcedure {
    * a direct or indirect reference to the one supplied as a parameter
    * @param origin the place from which the search started
    */
-  def checkCircularity(origin: XSLAttributeSet) {
+  def checkCircularity(origin: XSLAttributeSet): Unit = {
     if (this == origin) {
       compileError("The definition of the attribute set is circular", "XTSE0720")
       useAttributeSets = null
@@ -155,6 +155,6 @@ class XSLAttributeSet extends StyleElement with StylesheetProcedure {
    * Optimize the stylesheet construct
    * @param declaration
    */
-  def optimize(declaration: Declaration) {
+  def optimize(declaration: Declaration): Unit = {
   }
 }

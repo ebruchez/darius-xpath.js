@@ -37,7 +37,7 @@ class UserFunctionParameter extends Binding {
    * Set the slot number to be used by this parameter
    * @param slot the slot number, that is, the position of the parameter value within the local stack frame
    */
-  def setSlotNumber(slot: Int) {
+  def setSlotNumber(slot: Int): Unit = {
     slotNumber = slot
   }
 

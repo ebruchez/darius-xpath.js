@@ -56,7 +56,7 @@ class Bindery {
    * Define how many slots are needed for global variables
    * @param numberOfGlobals number of slots needed for global variables.
    */
-  def allocateGlobals(numberOfGlobals: Int) {
+  def allocateGlobals(numberOfGlobals: Int): Unit = {
     val n = numberOfGlobals + 1
     globals = Array.ofDim[Sequence](n)
     busy = Array.ofDim[Boolean](n)
@@ -70,7 +70,7 @@ class Bindery {
    * Define global parameters
    * @param params The ParameterSet passed in by the user, eg. from the command line
    */
-  def defineGlobalParameters(params: HashMap[StructuredQName, Sequence]) {
+  def defineGlobalParameters(params: HashMap[StructuredQName, Sequence]): Unit = {
     globalParameters = params
   }
 
@@ -151,7 +151,7 @@ class Bindery {
    * Indicate that a global variable is not currently being evaluated
    * @param binding the global variable
    */
-  def setNotExecuting(binding: GlobalVariable) {
+  def setNotExecuting(binding: GlobalVariable): Unit = {
     val slot = binding.getSlotNumber
     busy(slot) = false
   }

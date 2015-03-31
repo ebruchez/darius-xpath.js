@@ -21,11 +21,11 @@ class XSLApplyImports extends StyleElement {
    */
   def isInstruction(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     onlyAllow("with-param")
   }
 

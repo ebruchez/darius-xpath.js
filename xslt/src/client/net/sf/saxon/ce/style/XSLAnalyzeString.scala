@@ -43,7 +43,7 @@ class XSLAnalyzeString extends StyleElement {
    */
   protected def getReturnedItemType(): ItemType = getCommonChildItemType
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     select = checkAttribute("select", "e1").asInstanceOf[Expression]
     regex = checkAttribute("regex", "a1").asInstanceOf[Expression]
     flags = checkAttribute("flags", "a").asInstanceOf[Expression]
@@ -53,7 +53,7 @@ class XSLAnalyzeString extends StyleElement {
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     var state = 0
     for (child <- allChildren()) {
       if (child.isInstanceOf[XSLFallback]) {
@@ -85,7 +85,7 @@ class XSLAnalyzeString extends StyleElement {
     flags = typeCheck(flags)
   }
 
-  private def outOfOrder(code: String) {
+  private def outOfOrder(code: String): Unit = {
     compileError("Content model for xsl:analyze-string is (xsl:matching-substring? xsl:non-matching-substring? xsl:fallback*)", 
       code)
   }

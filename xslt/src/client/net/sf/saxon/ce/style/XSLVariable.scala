@@ -25,7 +25,7 @@ class XSLVariable extends XSLVariableDeclaration {
 
   private var state: Int = 0
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     if (state == 2) return
     if (state == 1) {
       compileError("Circular reference to variable", "XTDE0640")

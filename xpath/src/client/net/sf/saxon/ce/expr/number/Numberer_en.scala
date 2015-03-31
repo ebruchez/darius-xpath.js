@@ -38,7 +38,7 @@ class Numberer_en extends AbstractNumberer {
    * @param separator the separator to be used between tens and units when cardinal numbers are written
    *                  as words.
    */
-  def setTensUnitsSeparatorCardinal(separator: String) {
+  def setTensUnitsSeparatorCardinal(separator: String): Unit = {
     tensUnitsSeparatorCardinal = separator
   }
 
@@ -49,7 +49,7 @@ class Numberer_en extends AbstractNumberer {
    * @param separator the separator to be used between tens and units when ordinal numbers are written
    *                  as words.
    */
-  def setTensUnitsSeparatorOrdinal(separator: String) {
+  def setTensUnitsSeparatorOrdinal(separator: String): Unit = {
     tensUnitsSeparatorOrdinal = separator
   }
 

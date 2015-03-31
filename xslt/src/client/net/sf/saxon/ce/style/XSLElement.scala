@@ -44,7 +44,7 @@ class XSLElement extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     elementName = checkAttribute("name", "a1").asInstanceOf[Expression]
     namespace = checkAttribute("namespace", "a").asInstanceOf[Expression]
     checkAttribute("validation", "v")
@@ -57,7 +57,7 @@ class XSLElement extends StyleElement {
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     if (use != null) {
       attributeSets = getAttributeSets(use, null)
     }

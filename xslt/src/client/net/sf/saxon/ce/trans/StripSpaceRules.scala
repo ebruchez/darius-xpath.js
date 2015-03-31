@@ -44,7 +44,7 @@ class StripSpaceRules {
    * @param action           StripRuleTarget.STRIP or StripRuleTarget.PRESERVE
    * @param module the stylesheet module containing the rule
    */
-  def addRule(test: NodeTest, action: Template, module: StylesheetModule) {
+  def addRule(test: NodeTest, action: Template, module: StylesheetModule): Unit = {
     val precedence = module.getPrecedence
     val minImportPrecedence = module.getMinImportPrecedence
     val priority = test.getDefaultPriority

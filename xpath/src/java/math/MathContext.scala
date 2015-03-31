@@ -128,7 +128,7 @@ case class MathContext(precision: Int, roundingMode: RoundingMode) extends Seria
   }
 
 
-  private def checkValid() {
+  private def checkValid(): Unit = {
     if (precision < 0) {
       throw new IllegalArgumentException("Negative precision: " + precision)
     }
@@ -185,7 +185,7 @@ case class MathContext(precision: Int, roundingMode: RoundingMode) extends Seria
    * @throws StreamCorruptedException
      *             if {@code roundingMode == null}
    */
-  private def readObject(s: ObjectInputStream) {
+  private def readObject(s: ObjectInputStream): Unit = {
     s.defaultReadObject()
     checkValid()
   }

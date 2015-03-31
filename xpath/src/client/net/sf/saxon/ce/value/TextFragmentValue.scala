@@ -35,7 +35,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
   /**
    * Set the configuration (containing the name pool used for all names in this document)
    */
-  def setConfiguration(config: Configuration) {
+  def setConfiguration(config: Configuration): Unit = {
     this.config = config
     documentNumber = -1
   }
@@ -119,7 +119,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
   /**
    * Copy the result tree fragment value to a given Outputter
    */
-  override def copy(out: Receiver, copyOptions: Int) {
+  override def copy(out: Receiver, copyOptions: Int): Unit = {
     out.characters(getStringValue)
   }
 
@@ -146,7 +146,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
     /**
      * Get a character string that uniquely identifies this node
      */
-    override def generateId(buffer: FastStringBuffer) {
+    override def generateId(buffer: FastStringBuffer): Unit = {
       getParent.generateId(buffer)
       buffer.append("t1")
     }
@@ -218,7 +218,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
     /**
      * Copy the node to a given Outputter
      */
-    override def copy(out: Receiver, copyOptions: Int) {
+    override def copy(out: Receiver, copyOptions: Int): Unit = {
       out.characters(getStringValue)
     }
   }
@@ -231,7 +231,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
    * @param value The value to be set for the property. May be null, which effectively
    *              removes the existing value for the property.
    */
-  def setUserData(key: String, value: AnyRef) {
+  def setUserData(key: String, value: AnyRef): Unit = {
     if (userData == null) {
       userData = new HashMap(4)
     }

@@ -41,11 +41,11 @@ class XSLChoose extends StyleElement {
    */
   protected def getReturnedItemType(): ItemType = getCommonChildItemType
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     for (child <- allChildren()) {
       if (child.isInstanceOf[XSLWhen]) {
         if (otherwise != null) {

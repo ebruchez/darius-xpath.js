@@ -43,7 +43,7 @@ abstract class XSLVariableDeclaration extends XSLGeneralVariable with VariableDe
    * Method called by VariableReference to register the variable reference for
    * subsequent fixup
    */
-  def registerReference(ref: VariableReference) {
+  def registerReference(ref: VariableReference): Unit = {
     references.add(ref)
   }
 
@@ -56,7 +56,7 @@ abstract class XSLVariableDeclaration extends XSLGeneralVariable with VariableDe
   /**
    * Notify all references to this variable of the data type
    */
-  def fixupReferences() {
+  def fixupReferences(): Unit = {
     val `type` = getRequiredType
     val th = TypeHierarchy.getInstance
     for (reference <- references) {
@@ -82,7 +82,7 @@ abstract class XSLVariableDeclaration extends XSLGeneralVariable with VariableDe
    * Check that the variable is not already declared, and allocate a slot number
    * @param decl
    */
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     super.validate(decl)
     if (global) {
       if (!redundant) {
@@ -95,13 +95,13 @@ abstract class XSLVariableDeclaration extends XSLGeneralVariable with VariableDe
    * Notify all variable references of the Binding instruction
    * @param binding the Binding that represents this variable declaration in the executable code tree
    */
-  protected def fixupBinding(binding: Binding) {
+  protected def fixupBinding(binding: Binding): Unit = {
     for (reference <- references) {
       (reference).fixup(binding)
     }
   }
 
-  protected def index(decl: Declaration, top: PrincipalStylesheetModule) {
+  protected def index(decl: Declaration, top: PrincipalStylesheetModule): Unit = {
     top.indexVariableDeclaration(decl)
   }
 
@@ -109,7 +109,7 @@ abstract class XSLVariableDeclaration extends XSLGeneralVariable with VariableDe
    * Optimize the stylesheet construct
    * @param declaration
    */
-  def optimize(declaration: Declaration) {
+  def optimize(declaration: Declaration): Unit = {
     if (global && !redundant && select != null) {
       var exp2 = select
       val visitor = makeExpressionVisitor()

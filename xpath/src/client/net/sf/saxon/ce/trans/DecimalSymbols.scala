@@ -46,7 +46,7 @@ class DecimalSymbols {
    * Check that no character is used in more than one role
    * @throws XPathException if a character is used in more than one role
    */
-  def checkDistinctRoles() {
+  def checkDistinctRoles(): Unit = {
     val map = new HashMap[Int, String](20)
     map.put(decimalSeparator, "decimal-separator")
     if (map.get(groupingSeparator) != null) {
@@ -80,7 +80,7 @@ class DecimalSymbols {
    * @param role2  the second role
    * @throws XPathException (always)
    */
-  private def duplicate(role1: String, role2: String) {
+  private def duplicate(role1: String, role2: String): Unit = {
     throw new XPathException("The same character is used as the " + role1 + " and as the " + 
       role2)
   }

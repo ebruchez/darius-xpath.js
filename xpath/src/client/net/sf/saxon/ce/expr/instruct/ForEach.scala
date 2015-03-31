@@ -145,7 +145,7 @@ class ForEach extends Instruction with ContextMappingFunction {
    * @param offer The type of rewrite being offered
    * @throws XPathException
    */
-  override protected def promoteInst(offer: PromotionOffer) {
+  override protected def promoteInst(offer: PromotionOffer): Unit = {
     select = doPromotion(select, offer)
   }
 

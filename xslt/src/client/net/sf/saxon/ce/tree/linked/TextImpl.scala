@@ -19,7 +19,7 @@ class TextImpl(var content: String) extends NodeImpl {
    * Append to the content of the text node
    * @param content the new content to be appended
    */
-  def appendStringValue(content: String) {
+  def appendStringValue(content: String): Unit = {
     this.content = this.content + content
   }
 
@@ -38,7 +38,7 @@ class TextImpl(var content: String) extends NodeImpl {
   /**
    * Copy this node to a given outputter
    */
-  def copy(out: Receiver, copyOptions: Int) {
+  def copy(out: Receiver, copyOptions: Int): Unit = {
     out.characters(content)
   }
 }

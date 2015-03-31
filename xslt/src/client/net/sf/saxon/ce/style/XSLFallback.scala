@@ -32,11 +32,11 @@ class XSLFallback extends StyleElement {
    */
   protected def seesAvuncularVariables(): Boolean = false
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
   }
 
   def compile(exec: Executable, decl: Declaration): Expression = null

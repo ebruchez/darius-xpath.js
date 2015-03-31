@@ -57,12 +57,12 @@ class XSLCallTemplate extends StyleElement {
     }
   }
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     calledTemplateName = checkAttribute("name", "q1").asInstanceOf[StructuredQName]
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     onlyAllow("with-param")
     if (!(calledTemplateName.getNamespaceURI == NamespaceConstant.SAXON && 
       calledTemplateName.getLocalName == "error-template")) {
@@ -70,7 +70,7 @@ class XSLCallTemplate extends StyleElement {
     }
   }
 
-  def postValidate() {
+  def postValidate(): Unit = {
     if (template != null) {
       for (param <- template.allChildren() if param.isInstanceOf[XSLParam] && param.asInstanceOf[XSLParam].isRequiredParam && 
         !param.asInstanceOf[XSLParam].isTunnelParam) {

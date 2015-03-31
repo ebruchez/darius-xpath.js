@@ -30,13 +30,13 @@ class XSLCharacterMap extends StyleElement {
    * Validate the attributes on this instruction
    * @throws XPathException
    */
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     setObjectName(checkAttribute("name", "q1").asInstanceOf[StructuredQName])
     use = checkAttribute("use-character-maps", "s").asInstanceOf[String]
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     if (validated) return
     checkTopLevel(null)
     onlyAllow("output-character")

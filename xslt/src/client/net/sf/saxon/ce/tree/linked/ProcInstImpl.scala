@@ -39,7 +39,7 @@ class ProcInstImpl(var localName: String, var content: String) extends NodeImpl 
   /**
    * Copy this node to a given outputter
    */
-  def copy(out: Receiver, copyOptions: Int) {
+  def copy(out: Receiver, copyOptions: Int): Unit = {
     out.processingInstruction(getLocalPart, content)
   }
 }

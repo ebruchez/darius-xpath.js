@@ -57,7 +57,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
 
   private var moduleCache: HashMap[DocumentURI, XSLStylesheet] = new HashMap[DocumentURI, XSLStylesheet](4)
 
-  def setExecutable(preparedStylesheet: Executable) {
+  def setExecutable(preparedStylesheet: Executable): Unit = {
     this.preparedStylesheet = preparedStylesheet
   }
 
@@ -84,7 +84,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
    * @param key the key to be used (based on the absolute URI)
    * @param module the stylesheet document tree corresponding to this absolute URI
    */
-  def putStylesheetDocument(key: DocumentURI, module: XSLStylesheet) {
+  def putStylesheetDocument(key: DocumentURI, module: XSLStylesheet): Unit = {
     moduleCache.put(key, module)
   }
 
@@ -101,7 +101,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
    * documents. The method is called only on the XSLStylesheet element representing the
    * principal stylesheet module
    */
-  def preprocess() {
+  def preprocess(): Unit = {
     spliceIncludes()
     buildIndexes()
     processAllAttributes()
@@ -129,7 +129,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
   /**
    * Build indexes for selected top-level declarations
    */
-  private def buildIndexes() {
+  private def buildIndexes(): Unit = {
     var i = topLevel.size - 1
     while (i >= 0) {
       val decl = topLevel.get(i)
@@ -141,7 +141,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
   /**
    * Process the attributes of every node in the stylesheet
    */
-  def processAllAttributes() {
+  def processAllAttributes(): Unit = {
     getSourceElement.processDefaultCollationAttribute("")
     getSourceElement.prepareAttributes()
     for (decl <- topLevel) {
@@ -162,7 +162,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
    * @param decl The declaration wrapping an XSLFunction object
    * @throws XPathException
    */
-  protected def indexFunction(decl: Declaration) {
+  protected def indexFunction(decl: Declaration): Unit = {
     val function = decl.getSourceElement.asInstanceOf[XSLFunction]
     val qName = function.getObjectName
     val arity = function.getNumberOfArguments
@@ -215,7 +215,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
     }
   }
 
-  protected def putFunction(decl: Declaration) {
+  protected def putFunction(decl: Declaration): Unit = {
     val function = decl.getSourceElement.asInstanceOf[XSLFunction]
     val qName = function.getObjectName
     val arity = function.getNumberOfArguments
@@ -232,7 +232,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
    * @param decl The Declaration referencing the XSLVariable or XSLParam element
    * @throws XPathException
    */
-  protected def indexVariableDeclaration(decl: Declaration) {
+  protected def indexVariableDeclaration(decl: Declaration): Unit = {
     val `var` = decl.getSourceElement.asInstanceOf[XSLVariableDeclaration]
     val qName = `var`.getVariableQName
     if (qName != null) {
@@ -295,7 +295,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
    * @param decl the declaration of the Template object
    * @throws XPathException
    */
-  protected def indexNamedTemplate(decl: Declaration) {
+  protected def indexNamedTemplate(decl: Declaration): Unit = {
     val template = decl.getSourceElement.asInstanceOf[XSLTemplate]
     val qName = template.getTemplateName
     if (qName != null) {
@@ -330,7 +330,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
     (if (decl == null) null else decl.getSourceElement.asInstanceOf[XSLTemplate])
   }
 
-  protected def addNamespaceAlias(node: Declaration) {
+  protected def addNamespaceAlias(node: Declaration): Unit = {
     namespaceAliasList.add(node)
     numberOfAliases += 1
   }
@@ -354,7 +354,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
   /**
    * Collect any namespace aliases
    */
-  private def collectNamespaceAliases() {
+  private def collectNamespaceAliases(): Unit = {
     namespaceAliasMap = new HashMap(numberOfAliases)
     aliasResultUriSet = new HashSet(numberOfAliases)
     val aliasesAtThisPrecedence = new HashSet[String]()
@@ -388,7 +388,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
   /**
    * Compile the stylesheet to create an executable.
    */
-  def compileStylesheet() {
+  def compileStylesheet(): Unit = {
     try {
       val pss = getExecutable
       for (i <- 0 until topLevel.size) {
@@ -487,7 +487,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
    * template rules
    * @param n the number of slots to be allocated
    */
-  def allocatePatternSlots(n: Int) {
+  def allocatePatternSlots(n: Int): Unit = {
     if (n > largestPatternStackFrame) {
       largestPatternStackFrame = n
     }
@@ -499,7 +499,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
    * @param errorCode the error code. May be null if not known or not defined
    * @throws XPathException
    */
-  protected def compileError(message: String, errorCode: String) {
+  protected def compileError(message: String, errorCode: String): Unit = {
     val tce = new XPathException(message)
     tce.setErrorCode(errorCode)
     compileError(tce)
@@ -510,7 +510,7 @@ class PrincipalStylesheetModule(sourceElement: XSLStylesheet, precedence: Int)
    * @param error contains information about the error
    * @throws XPathException always, after reporting the error to the ErrorListener
    */
-  protected def compileError(error: XPathException) {
+  protected def compileError(error: XPathException): Unit = {
     error.setIsStaticError(true)
     val pss = getExecutable
     if (pss == null) {

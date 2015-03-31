@@ -55,7 +55,7 @@ class NumberFormatter {
    * This symbol may be preceded and followed by punctuation (any other characters) which is
    * copied to the output string.
    */
-  def prepare(_format: String) {
+  def prepare(_format: String): Unit = {
     var format = _format
     if (format.length == 0) {
       format = "1"

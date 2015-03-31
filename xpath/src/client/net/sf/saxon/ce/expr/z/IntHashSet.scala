@@ -99,7 +99,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
 
   def mutableCopy(): IntSet = copy()
 
-  def clear() {
+  def clear(): Unit = {
     _size = 0
     for (i <- 0 until _nmax) {
       _values(i) = ndv
@@ -181,7 +181,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
     i
   }
 
-  private def setCapacity(_capacity: Int) {
+  private def setCapacity(_capacity: Int): Unit = {
     var capacity = _capacity
     if (capacity < _size) {
       capacity = _size
@@ -249,7 +249,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
   /**
    * Diagnostic output
    */
-  def diagnosticDump() {
+  def diagnosticDump(): Unit = {
     System.err.println("Contents of IntHashSet")
     val sb = new FastStringBuffer(100)
     for (i <- 0 until _values.length) {

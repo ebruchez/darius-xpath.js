@@ -46,7 +46,7 @@ object Mode {
 
     var rules: ArrayList[Rule] = new ArrayList[Rule](100)
 
-    def addRule(rule: Rule) {
+    def addRule(rule: Rule): Unit = {
       rules.add(rule)
     }
 
@@ -54,13 +54,13 @@ object Mode {
       rules.get(a).compareComputedRank(rules.get(b))
     }
 
-    def swap(a: Int, b: Int) {
+    def swap(a: Int, b: Int): Unit = {
       val temp = rules.get(a)
       rules.set(a, rules.get(b))
       rules.set(b, temp)
     }
 
-    def allocateRanks() {
+    def allocateRanks(): Unit = {
       GenericSorter.quickSort(0, rules.size, this)
       var rank = 0
       for (i <- 0 until rules.size) {
@@ -205,7 +205,7 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
       priority: Double, 
       explicitMode: Boolean, 
       ixslPreventDefault: Boolean, 
-      ixslEventProperty: String) {
+      ixslEventProperty: String): Unit = {
     if (explicitMode) {
       hasRules = true
     }
@@ -312,7 +312,7 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
    * Specify how many slots for local variables are required by a particular pattern
    * @param slots the number of slots needed
    */
-  def allocatePatternSlots(slots: Int) {
+  def allocatePatternSlots(slots: Int): Unit = {
     stackFrameSlotsNeeded = Math.max(stackFrameSlotsNeeded, slots)
   }
 
@@ -554,7 +554,7 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
    * Walk over all the rules, applying a specified action to each one.
    * @param action an action that is to be applied to all the rules in this Mode
    */
-  def processRules(action: RuleAction) {
+  def processRules(action: RuleAction): Unit = {
     processRuleChain(documentRuleChain, action)
     processRuleChain(unnamedElementRuleChain, action)
     var ii = namedElementRuleChains.keySet.iterator()
@@ -575,7 +575,7 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
     processRuleChain(genericNodeRuleChain, action)
   }
 
-  private def processRuleChain(r: Rule, action: RuleAction) {
+  private def processRuleChain(r: Rule, action: RuleAction): Unit = {
     while (r != null) {
       action.processRule(r)
       r = r.getNext
@@ -586,11 +586,11 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
    * Compute a rank for each rule, as a combination of the precedence and priority, to allow
    * rapid comparison.
    */
-  def computeRankings() {
+  def computeRankings(): Unit = {
     val sorter = new RuleSorter()
     val addToSorter = new RuleAction() {
 
-      def processRule(r: Rule) {
+      def processRule(r: Rule): Unit = {
         sorter.addRule(r)
       }
     }

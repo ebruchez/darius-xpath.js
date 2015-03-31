@@ -42,12 +42,12 @@ class HTTPHandler {
   @BeanProperty
   var resultNode: Node = null
 
-  def setErrorMessage(value: String) {
+  def setErrorMessage(value: String): Unit = {
     responseState = State.ERROR
     errorMessage = value
   }
 
-  def doGet(url: String, callback: RequestCallback) {
+  def doGet(url: String, callback: RequestCallback): Unit = {
     val builder = new RequestBuilder(RequestBuilder.GET, url)
     responseState = State.COMPLETED
     try {

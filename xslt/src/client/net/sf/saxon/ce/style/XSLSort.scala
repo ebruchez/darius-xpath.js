@@ -50,7 +50,7 @@ class XSLSort extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     select = checkAttribute("select", "e").asInstanceOf[Expression]
     order = checkAttribute("order", "a").asInstanceOf[Expression]
     dataType = checkAttribute("data-type", "a").asInstanceOf[Expression]
@@ -76,7 +76,7 @@ class XSLSort extends StyleElement {
     }
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     if (select != null && hasChildNodes()) {
       compileError("An xsl:sort element with a select attribute must be empty", "XTSE1015")
     }

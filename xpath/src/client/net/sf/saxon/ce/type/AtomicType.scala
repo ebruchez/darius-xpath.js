@@ -55,7 +55,7 @@ object AtomicType {
    * @param localName the type name within the XSD namespace
    * @param type the SchemaType representing the built in type
    */
-  def register(localName: String, `type`: AtomicType) {
+  def register(localName: String, `type`: AtomicType): Unit = {
     lookup.put(localName, `type`)
   }
 

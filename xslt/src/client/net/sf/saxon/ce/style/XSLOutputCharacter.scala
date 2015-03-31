@@ -14,13 +14,13 @@ import scala.collection.JavaConversions._
  */
 class XSLOutputCharacter extends StyleElement {
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     checkAttribute("character", "s1")
     checkAttribute("string", "s1")
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkEmpty()
     if (!(getParent.isInstanceOf[XSLCharacterMap])) {
       compileError("xsl:output-character may appear only as a child of xsl:character-map", "XTSE0010")

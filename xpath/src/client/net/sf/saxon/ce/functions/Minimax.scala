@@ -159,7 +159,7 @@ class Minimax(_operation: Int) extends CollatingFunction {
   /**
    * Static analysis: prevent sorting of the argument
    */
-  override def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor): Unit = {
     super.checkArguments(visitor)
     argument(0) = ExpressionTool.unsorted(visitor.getConfiguration, argument(0), false)
   }

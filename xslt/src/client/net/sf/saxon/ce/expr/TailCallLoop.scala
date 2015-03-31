@@ -85,7 +85,7 @@ class TailCallLoop(var containingFunction: UserFunction) extends UnaryExpression
    * @param context The dynamic context, giving access to the current node,
    *                the current variables, etc.
    */
-  def process(context: XPathContext) {
+  def process(context: XPathContext): Unit = {
     val cm = context
     while (true) {
       operand.process(context)

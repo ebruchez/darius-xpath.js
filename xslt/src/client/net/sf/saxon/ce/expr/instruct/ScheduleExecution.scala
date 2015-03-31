@@ -91,7 +91,7 @@ class ScheduleExecution(var call: CallTemplate, var wait: Expression, var href: 
    * @throws client.net.sf.saxon.ce.trans.XPathException
    *
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     call = doPromotion(call, offer).asInstanceOf[CallTemplate]
     wait = doPromotion(wait, offer)
     href = doPromotion(href, offer)
@@ -142,7 +142,7 @@ class ScheduleExecution(var call: CallTemplate, var wait: Expression, var href: 
         val hr = new HTTPHandler()
         hr.doGet(uri, new RequestCallback() {
 
-          def onError(request: Request, exception: Throwable) {
+          def onError(request: Request, exception: Throwable): Unit = {
             val msg = "HTTP Error " + exception.getMessage + " for URI " + uri
             logger.log(Level.SEVERE, msg)
             if (SaxonceApi.doThrowJsExceptions()) {
@@ -150,7 +150,7 @@ class ScheduleExecution(var call: CallTemplate, var wait: Expression, var href: 
             }
           }
 
-          def onResponseReceived(request: Request, response: Response) {
+          def onResponseReceived(request: Request, response: Response): Unit = {
             val statusCode = response.getStatusCode
             if (statusCode == 200) {
               Logger.getLogger("ResponseReceived").fine("GET Ok for: " + uri)
@@ -204,7 +204,7 @@ class ScheduleExecution(var call: CallTemplate, var wait: Expression, var href: 
     } else {
       val t = new Timer() {
 
-        def run() {
+        def run(): Unit = {
           var success = false
           logger.fine("processing ixsl:schedule-action")
           if (LogConfiguration.loggingIsEnabled() && LogController.traceIsEnabled()) {

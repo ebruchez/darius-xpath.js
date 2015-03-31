@@ -22,7 +22,7 @@ abstract class AttributeCreator extends SimpleNodeConstructor {
    * @param context the dynamic evaluation context
    * @throws XPathException
    */
-  def processValue(value: CharSequence, context: XPathContext) {
+  def processValue(value: CharSequence, context: XPathContext): Unit = {
     val nameCode = evaluateNameCode(context)
     val out = context.getReceiver
     if (nameCode == StructuredQName.XML_ID) {

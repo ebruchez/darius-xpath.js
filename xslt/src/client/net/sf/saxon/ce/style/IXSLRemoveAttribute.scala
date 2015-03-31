@@ -16,14 +16,14 @@ import scala.collection.JavaConversions._
  */
 class IXSLRemoveAttribute extends XSLAttribute {
 
-  override def prepareAttributes() {
+  override def prepareAttributes(): Unit = {
     super.prepareAttributes()
     if (select != null) {
       compileError("ixsl:remove-attribute does not allow @select")
     }
   }
 
-  override def validate(decl: Declaration) {
+  override def validate(decl: Declaration): Unit = {
     super.validate(decl)
     checkEmpty()
   }

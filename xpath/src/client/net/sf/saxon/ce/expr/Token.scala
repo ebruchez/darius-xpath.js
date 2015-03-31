@@ -509,7 +509,7 @@ object Token {
 
   mapDouble("castable as", CASTABLE_AS)
 
-  private def mapDouble(doubleKeyword: String, token: Int) {
+  private def mapDouble(doubleKeyword: String, token: Int): Unit = {
     doubleKeywords.put(doubleKeyword, new java.lang.Integer(token))
     tokens(token) = doubleKeyword
   }

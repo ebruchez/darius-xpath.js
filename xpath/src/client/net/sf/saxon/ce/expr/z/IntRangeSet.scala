@@ -65,7 +65,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
     }
   }
 
-  def clear() {
+  def clear(): Unit = {
     startPoints = new Array[Int](4)
     endPoints = new Array[Int](4)
     used = 0
@@ -211,7 +211,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
     }
   }
 
-  private def ensureCapacity(n: Int) {
+  private def ensureCapacity(n: Int): Unit = {
     if (startPoints.length < n) {
       val s = new Array[Int](startPoints.length * 2)
       val e = new Array[Int](startPoints.length * 2)
@@ -269,7 +269,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
    * @param low the low end of the new range
    * @param high the high end of the new range
    */
-  def addRange(low: Int, high: Int) {
+  def addRange(low: Int, high: Int): Unit = {
     if (low == high) {
       add(low)
       return

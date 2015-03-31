@@ -37,7 +37,7 @@ class KeyDefinition(@BeanProperty var `match`: Pattern,
    * Set the primitive item type of the values returned by the use expression
    * @param itemType the primitive type of the indexed values
    */
-  def setIndexedItemType(itemType: AtomicType) {
+  def setIndexedItemType(itemType: AtomicType): Unit = {
     useType = itemType
   }
 
@@ -58,7 +58,7 @@ class KeyDefinition(@BeanProperty var `match`: Pattern,
    * as a SequenceIterable (not sure why!)
    * @param body the use expression of the key
    */
-  def setBody(body: Expression) {
+  def setBody(body: Expression): Unit = {
     super.setBody(body)
     use = body
   }

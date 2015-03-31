@@ -53,7 +53,7 @@ class ParameterSet(capacity: Int) {
    * @param value The value of the parameter
    * @param checked True if the caller has done static type checking against the required type
    */
-  def put(id: Int, value: Sequence, checked: Boolean) {
+  def put(id: Int, value: Sequence, checked: Boolean): Unit = {
     for (i <- 0 until used if keys(i) == id) {
       values(i) = value
       typeChecked(i) = checked
@@ -99,7 +99,7 @@ class ParameterSet(capacity: Int) {
   /**
    * Clear all values
    */
-  def clear() {
+  def clear(): Unit = {
     used = 0
   }
 }

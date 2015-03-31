@@ -85,7 +85,7 @@ class InscopeNamespaceResolver(_node: NodeInfo) extends NamespaceResolver {
         }
       }
 
-      def remove() {
+      def remove(): Unit = {
         throw new UnsupportedOperationException("remove")
       }
     }

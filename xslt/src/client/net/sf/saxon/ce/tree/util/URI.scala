@@ -689,7 +689,7 @@ class URI extends Serializable {
    *
    * @param p_other the URI to copy (cannot be null)
    */
-  private def initialize(p_other: URI) {
+  private def initialize(p_other: URI): Unit = {
     m_scheme = p_other.getScheme
     m_userinfo = p_other.getUserinfo
     m_host = p_other.getHost
@@ -720,7 +720,7 @@ class URI extends Serializable {
    *                                  is not an absolute URI or if
    *                                  p_uriSpec violates syntax rules
    */
-  private def initialize(p_base: URI, p_uriSpec: String, allowNonAbsoluteURI: Boolean) {
+  private def initialize(p_base: URI, p_uriSpec: String, allowNonAbsoluteURI: Boolean): Unit = {
     val uriSpec = p_uriSpec
     val uriSpecLen = if ((uriSpec != null)) uriSpec.length else 0
     if (p_base == null && uriSpecLen == 0) {
@@ -798,7 +798,7 @@ class URI extends Serializable {
    *                                  is not an absolute URI or if
    *                                  p_uriSpec violates syntax rules
    */
-  private def initialize(p_base: URI, p_uriSpec: String) {
+  private def initialize(p_base: URI, p_uriSpec: String): Unit = {
     val uriSpec = p_uriSpec
     val uriSpecLen = if ((uriSpec != null)) uriSpec.length else 0
     if (p_base == null && uriSpecLen == 0) {
@@ -860,7 +860,7 @@ class URI extends Serializable {
    *
    * @param p_base base URI for absolutization
    */
-  private def absolutize(p_base: URI) {
+  private def absolutize(p_base: URI): Unit = {
     if (m_path.length == 0 && m_scheme == null && m_host == null && 
       m_regAuthority == null) {
       m_scheme = p_base.getScheme
@@ -946,7 +946,7 @@ class URI extends Serializable {
    * @exception URISyntaxException if URI does not have a conformant
    *                                  scheme
    */
-  private def initializeScheme(p_uriSpec: String) {
+  private def initializeScheme(p_uriSpec: String): Unit = {
     val uriSpecLen = p_uriSpec.length
     var index = 0
     var scheme: String = null
@@ -1118,7 +1118,7 @@ class URI extends Serializable {
    *
    * @exception URISyntaxException if p_uriSpec violates syntax rules
    */
-  private def initializePath(p_uriSpec: String, p_nStartIndex: Int) {
+  private def initializePath(p_uriSpec: String, p_nStartIndex: Int): Unit = {
     if (p_uriSpec == null) {
       throw new URISyntaxException("Cannot initialize path from null string!")
     }
@@ -1313,7 +1313,7 @@ class URI extends Serializable {
    * @exception URISyntaxException if p_scheme is not a conformant
    *                                  scheme name
    */
-  private def setScheme(p_scheme: String) {
+  private def setScheme(p_scheme: String): Unit = {
     if (p_scheme == null) {
       throw new URISyntaxException("Cannot set scheme from null string!")
     }

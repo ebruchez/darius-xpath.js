@@ -71,14 +71,14 @@ class ExpressionParser {
    * Set the default container for newly constructed expressions
    * @param container the default container
    */
-  def setDefaultContainer(container: Container) {
+  def setDefaultContainer(container: Container): Unit = {
     this.defaultContainer = container
   }
 
   /**
    * Read the next token, catching any exception thrown by the tokenizer
    */
-  def nextToken() {
+  def nextToken(): Unit = {
     try {
       t.next()
     } catch {
@@ -94,7 +94,7 @@ class ExpressionParser {
    * @throws XPathException if the current token is not the expected
    *     token
    */
-  def expect(token: Int) {
+  def expect(token: Int): Unit = {
     if (t.currentToken != token) grumble("expected \"" + Token.tokens(token) + "\", found " + currentTokenDisplay())
   }
 
@@ -1053,7 +1053,7 @@ class ExpressionParser {
    * @param expected the expected token
    * @throws XPathException if the expected token was not found
    */
-  private def skipToken(expected: Int) {
+  private def skipToken(expected: Int): Unit = {
     expect(expected)
     nextToken()
   }
@@ -1175,14 +1175,14 @@ class ExpressionParser {
    * @param declaration the variable declaration to be added to the stack
    * @throws XPathException if any error is encountered
    */
-  def declareRangeVariable(declaration: Binding) {
+  def declareRangeVariable(declaration: Binding): Unit = {
     rangeVariables.push(declaration)
   }
 
   /**
    * Note when the most recently declared range variable has gone out of scope
    */
-  def undeclareRangeVariable() {
+  def undeclareRangeVariable(): Unit = {
     rangeVariables.pop()
   }
 
@@ -1249,7 +1249,7 @@ class ExpressionParser {
    * is retained. Needed mainly for XQuery.
    * @param exp the expression whose location information is to be set
    */
-  def setLocation(exp: Expression) {
+  def setLocation(exp: Expression): Unit = {
     if (exp.getContainer == null) {
       exp.setContainer(defaultContainer)
     }

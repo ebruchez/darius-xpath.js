@@ -31,7 +31,7 @@ abstract class Builder extends Receiver {
 
   protected var open: Boolean = false
 
-  def setPipelineConfiguration(pipe: PipelineConfiguration) {
+  def setPipelineConfiguration(pipe: PipelineConfiguration): Unit = {
     this.pipe = pipe
     config = pipe.getConfiguration
   }
@@ -51,7 +51,7 @@ abstract class Builder extends Receiver {
    * executing a query or transformation.
    * @param systemId the SystemId, that is, the document-uri.
    */
-  def setSystemId(systemId: String) {
+  def setSystemId(systemId: String): Unit = {
     this.systemId = systemId
   }
 
@@ -68,7 +68,7 @@ abstract class Builder extends Receiver {
    * Set the base URI of the document node of the tree being constructed by this builder
    * @param baseURI the base URI
    */
-  def setBaseURI(baseURI: String) {
+  def setBaseURI(baseURI: String): Unit = {
     this.baseURI = baseURI
   }
 
@@ -78,11 +78,11 @@ abstract class Builder extends Receiver {
    */
   def getBaseURI(): String = baseURI
 
-  def open() {
+  def open(): Unit = {
     open = true
   }
 
-  def close() {
+  def close(): Unit = {
     open = false
   }
 
@@ -101,7 +101,7 @@ abstract class Builder extends Receiver {
    * if the Builder is still in memory. This can happen because the Builder is referenced from a
    * parser in the Configuration's parser pool.
    */
-  def reset() {
+  def reset(): Unit = {
     pipe = null
     config = null
     systemId = null

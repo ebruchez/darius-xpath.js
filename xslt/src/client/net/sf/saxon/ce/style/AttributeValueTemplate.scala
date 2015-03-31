@@ -89,7 +89,7 @@ object AttributeValueTemplate {
   private def addStringComponent(components: List[_], 
       avt: String, 
       start: Int, 
-      end: Int) {
+      end: Int): Unit = {
     if (start < end) {
       components.add(new StringLiteral(avt.substring(start, end)))
     }

@@ -33,7 +33,7 @@ class ValueOf(select: Expression, var noNodeIfEmpty: Boolean) extends SimpleNode
   /**
    * Indicate that this is really an xsl:nunber instruction
    */
-  def setIsNumberingInstruction() {
+  def setIsNumberingInstruction(): Unit = {
     isNumberingInstruction = true
   }
 
@@ -47,7 +47,7 @@ class ValueOf(select: Expression, var noNodeIfEmpty: Boolean) extends SimpleNode
     }
   }
 
-  def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType) {
+  def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Unit = {
   }
 
   /**
@@ -83,7 +83,7 @@ class ValueOf(select: Expression, var noNodeIfEmpty: Boolean) extends SimpleNode
    * @throws client.net.sf.saxon.ce.trans.XPathException
    *
    */
-  def processValue(value: CharSequence, context: XPathContext) {
+  def processValue(value: CharSequence, context: XPathContext): Unit = {
     //ORBEON XSLT only called via processLeavingTail called via process which is never called in pure XPath
 //    val out = context.getReceiver~
 //    out.characters(value)

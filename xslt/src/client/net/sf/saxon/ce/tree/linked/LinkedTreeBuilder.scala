@@ -82,7 +82,7 @@ class LinkedTreeBuilder extends Builder {
     }
   }
 
-  def reset() {
+  def reset(): Unit = {
     super.reset()
     currentNode = null
     nodeFactory = null
@@ -97,7 +97,7 @@ class LinkedTreeBuilder extends Builder {
    * nodes added using XQuery update are not sequence-numbered.
    * @param allocate true if sequence numbers are to be allocated
    */
-  def setAllocateSequenceNumbers(allocate: Boolean) {
+  def setAllocateSequenceNumbers(allocate: Boolean): Unit = {
     allocateSequenceNumbers = allocate
   }
 
@@ -106,14 +106,14 @@ class LinkedTreeBuilder extends Builder {
    * @param factory the node factory to be used. This allows custom objects to be used to represent
    * the elements in the tree.
    */
-  def setNodeFactory(factory: NodeFactory) {
+  def setNodeFactory(factory: NodeFactory): Unit = {
     nodeFactory = factory
   }
 
   /**
    * Open the stream of Receiver events
    */
-  def open() {
+  def open(): Unit = {
     started = true
     depth = 0
     size(depth) = 0
@@ -124,7 +124,7 @@ class LinkedTreeBuilder extends Builder {
    * Start of a document node.
    * This event is ignored: we simply add the contained elements to the current document
    */
-  def startDocument() {
+  def startDocument(): Unit = {
     val doc = new DocumentImpl()
     currentRoot = doc
     doc.setSystemId(getSystemId)
@@ -140,14 +140,14 @@ class LinkedTreeBuilder extends Builder {
   /**
    * Notify the end of the document
    */
-  def endDocument() {
+  def endDocument(): Unit = {
     currentNode.compact(size(depth))
   }
 
   /**
    * Close the stream of Receiver events
    */
-  def close() {
+  def close(): Unit = {
     if (currentNode == null) {
       return
     }
@@ -161,7 +161,7 @@ class LinkedTreeBuilder extends Builder {
   /**
    * Notify the start of an element
    */
-  def startElement(qName: StructuredQName, properties: Int) {
+  def startElement(qName: StructuredQName, properties: Int): Unit = {
     if (currentNode == null) {
       startDocument()
       currentRoot.asInstanceOf[DocumentImpl].setImaginary(true)
@@ -172,7 +172,7 @@ class LinkedTreeBuilder extends Builder {
     contentStarted = false
   }
 
-  def namespace(nsBinding: NamespaceBinding, properties: Int) {
+  def namespace(nsBinding: NamespaceBinding, properties: Int): Unit = {
     if (contentStarted) {
       throw new IllegalStateException("namespace() called after startContent()")
     }
@@ -187,7 +187,7 @@ class LinkedTreeBuilder extends Builder {
     namespaces(namespacesUsed += 1) = nsBinding
   }
 
-  def attribute(nameCode: StructuredQName, value: CharSequence) {
+  def attribute(nameCode: StructuredQName, value: CharSequence): Unit = {
     if (contentStarted) {
       throw new IllegalStateException("attribute() called after startContent()")
     }
@@ -197,7 +197,7 @@ class LinkedTreeBuilder extends Builder {
     attributes.addAttribute(nameCode, value.toString)
   }
 
-  def startContent() {
+  def startContent(): Unit = {
     if (contentStarted) {
       throw new IllegalStateException("startContent() called more than once")
     }
@@ -236,7 +236,7 @@ class LinkedTreeBuilder extends Builder {
   /**
    * Notify the end of an element
    */
-  def endElement() {
+  def endElement(): Unit = {
     if (!contentStarted) {
       throw new IllegalStateException("missing call on startContent()")
     }
@@ -248,7 +248,7 @@ class LinkedTreeBuilder extends Builder {
   /**
    * Notify a text node. Adjacent text nodes must have already been merged
    */
-  def characters(chars: CharSequence) {
+  def characters(chars: CharSequence): Unit = {
     if (!contentStarted) {
       throw new IllegalStateException("missing call on startContent()")
     }
@@ -266,7 +266,7 @@ class LinkedTreeBuilder extends Builder {
   /**
    * Notify a processing instruction
    */
-  def processingInstruction(name: String, remainder: CharSequence) {
+  def processingInstruction(name: String, remainder: CharSequence): Unit = {
     if (!contentStarted) {
       throw new IllegalStateException("missing call on startContent()")
     }
@@ -277,7 +277,7 @@ class LinkedTreeBuilder extends Builder {
   /**
    * Notify a comment
    */
-  def comment(chars: CharSequence) {
+  def comment(chars: CharSequence): Unit = {
     if (!contentStarted) {
       throw new IllegalStateException("missing call on startContent()")
     }
@@ -308,7 +308,7 @@ class LinkedTreeBuilder extends Builder {
    * The supplied element is grafted onto the current element as its only child.
    * @param element the element to be grafted in as a new child.
    */
-  def graftElement(element: ElementImpl) {
+  def graftElement(element: ElementImpl): Unit = {
     currentNode.addChild(element, size(depth) += 1)
   }
 }

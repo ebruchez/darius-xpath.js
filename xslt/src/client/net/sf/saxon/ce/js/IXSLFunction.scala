@@ -191,7 +191,7 @@ class IXSLFunction(var localName: String, arguments: Array[Expression]) extends 
     new StructuredQName(NamespaceConstant.IXSL, "", localName)
   }
 
-  protected override def checkArguments(visitor: ExpressionVisitor) {
+  protected override def checkArguments(visitor: ExpressionVisitor): Unit = {
   }
 
   override def preEvaluate(visitor: ExpressionVisitor): Expression = this

@@ -10,7 +10,7 @@ class IntSingletonSet(var value: Int) extends IntSet {
 
   def getMember(): Int = value
 
-  def clear() {
+  def clear(): Unit = {
     throw new UnsupportedOperationException("IntSingletonSet is immutable")
   }
 

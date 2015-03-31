@@ -203,7 +203,7 @@ class DurationValue protected () extends AtomicValue {
   /**
    * Ensure that a zero duration is considered positive
    */
-  protected def normalizeZeroDuration() {
+  protected def normalizeZeroDuration(): Unit = {
     if (months == 0 && seconds == 0L && microseconds == 0) {
       negative = false
     }

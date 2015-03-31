@@ -98,7 +98,7 @@ class Block extends Instruction {
    * Set the children of this instruction
    * @param children The instructions that are children of this instruction
    */
-  def setChildren(children: Array[Expression]) {
+  def setChildren(children: Array[Expression]): Unit = {
     _children = children
     for (c <- 0 until children.length) {
       adoptChildExpression(children(c))
@@ -315,7 +315,7 @@ class Block extends Instruction {
    * after simplification
    * @throws XPathException should not happen
    */
-  private def flatten(targetList: List[Expression]) {
+  private def flatten(targetList: List[Expression]): Unit = {
     var currentLiteralList: List[Item] = null
     for (i <- 0 until _children.length) {
       if (Literal.isEmptySequence(_children(i))) {
@@ -347,7 +347,7 @@ class Block extends Instruction {
     flushCurrentLiteralList(currentLiteralList, targetList)
   }
 
-  private def flushCurrentLiteralList(currentLiteralList: List[Item], list: List[Expression]) {
+  private def flushCurrentLiteralList(currentLiteralList: List[Item], list: List[Expression]): Unit = {
     if (currentLiteralList != null) {
       val iter = new client.net.sf.saxon.ce.tree.iter.ListIterator(currentLiteralList)
       list.add(Literal.makeLiteral(SequenceExtent.makeSequenceExtent(iter)))
@@ -410,7 +410,7 @@ class Block extends Instruction {
    * @param offer The type of rewrite being offered
    * @throws XPathException
    */
-  override protected def promoteInst(offer: PromotionOffer) {
+  override protected def promoteInst(offer: PromotionOffer): Unit = {
     for (c <- 0 until _children.length) {
       _children(c) = doPromotion(_children(c), offer)
     }

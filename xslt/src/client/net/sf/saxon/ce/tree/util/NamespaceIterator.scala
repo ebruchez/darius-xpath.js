@@ -39,7 +39,7 @@ object NamespaceIterator {
    * @param element the element in question (the method does nothing if this is not an element)
    * @param receiver the receiver to which the namespaces are notified
    */
-  def sendNamespaces(element: NodeInfo, receiver: Receiver) {
+  def sendNamespaces(element: NodeInfo, receiver: Receiver): Unit = {
     if (element.getNodeKind == Type.ELEMENT) {
       var foundDefault = false
       var iter = iterateNamespaces(element)
@@ -82,7 +82,7 @@ class NamespaceIterator private (var element: NodeInfo) extends Iterator[Namespa
     next != null
   }
 
-  private def advance() {
+  private def advance(): Unit = {
     while (true) {
       var ascend = index >= localDeclarations.length
       var nsCode: NamespaceBinding = null
@@ -114,7 +114,7 @@ class NamespaceIterator private (var element: NodeInfo) extends Iterator[Namespa
     }
   }
 
-  def remove() {
+  def remove(): Unit = {
     throw new UnsupportedOperationException()
   }
 }

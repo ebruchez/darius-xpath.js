@@ -46,7 +46,7 @@ object LogController {
 
   private var initLogLevel: Level = _
 
-  def initLogger() {
+  def initLogger(): Unit = {
 //    mainLogger = Logger.getLogger("")
 //    val logLevel = Window.Location.getParameter("logLevel")
 //    initLogLevel = if ((logLevel == null)) null else Level.parse(logLevel)
@@ -58,7 +58,7 @@ object LogController {
   @BeanProperty
   var traceListener: TraceListener = null
 
-  def InitializeTraceListener() {
+  def InitializeTraceListener(): Unit = {
     checkTraceIsEnabled()
     if (isTraceEnabled) {
       ???
@@ -66,13 +66,13 @@ object LogController {
     }
   }
 
-  def openTraceListener() {
+  def openTraceListener(): Unit = {
     if (isTraceEnabled) {
       traceListener.open()
     }
   }
 
-  def closeTraceListener(success: Boolean) {
+  def closeTraceListener(success: Boolean): Unit = {
     if (traceListener != null) {
       if (success) {
         if (isTraceEnabled) {
@@ -101,7 +101,7 @@ object LogController {
 //  @BeanProperty
 //  var jsLogHandler: JsLogHandler = null
 
-  def setLogLevel(newLevel: String) {
+  def setLogLevel(newLevel: String): Unit = {
     if (initLogLevel == null) {
       try {
         mainLogger.setLevel(Level.parse(newLevel))
@@ -113,7 +113,7 @@ object LogController {
 
   def getLogLevel(): String = mainLogger.getLevel.getName
 
-  def addRequiredLogHanders(record: LogRecord) {
+  def addRequiredLogHanders(record: LogRecord): Unit = {
     ???
 //    jsLogHandler = new JsLogHandler()
 //    mainLogger.addHandler(jsLogHandler)

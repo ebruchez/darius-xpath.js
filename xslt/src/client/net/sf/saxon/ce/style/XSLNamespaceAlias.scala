@@ -31,7 +31,7 @@ class XSLNamespaceAlias extends StyleElement {
    */
   override def isDeclaration(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     var stylesheetPrefix = checkAttribute("stylesheet-prefix", "w1").asInstanceOf[String]
     var resultPrefix = checkAttribute("result-prefix", "w1").asInstanceOf[String]
     checkForUnknownAttributes()
@@ -58,13 +58,13 @@ class XSLNamespaceAlias extends StyleElement {
     resultNamespaceBinding = new NamespaceBinding(resultPrefix, resultURI)
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkTopLevel(null)
   }
 
   def compile(exec: Executable, decl: Declaration): Expression = null
 
-  protected def index(decl: Declaration, top: PrincipalStylesheetModule) {
+  protected def index(decl: Declaration, top: PrincipalStylesheetModule): Unit = {
     top.addNamespaceAlias(decl)
   }
 }

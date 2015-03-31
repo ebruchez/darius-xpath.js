@@ -89,7 +89,7 @@ object Elementary {
    * @param op1 any number
    * @param op2 any number
    */
-  def completeInPlaceAdd(op1: BigInteger, op2: BigInteger) {
+  def completeInPlaceAdd(op1: BigInteger, op2: BigInteger): Unit = {
     if (op1.sign == 0) {
       require( op2.numberLength >= 0)
       require( op2.numberLength <= op2.digits.length)
@@ -120,7 +120,7 @@ object Elementary {
    * @param op1 should have enough space to save the result
    * @param op2
    */
-  def completeInPlaceSubtract(op1: BigInteger, op2: BigInteger) {
+  def completeInPlaceSubtract(op1: BigInteger, op2: BigInteger): Unit = {
     val resultSign = op1.compareTo(op2)
     if (op1.sign == 0) {
       System.arraycopy(op2.digits, 0, op1.digits, 0, op2.numberLength)
@@ -150,7 +150,7 @@ object Elementary {
    * @param op1 the input minuend, and the output result.
    * @param op2 the addend
    */
-  def inplaceAdd(op1: BigInteger, op2: BigInteger) {
+  def inplaceAdd(op1: BigInteger, op2: BigInteger): Unit = {
     add(op1.digits, op1.digits, op1.numberLength, op2.digits, op2.numberLength)
     op1.numberLength = Math.min(Math.max(op1.numberLength, op2.numberLength) + 1, op1.digits.length)
     op1.cutOffLeadingZeroes()
@@ -161,7 +161,7 @@ object Elementary {
    * Performs: {@code op1 += addend}. The number must to have place to hold a
    * possible carry.
    */
-  def inplaceAdd(op1: BigInteger, addend: Int) {
+  def inplaceAdd(op1: BigInteger, addend: Int): Unit = {
     val carry = inplaceAdd(op1.digits, op1.numberLength, addend)
     if (carry == 1) {
       op1.digits(op1.numberLength) = 1
@@ -195,7 +195,7 @@ object Elementary {
    * @param op1 the input minuend, and the output result.
    * @param op2 the subtrahend
    */
-  def inplaceSubtract(op1: BigInteger, op2: BigInteger) {
+  def inplaceSubtract(op1: BigInteger, op2: BigInteger): Unit = {
     subtract(op1.digits, op1.digits, op1.numberLength, op2.digits, op2.numberLength)
     op1.cutOffLeadingZeroes()
     op1.unCache()
@@ -323,7 +323,7 @@ object Elementary {
                               a: Array[Int],
                               aSize: Int,
                               b: Array[Int],
-                              bSize: Int) {
+                              bSize: Int): Unit = {
     var i: Int = 0
     var borrow:Long = 0
     if (aSize < bSize) {
@@ -381,7 +381,7 @@ object Elementary {
                        a: Array[Int],
                        aSize: Int,
                        b: Array[Int],
-                       bSize: Int) {
+                       bSize: Int): Unit = {
     var i: Int = 0
     var borrow:Long = 0
     i = 0

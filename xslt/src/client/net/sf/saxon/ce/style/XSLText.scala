@@ -29,12 +29,12 @@ class XSLText extends XSLLeafNodeConstructor {
    */
   protected def getReturnedItemType(): ItemType = NodeKindTest.TEXT
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     checkAttribute("disable-output-escaping", "b")
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     value = StringValue.EMPTY_STRING
     for (child <- allChildren()) {
       if (child.isInstanceOf[StyleElement]) {

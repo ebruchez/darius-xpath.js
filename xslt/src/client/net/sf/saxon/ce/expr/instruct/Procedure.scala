@@ -45,14 +45,14 @@ abstract class Procedure extends Container with InstructionInfo {
    */
   def getContainerGranularity(): Int = 2
 
-  def setBody(body: Expression) {
+  def setBody(body: Expression): Unit = {
     this.body = body
     body.setContainer(this)
   }
 
   def getBody(): Expression = body
 
-  def allocateSlots(reserved: Int) {
+  def allocateSlots(reserved: Int): Unit = {
     numberOfSlots = ExpressionTool.allocateSlots(body, reserved)
   }
 

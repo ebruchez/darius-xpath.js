@@ -55,7 +55,7 @@ class RoleLocator(var kind: Int, var operation: AnyRef, var operand: Int) {
    * Set the error code to be produced if a type error is detected
    * @param code The error code
    */
-  def setErrorCode(code: String) {
+  def setErrorCode(code: String): Unit = {
     if (code != null) {
       _errorCode = code
     }

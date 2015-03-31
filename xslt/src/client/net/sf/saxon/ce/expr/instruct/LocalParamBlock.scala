@@ -83,7 +83,7 @@ class LocalParamBlock(params: Array[LocalParam]) extends Instruction {
    * @param offer The type of rewrite being offered
    * @throws client.net.sf.saxon.ce.trans.XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     for (c <- 0 until children.length) {
       children(c) = doPromotion(children(c), offer).asInstanceOf[LocalParam]
     }

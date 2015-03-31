@@ -92,7 +92,7 @@ object Version {
    *
    * @param args not used
    */
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     System.err.println(getProductTitle)
   }
 }

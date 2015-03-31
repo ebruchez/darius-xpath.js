@@ -29,7 +29,7 @@ object CallTemplate {
       var tunnelParams: ParameterSet, 
       var evaluationContext: XPathContext) extends TailCall {
 
-    def setEvaluationContext(evaluationContext: XPathContext) {
+    def setEvaluationContext(evaluationContext: XPathContext): Unit = {
       this.evaluationContext = evaluationContext
     }
 
@@ -58,7 +58,7 @@ class CallTemplate(var template: Template, var useTailRecursion: Boolean) extend
 
   private var tunnelParams: Array[WithParam] = null
 
-  def setUseTailRecursion(useIt: Boolean) {
+  def setUseTailRecursion(useIt: Boolean): Unit = {
     useTailRecursion = useIt
   }
 
@@ -67,7 +67,7 @@ class CallTemplate(var template: Template, var useTailRecursion: Boolean) extend
    * @param actualParams the parameters that are not tunnel parameters
    * @param tunnelParams the tunnel parameters
    */
-  def setActualParameters(actualParams: Array[WithParam], tunnelParams: Array[WithParam]) {
+  def setActualParameters(actualParams: Array[WithParam], tunnelParams: Array[WithParam]): Unit = {
     this.actualParams = actualParams
     this.tunnelParams = tunnelParams
     for (actualParam <- actualParams) {
@@ -173,7 +173,7 @@ class CallTemplate(var template: Template, var useTailRecursion: Boolean) extend
    * @param offer The type of rewrite being offered
    * @throws client.net.sf.saxon.ce.trans.XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     WithParam.promoteParams(this, actualParams, offer)
     WithParam.promoteParams(this, tunnelParams, offer)
   }
@@ -183,7 +183,7 @@ class CallTemplate(var template: Template, var useTailRecursion: Boolean) extend
    * @param context the dynamic context for this transformation
    * @throws XPathException if a dynamic error occurs
    */
-  def process(context: XPathContext) {
+  def process(context: XPathContext): Unit = {
     val t = getTargetTemplate
     val c2 = context.newContext()
     c2.setParameters(t.getNumberOfSlots, assembleParams(context, actualParams), assembleTunnelParams(context, 

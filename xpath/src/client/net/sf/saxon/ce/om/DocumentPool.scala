@@ -26,7 +26,7 @@ class DocumentPool {
    * @param doc The DocumentInfo for the document in question
    * @param uri The document-uri property of the document.
    */
-  def add(doc: DocumentInfo, uri: String) {
+  def add(doc: DocumentInfo, uri: String): Unit = {
     if (uri != null) {
       documentNameMap.put(new DocumentURI(uri), doc)
     }
@@ -37,7 +37,7 @@ class DocumentPool {
    * @param doc The DocumentInfo for the document in question
    * @param uri The document-uri property of the document.
    */
-  def add(doc: DocumentInfo, uri: DocumentURI) {
+  def add(doc: DocumentInfo, uri: DocumentURI): Unit = {
     if (uri != null) {
       documentNameMap.put(uri, doc)
     }
@@ -106,7 +106,7 @@ class DocumentPool {
    * false
    * @param uri the URI of the unavailable document
    */
-  def markUnavailable(uri: DocumentURI) {
+  def markUnavailable(uri: DocumentURI): Unit = {
     unavailableDocuments.add(uri)
   }
 

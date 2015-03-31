@@ -25,28 +25,28 @@ class AbsentExtensionElement extends StyleElement {
   /**
    * Process the attributes of this element and all its children
    */
-  def processAllAttributes() {
+  def processAllAttributes(): Unit = {
     if (isTopLevel && forwardsCompatibleModeIsEnabled()) {
     } else {
       super.processAllAttributes()
     }
   }
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
   }
 
   /**
    * Recursive walk through the stylesheet to validate all nodes
    * @param decl
    */
-  def validateSubtree(decl: Declaration) {
+  def validateSubtree(decl: Declaration): Unit = {
     if (isTopLevel && forwardsCompatibleModeIsEnabled()) {
     } else {
       super.validateSubtree(decl)
     }
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
   }
 
   def compile(exec: Executable, decl: Declaration): Expression = {

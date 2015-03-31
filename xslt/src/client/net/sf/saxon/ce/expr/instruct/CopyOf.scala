@@ -37,7 +37,7 @@ class CopyOf(var select: Expression, var copyNamespaces: Boolean) extends Instru
    * Set the static base URI of the xsl:copy-of instruction
    * @param base the static base URI
    */
-  def setStaticBaseUri(base: String) {
+  def setStaticBaseUri(base: String): Unit = {
     staticBaseUri = base
   }
 
@@ -67,7 +67,7 @@ class CopyOf(var select: Expression, var copyNamespaces: Boolean) extends Instru
 
   def getDependencies(): Int = select.getDependencies
 
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     select = doPromotion(select, offer)
   }
 

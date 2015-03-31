@@ -82,7 +82,7 @@ object FormatNumber {
     pic.format(absN, dfs, minusSign)
   }
 
-  private def grumble(s: String) {
+  private def grumble(s: String): Unit = {
     throw new XPathException("format-number picture: " + s, "XTDE1310")
   }
 
@@ -428,7 +428,7 @@ object FormatNumber {
      * @param _dval the decimal value
      * @param fsb  the FastStringBuffer to contain the result
      */
-    private def formatDecimal(_dval: BigDecimal, fsb: FastStringBuffer) {
+    private def formatDecimal(_dval: BigDecimal, fsb: FastStringBuffer): Unit = {
       val dval = _dval.setScale(maxFractionPartSize, BigDecimal.ROUND_HALF_EVEN)
       DecimalValue.decimalToString(dval, fsb)
       val point = fsb.indexOf('.')
@@ -469,7 +469,7 @@ object FormatNumber {
      * @param value the integer value
      * @param fsb   the FastStringBuffer to contain the result
      */
-    private def formatInteger(value: NumericValue, fsb: FastStringBuffer) {
+    private def formatInteger(value: NumericValue, fsb: FastStringBuffer): Unit = {
       fsb.append(value.getStringValue)
       val leadingZeroes = minWholePartSize - fsb.length
       fsb.prependRepeated('0', leadingZeroes)
@@ -530,7 +530,7 @@ class FormatNumber extends SystemFunction {
 
   private var staticContext: StaticContext = _
 
-  override def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor): Unit = {
     if (staticContext == null) {
       staticContext = visitor.getStaticContext
     }

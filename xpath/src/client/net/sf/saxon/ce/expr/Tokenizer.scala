@@ -171,7 +171,7 @@ class Tokenizer {
    * @throws XPathException if a lexical error occurs, e.g. unmatched
    *     string quotes
    */
-  def tokenize(input: String, start: Int, end: Int) {
+  def tokenize(input: String, start: Int, end: Int): Unit = {
     nextToken = Token.EOF
     nextTokenValue = null
     nextTokenStartOffset = 0
@@ -188,7 +188,7 @@ class Tokenizer {
    *
    * @throws XPathException if a lexical error is detected
    */
-  def next() {
+  def next(): Unit = {
     precedingToken = currentToken
     currentToken = nextToken
     currentTokenValue = nextTokenValue
@@ -267,7 +267,7 @@ class Tokenizer {
    * syntax.
    * @throws XPathException if a lexical error occurs
    */
-  def lookAhead() {
+  def lookAhead(): Unit = {
     precedingToken = nextToken
     nextTokenValue = null
     nextTokenStartOffset = inputOffset

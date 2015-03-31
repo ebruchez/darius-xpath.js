@@ -32,7 +32,7 @@ class UserFunctionCall extends FunctionCall {
    *
    * @param type the static type of the result of the function call
    */
-  def setStaticType(`type`: SequenceType) {
+  def setStaticType(`type`: SequenceType): Unit = {
     staticType = `type`
   }
 
@@ -41,7 +41,7 @@ class UserFunctionCall extends FunctionCall {
    *
    * @param compiledFunction the function being called
    */
-  def setFunction(compiledFunction: UserFunction) {
+  def setFunction(compiledFunction: UserFunction): Unit = {
     function = compiledFunction
   }
 
@@ -51,7 +51,7 @@ class UserFunctionCall extends FunctionCall {
    * @param compiledFunction the function being called
    * @param visitor          an expression visitor
    */
-  def checkFunctionCall(compiledFunction: UserFunction, visitor: ExpressionVisitor) {
+  def checkFunctionCall(compiledFunction: UserFunction, visitor: ExpressionVisitor): Unit = {
     val n = compiledFunction.getNumberOfArguments
     for (i <- 0 until n) {
       val role = new RoleLocator(RoleLocator.FUNCTION, compiledFunction.getFunctionName, i)
@@ -64,7 +64,7 @@ class UserFunctionCall extends FunctionCall {
   /**
    * Method called during the type checking phase
    */
-  def checkArguments(visitor: ExpressionVisitor) {
+  def checkArguments(visitor: ExpressionVisitor): Unit = {
   }
 
   /**
@@ -202,7 +202,7 @@ class UserFunctionCall extends FunctionCall {
    * @param context the XPath dynamic context
    * @throws XPathException
    */
-  def process(context: XPathContext) {
+  def process(context: XPathContext): Unit = {
     val actualArgs = evaluateArguments(context)
     if (tailCall) {
       context.requestTailCall(function, actualArgs)

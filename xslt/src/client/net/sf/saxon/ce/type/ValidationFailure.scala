@@ -39,11 +39,11 @@ class ValidationFailure(@BeanProperty var message: String) extends ConversionRes
     "ValidationException" + (if (message == null) "" else ": " + message)
   }
 
-  def setErrorCode(errorCode: String) {
+  def setErrorCode(errorCode: String): Unit = {
     this.errorCode = new StructuredQName("err", NamespaceConstant.ERR, errorCode)
   }
 
-  def setErrorCodeQName(errorCode: StructuredQName) {
+  def setErrorCodeQName(errorCode: StructuredQName): Unit = {
     this.errorCode = errorCode
   }
 

@@ -75,7 +75,7 @@ class ValueComparison(p1: Expression, op: Int, p2: Expression) extends BinaryExp
    * Set the AtomicComparer used to compare atomic values
    * @param comparer the AtomicComparer
    */
-  def setAtomicComparer(comparer: AtomicComparer) {
+  def setAtomicComparer(comparer: AtomicComparer): Unit = {
     this.comparer = comparer
   }
 

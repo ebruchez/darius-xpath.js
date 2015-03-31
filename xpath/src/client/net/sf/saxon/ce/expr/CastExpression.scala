@@ -18,7 +18,7 @@ object CastExpression {
 
   var castingTable: HashMap[AtomicType, Array[AtomicType]] = new HashMap[AtomicType, Array[AtomicType]](25)
 
-  def addAllowedCasts(source: AtomicType, target: Array[AtomicType]) {
+  def addAllowedCasts(source: AtomicType, target: Array[AtomicType]): Unit = {
     castingTable.put(source, target)
   }
 

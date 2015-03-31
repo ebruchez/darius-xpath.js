@@ -40,7 +40,7 @@ class RuleManager {
   /**
    * Set up a new table of handlers.
    */
-  def resetHandlers() {
+  def resetHandlers(): Unit = {
     unnamedMode = new Mode(Mode.UNNAMED_MODE, Mode.UNNAMED_MODE_NAME)
     modes = new HashMap[StructuredQName, Mode](5)
   }
@@ -101,7 +101,7 @@ class RuleManager {
       module: StylesheetModule, 
       priority: Double, 
       ixslPreventDefault: Boolean, 
-      ixslEventProperty: String) {
+      ixslEventProperty: String): Unit = {
     if (pattern.isInstanceOf[UnionPattern]) {
       val up = pattern.asInstanceOf[UnionPattern]
       val p1 = up.getLHS
@@ -189,7 +189,7 @@ class RuleManager {
    * Allocate rankings to the rules within each mode. This method must be called when all
    * the rules in each mode are known
    */
-  def computeRankings() {
+  def computeRankings(): Unit = {
     unnamedMode.computeRankings()
     val iter = modes.values.iterator()
     while (iter.hasNext) {

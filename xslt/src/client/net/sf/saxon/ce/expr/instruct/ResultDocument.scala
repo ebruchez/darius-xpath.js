@@ -83,7 +83,7 @@ class ResultDocument(var href: Expression,
    * Set the expression that constructs the content
    * @param content the expression defining the content of the result document
    */
-  def setContentExpression(content: Expression) {
+  def setContentExpression(content: Expression): Unit = {
     this.content = content
     adoptChildExpression(content)
   }
@@ -137,7 +137,7 @@ class ResultDocument(var href: Expression,
    * @param offer The type of rewrite being offered
    * @throws XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     content = doPromotion(content, offer)
     if (href != null) {
       href = doPromotion(href, offer)
@@ -287,7 +287,7 @@ class ResultDocument(var href: Expression,
     null
   }
 
-  private def addResultDocument(context: XPathContext, documentKey: DocumentURI, doc: Document) {
+  private def addResultDocument(context: XPathContext, documentKey: DocumentURI, doc: Document): Unit = {
     val controller = context.getController
     if (controller.getDocumentPool.find(documentKey.toString) != 
       null) {

@@ -83,7 +83,7 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
     this
   }
 
-  def setAtomicComparer(comparer: AtomicComparer) {
+  def setAtomicComparer(comparer: AtomicComparer): Unit = {
     this.comparer = comparer
   }
 

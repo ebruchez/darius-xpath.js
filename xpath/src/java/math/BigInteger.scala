@@ -1238,7 +1238,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     new BigInteger(sign, numberLength, copyDigits)
   }
 
-  def cutOffLeadingZeroes() {
+  def cutOffLeadingZeroes(): Unit = {
     while ((numberLength > 0) && (digits({numberLength  -= 1;numberLength}) == 0)) {
     }
 
@@ -1284,14 +1284,14 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
     if ((sign == 0)) this else BitLevel.shiftLeftOneBit(this)
   }
 
-  def unCache() {
+  def unCache(): Unit = {
     firstNonzeroDigit = -2
   }
 
   /**
    * Puts a big-endian byte array into a little-endian applying two complement.
    */
-  private def putBytesNegativeToIntegers(byteValues: Array[Byte]) {
+  private def putBytesNegativeToIntegers(byteValues: Array[Byte]): Unit = {
     var bytesLen = byteValues.length
     val highBytes = bytesLen & 3
     numberLength = (bytesLen >> 2) + (if ((highBytes == 0)) 0 else 1)
@@ -1345,7 +1345,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
   /**
    * Puts a big-endian byte array into a little-endian int array.
    */
-  private def putBytesPositiveToIntegers(byteValues: Array[Byte]) {
+  private def putBytesPositiveToIntegers(byteValues: Array[Byte]): Unit = {
     var bytesLen = byteValues.length
     val highBytes = bytesLen & 3
     numberLength = (bytesLen >> 2) + (if ((highBytes == 0)) 0 else 1)
@@ -1370,7 +1370,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
   /**
    * @see BigInteger#BigInteger(String, int)
    */
-  private def setFromString(s: String, radix: Int) {
+  private def setFromString(s: String, radix: Int): Unit = {
     var _sign: Int = 0
     var _digits: Array[Int] = Array()
     var _numberLength: Int = 0

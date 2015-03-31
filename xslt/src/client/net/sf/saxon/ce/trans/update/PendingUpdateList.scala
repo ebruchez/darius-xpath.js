@@ -26,7 +26,7 @@ class PendingUpdateList(config: Configuration) {
    * @param action the Pending Update Action to be added to the list
    * @throws client.net.sf.saxon.ce.trans.XPathException if the pending update action conflicts with an action that is already on the list
    */
-  def add(action: PendingUpdateAction) {
+  def add(action: PendingUpdateAction): Unit = {
     list.add(action)
   }
 
@@ -34,7 +34,7 @@ class PendingUpdateList(config: Configuration) {
    * Apply the pending updates
    * @param context the XPath dynamic evaluation context
    */
-  def apply(context: XPathContext) {
+  def apply(context: XPathContext): Unit = {
     synchronized {
       var state = ""
       try {

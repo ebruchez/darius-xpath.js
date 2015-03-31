@@ -59,7 +59,7 @@ object UnicodeDataParserFromXML {
   /**
    * Reads exclusion list and stores the data
    */
-  private def readExclusionList(s: String, isExcluded: BitSet) {
+  private def readExclusionList(s: String, isExcluded: BitSet): Unit = {
     for (tok <- Whitespace.tokenize(s)) {
       val value = Integer.parseInt(tok, 32)
       isExcluded.set(value)
@@ -69,7 +69,7 @@ object UnicodeDataParserFromXML {
   /**
    * Reads compatibility list and stores the data
    */
-  private def readCompatibilityList(s: String, isCompatible: BitSet) {
+  private def readCompatibilityList(s: String, isCompatible: BitSet): Unit = {
     for (tok <- Whitespace.tokenize(s)) {
       val value = Integer.parseInt(tok, 32)
       isCompatible.set(value)
@@ -79,7 +79,7 @@ object UnicodeDataParserFromXML {
   /**
    * Read canonical class table (mapping from character codes to their canonical class)
    */
-  private def readCanonicalClassTable(keyString: String, valueString: String, canonicalClasses: Map[Int, Integer]) {
+  private def readCanonicalClassTable(keyString: String, valueString: String, canonicalClasses: Map[Int, Integer]): Unit = {
     val keys = new ArrayList[Int](5000)
     for (tok <- Whitespace.tokenize(keyString)) {
       val value = Integer.parseInt(tok, 32)
@@ -111,7 +111,7 @@ object UnicodeDataParserFromXML {
       decompose: Map[Int, String],
       compose: Map[Int, Integer],
       isExcluded: BitSet, 
-      isCompatibility: BitSet) {
+      isCompatibility: BitSet): Unit = {
     var k = 0
     val values = new ArrayList[String](1000)
     for (tok <- Whitespace.tokenize(decompositionValuesString)) {

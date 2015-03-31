@@ -40,7 +40,7 @@ class DocumentOrderIterator(base: SequenceIterator, var comparer: NodeOrderCompa
   /**
    * Swap two nodes (needed to implement the Sortable interface)
    */
-  def swap(a: Int, b: Int) {
+  def swap(a: Int, b: Int): Unit = {
     sequence.swap(a, b)
   }
 

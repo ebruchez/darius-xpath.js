@@ -99,7 +99,7 @@ class XSLResultDocument extends StyleElement {
    */
   protected def getReturnedItemType(): ItemType = null
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     for (att <- fans) {
       checkAttribute(att, "s")
     }
@@ -111,7 +111,7 @@ class XSLResultDocument extends StyleElement {
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     href = typeCheck(href)
     methodExpression = typeCheck(methodExpression)
     getExecutable.setCreatesSecondaryResult(true)

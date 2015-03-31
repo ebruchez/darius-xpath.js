@@ -214,7 +214,7 @@ class SequenceExtent(@transient var value: Array[Item]) extends Sequence {
    * @param a the position of the first item to be swapped
    * @param b the position of the second item to be swapped
    */
-  def swap(a: Int, b: Int) {
+  def swap(a: Int, b: Int): Unit = {
     val temp = value(a)
     value(a) = value(b)
     value(b) = temp

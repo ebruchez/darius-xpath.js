@@ -81,7 +81,7 @@ class CardinalityChecker private (sequence: Expression, @BeanProperty var requir
    * as exactly-one() which have their own error codes)
    * @param code the error code to be used
    */
-  def setErrorCode(code: String) {
+  def setErrorCode(code: String): Unit = {
     role.setErrorCode(code)
   }
 

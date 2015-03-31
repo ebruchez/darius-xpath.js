@@ -34,7 +34,7 @@ class StartTagBuffer extends ProxyReceiver {
    * Set the pipeline configuration
    * @param pipe the pipeline configuration
    */
-  def setPipelineConfiguration(pipe: PipelineConfiguration) {
+  def setPipelineConfiguration(pipe: PipelineConfiguration): Unit = {
     super.setPipelineConfiguration(pipe)
     bufferedAttributes = new AttributeCollection()
   }
@@ -42,7 +42,7 @@ class StartTagBuffer extends ProxyReceiver {
   /**
    * startElement
    */
-  def startElement(qName: StructuredQName, properties: Int) {
+  def startElement(qName: StructuredQName, properties: Int): Unit = {
     elementNameCode = qName
     elementProperties = properties
     bufferedAttributes.clear()
@@ -50,7 +50,7 @@ class StartTagBuffer extends ProxyReceiver {
     attCount = 0
   }
 
-  override def namespace(nsBinding: NamespaceBinding, properties: Int) {
+  override def namespace(nsBinding: NamespaceBinding, properties: Int): Unit = {
     bufferedNamespaces.add(nsBinding)
   }
 
@@ -63,7 +63,7 @@ class StartTagBuffer extends ProxyReceiver {
    * @throws IllegalStateException: attempt to output an attribute when there is no open element
    *                                start tag
    */
-  def attribute(nameCode: StructuredQName, value: CharSequence) {
+  def attribute(nameCode: StructuredQName, value: CharSequence): Unit = {
     bufferedAttributes.addAttribute(nameCode, value.toString)
   }
 
@@ -71,7 +71,7 @@ class StartTagBuffer extends ProxyReceiver {
    * startContent: Add any namespace undeclarations needed to stop
    * namespaces being inherited from parent elements
    */
-  def startContent() {
+  def startContent(): Unit = {
     nextReceiver.startElement(elementNameCode, elementProperties)
     val length = bufferedAttributes.getLength
     for (i <- 0 until length) {

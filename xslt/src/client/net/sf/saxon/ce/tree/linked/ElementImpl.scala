@@ -35,7 +35,7 @@ class ElementImpl extends ParentNodeImpl {
    * Set the name code. Used when creating a dummy element in the Stripper
    * @param name the new element name
    */
-  def setNodeName(name: StructuredQName) {
+  def setNodeName(name: StructuredQName): Unit = {
     this.elementName = name
   }
 
@@ -43,7 +43,7 @@ class ElementImpl extends ParentNodeImpl {
    * Set the attribute list
    * @param atts the list of attributes of this element (not including namespace attributes)
    */
-  def setAttributeList(atts: AttributeCollection) {
+  def setAttributeList(atts: AttributeCollection): Unit = {
     this.attributeList = atts
   }
 
@@ -57,7 +57,7 @@ class ElementImpl extends ParentNodeImpl {
   def initialise(qName: StructuredQName, 
       atts: AttributeCollection, 
       parent: NodeInfo, 
-      sequenceNumber: Int) {
+      sequenceNumber: Int): Unit = {
     setNodeName(qName)
     setRawParent(parent.asInstanceOf[ParentNodeImpl])
     setRawSequenceNumber(sequenceNumber)
@@ -68,7 +68,7 @@ class ElementImpl extends ParentNodeImpl {
    * Set location information for this node
    * @param systemId the base URI
    */
-  def setLocation(systemId: String) {
+  def setLocation(systemId: String): Unit = {
     val root = getRawParent.getPhysicalRoot
     root.setSystemId(getRawSequenceNumber, systemId)
   }
@@ -78,7 +78,7 @@ class ElementImpl extends ParentNodeImpl {
    * implements the javax.xml.transform.Source interface, allowing a node to be
    * used directly as the Source of a transformation
    */
-  def setSystemId(uri: String) {
+  def setSystemId(uri: String): Unit = {
     getPhysicalRoot.setSystemId(getRawSequenceNumber, uri)
   }
 
@@ -132,7 +132,7 @@ class ElementImpl extends ParentNodeImpl {
    * Get a character string that uniquely identifies this node
    * @param buffer to contain the generated ID
    */
-  def generateId(buffer: FastStringBuffer) {
+  def generateId(buffer: FastStringBuffer): Unit = {
     val sequence = getRawSequenceNumber
     if (sequence >= 0) {
       getPhysicalRoot.generateId(buffer)
@@ -156,7 +156,7 @@ class ElementImpl extends ParentNodeImpl {
    * @param out The outputter
    * @param copyOptions
    */
-  def copy(out: Receiver, copyOptions: Int) {
+  def copy(out: Receiver, copyOptions: Int): Unit = {
     out.startElement(getNodeName, 0)
     var childCopyOptions = copyOptions & ~CopyOptions.ALL_NAMESPACES
     if ((copyOptions & CopyOptions.LOCAL_NAMESPACES) != 0) {
@@ -194,7 +194,7 @@ class ElementImpl extends ParentNodeImpl {
    * @param namespaces the list of namespace codes
    * @param namespacesUsed the number of entries in the list that are used
    */
-  def setNamespaceDeclarations(namespaces: Array[NamespaceBinding], namespacesUsed: Int) {
+  def setNamespaceDeclarations(namespaces: Array[NamespaceBinding], namespacesUsed: Int): Unit = {
     namespaceList = Array.ofDim[NamespaceBinding](namespacesUsed)
     System.arraycopy(namespaces, 0, namespaceList, 0, namespacesUsed)
   }

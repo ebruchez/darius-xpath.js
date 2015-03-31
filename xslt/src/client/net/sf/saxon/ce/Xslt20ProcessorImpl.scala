@@ -65,14 +65,14 @@ object Xslt20ProcessorImpl {
 
   /* native */ def bindTemplateToWindowEvent(eventName: String, target: JavaScriptObject): String
 
-  def relayNonDomEvent(name: String, obj: JavaScriptObject, eventArg: JavaScriptObject) {
+  def relayNonDomEvent(name: String, obj: JavaScriptObject, eventArg: JavaScriptObject): Unit = {
     val event = if ((eventArg == null)) getWindowEvent else eventArg
     Controller.relayNonDomEvent(name, obj, event)
   }
 
   /* native */ def getWindowEvent(): JavaScriptObject
 
-  def handleException(err: Exception, prefix: String) {
+  def handleException(err: Exception, prefix: String): Unit = {
     if (err.isInstanceOf[JavaScriptAPIException]) {
       return
     }
@@ -136,7 +136,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
 
   var localController: Controller = new Controller(config, true)
 
-  def onModuleLoad() {
+  def onModuleLoad(): Unit = {
     if (LogConfiguration.loggingIsEnabled()) {
       SaxonceApi.setAnyExternalErrorHandler()
       LogController.initLogger()
@@ -172,7 +172,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
 
   var successOwner: XSLT20Processor = null
 
-  def setSuccess(sFunction: JavaScriptObject, sOwner: XSLT20Processor) {
+  def setSuccess(sFunction: JavaScriptObject, sOwner: XSLT20Processor): Unit = {
     successCallback = sFunction
     successOwner = sOwner
   }
@@ -181,7 +181,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
    * The entry point for transforms initiate on module load,
    * fetches settings from the <code>application/xslt+xml style</code> element
    */
-  def doTransformation() {
+  def doTransformation(): Unit = {
     val logger = Logger.getLogger("Xstl20Processor")
     try {
       val scripts = getScriptsOnLoad
@@ -246,7 +246,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
   def continueWithSourceDocument(sourceDoc: DocumentInfo, 
       styleURI: String, 
       initialMode: String, 
-      initialTemplate: String) {
+      initialTemplate: String): Unit = {
   }
 
   /**
@@ -254,7 +254,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
    * use transformToFragment or updateHTMLDocument for html dom
    * @param sourceDoc
    */
-  def updateHTMLDocument(sourceDoc: JavaScriptObject, targetDoc: Document, cmd: APIcommand) {
+  def updateHTMLDocument(sourceDoc: JavaScriptObject, targetDoc: Document, cmd: APIcommand): Unit = {
     if (targetDoc == null) {
       targetDoc = Document.get
     }
@@ -285,7 +285,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
    * any previous stylesheet for this processor
    * @param doc
    */
-  def importStylesheet(doc: JavaScriptObject) {
+  def importStylesheet(doc: JavaScriptObject): Unit = {
     deregisterEventHandlers()
     try {
       importedStylesheet = SaxonceApi.getDocSynchronously(doc, config)
@@ -325,12 +325,12 @@ class Xslt20ProcessorImpl extends EntryPoint {
         val hr = new HTTPHandler()
         hr.doGet(asyncSourceURI, new RequestCallback() {
 
-          def onError(request: Request, exception: Throwable) {
+          def onError(request: Request, exception: Throwable): Unit = {
             val msg = "HTTP Error " + exception.getMessage + " for URI " + URI
             handleException(new RuntimeException(msg), "onError")
           }
 
-          def onResponseReceived(request: Request, response: Response) {
+          def onResponseReceived(request: Request, response: Response): Unit = {
             val statusCode = response.getStatusCode
             if (statusCode == 200) {
               Logger.getLogger("ResponseReceived").fine("GET Ok for: " + URI)
@@ -393,7 +393,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
 
   private var registeredProcessorForNonDomEvents: Boolean = false
 
-  private def registerNonDOMevents(controller: Controller) {
+  private def registerNonDOMevents(controller: Controller): Unit = {
     for (eventMode <- registeredEventModes) {
       val nonDomRules = eventMode.getVirtualRuleSet
       if (nonDomRules != null) {
@@ -411,7 +411,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
     }
   }
 
-  private def registerEventHandlers(controller: Controller) {
+  private def registerEventHandlers(controller: Controller): Unit = {
     if (registeredEventModes != null) {
       return
     }
@@ -425,7 +425,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
         principleEventListener = true
         DOM.setEventListener(docElement.asInstanceOf[com.google.gwt.user.client.Element], new EventListener() {
 
-          def onBrowserEvent(event: Event) {
+          def onBrowserEvent(event: Event): Unit = {
             val eTarget = event.getEventTarget
             var eventNode: Node = null
             if (Node.is(eTarget)) {
@@ -456,7 +456,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
     }
   }
 
-  def deregisterEventHandlers() {
+  def deregisterEventHandlers(): Unit = {
   }
 
   /**
@@ -511,7 +511,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
     result
   }
 
-  def bubbleApplyTemplates(node: Node, event: Event) {
+  def bubbleApplyTemplates(node: Node, event: Event): Unit = {
     if (principleEventListener) {
       Controller.relayEvent(node, event)
     }
@@ -549,7 +549,7 @@ class Xslt20ProcessorImpl extends EntryPoint {
   def applyEventTemplates(mode: String, 
       start: NodeInfo, 
       event: JavaScriptObject, 
-      `object`: JavaScriptObject) {
+      `object`: JavaScriptObject): Unit = {
     try {
       if (start == null) {
         start = config.getHostPage

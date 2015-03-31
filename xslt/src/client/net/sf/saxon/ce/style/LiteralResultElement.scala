@@ -59,7 +59,7 @@ class LiteralResultElement extends StyleElement {
   /**
    * Process the attribute list
    */
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     val atts = getAttributeList
     val num = atts.getLength
     if (num == 0) {
@@ -118,7 +118,7 @@ class LiteralResultElement extends StyleElement {
    * Validate that this node is OK
    * @param decl
    */
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     toplevel = (getParent.isInstanceOf[XSLStylesheet])
     resultNameCode = getNodeName
     val elementURI = getURI
@@ -185,7 +185,7 @@ class LiteralResultElement extends StyleElement {
    * data elements.
    * @param decl
    */
-  protected def validateChildren(decl: Declaration) {
+  protected def validateChildren(decl: Declaration): Unit = {
     if (!toplevel) {
       super.validateChildren(decl)
     }

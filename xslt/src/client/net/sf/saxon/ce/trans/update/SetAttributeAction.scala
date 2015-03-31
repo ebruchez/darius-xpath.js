@@ -31,7 +31,7 @@ class SetAttributeAction(element: Element,
    *
    * @param context the XPath evaluation context
    */
-  def apply(context: XPathContext) {
+  def apply(context: XPathContext): Unit = {
     if (value == null) {
       targetNode.removeAttribute(localName)
     } else if (NamespaceConstant.HTML_PROP == uri) {

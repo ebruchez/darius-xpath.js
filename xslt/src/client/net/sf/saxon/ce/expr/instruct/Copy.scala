@@ -169,7 +169,7 @@ class Copy(var select: Expression, var copyNamespaces: Boolean, inheritNamespace
   protected def outputNamespaceNodes(context: XPathContext, 
       receiver: Receiver, 
       nameCode: StructuredQName, 
-      copiedNode: NodeInfo) {
+      copiedNode: NodeInfo): Unit = {
     if (copyNamespaces) {
       NamespaceIterator.sendNamespaces(copiedNode, receiver)
     } else {

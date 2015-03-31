@@ -57,7 +57,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    * Set the Configuration that contains this document
    * @param config the Saxon configuration
    */
-  def setConfiguration(config: Configuration) {
+  def setConfiguration(config: Configuration): Unit = {
     this.config = config
     documentNumber = config.allocateDocumentNumber()
   }
@@ -81,7 +81,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
   /**
    * Set the system id (base URI) of this node
    */
-  def setSystemId(uri: String) {
+  def setSystemId(uri: String): Unit = {
     if (uri == null) {
       uri = ""
     }
@@ -99,7 +99,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    * Set the base URI of this document node
    * @param uri the new base URI
    */
-  def setBaseURI(uri: String) {
+  def setBaseURI(uri: String): Unit = {
     baseURI = uri
   }
 
@@ -119,7 +119,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    * @param seq the sequence number of the element
    * @param uri the system identifier (base URI) of the element
    */
-  def setSystemId(seq: Int, uri: String) {
+  def setSystemId(seq: Int, uri: String): Unit = {
     if (uri == null) {
       uri = ""
     }
@@ -175,7 +175,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    *  @param buffer a buffer into which will be placed a string based on the document number
    *
    */
-  def generateId(buffer: FastStringBuffer) {
+  def generateId(buffer: FastStringBuffer): Unit = {
     buffer.append('d')
     buffer.append(Long toString documentNumber)
   }
@@ -208,7 +208,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    * Index all the ID attributes. This is done the first time the id() function
    * is used on this document, or the first time that id() is called after a sequence of updates
    */
-  private def indexIDs() {
+  private def indexIDs(): Unit = {
     if (idTable != null) {
       return
     }
@@ -233,7 +233,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    * @param e The Element having a particular unique ID value
    * @param id The unique ID value
    */
-  protected def registerID(e: NodeInfo, id: String) {
+  protected def registerID(e: NodeInfo, id: String): Unit = {
     if (idTable == null) {
       idTable = new HashMap[String, NodeInfo](256)
     }
@@ -258,7 +258,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
   /**
    * Copy this node to a given outputter
    */
-  def copy(out: Receiver, copyOptions: Int) {
+  def copy(out: Receiver, copyOptions: Int): Unit = {
     out.startDocument()
     var next = getFirstChild.asInstanceOf[NodeImpl]
     while (next != null) {
@@ -276,7 +276,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    * @param value The value to be set for the property. May be null, which effectively
    *              removes the existing value for the property.
    */
-  def setUserData(key: String, value: AnyRef) {
+  def setUserData(key: String, value: AnyRef): Unit = {
     if (userData == null) {
       userData = new HashMap(4)
     }

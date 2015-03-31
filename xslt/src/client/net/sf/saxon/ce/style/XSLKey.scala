@@ -38,7 +38,7 @@ class XSLKey extends StyleElement with StylesheetProcedure {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     setObjectName(checkAttribute("name", "q1").asInstanceOf[StructuredQName])
     use = checkAttribute("use", "e").asInstanceOf[Expression]
     `match` = checkAttribute("match", "p1").asInstanceOf[Pattern]
@@ -48,7 +48,7 @@ class XSLKey extends StyleElement with StylesheetProcedure {
 
   def getKeyName(): StructuredQName = getObjectName
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkTopLevel(null)
     if (use != null) {
       if (hasChildNodes()) {
@@ -88,7 +88,7 @@ class XSLKey extends StyleElement with StylesheetProcedure {
     }
   }
 
-  protected def index(decl: Declaration, top: PrincipalStylesheetModule) {
+  protected def index(decl: Declaration, top: PrincipalStylesheetModule): Unit = {
     val keyName = getKeyName
     if (keyName != null) {
       top.getExecutable.getKeyManager.preRegisterKeyDefinition(keyName)
@@ -158,6 +158,6 @@ class XSLKey extends StyleElement with StylesheetProcedure {
    * Optimize the stylesheet construct
    * @param declaration
    */
-  def optimize(declaration: Declaration) {
+  def optimize(declaration: Declaration): Unit = {
   }
 }

@@ -41,7 +41,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
 
   setPipelineConfiguration(nextInChain.getPipelineConfiguration)
 
-  def setSystemId(systemId: String) {
+  def setSystemId(systemId: String): Unit = {
     if (systemId != null && systemId != this.systemId) {
       this.systemId = systemId
       if (nextReceiver != null) {
@@ -50,7 +50,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
     }
   }
 
-  def setPipelineConfiguration(pipe: PipelineConfiguration) {
+  def setPipelineConfiguration(pipe: PipelineConfiguration): Unit = {
     if (pipelineConfiguration != pipe) {
       pipelineConfiguration = pipe
       if (nextReceiver != null) {
@@ -68,7 +68,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
   /**
    * Start of event sequence
    */
-  def open() {
+  def open(): Unit = {
     if (nextReceiver == null) {
       throw new IllegalStateException("TreeReceiver.open(): no underlying receiver provided")
     }
@@ -79,7 +79,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
   /**
    * End of event sequence
    */
-  def close() {
+  def close(): Unit = {
     if (nextReceiver != null) {
       nextReceiver.close()
     }
@@ -89,7 +89,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
   /**
    * Start of a document node.
    */
-  def startDocument() {
+  def startDocument(): Unit = {
     if (level == 0) {
       nextReceiver.startDocument()
     }
@@ -104,7 +104,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
   /**
    * Notify the end of a document node
    */
-  def endDocument() {
+  def endDocument(): Unit = {
     level -= 1
     if (level == 0) {
       nextReceiver.endDocument()
@@ -116,7 +116,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
    * @param qName integer code identifying the name of the element within the name pool.
    * @param properties bit-significant properties of the element node
    */
-  def startElement(qName: StructuredQName, properties: Int) {
+  def startElement(qName: StructuredQName, properties: Int): Unit = {
     if (inStartTag) {
       startContent()
     }
@@ -143,7 +143,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
    * @throws IllegalStateException: attempt to output a namespace when there is no open element
    * start tag
    */
-  def namespace(nsBinding: NamespaceBinding, properties: Int) {
+  def namespace(nsBinding: NamespaceBinding, properties: Int): Unit = {
     val documentLevel = level == 0 || isDocumentLevel(level - 1)
     if (documentLevel || !inStartTag) {
       throw NoOpenStartTagException.makeNoOpenStartTagException(Type.NAMESPACE, nsBinding.getPrefix, 
@@ -161,7 +161,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
    * @throws IllegalStateException: attempt to output an attribute when there is no open element
    * start tag
    */
-  def attribute(nameCode: StructuredQName, value: CharSequence) {
+  def attribute(nameCode: StructuredQName, value: CharSequence): Unit = {
     val documentLevel = level == 0 || isDocumentLevel(level - 1)
     if (documentLevel || !inStartTag) {
       throw NoOpenStartTagException.makeNoOpenStartTagException(Type.ATTRIBUTE, nameCode.getDisplayName, 
@@ -177,7 +177,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
    * it has to detect it itself. Note that this event is reported for every element even if it has
    * no attributes, no namespaces, and no content.
    */
-  def startContent() {
+  def startContent(): Unit = {
     inStartTag = false
     nextReceiver.startContent()
     previousAtomic = false
@@ -186,7 +186,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
   /**
    * End of element
    */
-  def endElement() {
+  def endElement(): Unit = {
     if (inStartTag) {
       startContent()
     }
@@ -198,7 +198,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
   /**
    * Character data
    */
-  def characters(chars: CharSequence) {
+  def characters(chars: CharSequence): Unit = {
     if (chars.length > 0) {
       if (inStartTag) {
         startContent()
@@ -211,7 +211,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
   /**
    * Processing Instruction
    */
-  def processingInstruction(target: String, data: CharSequence) {
+  def processingInstruction(target: String, data: CharSequence): Unit = {
     if (inStartTag) {
       startContent()
     }
@@ -222,7 +222,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
   /**
    * Output a comment
    */
-  def comment(chars: CharSequence) {
+  def comment(chars: CharSequence): Unit = {
     if (inStartTag) {
       startContent()
     }
@@ -233,7 +233,7 @@ class TreeReceiver(var nextReceiver: Receiver) extends SequenceReceiver {
   /**
    * Append an arbitrary item (node or atomic value) to the output
    */
-  def append(item: Item, copyNamespaces: Int) {
+  def append(item: Item, copyNamespaces: Int): Unit = {
     if (item != null) {
       if (item.isInstanceOf[AtomicValue]) {
         if (previousAtomic) {

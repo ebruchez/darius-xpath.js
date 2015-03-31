@@ -97,7 +97,7 @@ class XPathContext(var controller: Controller) {
    * @param localParameters the supplied non-tunnel parameters
    * @param tunnelParameters the supplied tunnel parameters
    */
-  def setParameters(slots: Int, localParameters: ParameterSet, tunnelParameters: ParameterSet) {
+  def setParameters(slots: Int, localParameters: ParameterSet, tunnelParameters: ParameterSet): Unit = {
     openStackFrame(slots)
 //ORBEON XSLT
 //    this.localParameters = localParameters
@@ -112,7 +112,7 @@ class XPathContext(var controller: Controller) {
    * @param variables the array of "slots" to hold the actual variable values. This array will be
    * copied if it is too small to hold all the variables defined in the SlotManager
    */
-  def setStackFrame(size: Int, variables: Array[Sequence]) {
+  def setStackFrame(size: Int, variables: Array[Sequence]): Unit = {
     stackFrame = variables
     if (variables.length != size) {
       if (variables.length > size) {
@@ -132,7 +132,7 @@ class XPathContext(var controller: Controller) {
    * @param numberOfSlots the number of slots needed for the stack frame contents
    * @param numberOfParams the number of parameters required on the new stack frame
    */
-  def resetStackFrameMap(numberOfSlots: Int, numberOfParams: Int) {
+  def resetStackFrameMap(numberOfSlots: Int, numberOfParams: Int): Unit = {
     if (stackFrame.length != numberOfSlots) {
       val v2 = new Array[Sequence](numberOfSlots)
       System.arraycopy(stackFrame, 0, v2, 0, numberOfParams)
@@ -179,7 +179,7 @@ class XPathContext(var controller: Controller) {
    * where there are no parameters
    * @param numberOfSlots the number of slots needed in the stack frame
    */
-  def openStackFrame(numberOfSlots: Int) {
+  def openStackFrame(numberOfSlots: Int): Unit = {
     stackFrame = if (numberOfSlots == 0) EMPTY_STACKFRAME else new Array[Sequence](numberOfSlots)
   }
 
@@ -208,7 +208,7 @@ class XPathContext(var controller: Controller) {
    * Set the calling XPathContext
    * @param caller the XPathContext of the calling expression
    */
-  def setCaller(caller: XPathContext) {
+  def setCaller(caller: XPathContext): Unit = {
     this.caller = caller
   }
 
@@ -237,7 +237,7 @@ class XPathContext(var controller: Controller) {
    * Set a singleton focus: a context item, with position and size both equal to one
    * @param item the singleton focus
    */
-  def setSingletonFocus(item: Item) {
+  def setSingletonFocus(item: Item): Unit = {
     val iter = SingletonIterator.makeIterator(item)
     val focus = setCurrentIterator(iter)
     focus.next()
@@ -304,7 +304,7 @@ class XPathContext(var controller: Controller) {
    * which identifies its position within the local stack frame
    * @param value the value of the variable
    */
-  def setLocalVariable(slotnumber: Int, value: Sequence) {
+  def setLocalVariable(slotnumber: Int, value: Sequence): Unit = {
     stackFrame(slotnumber) = value
   }
 
@@ -344,12 +344,12 @@ class XPathContext(var controller: Controller) {
    * output destination.
    * @param out The SequenceReceiver to be used
    */
-  def setTemporaryReceiver(out: SequenceReceiver) {
+  def setTemporaryReceiver(out: SequenceReceiver): Unit = {
     isTemporaryDestination = true
     currentReceiver = out
   }
 
-  def setTemporaryOutputState(temporary: Boolean) {
+  def setTemporaryOutputState(temporary: Boolean): Unit = {
     this.isTemporaryDestination = temporary
   }
 
@@ -392,7 +392,7 @@ class XPathContext(var controller: Controller) {
    *
    * @param rule the current template rule
    */
-  def setCurrentTemplateRule(rule: Rule) {
+  def setCurrentTemplateRule(rule: Rule): Unit = {
 //ORBEON XSLT
 //    this.currentTemplate = rule
   }

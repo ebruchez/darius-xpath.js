@@ -59,7 +59,7 @@ object ExpressionTool {
    * @param from the expression containing the location information
    * @param to the expression to which the information is to be copied
    */
-  def copyLocationInfo(from: Expression, to: Expression) {
+  def copyLocationInfo(from: Expression, to: Expression): Unit = {
     if (from != null && to != null) {
       if (from.sourceLocator != null) {
         to.setSourceLocator(from.sourceLocator)
@@ -275,7 +275,7 @@ object ExpressionTool {
    * @param reason the nature of the error
    * @throws XPathException
    */
-  def ebvError(reason: String) {
+  def ebvError(reason: String): Unit = {
     val err = new XPathException("Effective boolean value is not defined for " + reason)
     err.setErrorCode("FORG0006")
     err.setIsTypeError(true)
@@ -370,7 +370,7 @@ object ExpressionTool {
    * @param binding the variable binding whose references are sought
    * @param list a list to be populated with the references to this variable
    */
-  def gatherVariableReferences(exp: Expression, binding: Binding, list: List[VariableReference]) {
+  def gatherVariableReferences(exp: Expression, binding: Binding, list: List[VariableReference]): Unit = {
     if (exp.isInstanceOf[VariableReference] && 
       exp.asInstanceOf[VariableReference].getBinding == binding) {
       list.add(exp.asInstanceOf[VariableReference])
@@ -388,7 +388,7 @@ object ExpressionTool {
    * @param oldBinding the old binding for the variable references
    * @param newBinding the new binding to which the variables should be rebound
    */
-  def rebindVariableReferences(exp: Expression, oldBinding: Binding, newBinding: Binding) {
+  def rebindVariableReferences(exp: Expression, oldBinding: Binding, newBinding: Binding): Unit = {
     if (exp.isInstanceOf[VariableReference]) {
       if (exp.asInstanceOf[VariableReference].getBinding == oldBinding) {
         exp.asInstanceOf[VariableReference].fixup(newBinding)

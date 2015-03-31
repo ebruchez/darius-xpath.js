@@ -44,7 +44,7 @@ class DecimalFormatManager {
    * Note that it is an error to register the same decimal-format twice, even with different
    * precedence
    */
-  def setDefaultDecimalFormat(dfs: DecimalSymbols, precedence: Int) {
+  def setDefaultDecimalFormat(dfs: DecimalSymbols, precedence: Int): Unit = {
     if (!usingOriginalDefault) {
       if (dfs != defaultDFS) {
         val err = new XPathException("There are two conflicting definitions of the default decimal format")
@@ -62,7 +62,7 @@ class DecimalFormatManager {
    * Method called at the end of stylesheet compilation to fix up any format-number() calls
    * to the "default default" decimal format
    */
-  def fixupDefaultDefault() {
+  def fixupDefaultDefault(): Unit = {
     if (usingOriginalDefault) {
       setNamedDecimalFormat(DEFAULT_NAME, defaultDFS, -1000)
     }
@@ -80,7 +80,7 @@ class DecimalFormatManager {
    * are registered in order of decreasing precedence
    * @param qName the name of the decimal format
    */
-  def setNamedDecimalFormat(qName: StructuredQName, dfs: DecimalSymbols, precedence: Int) {
+  def setNamedDecimalFormat(qName: StructuredQName, dfs: DecimalSymbols, precedence: Int): Unit = {
     val o = formatTable.get(qName)
     if (o != null) {
       val info = o.asInstanceOf[DecimalFormatInfo]

@@ -15,7 +15,7 @@ abstract class Aggregate extends SystemFunction {
   /**
    * Static analysis: prevent sorting of the argument
    */
-  override def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor): Unit = {
     super.checkArguments(visitor)
     argument(0) = ExpressionTool.unsorted(visitor.getConfiguration, argument(0), true)
   }

@@ -74,7 +74,7 @@ class UserFunction extends Procedure {
   /**
    * Determine the preferred evaluation mode for this function
    */
-  def computeEvaluationMode() {
+  def computeEvaluationMode(): Unit = {
     evaluationMode = if (tailRecursive) ExpressionTool.eagerEvaluationMode(getBody) else ExpressionTool.lazyEvaluationMode(getBody)
   }
 
@@ -83,7 +83,7 @@ class UserFunction extends Procedure {
    *
    * @param resultType the declared return type
    */
-  def setResultType(resultType: SequenceType) {
+  def setResultType(resultType: SequenceType): Unit = {
     this.resultType = resultType
   }
 
@@ -93,7 +93,7 @@ class UserFunction extends Procedure {
    * @param tailCalls          true if the function contains a tail call (on any function)
    * @param recursiveTailCalls true if the function contains a tail call (on itself)
    */
-  def setTailRecursive(tailCalls: Boolean, recursiveTailCalls: Boolean) {
+  def setTailRecursive(tailCalls: Boolean, recursiveTailCalls: Boolean): Unit = {
     this.tailCalls = tailCalls
     tailRecursive = recursiveTailCalls
   }
@@ -194,7 +194,7 @@ class UserFunction extends Procedure {
    *                   responsibility to allocate a "clean" context for the function to use; the context that is provided
    *                   will be overwritten by the function.
    */
-  def process(actualArgs: Array[Sequence], context: XPathContext) {
+  def process(actualArgs: Array[Sequence], context: XPathContext): Unit = {
     context.setStackFrame(getNumberOfSlots, actualArgs)
     getBody.process(context)
   }

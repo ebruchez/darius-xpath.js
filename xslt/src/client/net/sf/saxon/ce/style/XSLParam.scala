@@ -36,7 +36,7 @@ class XSLParam extends XSLVariableDeclaration {
 
   protected def allowsTunnelAttribute(): Boolean = true
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     val parent = getParent
     global = (parent.isInstanceOf[XSLStylesheet])
     if (!((parent.isInstanceOf[StyleElement]) && 

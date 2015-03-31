@@ -21,13 +21,13 @@ class XSLMinorNodeConstructor extends XSLLeafNodeConstructor {
 
   var name: Expression = _
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     name = checkAttribute("name", "a1").asInstanceOf[Expression]
     select = checkAttribute("select", "e").asInstanceOf[Expression]
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     name = typeCheck(name)
     select = typeCheck(select)
     super.validate(decl)

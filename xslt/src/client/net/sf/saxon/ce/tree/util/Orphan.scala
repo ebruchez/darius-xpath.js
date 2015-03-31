@@ -44,7 +44,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * Set the node kind
    * @param kind the kind of node, for example [[Type#ELEMENT]] or [[Type#ATTRIBUTE]]
    */
-  def setNodeKind(kind: Int) {
+  def setNodeKind(kind: Int): Unit = {
     this.kind = kind
   }
 
@@ -52,7 +52,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * Set the name of the node
    * @param nameCode the the name of the node
    */
-  def setNodeName(nameCode: StructuredQName) {
+  def setNodeName(nameCode: StructuredQName): Unit = {
     this.qName = nameCode
   }
 
@@ -60,7 +60,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * Set the string value of the node
    * @param stringValue the string value of the node
    */
-  def setStringValue(stringValue: CharSequence) {
+  def setStringValue(stringValue: CharSequence): Unit = {
     this.stringValue = stringValue
   }
 
@@ -233,7 +233,7 @@ class Orphan extends AbstractNode with NodeInfo {
    * document. The calling code prepends information to make the result
    * unique across all documents.
    */
-  def generateId(buffer: FastStringBuffer) {
+  def generateId(buffer: FastStringBuffer): Unit = {
     buffer.append('Q')
     buffer.append(Integer toString hashCode)
   }
@@ -247,7 +247,7 @@ class Orphan extends AbstractNode with NodeInfo {
   /**
    * Copy this node to a given outputter (deep copy)
    */
-  def copy(out: Receiver, copyOptions: Int) {
+  def copy(out: Receiver, copyOptions: Int): Unit = {
     Navigator.copy(this, out, copyOptions)
   }
 

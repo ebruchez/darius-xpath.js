@@ -59,7 +59,7 @@ abstract class AbstractTraceListener extends TraceListener {
   /**
    * Called at start
    */
-  def open() {
+  def open(): Unit = {
     prevModule = ""
     t_total = System.currentTimeMillis()
     logger.finest("<trace " + "saxon-version=\"" + Version.getProductVersion + 
@@ -74,21 +74,21 @@ abstract class AbstractTraceListener extends TraceListener {
   /**
    * Called at end
    */
-  def close() {
+  def close(): Unit = {
     t_total = t_total - System.currentTimeMillis()
     indent -= 1
     logger.finest("</trace>")
     GenericLogHandler.dumpTrace()
   }
 
-  def terminate() {
+  def terminate(): Unit = {
     indent = 0
   }
 
   /**
    * Called when an instruction in the stylesheet gets processed
    */
-  def enterChooseItem(test: String) {
+  def enterChooseItem(test: String): Unit = {
     if (test.isEmpty) {
       logger.finest(AbstractTraceListener.spaces(indent) + "<xsl:otherwise>")
     } else {
@@ -99,7 +99,7 @@ abstract class AbstractTraceListener extends TraceListener {
     indent += 1
   }
 
-  def leaveChooseItem(test: String) {
+  def leaveChooseItem(test: String): Unit = {
     if (test.isEmpty) {
       logger.finest(AbstractTraceListener.spaces(indent) + "</xsl:otherwise>")
     } else {
@@ -108,7 +108,7 @@ abstract class AbstractTraceListener extends TraceListener {
     indent -= 1
   }
 
-  def enter(info: InstructionInfo, context: XPathContext) {
+  def enter(info: InstructionInfo, context: XPathContext): Unit = {
     val infotype = info.getConstructType
     val qName = info.getObjectName
     val tag = tag(infotype)
@@ -185,7 +185,7 @@ abstract class AbstractTraceListener extends TraceListener {
   /**
    * Called after an instruction of the stylesheet got processed
    */
-  def leave(info: InstructionInfo) {
+  def leave(info: InstructionInfo): Unit = {
     val infotype = info.getConstructType
     val tag = tag(infotype)
     if (tag == null) {
@@ -200,7 +200,7 @@ abstract class AbstractTraceListener extends TraceListener {
   /**
    * Called when an item becomes the context item
    */
-  def startCurrentItem(item: Item) {
+  def startCurrentItem(item: Item): Unit = {
     if (item.isInstanceOf[NodeInfo]) {
       val curr = item.asInstanceOf[NodeInfo]
       logger.finest(AbstractTraceListener.spaces(indent) + "<source node=\"" + 
@@ -215,7 +215,7 @@ abstract class AbstractTraceListener extends TraceListener {
   /**
    * Called after a node of the source tree got processed
    */
-  def endCurrentItem(item: Item) {
+  def endCurrentItem(item: Item): Unit = {
     indent -= 1
     if (item.isInstanceOf[NodeInfo]) {
       val curr = item.asInstanceOf[NodeInfo]

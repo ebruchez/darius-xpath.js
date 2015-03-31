@@ -92,14 +92,14 @@ class HTMLAttributeNode(
 
   def hasChildNodes(): Boolean = false
 
-  def generateId(buffer: FastStringBuffer) {
+  def generateId(buffer: FastStringBuffer): Unit = {
     element.generateId(buffer)
     buffer.append("" + name.hashCode)
   }
 
   def getDocumentNumber(): Int = element.getDocumentNumber
 
-  def copy(out: Receiver, copyOptions: Int) {
+  def copy(out: Receiver, copyOptions: Int): Unit = {
     out.attribute(qname, value)
   }
 

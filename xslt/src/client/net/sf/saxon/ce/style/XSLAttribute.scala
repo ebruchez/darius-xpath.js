@@ -28,7 +28,7 @@ class XSLAttribute extends XSLLeafNodeConstructor {
 
   private var namespace: Expression = _
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     attributeName = checkAttribute("name", "a1").asInstanceOf[Expression]
     namespace = checkAttribute("namespace", "a").asInstanceOf[Expression]
     select = checkAttribute("select", "e").asInstanceOf[Expression]
@@ -41,7 +41,7 @@ class XSLAttribute extends XSLLeafNodeConstructor {
     }
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     attributeName = typeCheck(attributeName)
     namespace = typeCheck(namespace)
     select = typeCheck(select)

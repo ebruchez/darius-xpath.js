@@ -105,7 +105,7 @@ class TraceEventMulticaster protected (protected val a: EventListener, protected
   /**
    * Called at start
    */
-  def open() {
+  def open(): Unit = {
     a.asInstanceOf[TraceListener].open()
     b.asInstanceOf[TraceListener].open()
   }
@@ -113,7 +113,7 @@ class TraceEventMulticaster protected (protected val a: EventListener, protected
   /**
    * Called at end
    */
-  def close() {
+  def close(): Unit = {
     a.asInstanceOf[TraceListener].close()
     b.asInstanceOf[TraceListener].close()
   }
@@ -121,7 +121,7 @@ class TraceEventMulticaster protected (protected val a: EventListener, protected
   /**
    * Called when an element of the stylesheet gets processed
    */
-  def enter(element: InstructionInfo, context: XPathContext) {
+  def enter(element: InstructionInfo, context: XPathContext): Unit = {
     a.asInstanceOf[TraceListener].enter(element, context)
     b.asInstanceOf[TraceListener].enter(element, context)
   }
@@ -129,7 +129,7 @@ class TraceEventMulticaster protected (protected val a: EventListener, protected
   /**
    * Called after an element of the stylesheet got processed
    */
-  def leave(element: InstructionInfo) {
+  def leave(element: InstructionInfo): Unit = {
     a.asInstanceOf[TraceListener].leave(element)
     b.asInstanceOf[TraceListener].leave(element)
   }
@@ -137,7 +137,7 @@ class TraceEventMulticaster protected (protected val a: EventListener, protected
   /**
    * Called when an item becomes current
    */
-  def startCurrentItem(item: Item) {
+  def startCurrentItem(item: Item): Unit = {
     a.asInstanceOf[TraceListener].startCurrentItem(item)
     b.asInstanceOf[TraceListener].startCurrentItem(item)
   }
@@ -145,7 +145,7 @@ class TraceEventMulticaster protected (protected val a: EventListener, protected
   /**
    * Called when an item ceases to be the current item
    */
-  def endCurrentItem(item: Item) {
+  def endCurrentItem(item: Item): Unit = {
     a.asInstanceOf[TraceListener].endCurrentItem(item)
     b.asInstanceOf[TraceListener].endCurrentItem(item)
   }

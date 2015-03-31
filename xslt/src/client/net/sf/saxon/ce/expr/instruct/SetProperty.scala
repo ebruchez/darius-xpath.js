@@ -52,7 +52,7 @@ class SetProperty(`object`: Expression, var select: Expression, var name: Expres
     this
   }
 
-  private def adoptChildren() {
+  private def adoptChildren(): Unit = {
     adoptChildExpression(select)
     adoptChildExpression(targetObject)
     adoptChildExpression(name)
@@ -73,7 +73,7 @@ class SetProperty(`object`: Expression, var select: Expression, var name: Expres
    * @param offer The type of rewrite being offered
    * @throws client.net.sf.saxon.ce.trans.XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     targetObject = doPromotion(targetObject, offer)
     name = doPromotion(name, offer)
     select = doPromotion(select, offer)

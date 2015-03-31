@@ -17,7 +17,7 @@ abstract class CollatingFunction extends SystemFunction {
 
   private var staticContext: StaticContext = null
 
-  override def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor): Unit = {
     if (staticContext == null) {
       staticContext = visitor.getStaticContext
     }
@@ -31,7 +31,7 @@ abstract class CollatingFunction extends SystemFunction {
    * Pre-evaluate the collation argument if its value is known statically
    * @param env the static XPath evaluation context
    */
-  private def preEvaluateCollation(env: StaticContext) {
+  private def preEvaluateCollation(env: StaticContext): Unit = {
     if (getNumberOfArguments == getDetails.maxArguments) {
       val collationExp = argument(getNumberOfArguments - 1)
       val collationVal = (if (collationExp.isInstanceOf[Literal]) collationExp.asInstanceOf[Literal].getValue else null)
@@ -121,7 +121,7 @@ abstract class CollatingFunction extends SystemFunction {
     }
   }
 
-  protected def doesNotSupportSubstringMatching(context: XPathContext) {
+  protected def doesNotSupportSubstringMatching(context: XPathContext): Unit = {
     dynamicError("The collation requested for " + getDisplayName + " does not support substring matching", 
       "FOCH0004")
   }

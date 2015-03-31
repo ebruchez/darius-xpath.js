@@ -28,7 +28,7 @@ class SystemIdMap {
   /**
    * Set the system ID corresponding to a given sequence number
    */
-  def setSystemId(sequence: Int, uri: String) {
+  def setSystemId(sequence: Int, uri: String): Unit = {
     if (allocated > 0 && uri == uris(allocated - 1)) {
       return
     }

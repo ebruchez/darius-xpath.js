@@ -29,7 +29,7 @@ class Available(_operation: Int) extends SystemFunction {
 
   private var env: StaticContext = _
 
-  override def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor): Unit = {
     if (env == null) {
       env = visitor.getStaticContext
     }

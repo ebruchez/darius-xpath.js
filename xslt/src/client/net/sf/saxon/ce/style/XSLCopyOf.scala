@@ -25,7 +25,7 @@ class XSLCopyOf extends StyleElement {
    */
   def isInstruction(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     select = checkAttribute("select", "e1").asInstanceOf[Expression]
     val b = checkAttribute("copy-namespaces", "b").asInstanceOf[java.lang.Boolean]
     if (b != null) {
@@ -36,7 +36,7 @@ class XSLCopyOf extends StyleElement {
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     checkEmpty()
     select = typeCheck(select)
   }

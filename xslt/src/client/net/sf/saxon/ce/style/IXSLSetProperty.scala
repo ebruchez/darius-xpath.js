@@ -31,7 +31,7 @@ class IXSLSetProperty extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = false
 
-  protected override def prepareAttributes() {
+  protected override def prepareAttributes(): Unit = {
     targetObject = checkAttribute("object", "e").asInstanceOf[Expression]
     select = checkAttribute("select", "e").asInstanceOf[Expression]
     name = checkAttribute("name", "a").asInstanceOf[Expression]

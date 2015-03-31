@@ -32,7 +32,7 @@ object Normalizer {
    * @param offset the position at which the data is to be inserted
    * @param ch32 the character to be inserted, as a 32-bit Unicode codepoint
    */
-  private def setCharAt(target: StringBuffer, offset: Int, ch32: Int) {
+  private def setCharAt(target: StringBuffer, offset: Int, ch32: Int): Unit = {
     if (ch32 < 65536) {
       if (UTF16CharacterSet.isHighSurrogate(target.charAt(offset))) {
         target.setCharAt(offset, ch32.toChar)
@@ -103,7 +103,7 @@ class Normalizer(var form: Byte, config: Configuration) {
    * @param   source      the original text, unnormalized
    * @param   target      the resulting normalized text
    */
-  private def internalDecompose(source: CharSequence, target: StringBuffer) {
+  private def internalDecompose(source: CharSequence, target: StringBuffer): Unit = {
     val buffer = new StringBuffer(8)
     val canonical = (form & COMPATIBILITY_MASK) == 0
     var ch32: Int = 0
@@ -160,7 +160,7 @@ class Normalizer(var form: Byte, config: Configuration) {
    * @param   target      input: decomposed text.
    *                      output: the resulting normalized text.
    */
-  private def internalCompose(target: StringBuffer) {
+  private def internalCompose(target: StringBuffer): Unit = {
     var starterPos = 0
     var starterCh: Int = target.charAt(0)
     var compPos = 1

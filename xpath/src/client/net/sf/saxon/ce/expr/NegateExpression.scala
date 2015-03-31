@@ -21,7 +21,7 @@ class NegateExpression(base: Expression) extends UnaryExpression(base) {
    * Set whether the expression is to be evaluated in XPath 1.0 compatibility mode
    * @param compatible true if XPath 1.0 compatibility mode is enabled
    */
-  def setBackwardsCompatible(compatible: Boolean) {
+  def setBackwardsCompatible(compatible: Boolean): Unit = {
     backwardsCompatible = compatible
   }
 

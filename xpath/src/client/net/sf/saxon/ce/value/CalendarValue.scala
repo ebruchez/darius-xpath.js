@@ -47,7 +47,7 @@ object CalendarValue {
    * @param value the integer to be formatted
    * @param size  the number of digits required (max 9)
    */
-  def appendString(sb: FastStringBuffer, value: Int, size: Int) {
+  def appendString(sb: FastStringBuffer, value: Int, size: Int): Unit = {
     val s = "000000000" + value
     sb.append(s.substring(s.length - size))
   }
@@ -58,7 +58,7 @@ object CalendarValue {
    * @param sb    the string buffer
    * @param value the integer to be formatted (must be in the range 0..99
    */
-  def appendTwoDigits(sb: FastStringBuffer, value: Int) {
+  def appendTwoDigits(sb: FastStringBuffer, value: Int): Unit = {
     sb.append((value / 10 + '0').toChar)
     sb.append((value % 10 + '0').toChar)
   }
@@ -86,7 +86,7 @@ abstract class CalendarValue extends AtomicValue {
    *                value NO_TIMEZONE indicating that the value is not in a timezone (this is the default if this
    *                method is not called)
    */
-  def setTimezoneInMinutes(minutes: Int) {
+  def setTimezoneInMinutes(minutes: Int): Unit = {
     tzMinutes = minutes
   }
 
@@ -212,7 +212,7 @@ abstract class CalendarValue extends AtomicValue {
    * @param sb The StringBuffer that will be updated with the resulting string
    *           representation
    */
-  def appendTimezone(sb: FastStringBuffer) {
+  def appendTimezone(sb: FastStringBuffer): Unit = {
     if (hasTimezone()) {
       var tz = getTimezoneInMinutes
       if (tz == 0) {

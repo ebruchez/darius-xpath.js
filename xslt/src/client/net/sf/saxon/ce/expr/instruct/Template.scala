@@ -41,7 +41,7 @@ class Template extends Procedure {
    * Set the expression that forms the body of the template
    * @param body the body of the template
    */
-  def setBody(body: Expression) {
+  def setBody(body: Expression): Unit = {
     super.setBody(body)
     bodyIsTailCallReturner = (body.isInstanceOf[TailCallReturner])
   }
@@ -57,7 +57,7 @@ class Template extends Procedure {
    * Set whether this template has one or more required parameters
    * @param has true if the template has at least one required parameter
    */
-  def setHasRequiredParams(has: Boolean) {
+  def setHasRequiredParams(has: Boolean): Unit = {
     hasRequiredParams = has
   }
 
@@ -65,7 +65,7 @@ class Template extends Procedure {
    * Set the required type to be returned by this template
    * @param type the required type as defined in the "as" attribute on the xsl:template element
    */
-  def setRequiredType(`type`: SequenceType) {
+  def setRequiredType(`type`: SequenceType): Unit = {
     requiredType = `type`
   }
 
@@ -103,7 +103,7 @@ class Template extends Procedure {
    * xsl:apply-imports and xsl:next-match
    * @param context The dynamic context, giving access to the current node,
    */
-  def apply(context: XPathContext) {
+  def apply(context: XPathContext): Unit = {
     var tc = applyLeavingTail(context)
     while (tc != null) {
       tc = tc.processLeavingTail()

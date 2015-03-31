@@ -31,14 +31,14 @@ object GenericSorter {
    *   an object that knows how to swap the elements at any two indexes (a,b).
    *
    */
-  def quickSort(fromIndex: Int, toIndex: Int, c: Sortable) {
+  def quickSort(fromIndex: Int, toIndex: Int, c: Sortable): Unit = {
     quickSort1(fromIndex, toIndex - fromIndex, c)
   }
 
   /**
    * Sorts the specified sub-array into ascending order.
    */
-  private def quickSort1(off: Int, len: Int, comp: Sortable) {
+  private def quickSort1(off: Int, len: Int, comp: Sortable): Unit = {
     if (len < SMALL) {
       for (i <- off until len + off) {
         var j = i

@@ -209,7 +209,7 @@ class EarlyEvaluationContext(var config: Configuration) extends XPathContext(nul
   /**
    * Set the calling XPathContext
    */
-  override def setCaller(caller: XPathContext) {
+  override def setCaller(caller: XPathContext): Unit = {
   }
 
   /**
@@ -220,14 +220,14 @@ class EarlyEvaluationContext(var config: Configuration) extends XPathContext(nul
     null
   }
 
-  override def setSingletonFocus(item: Item) {
+  override def setSingletonFocus(item: Item): Unit = {
     notAllowed()
   }
 
   /**
    * Set the value of a local variable, identified by its slot number
    */
-  override def setLocalVariable(slotnumber: Int, value: Sequence) {
+  override def setLocalVariable(slotnumber: Int, value: Sequence): Unit = {
     notAllowed()
   }
 
@@ -237,7 +237,7 @@ class EarlyEvaluationContext(var config: Configuration) extends XPathContext(nul
    *
    * @param out The SequenceOutputter to be used
    */
-  override def setTemporaryReceiver(out: SequenceReceiver) {
+  override def setTemporaryReceiver(out: SequenceReceiver): Unit = {
     notAllowed()
   }
 
@@ -253,7 +253,7 @@ class EarlyEvaluationContext(var config: Configuration) extends XPathContext(nul
    * Throw an error for operations that aren't supported when doing early evaluation of constant
    * subexpressions
    */
-  private def notAllowed() {
+  private def notAllowed(): Unit = {
     throw new UnsupportedOperationException("Internal error: early evaluation of subexpression with no context")
   }
 }

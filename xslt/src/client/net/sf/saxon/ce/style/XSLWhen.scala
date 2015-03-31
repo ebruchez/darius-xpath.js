@@ -27,7 +27,7 @@ class XSLWhen extends StyleElement {
    */
   protected def getReturnedItemType(): ItemType = getCommonChildItemType
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     test = checkAttribute("test", "e1").asInstanceOf[Expression]
     checkForUnknownAttributes()
   }
@@ -38,7 +38,7 @@ class XSLWhen extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     if (!(getParent.isInstanceOf[XSLChoose])) {
       compileError("xsl:when must be immediately within xsl:choose", "XTSE0010")
     }

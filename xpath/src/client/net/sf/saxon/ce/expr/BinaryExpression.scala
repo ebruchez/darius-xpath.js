@@ -121,7 +121,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
    * @param flattened set to true if the result of the expression is atomized or otherwise turned into
    *                  an atomic value
    */
-  override def setFlattened(flattened: Boolean) {
+  override def setFlattened(flattened: Boolean): Unit = {
     operand0.setFlattened(flattened)
     operand1.setFlattened(flattened)
   }

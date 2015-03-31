@@ -64,7 +64,7 @@ abstract class Expression {
    */
   def implementsStaticTypeCheck(): Boolean = false
 
-  def AddTraceProperty(name: String, value: Expression) {
+  def AddTraceProperty(name: String, value: Expression): Unit = {
     if (traceProperties == null) {
       traceProperties = new ArrayList[Array[String]]()
     }
@@ -75,7 +75,7 @@ abstract class Expression {
     traceProperties.add(entry)
   }
 
-  def AddTraceProperty(name: String, value: String) {
+  def AddTraceProperty(name: String, value: String): Unit = {
     if (traceProperties == null) {
       traceProperties = new ArrayList[Array[String]]()
     }
@@ -278,7 +278,7 @@ abstract class Expression {
    * @param flattened set to true if the result of the expression is atomized or otherwise turned into
    * an atomic value
    */
-  def setFlattened(flattened: Boolean) {
+  def setFlattened(flattened: Boolean): Unit = {
   }
 
   /**
@@ -357,7 +357,7 @@ abstract class Expression {
    * @param context The dynamic context, giving access to the current node,
    * the current variables, etc.
    */
-  def process(context: XPathContext) {
+  def process(context: XPathContext): Unit = {
     val m = getImplementationMethod
     if ((m & EVALUATE_METHOD) != 0) {
       val item = evaluateItem(context)
@@ -430,7 +430,7 @@ abstract class Expression {
    *
    * @param container The container of this expression.
    */
-  def setContainer(container: Container) {
+  def setContainer(container: Container): Unit = {
     this._container = container
     if (_container != null) {
       val children = iterateSubExpressions()
@@ -456,7 +456,7 @@ abstract class Expression {
    * returned object was not the same as the original.
    * @param child the child expression
    */
-  def adoptChildExpression(child: Expression) {
+  def adoptChildExpression(child: Expression): Unit = {
     if (child == null) {
       return
     }
@@ -478,7 +478,7 @@ abstract class Expression {
    * that contains the expression.
    * @param location the location id
    */
-  def setSourceLocator(location: SourceLocator) {
+  def setSourceLocator(location: SourceLocator): Unit = {
     sourceLocator = location
     val iter = iterateSubExpressions()
     while (iter.hasNext) {
@@ -545,7 +545,7 @@ abstract class Expression {
    * Compute the static properties. This should only be done once for each
    * expression.
    */
-  def computeStaticProperties() {
+  def computeStaticProperties(): Unit = {
     staticProperties = computeDependencies() | computeCardinality() | computeSpecialProperties()
   }
 
@@ -553,7 +553,7 @@ abstract class Expression {
    * Reset the static properties of the expression to -1, so that they have to be recomputed
    * next time they are used.
    */
-  protected[expr] def resetLocalStaticProperties() {
+  protected[expr] def resetLocalStaticProperties(): Unit = {
     staticProperties = -1
   }
 
@@ -618,7 +618,7 @@ abstract class Expression {
    * @param message the error message
    * @param code the error code
    */
-  protected def dynamicError(message: String, code: String) {
+  protected def dynamicError(message: String, code: String): Unit = {
     if (LogConfiguration.loggingIsEnabled()) {
       throw new XPathException(message, code, getSourceLocator)
     } else {
@@ -631,11 +631,11 @@ abstract class Expression {
    * @param message the error message
    * @param errorCode the error code
    */
-  protected def typeError(message: String, errorCode: String) {
+  protected def typeError(message: String, errorCode: String): Unit = {
     typeError(null, message, errorCode)
   }
 
-  protected def typeError(visitor: ExpressionVisitor, message: String, errorCode: String) {
+  protected def typeError(visitor: ExpressionVisitor, message: String, errorCode: String): Unit = {
     var e: XPathException = null
     if (visitor != null) {
       val path = "at " + visitor.getLocation + ": "

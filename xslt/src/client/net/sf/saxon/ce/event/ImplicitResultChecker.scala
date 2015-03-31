@@ -23,40 +23,40 @@ class ImplicitResultChecker(next: Receiver, var controller: Controller) extends 
 
   setUnderlyingReceiver(next)
 
-  def open() {
+  def open(): Unit = {
     super.open()
     open = true
   }
 
-  def startDocument() {
+  def startDocument(): Unit = {
     if (!open) {
       open()
     }
     nextReceiver.startDocument()
   }
 
-  def startElement(qName: StructuredQName, properties: Int) {
+  def startElement(qName: StructuredQName, properties: Int): Unit = {
     if (clean) {
       firstContent()
     }
     nextReceiver.startElement(qName, properties)
   }
 
-  def characters(chars: CharSequence) {
+  def characters(chars: CharSequence): Unit = {
     if (clean) {
       firstContent()
     }
     nextReceiver.characters(chars)
   }
 
-  def processingInstruction(target: String, data: CharSequence) {
+  def processingInstruction(target: String, data: CharSequence): Unit = {
     if (clean) {
       firstContent()
     }
     nextReceiver.processingInstruction(target, data)
   }
 
-  def comment(chars: CharSequence) {
+  def comment(chars: CharSequence): Unit = {
     if (clean) {
       firstContent()
     }
@@ -69,7 +69,7 @@ class ImplicitResultChecker(next: Receiver, var controller: Controller) extends 
    * as the implicit result document
    * @throws XPathException
    */
-  private def firstContent() {
+  private def firstContent(): Unit = {
     controller.checkImplicitResultTree()
     if (!open) {
       open()
@@ -78,7 +78,7 @@ class ImplicitResultChecker(next: Receiver, var controller: Controller) extends 
     clean = false
   }
 
-  def close() {
+  def close(): Unit = {
     if (!clean || !controller.hasThereBeenAnExplicitResultDocument()) {
       if (!open) {
         open()

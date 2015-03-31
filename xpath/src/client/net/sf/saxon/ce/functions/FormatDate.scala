@@ -306,7 +306,7 @@ class FormatDate extends SystemFunction {
 
   def newInstance(): FormatDate = new FormatDate()
 
-  override def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor): Unit = {
     val numArgs = argument.length
     if (numArgs != 2 && numArgs != 5) {
       throw new XPathException("Function " + getDisplayName + " must have either two or five arguments",

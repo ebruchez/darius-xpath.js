@@ -44,7 +44,7 @@ abstract class AbstractStaticContext extends StaticContext {
    * Set the Configuration.
    * @param config the configuration
    */
-  def setConfiguration(config: Configuration) {
+  def setConfiguration(config: Configuration): Unit = {
     this.config = config
   }
 
@@ -57,7 +57,7 @@ abstract class AbstractStaticContext extends StaticContext {
    * Set the base URI in the static context
    * @param baseURI the base URI of the expression
    */
-  def setBaseURI(baseURI: String) {
+  def setBaseURI(baseURI: String): Unit = {
     this.baseURI = baseURI
   }
 
@@ -79,7 +79,7 @@ abstract class AbstractStaticContext extends StaticContext {
    * Set the function library to be used
    * @param lib the function library
    */
-  def setFunctionLibrary(lib: FunctionLibraryList) {
+  def setFunctionLibrary(lib: FunctionLibraryList): Unit = {
     libraryList = lib
     usingDefaultFunctionLibrary = false
   }
@@ -111,7 +111,7 @@ abstract class AbstractStaticContext extends StaticContext {
    * @param option true if XPath 1.0 compatibility mode is to be set to true;
    * otherwise false
    */
-  def setBackwardsCompatibilityMode(option: Boolean) {
+  def setBackwardsCompatibilityMode(option: Boolean): Unit = {
     backwardsCompatible = option
   }
 
@@ -128,7 +128,7 @@ abstract class AbstractStaticContext extends StaticContext {
    * @param manager the decimal format manager for this static context, or null if no named decimal
    *         formats are available in this environment.
    */
-  def setDecimalFormatManager(manager: DecimalFormatManager) {
+  def setDecimalFormatManager(manager: DecimalFormatManager): Unit = {
     this.decimalFormatManager = manager
   }
 }

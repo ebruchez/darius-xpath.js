@@ -24,7 +24,7 @@ class XSLWithParam extends XSLGeneralVariable {
 
   protected def allowsTunnelAttribute(): Boolean = true
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     super.validate(decl)
     val iter = iterateAxis(Axis.PRECEDING_SIBLING, NodeKindTest.ELEMENT)
     while (true) {

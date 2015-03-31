@@ -25,7 +25,7 @@ abstract class SequenceReceiver extends Receiver {
 
   def getPipelineConfiguration(): PipelineConfiguration = pipelineConfiguration
 
-  def setPipelineConfiguration(pipelineConfiguration: PipelineConfiguration) {
+  def setPipelineConfiguration(pipelineConfiguration: PipelineConfiguration): Unit = {
     this.pipelineConfiguration = pipelineConfiguration
   }
 
@@ -39,7 +39,7 @@ abstract class SequenceReceiver extends Receiver {
    * Set the system ID
    * @param systemId the URI used to identify the tree being passed across this interface
    */
-  def setSystemId(systemId: String) {
+  def setSystemId(systemId: String): Unit = {
     this.systemId = systemId
   }
 
@@ -52,7 +52,7 @@ abstract class SequenceReceiver extends Receiver {
   /**
    * Start the output process
    */
-  def open() {
+  def open(): Unit = {
     previousAtomic = false
   }
 
@@ -69,7 +69,7 @@ abstract class SequenceReceiver extends Receiver {
    * Append an item (node or atomic value) to the output
    * @param item the item to be appended
    */
-  def append(item: Item) {
+  def append(item: Item): Unit = {
     append(item, NodeInfo.ALL_NAMESPACES)
   }
 }

@@ -22,7 +22,7 @@ class XSLOtherwise extends StyleElement {
    */
   protected def getReturnedItemType(): ItemType = getCommonChildItemType
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     checkForUnknownAttributes()
   }
 
@@ -32,7 +32,7 @@ class XSLOtherwise extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     if (!(getParent.isInstanceOf[XSLChoose])) {
       compileError("xsl:otherwise must be immediately within xsl:choose", "XTSE0010")
     }

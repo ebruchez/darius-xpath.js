@@ -63,7 +63,7 @@ class SetAttribute(var content: AttributeCreator, var action: Int) extends Instr
    * @param offer The type of rewrite being offered
    * @throws client.net.sf.saxon.ce.trans.XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     content = doPromotion(content, offer)
   }
 

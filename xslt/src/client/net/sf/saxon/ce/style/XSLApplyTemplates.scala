@@ -50,7 +50,7 @@ class XSLApplyTemplates extends StyleElement {
    */
   def isInstruction(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     select = checkAttribute("select", "e").asInstanceOf[Expression]
     modeAttribute = checkAttribute("mode", "w").asInstanceOf[String]
     checkForUnknownAttributes()
@@ -78,7 +78,7 @@ class XSLApplyTemplates extends StyleElement {
     }
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     if (!useCurrentMode) {
       if (modeName == null) {
         modeName = getContainingStylesheet.getDefaultMode

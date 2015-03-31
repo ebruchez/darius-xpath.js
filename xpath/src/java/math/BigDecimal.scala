@@ -2675,7 +2675,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
      *            the {@code MathContext} for perform the rounding.
    * @see #round(MathContext)
    */
-  private def inplaceRound(mc: MathContext) {
+  private def inplaceRound(mc: MathContext): Unit = {
     val mcPrecision = mc.precision
     if (approxPrecision() < mcPrecision || mcPrecision == 0) {
       return
@@ -2728,7 +2728,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
      *            the number of decimal digits that are discarded
    * @see #round(MathContext)
    */
-  private def smallRound(mc: MathContext, discardedPrecision: Int) {
+  private def smallRound(mc: MathContext, discardedPrecision: Int): Unit = {
     val sizeOfFraction: Long = LONG_POWERS_OF_TEN(discardedPrecision)
     var newScale: Long       = _scale.toLong - discardedPrecision
     val unscaledVal: Long    = _smallValue
@@ -2798,7 +2798,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    * {@code BigDecimal} instance (bitLength and smallValue). The transient
    * field precision is assigned lazily.
    */
-  private def readObject(in: ObjectInputStream) {
+  private def readObject(in: ObjectInputStream): Unit = {
     in.defaultReadObject()
     this._bitLength = intVal.bitLength()
     if (this._bitLength < 64) {
@@ -2810,7 +2810,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    * Prepares this {@code BigDecimal} for serialization, i.e. the
    * non-transient field {@code intVal} is assigned.
    */
-  private def writeObject(out: ObjectOutputStream) {
+  private def writeObject(out: ObjectOutputStream): Unit = {
     getUnscaledValue
     out.defaultWriteObject()
   }

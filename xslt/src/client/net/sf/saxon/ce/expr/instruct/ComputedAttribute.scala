@@ -66,7 +66,7 @@ class ComputedAttribute(var attributeName: Expression, var namespace: Expression
     super.simplify(visitor)
   }
 
-  def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType) {
+  def localTypeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Unit = {
     val env = visitor.getStaticContext
     attributeName = visitor.typeCheck(attributeName, contextItemType)
     adoptChildExpression(attributeName)
@@ -123,7 +123,7 @@ class ComputedAttribute(var attributeName: Expression, var namespace: Expression
    *     the containing expression
    * @exception XPathException if any error is detected
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     attributeName = doPromotion(attributeName, offer)
     if (namespace != null) {
       namespace = doPromotion(namespace, offer)

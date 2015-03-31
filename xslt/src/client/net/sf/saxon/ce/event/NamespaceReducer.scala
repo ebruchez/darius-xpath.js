@@ -41,7 +41,7 @@ class NamespaceReducer extends ProxyReceiver with NamespaceResolver {
    * startElement. This call removes redundant namespace declarations, and
    * possibly adds an xmlns="" undeclaration.
    */
-  def startElement(qName: StructuredQName, properties: Int) {
+  def startElement(qName: StructuredQName, properties: Int): Unit = {
     nextReceiver.startElement(qName, properties)
     if (depth > 0 && disinheritStack(depth - 1)) {
       pendingUndeclarations = Array.ofDim[NamespaceBinding](namespacesSize)
@@ -71,7 +71,7 @@ class NamespaceReducer extends ProxyReceiver with NamespaceResolver {
    * @param properties the properties of the namespace binding
    * @throws XPathException
    */
-  def namespace(nsBinding: NamespaceBinding, properties: Int) {
+  def namespace(nsBinding: NamespaceBinding, properties: Int): Unit = {
     if (isNeeded(nsBinding)) {
       addToStack(nsBinding)
       countStack(depth - 1) += 1
@@ -112,7 +112,7 @@ class NamespaceReducer extends ProxyReceiver with NamespaceResolver {
    * Add a namespace declaration to the stack
    * @param nscode the namespace code to be added
    */
-  private def addToStack(nscode: NamespaceBinding) {
+  private def addToStack(nscode: NamespaceBinding): Unit = {
     if (namespacesSize + 1 >= namespaces.length) {
       val newlist = Array.ofDim[NamespaceBinding](namespacesSize * 2)
       System.arraycopy(namespaces, 0, newlist, 0, namespacesSize)
@@ -125,7 +125,7 @@ class NamespaceReducer extends ProxyReceiver with NamespaceResolver {
    * startContent: Add any namespace undeclarations needed to stop
    * namespaces being inherited from parent elements
    */
-  def startContent() {
+  def startContent(): Unit = {
     if (pendingUndeclarations != null) {
       for (i <- 0 until pendingUndeclarations.length) {
         val nscode = pendingUndeclarations(i)
@@ -141,7 +141,7 @@ class NamespaceReducer extends ProxyReceiver with NamespaceResolver {
   /**
    * endElement: Discard the namespaces declared on this element.
    */
-  def endElement() {
+  def endElement(): Unit = {
     if (depth -= 1 == 0) {
       throw new IllegalStateException("Attempt to output end tag with no matching start tag")
     }

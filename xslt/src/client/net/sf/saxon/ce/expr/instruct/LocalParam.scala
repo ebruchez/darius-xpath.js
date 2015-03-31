@@ -41,7 +41,7 @@ class LocalParam extends GeneralVariable {
    * a required type. The conversion uses the actual parameter value as input,
    * referencing it using a VariableReference.
    */
-  def setConversion(convertor: Expression) {
+  def setConversion(convertor: Expression): Unit = {
     conversion = convertor
     if (convertor != null) {
       conversionEvaluationMode = ExpressionTool.eagerEvaluationMode(conversion)

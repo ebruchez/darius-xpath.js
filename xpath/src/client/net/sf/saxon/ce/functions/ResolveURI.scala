@@ -96,7 +96,7 @@ class ResolveURI extends SystemFunction {
 
   var expressionBaseURI: String = null
 
-  override def checkArguments(visitor: ExpressionVisitor) {
+  override def checkArguments(visitor: ExpressionVisitor): Unit = {
     if (expressionBaseURI == null) {
       super.checkArguments(visitor)
       expressionBaseURI = visitor.getStaticContext.getBaseURI

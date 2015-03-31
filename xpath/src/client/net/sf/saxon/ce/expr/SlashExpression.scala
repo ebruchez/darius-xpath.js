@@ -27,14 +27,14 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
 
   adoptChildExpression(step)
 
-  protected def setStartExpression(start2: Expression) {
+  protected def setStartExpression(start2: Expression): Unit = {
     if (start != start2) {
       start = start2
       adoptChildExpression(start)
     }
   }
 
-  protected def setStepExpression(step2: Expression) {
+  protected def setStepExpression(step2: Expression): Unit = {
     if (step != step2) {
       step = step2
       adoptChildExpression(step)

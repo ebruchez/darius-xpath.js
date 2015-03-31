@@ -19,7 +19,7 @@ class CommentStripper extends ProxyReceiver {
 
   private var buffer: FastStringBuffer = new FastStringBuffer(FastStringBuffer.MEDIUM)
 
-  def startElement(qName: StructuredQName, properties: Int) {
+  def startElement(qName: StructuredQName, properties: Int): Unit = {
     flush()
     nextReceiver.startElement(qName, properties)
   }
@@ -27,7 +27,7 @@ class CommentStripper extends ProxyReceiver {
   /**
    * Callback interface for SAX: not for application use
    */
-  def endElement() {
+  def endElement(): Unit = {
     flush()
     nextReceiver.endElement()
   }
@@ -39,26 +39,26 @@ class CommentStripper extends ProxyReceiver {
    * significant. But it's worth going to some effort to avoid uncompressing the whitespace in the
    * more common case, so that it can easily be detected and stripped downstream.
    */
-  def characters(chars: CharSequence) {
+  def characters(chars: CharSequence): Unit = {
     buffer.append(chars)
   }
 
   /**
    * Remove comments
    */
-  def comment(chars: CharSequence) {
+  def comment(chars: CharSequence): Unit = {
   }
 
   /**
    * Remove processing instructions
    */
-  def processingInstruction(name: String, data: CharSequence) {
+  def processingInstruction(name: String, data: CharSequence): Unit = {
   }
 
   /**
    * Flush the character buffer
    */
-  private def flush() {
+  private def flush(): Unit = {
     if (buffer.length > 0) {
       nextReceiver.characters(buffer)
     }

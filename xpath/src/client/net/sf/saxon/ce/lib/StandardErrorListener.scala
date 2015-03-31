@@ -182,7 +182,7 @@ class StandardErrorListener extends ErrorListener {
    *
    * @param writer The PrintStream to use for error messages
    */
-  def setErrorOutput(writer: PrintStream) {
+  def setErrorOutput(writer: PrintStream): Unit = {
     errorOutput = writer
   }
 
@@ -208,7 +208,7 @@ class StandardErrorListener extends ErrorListener {
    *                  transformer exception.
    * @see javax.xml.transform.TransformerException
    */
-  def warning(exception: XPathException) {
+  def warning(exception: XPathException): Unit = {
     if (errorOutput == null) {
       errorOutput = System.err
     }
@@ -240,7 +240,7 @@ class StandardErrorListener extends ErrorListener {
    * @throws XPathException if the application
    *                              chooses to discontinue the transformation.
    */
-  def error(exception: XPathException) {
+  def error(exception: XPathException): Unit = {
     if (exception.hasBeenReported()) {
       return
     }

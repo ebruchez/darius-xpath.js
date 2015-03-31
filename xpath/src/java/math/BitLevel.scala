@@ -126,7 +126,7 @@ object BitLevel {
   /**
    * Performs {@code val <<= count}.
    */
-  def inplaceShiftLeft(bi: BigInteger, count: Int) {
+  def inplaceShiftLeft(bi: BigInteger, count: Int): Unit = {
     val intCount = count >> 5
     bi.numberLength += intCount +
       (if ( (java.lang.Integer.numberOfLeadingZeros(bi.digits(bi.numberLength - 1)) -
@@ -139,7 +139,7 @@ object BitLevel {
   /**
    * Performs {@code val >>= count} where {@code val} is a positive number.
    */
-  def inplaceShiftRight(bi: BigInteger, count: Int) {
+  def inplaceShiftRight(bi: BigInteger, count: Int): Unit = {
     val sign = bi.signum()
     if (count == 0 || bi.signum() == 0) {
       return
@@ -210,7 +210,7 @@ object BitLevel {
   def shiftLeft(result: Array[Int],
                 source: Array[Int],
                 intCount: Int,
-                count: Int) {
+                count: Int): Unit = {
     if (count == 0) {
       System.arraycopy(source, 0, result, intCount, result.length - intCount)
     } else {
@@ -250,7 +250,7 @@ object BitLevel {
    * @param srcLen the length of {@code source}; may be less than {@code
    *          source.length}
    */
-  def shiftLeftOneBit(result: Array[Int], source: Array[Int], srcLen: Int) {
+  def shiftLeftOneBit(result: Array[Int], source: Array[Int], srcLen: Int): Unit = {
     var carry = 0
     for (i <- 0 until srcLen) {
       val iVal = source(i)

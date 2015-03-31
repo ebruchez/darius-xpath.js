@@ -23,7 +23,7 @@ class TeeOutputter(seq1: Receiver, seq2: Receiver) extends SequenceReceiver {
   /**
    * Output an item (atomic value or node) to the sequence
    */
-  def append(item: Item, copyNamespaces: Int) {
+  def append(item: Item, copyNamespaces: Int): Unit = {
     seq1.append(item, NodeInfo.ALL_NAMESPACES)
     seq2.append(item, NodeInfo.ALL_NAMESPACES)
   }
@@ -31,7 +31,7 @@ class TeeOutputter(seq1: Receiver, seq2: Receiver) extends SequenceReceiver {
   /**
    * Notify the start of a document node
    */
-  def startDocument() {
+  def startDocument(): Unit = {
     seq1.startDocument()
     seq2.startDocument()
   }
@@ -39,7 +39,7 @@ class TeeOutputter(seq1: Receiver, seq2: Receiver) extends SequenceReceiver {
   /**
    * Notify the end of a document node
    */
-  def endDocument() {
+  def endDocument(): Unit = {
     seq1.endDocument()
     seq2.endDocument()
   }
@@ -50,7 +50,7 @@ class TeeOutputter(seq1: Receiver, seq2: Receiver) extends SequenceReceiver {
    * @param qName    integer code identifying the name of the element within the name pool.
    * @param properties  bit-significant properties of the element node. If there are no revelant
    */
-  def startElement(qName: StructuredQName, properties: Int) {
+  def startElement(qName: StructuredQName, properties: Int): Unit = {
     seq1.startElement(qName, properties)
     seq2.startElement(qName, properties)
   }
@@ -68,7 +68,7 @@ class TeeOutputter(seq1: Receiver, seq2: Receiver) extends SequenceReceiver {
    * @throws IllegalStateException: attempt to output a namespace when there is no open element
    *                                start tag
    */
-  def namespace(nsBinding: NamespaceBinding, properties: Int) {
+  def namespace(nsBinding: NamespaceBinding, properties: Int): Unit = {
     seq1.namespace(nsBinding, properties)
     seq2.namespace(nsBinding, properties)
   }
@@ -82,7 +82,7 @@ class TeeOutputter(seq1: Receiver, seq2: Receiver) extends SequenceReceiver {
    * @throws IllegalStateException: attempt to output an attribute when there is no open element
    *                                start tag
    */
-  def attribute(nameCode: StructuredQName, value: CharSequence) {
+  def attribute(nameCode: StructuredQName, value: CharSequence): Unit = {
     seq1.attribute(nameCode, value)
     seq2.attribute(nameCode, value)
   }
@@ -93,7 +93,7 @@ class TeeOutputter(seq1: Receiver, seq2: Receiver) extends SequenceReceiver {
    * it has to detect it itself. Note that this event is reported for every element even if it has
    * no attributes, no namespaces, and no content.
    */
-  def startContent() {
+  def startContent(): Unit = {
     seq1.startContent()
     seq2.startContent()
   }
@@ -102,7 +102,7 @@ class TeeOutputter(seq1: Receiver, seq2: Receiver) extends SequenceReceiver {
    * Notify the end of an element. The receiver must maintain a stack if it needs to know which
    * element is ending.
    */
-  def endElement() {
+  def endElement(): Unit = {
     seq1.endElement()
     seq2.endElement()
   }
@@ -113,7 +113,7 @@ class TeeOutputter(seq1: Receiver, seq2: Receiver) extends SequenceReceiver {
    *
    * @param chars      The characters
    */
-  def characters(chars: CharSequence) {
+  def characters(chars: CharSequence): Unit = {
     seq1.characters(chars)
     seq2.characters(chars)
   }
@@ -125,7 +125,7 @@ class TeeOutputter(seq1: Receiver, seq2: Receiver) extends SequenceReceiver {
    * @param data       The data portion of the processing instruction
    * @throws IllegalArgumentException: the content is invalid for an XML processing instruction
    */
-  def processingInstruction(name: String, data: CharSequence) {
+  def processingInstruction(name: String, data: CharSequence): Unit = {
     seq1.processingInstruction(name, data)
     seq2.processingInstruction(name, data)
   }
@@ -136,7 +136,7 @@ class TeeOutputter(seq1: Receiver, seq2: Receiver) extends SequenceReceiver {
    * @param content    The content of the comment
    * @throws IllegalArgumentException: the content is invalid for an XML comment
    */
-  def comment(content: CharSequence) {
+  def comment(content: CharSequence): Unit = {
     seq1.comment(content)
     seq2.comment(content)
   }
@@ -144,7 +144,7 @@ class TeeOutputter(seq1: Receiver, seq2: Receiver) extends SequenceReceiver {
   /**
    * Notify the end of the event stream
    */
-  def close() {
+  def close(): Unit = {
     seq1.close()
     seq2.close()
   }

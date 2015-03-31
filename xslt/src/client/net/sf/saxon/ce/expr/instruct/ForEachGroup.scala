@@ -51,7 +51,7 @@ class ForEachGroup(var select: Expression,
 
   adoptChildExpressions()
 
-  private def adoptChildExpressions() {
+  private def adoptChildExpressions(): Unit = {
     adoptChildExpression(select)
     adoptChildExpression(action)
     adoptChildExpression(key)
@@ -194,7 +194,7 @@ class ForEachGroup(var select: Expression,
    * @param offer The type of rewrite being offered
    * @throws XPathException
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     select = doPromotion(select, offer)
   }
 

@@ -30,7 +30,7 @@ class AttributeCollection {
    * @param nameCode Integer representing the attribute name.
    * @param value    The attribute value (must not be null)
    */
-  def addAttribute(nameCode: StructuredQName, value: String) {
+  def addAttribute(nameCode: StructuredQName, value: String): Unit = {
     if (values == null) {
       values = new Array[String](5)
       names = new Array[StructuredQName](5)
@@ -54,14 +54,14 @@ class AttributeCollection {
    * Clear the attribute list. This removes the values but doesn't free the memory used.
    * free the memory, use clear() then compact().
    */
-  def clear() {
+  def clear(): Unit = {
     used = 0
   }
 
   /**
    * Compact the attribute list to avoid wasting memory
    */
-  def compact() {
+  def compact(): Unit = {
     if (used == 0) {
       names = null
       values = null

@@ -106,7 +106,7 @@ class KeyManager {
    * without providing any details.
    * @param keyName the name of the key to be pre-registered
    */
-  def preRegisterKeyDefinition(keyName: StructuredQName) {
+  def preRegisterKeyDefinition(keyName: StructuredQName): Unit = {
     var keySet = keyMap.get(keyName)
     if (keySet == null) {
       keySet = new KeyDefinitionSet(keyName, keyMap.size)
@@ -122,7 +122,7 @@ class KeyManager {
    * @param config The configuration
    * @throws XPathException if this key definition is inconsistent with existing key definitions having the same name
    */
-  def addKeyDefinition(keyName: StructuredQName, keydef: KeyDefinition, config: Configuration) {
+  def addKeyDefinition(keyName: StructuredQName, keydef: KeyDefinition, config: Configuration): Unit = {
     var keySet = keyMap.get(keyName)
     if (keySet == null) {
       keySet = new KeyDefinitionSet(keyName, keyMap.size)
@@ -193,7 +193,7 @@ class KeyManager {
       soughtItemType: AtomicType, 
       foundItemTypes: Set[AtomicType], 
       context: XPathContext, 
-      isFirst: Boolean) {
+      isFirst: Boolean): Unit = {
     val `match` = keydef.getMatch
     val xc = context.newContext()
     xc.openStackFrame(keydef.getNumberOfSlots)
@@ -227,7 +227,7 @@ class KeyManager {
       keydef: KeyDefinition, 
       index: HashMap[Any, List[NodeInfo]], 
       xc: XPathContext, 
-      isFirst: Boolean) {
+      isFirst: Boolean): Unit = {
     xc.setSingletonFocus(curr)
     val collation = keydef.getCollation
     val use = keydef.getUse
@@ -405,7 +405,7 @@ class KeyManager {
       keyName: StructuredQName, 
       itemType: AtomicType, 
       index: AnyRef, 
-      context: XPathContext) {
+      context: XPathContext): Unit = {
     synchronized {
       if (docIndexes == null) {
         docIndexes = new HashMap[DocumentInfo, HashMap[IndexId, Any]](10)

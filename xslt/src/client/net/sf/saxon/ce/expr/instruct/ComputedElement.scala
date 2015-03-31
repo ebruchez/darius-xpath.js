@@ -122,7 +122,7 @@ class ComputedElement(var elementName: Expression,
    *              the containing expression
    * @throws client.net.sf.saxon.ce.trans.XPathException if any error is detected
    */
-  protected def promoteInst(offer: PromotionOffer) {
+  protected def promoteInst(offer: PromotionOffer): Unit = {
     elementName = doPromotion(elementName, offer)
     if (namespace != null) {
       namespace = doPromotion(namespace, offer)
@@ -210,6 +210,6 @@ class ComputedElement(var elementName: Expression,
   protected def outputNamespaceNodes(context: XPathContext, 
       out: Receiver, 
       nameCode: StructuredQName, 
-      copiedNode: NodeInfo) {
+      copiedNode: NodeInfo): Unit = {
   }
 }

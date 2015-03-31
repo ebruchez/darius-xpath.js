@@ -266,7 +266,7 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    * @param buffer buffer to hold a string that uniquely identifies this node, across all
    *               documents.
    */
-  def generateId(buffer: FastStringBuffer) {
+  def generateId(buffer: FastStringBuffer): Unit = {
     element.generateId(buffer)
     buffer.append("n")
     buffer.append(Integer toString position)
@@ -284,7 +284,7 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    * @param out         the Receiver to which the node should be copied
    * @param copyOptions a selection of the options defined
    */
-  def copy(out: Receiver, copyOptions: Int) {
+  def copy(out: Receiver, copyOptions: Int): Unit = {
     out.namespace(nsBinding, ReceiverOptions.REJECT_DUPLICATES)
   }
 

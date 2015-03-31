@@ -20,7 +20,7 @@ object AttributeSet {
    * @param context the run-time context to use
    * @throws XPathException if a dynamic error occurs
    */
-  protected def expand(asets: Array[AttributeSet], context: XPathContext) {
+  protected def expand(asets: Array[AttributeSet], context: XPathContext): Unit = {
     for (aset <- asets) {
       aset.expand(context)
     }
@@ -37,7 +37,7 @@ class AttributeSet extends Procedure {
    * Set the name of the attribute-set
    * @param attributeSetName the name of the attribute-set
    */
-  def setName(attributeSetName: StructuredQName) {
+  def setName(attributeSetName: StructuredQName): Unit = {
     this.attributeSetName = attributeSetName
   }
 
@@ -45,7 +45,7 @@ class AttributeSet extends Procedure {
    * Set the attribute sets used by this attribute set
    * @param useAttributeSets the set of attribute sets used by this attribute set
    */
-  def setUseAttributeSets(useAttributeSets: Array[AttributeSet]) {
+  def setUseAttributeSets(useAttributeSets: Array[AttributeSet]): Unit = {
     this.useAttributeSets = useAttributeSets
   }
 
@@ -71,7 +71,7 @@ class AttributeSet extends Procedure {
    * @param context the dynamic context
    * @throws XPathException if any failure occurs
    */
-  def expand(context: XPathContext) {
+  def expand(context: XPathContext): Unit = {
     if (useAttributeSets != null) {
       AttributeSet.expand(useAttributeSets, context)
     }

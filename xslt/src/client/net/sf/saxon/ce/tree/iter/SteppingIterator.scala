@@ -48,7 +48,7 @@ class SteppingIterator(var origin: Item, var function: SteppingFunction, var inc
   /**
    * Advance along the axis until a node is found that matches the required criteria
    */
-  protected def advance() {
+  protected def advance(): Unit = {
     do {
       next = function.step(next)
     } while (next != null && !function.conforms(next));

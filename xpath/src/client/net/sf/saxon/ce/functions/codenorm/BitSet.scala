@@ -18,7 +18,7 @@ class BitSet(bits: Int) {
    * @throws ArrayIndexOutOfBoundsException if n is negative or greater than the number of bits allocated
    * (rounded up to a multiple of 32)
    */
-  def set(bit: Int) {
+  def set(bit: Int): Unit = {
     val n = bit >> 5
     words(n) |= (1 << (bit & 0x1f))
   }

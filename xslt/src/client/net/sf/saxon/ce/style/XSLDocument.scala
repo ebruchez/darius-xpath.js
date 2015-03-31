@@ -30,13 +30,13 @@ class XSLDocument extends StyleElement {
    */
   def mayContainSequenceConstructor(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     checkAttribute("validation", "v")
     checkAttribute("type", "t")
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
   }
 
   def compile(exec: Executable, decl: Declaration): Expression = {

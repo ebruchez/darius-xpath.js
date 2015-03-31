@@ -43,7 +43,7 @@ class PipelineConfiguration {
    * Set the Saxon Configuration object
    * @param config the Saxon Configuration
    */
-  def setConfiguration(config: Configuration) {
+  def setConfiguration(config: Configuration): Unit = {
     this.config = config
   }
 }

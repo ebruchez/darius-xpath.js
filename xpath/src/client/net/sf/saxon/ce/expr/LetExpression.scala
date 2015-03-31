@@ -24,7 +24,7 @@ class LetExpression extends Assignation with TailCallReturner {
   /**
    * Set the evaluation mode
    */
-  def setEvaluationMode(mode: Int) {
+  def setEvaluationMode(mode: Int): Unit = {
     evaluationMode = mode
   }
 
@@ -203,7 +203,7 @@ class LetExpression extends Assignation with TailCallReturner {
    * Process this expression as an instruction, writing results to the current
    * outputter
    */
-  override def process(context: XPathContext) {
+  override def process(context: XPathContext): Unit = {
     var let = this
     breakable {
       while (true) {

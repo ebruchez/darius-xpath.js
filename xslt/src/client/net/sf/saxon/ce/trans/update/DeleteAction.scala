@@ -20,7 +20,7 @@ class DeleteAction(@BeanProperty var targetNode: Node) extends PendingUpdateActi
    *
    * @param context the XPath evaluation context
    */
-  def apply(context: XPathContext) {
+  def apply(context: XPathContext): Unit = {
     val parent = targetNode.getParentElement
     if (parent != null) {
       parent.removeChild(targetNode)

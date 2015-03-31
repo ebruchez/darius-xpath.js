@@ -536,7 +536,7 @@ object Navigator {
    * @param sb a buffer to which the unique identifier will be appended
    * @param addDocNr true if a unique document number is to be included in the information
    */
-  def appendSequentialKey(node: NodeInfo, sb: FastStringBuffer, addDocNr: Boolean) {
+  def appendSequentialKey(node: NodeInfo, sb: FastStringBuffer, addDocNr: Boolean): Unit = {
     if (addDocNr) {
       sb.append('w')
       sb.append(node.getDocumentNumber.toLong.toString)

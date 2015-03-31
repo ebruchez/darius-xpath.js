@@ -70,7 +70,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
 
   private var conditionTests: Array[String] = null
 
-  def setConditionTests(conditionTests: Array[String]) {
+  def setConditionTests(conditionTests: Array[String]): Unit = {
     this.conditionTests = conditionTests
   }
 
@@ -296,7 +296,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    * @param offer The type of rewrite being offered
    * @throws XPathException
    */
-  override protected def promoteInst(offer: PromotionOffer) {
+  override protected def promoteInst(offer: PromotionOffer): Unit = {
     if (offer.action == PromotionOffer.UNORDERED || offer.action == PromotionOffer.REPLACE_CURRENT) {
       for (i <- 0 until conditions.length) {
         conditions(i) = doPromotion(conditions(i), offer)
@@ -425,7 +425,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
     if (i < 0) EmptyIterator.getInstance else actions(i).iterate(context)
   }
 
-  private def enterConditionTrace(i: Int) {
+  private def enterConditionTrace(i: Int): Unit = {
     if (LogConfiguration.loggingIsEnabled() && LogController.traceIsEnabled() && conditionTests != null) {
 //ORBEON XSLT
 //      val xlt = LogController.getTraceListener.asInstanceOf[XSLTTraceListener]
@@ -433,7 +433,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
     }
   }
 
-  private def leaveConditionTrace(i: Int) {
+  private def leaveConditionTrace(i: Int): Unit = {
     if (LogConfiguration.loggingIsEnabled() && LogController.traceIsEnabled() && conditionTests != null) {
 //ORBEON XSLT
 //      val xlt = LogController.getTraceListener.asInstanceOf[XSLTTraceListener]

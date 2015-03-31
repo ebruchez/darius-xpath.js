@@ -66,7 +66,7 @@ class ForExpression extends Assignation {
    * @param nr the slot number allocated to the range variable on the local stack frame.
    * This implicitly allocates the next slot number to the position variable if there is one.
    */
-  override def setSlotNumber(nr: Int) {
+  override def setSlotNumber(nr: Int): Unit = {
     super.setSlotNumber(nr)
   }
 
@@ -211,7 +211,7 @@ class ForExpression extends Assignation {
    * Process this expression as an instruction, writing results to the current
    * outputter
    */
-  override def process(context: XPathContext) {
+  override def process(context: XPathContext): Unit = {
     val iter = sequence.iterate(context)
     var position = 1
     val slot = getLocalSlotNumber

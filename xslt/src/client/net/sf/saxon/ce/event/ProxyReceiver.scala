@@ -19,7 +19,7 @@ abstract class ProxyReceiver extends SequenceReceiver {
 
   protected var nextReceiver: Receiver = _
 
-  def setSystemId(systemId: String) {
+  def setSystemId(systemId: String): Unit = {
     if (systemId != this.systemId) {
       this.systemId = systemId
       if (nextReceiver != null) {
@@ -33,7 +33,7 @@ abstract class ProxyReceiver extends SequenceReceiver {
    * @param receiver the underlying receiver, the one that is to receive events after processing
    * by this filter.
    */
-  def setUnderlyingReceiver(receiver: Receiver) {
+  def setUnderlyingReceiver(receiver: Receiver): Unit = {
     if (receiver != nextReceiver) {
       nextReceiver = receiver
       if (pipelineConfiguration != null && receiver != null) {
@@ -47,7 +47,7 @@ abstract class ProxyReceiver extends SequenceReceiver {
    */
   def getUnderlyingReceiver(): Receiver = nextReceiver
 
-  def setPipelineConfiguration(pipe: PipelineConfiguration) {
+  def setPipelineConfiguration(pipe: PipelineConfiguration): Unit = {
     if (pipelineConfiguration != pipe) {
       pipelineConfiguration = pipe
       if (nextReceiver != null) {
@@ -61,7 +61,7 @@ abstract class ProxyReceiver extends SequenceReceiver {
   /**
    * Start of event stream
    */
-  def open() {
+  def open(): Unit = {
     if (nextReceiver == null) {
       throw new IllegalStateException("ProxyReceiver.open(): no underlying receiver provided")
     }
@@ -72,21 +72,21 @@ abstract class ProxyReceiver extends SequenceReceiver {
    * End of output. Note that closing this receiver also closes the rest of the
    * pipeline.
    */
-  def close() {
+  def close(): Unit = {
     nextReceiver.close()
   }
 
   /**
    * Start of a document node.
    */
-  def startDocument() {
+  def startDocument(): Unit = {
     nextReceiver.startDocument()
   }
 
   /**
    * Notify the end of a document node
    */
-  def endDocument() {
+  def endDocument(): Unit = {
     nextReceiver.endDocument()
   }
 
@@ -96,7 +96,7 @@ abstract class ProxyReceiver extends SequenceReceiver {
    * @param qName   integer code identifying the name of the element within the name pool.
    * @param properties properties of the element node
    */
-  def startElement(qName: StructuredQName, properties: Int) {
+  def startElement(qName: StructuredQName, properties: Int): Unit = {
     nextReceiver.startElement(qName, properties)
   }
 
@@ -113,7 +113,7 @@ abstract class ProxyReceiver extends SequenceReceiver {
    * @throws IllegalStateException: attempt to output a namespace when there is no open element
    *                                start tag
    */
-  def namespace(nsBinding: NamespaceBinding, properties: Int) {
+  def namespace(nsBinding: NamespaceBinding, properties: Int): Unit = {
     nextReceiver.namespace(nsBinding, properties)
   }
 
@@ -126,7 +126,7 @@ abstract class ProxyReceiver extends SequenceReceiver {
    * @throws IllegalStateException: attempt to output an attribute when there is no open element
    *                                start tag
    */
-  def attribute(nameCode: StructuredQName, value: CharSequence) {
+  def attribute(nameCode: StructuredQName, value: CharSequence): Unit = {
     nextReceiver.attribute(nameCode, value)
   }
 
@@ -136,35 +136,35 @@ abstract class ProxyReceiver extends SequenceReceiver {
    * it has to detect it itself. Note that this event is reported for every element even if it has
    * no attributes, no namespaces, and no content.
    */
-  def startContent() {
+  def startContent(): Unit = {
     nextReceiver.startContent()
   }
 
   /**
    * End of element
    */
-  def endElement() {
+  def endElement(): Unit = {
     nextReceiver.endElement()
   }
 
   /**
    * Character data
    */
-  def characters(chars: CharSequence) {
+  def characters(chars: CharSequence): Unit = {
     nextReceiver.characters(chars)
   }
 
   /**
    * Processing Instruction
    */
-  def processingInstruction(target: String, data: CharSequence) {
+  def processingInstruction(target: String, data: CharSequence): Unit = {
     nextReceiver.processingInstruction(target, data)
   }
 
   /**
    * Output a comment
    */
-  def comment(chars: CharSequence) {
+  def comment(chars: CharSequence): Unit = {
     nextReceiver.comment(chars)
   }
 
@@ -176,7 +176,7 @@ abstract class ProxyReceiver extends SequenceReceiver {
    *                       need to be copied. Values are [[client.net.sf.saxon.ce.om.NodeInfo#ALL_NAMESPACES]],
    *                       [[client.net.sf.saxon.ce.om.NodeInfo#LOCAL_NAMESPACES]], [[client.net.sf.saxon.ce.om.NodeInfo#NO_NAMESPACES]]
    */
-  def append(item: Item, copyNamespaces: Int) {
+  def append(item: Item, copyNamespaces: Int): Unit = {
     if (nextReceiver.isInstanceOf[SequenceReceiver]) {
       nextReceiver.asInstanceOf[SequenceReceiver].append(item, copyNamespaces)
     } else {

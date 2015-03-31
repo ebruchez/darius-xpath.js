@@ -30,13 +30,13 @@ class IXSLScheduleAction extends StyleElement {
 
   def isInstruction(): Boolean = true
 
-  def prepareAttributes() {
+  def prepareAttributes(): Unit = {
     wait = checkAttribute("wait", "e").asInstanceOf[Expression]
     href = checkAttribute("href", "a").asInstanceOf[Expression]
     checkForUnknownAttributes()
   }
 
-  def validate(decl: Declaration) {
+  def validate(decl: Declaration): Unit = {
     val visitor = makeExpressionVisitor()
     if (wait != null) {
       wait = typeCheck(wait)

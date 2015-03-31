@@ -48,7 +48,7 @@ class Rule(@BeanProperty var pattern: Pattern,
     next = if (r.next == null) null else new Rule(r.next)
   }
 
-  def setIsVirtual() {
+  def setIsVirtual(): Unit = {
     isVirtual = true
   }
 

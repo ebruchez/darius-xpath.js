@@ -18,7 +18,7 @@ object Trace {
 
   private val logger: Logger = Logger.getLogger("Trace")
 
-  def traceItem(`val`: Item, label: String) {
+  def traceItem(`val`: Item, label: String): Unit = {
     if (`val` == null) {
       logger.info(label + ": empty sequence")
     } else {
@@ -72,7 +72,7 @@ class Trace extends SystemFunction {
     `val`
   }
 
-  private def notifyListener(label: String, `val`: Sequence, context: XPathContext) {
+  private def notifyListener(label: String, `val`: Sequence, context: XPathContext): Unit = {
     val info = new TraceExpression(this)
     info.setConstructType(Location.TRACE_CALL)
     info.setSourceLocator(this.getSourceLocator)

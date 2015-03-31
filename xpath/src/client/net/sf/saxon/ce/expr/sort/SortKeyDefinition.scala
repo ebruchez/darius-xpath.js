@@ -57,7 +57,7 @@ class SortKeyDefinition {
    * Set the expression used as the sort key
    * @param exp the sort key select expression
    */
-  def setSortKey(exp: Expression) {
+  def setSortKey(exp: Expression): Unit = {
     sortKey = exp
   }
 
@@ -67,7 +67,7 @@ class SortKeyDefinition {
    */
   def getSortKey(): Expression = sortKey
 
-  def setSortProperty(property: Int, value: Expression) {
+  def setSortProperty(property: Int, value: Expression): Unit = {
     sortProperties(property) = value
   }
 
@@ -77,7 +77,7 @@ class SortKeyDefinition {
    * Set the collation to be used
    * @param collation A StringCollator, which encapsulates both the collation URI and the collating function
    */
-  def setCollation(collation: StringCollator) {
+  def setCollation(collation: StringCollator): Unit = {
     this.collation = collation
   }
 
@@ -92,7 +92,7 @@ class SortKeyDefinition {
    * evaluated at run-time turns out to be a relative URI.
    * @param baseURI the static base URI of the expression
    */
-  def setBaseURI(baseURI: String) {
+  def setBaseURI(baseURI: String): Unit = {
     this.baseURI = baseURI
   }
 
@@ -107,7 +107,7 @@ class SortKeyDefinition {
    * Set whether this sort key is evaluated in XSLT 1.0 backwards compatibility mode
    * @param compatible true if backwards compatibility mode is selected
    */
-  def setBackwardsCompatible(compatible: Boolean) {
+  def setBackwardsCompatible(compatible: Boolean): Unit = {
     backwardsCompatible = compatible
   }
 
@@ -149,7 +149,7 @@ class SortKeyDefinition {
    * @param contextItemType the type of the context item
    * @throws XPathException if any failure occurs
    */
-  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType) {
+  def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Unit = {
     for (i <- 0 until N) {
       sortProperties(i) = visitor.typeCheck(sortProperties(i), contextItemType)
     }

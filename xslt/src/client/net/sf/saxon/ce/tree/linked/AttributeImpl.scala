@@ -122,7 +122,7 @@ class AttributeImpl(element: ElementImpl, index: Int) extends NodeImpl {
    * Get sequential key. Returns key of owning element with the attribute index as a suffix
    * @param buffer a buffer to which the generated ID will be written
    */
-  def generateId(buffer: FastStringBuffer) {
+  def generateId(buffer: FastStringBuffer): Unit = {
     getParent.generateId(buffer)
     buffer.append('a')
     buffer.append(Integer toString getSiblingPosition)
@@ -131,7 +131,7 @@ class AttributeImpl(element: ElementImpl, index: Int) extends NodeImpl {
   /**
    * Copy this node to a given outputter
    */
-  def copy(out: Receiver, copyOptions: Int) {
+  def copy(out: Receiver, copyOptions: Int): Unit = {
     val name = getNodeName
     out.attribute(name, getStringValue)
   }
