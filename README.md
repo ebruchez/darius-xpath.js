@@ -4,6 +4,10 @@ A port of the XPath processor of [Saxon-CE][1] to [Scala.js][2].
 
 Only the XPath processor is ported. The full XSLT processor files are present but do not compile.
 
+## Try it out
+
+The demo app is [here][2].
+
 ## Status
 
 The port is not complete yet, in particular:
@@ -18,4 +22,5 @@ The Saxon files and their translations are under the MPL license. Other files ar
 
 
 [1]: http://www.saxonica.com/ce/index.xml
-[2]: http://www.scala-js.org/
+[2]: http://ebruchez.github.io/saxon.scala.js/
+[3]: http://www.scala-js.org/
