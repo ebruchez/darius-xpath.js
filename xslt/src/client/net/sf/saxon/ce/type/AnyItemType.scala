@@ -36,7 +36,7 @@ class AnyItemType private () extends ItemType {
 
   def getAtomizedItemType: AtomicType = AtomicType.ANY_ATOMIC
 
-  override def toString(): String = "item()"
+  override def toString: String = "item()"
 
   /**
    * Returns a hash code value for the object.

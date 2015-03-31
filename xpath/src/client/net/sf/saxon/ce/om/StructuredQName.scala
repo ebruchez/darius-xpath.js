@@ -162,7 +162,7 @@ class StructuredQName(prefix: String, var uri: String, localName: String) extend
    * The toString() method displays the QName as a lexical QName, that is prefix:local
    * @return the lexical QName
    */
-  override def toString(): String = getDisplayName
+  override def toString: String = getDisplayName
 
   /**
    * Compare two StructuredQName values for equality. This compares the URI and local name parts,

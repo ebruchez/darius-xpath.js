@@ -62,7 +62,7 @@ class LocalNameTest(var nodeKind: Int, @BeanProperty var localName: String) exte
    */
   override def getNodeKindMask: Int = 1 << nodeKind
 
-  override def toString(): String = "*:" + localName
+  override def toString: String = "*:" + localName
 
   /**
    * Returns a hash code value for the object.

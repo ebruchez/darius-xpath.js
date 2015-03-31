@@ -172,7 +172,7 @@ case class MathContext(precision: Int, roundingMode: RoundingMode) extends Seria
    *
    * @return a string representation for this {@code MathContext} instance
    */
-  override def toString(): String = {
+  override def toString: String = {
     "precision=" + precision + " roundingMode=" + roundingMode
   }
 

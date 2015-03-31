@@ -176,5 +176,5 @@ class AtomicType private (var localName: String) extends ItemType {
    */
   def getAtomizedItemType: AtomicType = this
 
-  override def toString(): String = getDisplayName
+  override def toString: String = getDisplayName
 }

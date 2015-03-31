@@ -228,7 +228,7 @@ class SequenceExtent(@transient var value: Array[Item]) extends Sequence {
    */
   def iterate(): UnfailingIterator = new ArrayIterator(value)
 
-  override def toString(): String = {
+  override def toString: String = {
     val fsb = new FastStringBuffer(FastStringBuffer.SMALL)
     fsb.append('(')
     for (i ← 0 until value.length) {

@@ -61,7 +61,7 @@ class AnyChildNodeTest private () extends NodeTest {
       1 << Type.PROCESSING_INSTRUCTION
   }
 
-  override def toString(): String = "node()"
+  override def toString: String = "node()"
 
   /**
    * Returns a hash code value for the object.

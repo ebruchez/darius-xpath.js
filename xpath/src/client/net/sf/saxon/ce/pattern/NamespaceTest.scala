@@ -78,7 +78,7 @@ class NamespaceTest(var nodeKind: Int, var uri: String) extends NodeTest {
    */
   def getNamespaceURI: String = uri
 
-  override def toString(): String = '{' + uri + "}:*"
+  override def toString: String = '{' + uri + "}:*"
 
   /**
    * Returns a hash code value for the object.

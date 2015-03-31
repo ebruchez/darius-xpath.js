@@ -65,7 +65,7 @@ class AnyNodeTest private () extends NodeTest {
       1 << Type.DOCUMENT
   }
 
-  override def toString(): String = "node()"
+  override def toString: String = "node()"
 
   /**
    * Returns a hash code value for the object.

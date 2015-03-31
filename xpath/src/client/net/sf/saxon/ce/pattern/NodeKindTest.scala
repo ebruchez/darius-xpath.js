@@ -120,7 +120,7 @@ class NodeKindTest private (var kind: Int) extends NodeTest {
     case _ ⇒ throw new AssertionError("Unknown node kind")
   }
 
-  override def toString(): String = NodeKindTest.toString(kind)
+  override def toString: String = NodeKindTest.toString(kind)
 
   /**
    * Returns a hash code value for the object.

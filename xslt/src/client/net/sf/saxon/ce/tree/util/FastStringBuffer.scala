@@ -257,7 +257,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
   /**
    * Convert contents of the FastStringBuffer to a string
    */
-  override def toString(): String = {
+  override def toString: String = {
     condense()
     new String(array, 0, used)
   }

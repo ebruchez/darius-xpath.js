@@ -63,7 +63,7 @@ class GeneralUnicodeString private (val chars: Array[Int], val start: Int, val e
 
   def isEnd(pos: Int): Boolean = pos >= (end - start)
 
-  override def toString(): String = {
+  override def toString: String = {
     var c = chars
     if (start != 0) {
       c = new Array[Int](end - start)

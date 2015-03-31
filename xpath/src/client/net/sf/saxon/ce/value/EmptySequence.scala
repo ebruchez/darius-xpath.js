@@ -28,7 +28,7 @@ class EmptySequence private () extends Sequence {
    */
   def iterate(): UnfailingIterator = EmptyIterator.getInstance
 
-  override def toString(): String = "()"
+  override def toString: String = "()"
 
   /**
    * Determine the item type

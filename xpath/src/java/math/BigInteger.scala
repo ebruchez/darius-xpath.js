@@ -1200,7 +1200,7 @@ class BigInteger  extends Number with Comparable[BigInteger] with Serializable {
    *
    * @return a string representation of {@code this} in decimal form.
    */
-  override def toString(): String = {
+  override def toString: String = {
     Conversion.toDecimalScaledString(this, 0)
   }
 

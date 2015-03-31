@@ -53,7 +53,7 @@ class EmptySequenceTest private () extends NodeTest {
    */
   override def getNodeKindMask: Int = 0
 
-  override def toString(): String = "empty-sequence()"
+  override def toString: String = "empty-sequence()"
 
   /**
    * Returns a hash code value for the object.

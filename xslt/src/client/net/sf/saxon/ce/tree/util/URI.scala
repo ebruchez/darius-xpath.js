@@ -1359,7 +1359,7 @@ class URI extends Serializable {
    *
    * @return the URI string specification
    */
-  override def toString(): String = {
+  override def toString: String = {
     val uriSpecString = new StringBuffer()
     if (m_scheme != null) {
       uriSpecString.append(m_scheme)

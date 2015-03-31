@@ -32,7 +32,7 @@ class ValidationFailure(val message: String, private var errorCode: StructuredQN
    * @return the String representation of this Exception
    *
    */
-  override def toString(): String = {
+  override def toString: String = {
     "ValidationException" + (if (message == null) "" else ": " + message)
   }
 

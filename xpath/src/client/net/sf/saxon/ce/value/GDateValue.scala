@@ -122,10 +122,9 @@ abstract class GDateValue extends CalendarValue {
    * @throws ClassCastException if the values are not comparable
    */
   override def equals(o: Any): Boolean = o match {
-    case o: GDateValue ⇒ {
+    case o: GDateValue ⇒
       val gdv = o
       getItemType == gdv.getItemType && toDateTime == gdv.toDateTime
-    }
     case _ ⇒ false
   }
 

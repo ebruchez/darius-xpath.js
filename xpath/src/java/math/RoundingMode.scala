@@ -8,7 +8,7 @@ abstract class RoundingMode private (_index: Int,
   def name(): String = _name
   def ordinal(): Int = _index
 
-  override def toString() = name()
+  override def toString = name()
 }
 
 /**

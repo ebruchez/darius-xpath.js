@@ -70,7 +70,7 @@ class DocumentNodeTest(@BeanProperty var elementTest: NodeTest) extends NodeTest
    */
   override def getNodeKindMask: Int = 1 << Type.DOCUMENT
 
-  override def toString(): String = {
+  override def toString: String = {
     "document-node(" + elementTest.toString + ')'
   }
 

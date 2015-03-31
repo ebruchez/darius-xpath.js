@@ -94,7 +94,7 @@ class NameTest(var nodeKind: Int, var qName: StructuredQName) extends NodeTest {
    */
   override def getNodeKindMask: Int = 1 << nodeKind
 
-  override def toString(): String = nodeKind match {
+  override def toString: String = nodeKind match {
     case Type.ELEMENT ⇒ "element(" + qName.getClarkName + ")"
     case Type.ATTRIBUTE ⇒ "attribute(" + qName.getClarkName + ")"
     case Type.PROCESSING_INSTRUCTION ⇒ "processing-instruction(" + qName.getLocalName + ')'

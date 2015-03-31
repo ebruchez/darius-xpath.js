@@ -102,7 +102,7 @@ class SequenceType private (@BeanProperty var primaryType: ItemType, _cardinalit
    * @return the string representation as an instance of the XPath
    *         SequenceType construct
    */
-  override def toString(): String = {
+  override def toString: String = {
     var s = primaryType.toString
     if (cardinality == StaticProperty.ALLOWS_ONE_OR_MORE) {
       s = s + '+'

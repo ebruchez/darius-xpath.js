@@ -2225,7 +2225,7 @@ class BigDecimal() extends Number with Comparable[BigDecimal] with Serializable 
    * @return a string representation of {@code this} in scientific notation if
    *         necessary.
    */
-  override def toString(): String =  {
+  override def toString: String =  {
     if (toStringImage != null) {
       return toStringImage
     }

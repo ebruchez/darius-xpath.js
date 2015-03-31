@@ -195,7 +195,7 @@ abstract class AtomicValue extends Item with ConversionResult {
    * written in XPath: that is, as a literal if available, or as a call on a constructor function
    * otherwise.
    */
-  override def toString(): String = {
+  override def toString: String = {
     getItemType.toString + " (\"" + getStringValue + "\")"
   }
 }

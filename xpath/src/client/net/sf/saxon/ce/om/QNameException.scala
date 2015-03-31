@@ -10,5 +10,5 @@ package client.net.sf.saxon.ce.om
  */
 class QNameException(var message: String) extends Exception {
 
-  override def getMessage(): String = message
+  override def getMessage: String = message
 }

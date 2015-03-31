@@ -35,7 +35,7 @@ class ValidationFailure(@BeanProperty var message: String) extends ConversionRes
    * @return the String representation of this Exception
    *
    */
-  override def toString(): String = {
+  override def toString: String = {
     "ValidationException" + (if (message == null) "" else ": " + message)
   }
 

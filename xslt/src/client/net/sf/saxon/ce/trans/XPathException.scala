@@ -83,7 +83,7 @@ class XPathException(message: String) extends Exception() {
     this.locator = loc
   }
 
-  override def toString(): String = message
+  override def toString: String = message
 
   /**
    * Create an XPathException that supplies an error message and an error code

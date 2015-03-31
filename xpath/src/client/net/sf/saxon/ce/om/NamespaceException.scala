@@ -9,7 +9,7 @@ package client.net.sf.saxon.ce.om
  */
 class NamespaceException(var prefix: String) extends Exception {
 
-  override def getMessage(): String = {
+  override def getMessage: String = {
     "Namespace prefix " + prefix + " has not been declared"
   }
 
