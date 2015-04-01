@@ -60,7 +60,7 @@ class CodepointCollator extends StringCollator {
       }
       val c = nexta - nextb
       if (c != 0) {
-        c
+        return c
       }
     }
     throw new IllegalStateException

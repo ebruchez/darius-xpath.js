@@ -28,11 +28,13 @@ object Minimax {
    * @return the min or max value in the sequence, according to the rules of the fn:min() or fn:max() functions
    * @throws XPathException typically if non-comparable values are found in the sequence
    */
-  def minimax(iter: SequenceIterator, 
-      operation: Int, 
-      _atomicComparer: AtomicComparer,
-      ignoreNaN: Boolean, 
-      context: XPathContext): AtomicValue = {
+  def minimax(
+    iter            : SequenceIterator,
+    operation       : Int,
+    _atomicComparer : AtomicComparer,
+    ignoreNaN       : Boolean,
+    context         : XPathContext
+  ): AtomicValue = {
     var atomicComparer = _atomicComparer
     val th = TypeHierarchy.getInstance
     var foundDouble = false
@@ -43,89 +45,93 @@ object Minimax {
     }
     var min: AtomicValue = null
     var prim: AtomicValue = null
-    while (true) {
-      min = iter.next().asInstanceOf[AtomicValue]
-      if (min == null) {
-        return null
-      }
-      prim = min
-      if (min.isInstanceOf[UntypedAtomicValue]) {
-        min = new DoubleValue(StringToDouble.stringToNumber(min.getStringValue))
+    import scala.util.control.Breaks._
+    breakable {
+      while (true) {
+        min = iter.next().asInstanceOf[AtomicValue]
+        if (min == null) {
+          return null
+        }
         prim = min
-        foundDouble = true
-      } else {
-        prim match {
-          case _: DoubleValue ⇒
-            foundDouble = true
-          case _: FloatValue ⇒
-            foundFloat = true
-          case _ ⇒
-        }
-      }
-      if (prim.isNaN) {
-        if (ignoreNaN) {
-        } else if (prim.isInstanceOf[DoubleValue]) {
-          return min
+        if (min.isInstanceOf[UntypedAtomicValue]) {
+          min = new DoubleValue(StringToDouble.stringToNumber(min.getStringValue))
+          prim = min
+          foundDouble = true
         } else {
-          foundNaN = true
-          min = FloatValue.NaN
-          //break
+          prim match {
+            case _: DoubleValue ⇒
+              foundDouble = true
+            case _: FloatValue ⇒
+              foundFloat = true
+            case _ ⇒
+          }
         }
-      } else {
-        if (!prim.getItemType.isOrdered) {
-          val de = new XPathException("Type " + prim.getItemType + " is not an ordered type", "FORG0006")
-          de.setIsTypeError(true)
-          throw de
+        if (prim.isNaN) {
+          if (ignoreNaN) {
+          } else if (prim.isInstanceOf[DoubleValue]) {
+            return min
+          } else {
+            foundNaN = true
+            min = FloatValue.NaN
+            break()
+          }
+        } else {
+          if (!prim.getItemType.isOrdered) {
+            val de = new XPathException("Type " + prim.getItemType + " is not an ordered type", "FORG0006")
+            de.setIsTypeError(true)
+            throw de
+          }
+          break()
         }
-        //break
       }
     }
     var lowestCommonSuperType = min.getItemType
-    while (true) {
-      val test = iter.next().asInstanceOf[AtomicValue]
-      if (test == null) {
-        //break
-      }
-      var test2 = test
-      prim = test2
-      if (test.isInstanceOf[UntypedAtomicValue]) {
-        test2 = new DoubleValue(StringToDouble.stringToNumber(test.getStringValue))
-        if (foundNaN) {
-          return DoubleValue.NaN
+    breakable {
+      while (true) {
+        val test = iter.next().asInstanceOf[AtomicValue]
+        if (test == null) {
+          break()
         }
+        var test2 = test
         prim = test2
-        foundDouble = true
-      } else {
-        prim match {
-          case _: DoubleValue ⇒
-            if (foundNaN) {
-              return DoubleValue.NaN
-            }
-            foundDouble = true
-          case _: FloatValue ⇒
-            foundFloat = true
-          case _ ⇒
-        }
-      }
-      lowestCommonSuperType = Type.getCommonSuperType(lowestCommonSuperType, prim.getItemType).asInstanceOf[AtomicType]
-      if (prim.isNaN) {
-        if (ignoreNaN) {
-        } else if (foundDouble) {
-          return DoubleValue.NaN
-        } else {
-          foundNaN = true
-        }
-      } else {
-        try {
-          if (atomicComparer.compareAtomicValues(prim, min) < 0) {
-            min = test2
+        if (test.isInstanceOf[UntypedAtomicValue]) {
+          test2 = new DoubleValue(StringToDouble.stringToNumber(test.getStringValue))
+          if (foundNaN) {
+            return DoubleValue.NaN
           }
-        } catch {
-          case err: ClassCastException ⇒ {
-            val de = new XPathException("Cannot compare " + min.getItemType + " with " + test2.getItemType, 
-              "FORG0006")
-            de.setIsTypeError(true)
-            throw de
+          prim = test2
+          foundDouble = true
+        } else {
+          prim match {
+            case _: DoubleValue ⇒
+              if (foundNaN) {
+                return DoubleValue.NaN
+              }
+              foundDouble = true
+            case _: FloatValue ⇒
+              foundFloat = true
+            case _ ⇒
+          }
+        }
+        lowestCommonSuperType = Type.getCommonSuperType(lowestCommonSuperType, prim.getItemType).asInstanceOf[AtomicType]
+        if (prim.isNaN) {
+          if (ignoreNaN) {
+          } else if (foundDouble) {
+            return DoubleValue.NaN
+          } else {
+            foundNaN = true
+          }
+        } else {
+          try {
+            if (atomicComparer.compareAtomicValues(prim, min) < 0) {
+              min = test2
+            }
+          } catch {
+            case err: ClassCastException ⇒
+              val de = new XPathException("Cannot compare " + min.getItemType + " with " + test2.getItemType,
+                "FORG0006")
+              de.setIsTypeError(true)
+              throw de
           }
         }
       }
@@ -165,7 +171,7 @@ class Minimax(_operation: Int) extends CollatingFunction {
    */
   override def checkArguments(visitor: ExpressionVisitor): Unit = {
     super.checkArguments(visitor)
-    argument(0) = ExpressionTool.unsorted(visitor.getConfiguration, argument(0), false)
+    argument(0) = ExpressionTool.unsorted(visitor.getConfiguration, argument(0), retainAllNodes = false)
   }
 
   /**
@@ -217,7 +223,7 @@ class Minimax(_operation: Int) extends CollatingFunction {
    * @return the statically inferred type of the expression
    */
   override def getItemType: ItemType = {
-    val t = Atomizer.getAtomizedItemType(argument(0), false)
+    val t = Atomizer.getAtomizedItemType(argument(0), alwaysUntyped = false)
     if (t == AtomicType.UNTYPED_ATOMIC) {
       AtomicType.DOUBLE
     } else {
@@ -234,10 +240,9 @@ class Minimax(_operation: Int) extends CollatingFunction {
     try {
       minimax(iter, operation, comparer, ignoreNaN, context)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.maybeSetLocation(getSourceLocator)
         throw err
-      }
     }
   }
 

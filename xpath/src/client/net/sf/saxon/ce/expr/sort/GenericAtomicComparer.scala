@@ -44,10 +44,8 @@ object GenericAtomicComparer {
     if (type0.isPrimitiveNumeric && type1.isPrimitiveNumeric) {
       return ComparableAtomicValueComparer.getInstance
     }
-    if ((type0 == AtomicType.STRING || type0 == AtomicType.UNTYPED_ATOMIC || 
-      type0 == AtomicType.ANY_URI) && 
-      (type1 == AtomicType.STRING || type1 == AtomicType.UNTYPED_ATOMIC || 
-      type1 == AtomicType.ANY_URI)) {
+    if ((type0 == AtomicType.STRING || type0 == AtomicType.UNTYPED_ATOMIC || type0 == AtomicType.ANY_URI) &&
+        (type1 == AtomicType.STRING || type1 == AtomicType.UNTYPED_ATOMIC || type1 == AtomicType.ANY_URI)) {
       if (collator.isInstanceOf[CodepointCollator]) {
         return CodepointCollatingComparer.getInstance
       } else {
