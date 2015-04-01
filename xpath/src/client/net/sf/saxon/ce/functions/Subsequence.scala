@@ -31,7 +31,7 @@ object Subsequence {
   private class SubsequenceMappingFunction(var base: SequenceIterator, var min: Int, var max: Int)
       extends ItemMappingFunction with StatefulMappingFunction {
 
-    private var pos: Int = 0
+    private val pos: Int = 0
 
     /**
      * Map one item to another item.
@@ -42,7 +42,6 @@ object Subsequence {
     def mapItem(item: Item): Item = {
       val position = pos
       if (position > max) {
-        //println("xxxx")
         throw new ItemMappingIterator.EarlyExitException()
       }
       if (position >= min) item else null
@@ -109,10 +108,10 @@ class Subsequence extends SystemFunction {
    */
   override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val e = super.optimize(visitor, contextItemType)
-    if (e != this) {
-      return e
-    }
-    this
+    if (e ne this)
+      e
+    else
+      this
   }
 
   /**

@@ -436,7 +436,7 @@ abstract class Expression {
       val children = iterateSubExpressions()
       while (children.hasNext) {
         val child = children.next()
-        if (child != null && child.getContainer != _container &&
+        if (child != null && (child.getContainer ne _container) &&
           (child._container == null ||
           child._container.getContainerGranularity < _container.getContainerGranularity)) {
           child.setContainer(_container)
@@ -533,7 +533,7 @@ abstract class Expression {
       return null
     }
     val e = subexpression.promote(offer, this)
-    if (e != subexpression) {
+    if (e ne subexpression) {
       adoptChildExpression(e)
     } else if (offer.accepted) {
       resetLocalStaticProperties()

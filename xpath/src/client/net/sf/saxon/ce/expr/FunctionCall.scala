@@ -93,7 +93,7 @@ abstract class FunctionCall extends Expression {
   protected def simplifyArguments(visitor: ExpressionVisitor): Expression = {
     for (i ← 0 until argument.length) {
       val exp = visitor.simplify(argument(i))
-      if (exp != argument(i)) {
+      if (exp ne argument(i)) {
         adoptChildExpression(exp)
         argument(i) = exp
       }
@@ -110,7 +110,7 @@ abstract class FunctionCall extends Expression {
     var fixed = true
     for (i ← 0 until argument.length) {
       val exp = visitor.typeCheck(argument(i), contextItemType)
-      if (exp != argument(i)) {
+      if (exp ne argument(i)) {
         adoptChildExpression(exp)
         argument(i) = exp
       }
@@ -145,7 +145,7 @@ abstract class FunctionCall extends Expression {
     var fixed = true
     for (i ← 0 until argument.length) {
       val exp = visitor.optimize(argument(i), contextItemType)
-      if (exp != argument(i)) {
+      if (exp ne argument(i)) {
         adoptChildExpression(exp)
         argument(i) = exp
       }

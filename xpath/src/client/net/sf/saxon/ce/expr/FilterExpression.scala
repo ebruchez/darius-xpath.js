@@ -106,8 +106,7 @@ object FilterExpression {
    */
   private def isExplicitlyPositional(exp: Expression): Boolean = {
     (exp.getDependencies & 
-      (StaticProperty.DEPENDS_ON_POSITION | StaticProperty.DEPENDS_ON_LAST)) != 
-      0
+      (StaticProperty.DEPENDS_ON_POSITION | StaticProperty.DEPENDS_ON_LAST)) != 0
   }
 }
 
@@ -187,7 +186,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
     start = visitor.typeCheck(start, contextItemType)
     adoptChildExpression(start)
     val filter2 = visitor.typeCheck(filter, start.getItemType)
-    if (filter2 != filter) {
+    if (filter2 ne filter) {
       filter = filter2
       adoptChildExpression(filter2)
     }
@@ -199,8 +198,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
     }
     filterIsIndependentNumeric = th.isSubType(filter.getItemType, AtomicType.NUMERIC) && 
       (filter.getDependencies & 
-      (StaticProperty.DEPENDS_ON_CONTEXT_ITEM | StaticProperty.DEPENDS_ON_POSITION)) == 
-      0 && 
+      (StaticProperty.DEPENDS_ON_CONTEXT_ITEM | StaticProperty.DEPENDS_ON_POSITION)) == 0 &&
       !Cardinality.allowsMany(filter.getCardinality)
     visitor.resetStaticProperties()
     this
@@ -225,19 +223,17 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
     val config = visitor.getConfiguration
     val th = TypeHierarchy.getInstance
     val start2 = visitor.optimize(start, contextItemType)
-    if (start2 != start) {
+    if (start2 ne start) {
       start = start2
       adoptChildExpression(start2)
     }
     var filter2 = filter.optimize(visitor, start.getItemType)
-    if (filter2 != filter) {
+    if (filter2 ne filter) {
       filter = filter2
       adoptChildExpression(filter2)
     }
-    if (filter.isInstanceOf[Literal] && 
-      filter.asInstanceOf[Literal].getValue.isInstanceOf[BooleanValue]) {
-      if (filter.asInstanceOf[Literal].getValue.asInstanceOf[BooleanValue]
-        .getBooleanValue) {
+    if (filter.isInstanceOf[Literal] && filter.asInstanceOf[Literal].getValue.isInstanceOf[BooleanValue]) {
+      if (filter.asInstanceOf[Literal].getValue.asInstanceOf[BooleanValue].getBooleanValue) {
         return start
       } else {
         return new Literal(EmptySequence.getInstance)
@@ -247,16 +243,14 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
     val subsequence = tryToRewritePositionalFilter(visitor)
     if (subsequence != null) {
       ExpressionTool.copyLocationInfo(this, subsequence)
-      return subsequence.simplify(visitor).typeCheck(visitor, contextItemType)
-        .optimize(visitor, contextItemType)
+      return subsequence.simplify(visitor).typeCheck(visitor, contextItemType).optimize(visitor, contextItemType)
     }
     val offer = new PromotionOffer()
     offer.action = PromotionOffer.FOCUS_INDEPENDENT
-    offer.promoteDocumentDependent = (start.getSpecialProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 
-      0
+    offer.promoteDocumentDependent = (start.getSpecialProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 0
     offer.containingExpression = this
     filter2 = doPromotion(filter, offer)
-    if (filter2 != filter) {
+    if (filter2 ne filter) {
       filter = filter2
       adoptChildExpression(filter2)
     }
@@ -407,7 +401,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    * @param child the immediate subexpression
    * @return true if the child expression is evaluated repeatedly
    */
-  override def hasLoopingSubexpression(child: Expression): Boolean = child == filter
+  override def hasLoopingSubexpression(child: Expression): Boolean = child eq filter
 
   /**
    * Get the static cardinality of this expression
@@ -419,8 +413,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
     if (filter.isInstanceOf[Literal] && 
       filter.asInstanceOf[Literal].getValue.isInstanceOf[NumericValue]) {
       if (filter.asInstanceOf[Literal].getValue.asInstanceOf[NumericValue]
-        .compareTo(1) == 
-        0 && 
+        .compareTo(1) == 0 &&
         !Cardinality.allowsZero(start.getCardinality)) {
         return StaticProperty.ALLOWS_ONE
       } else {
@@ -454,7 +447,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
   override def equals(other: Any): Boolean = {
     if (other.isInstanceOf[FilterExpression]) {
       val f = other.asInstanceOf[FilterExpression]
-      return start == f.start && filter == f.filter
+      return (start eq f.start) && (filter eq f.filter)
     }
     false
   }
