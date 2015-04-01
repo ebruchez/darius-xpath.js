@@ -217,7 +217,7 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
   /**
    * Represent the expression as a string for diagnostics
    */
-  override def toString(): String = {
+  override def toString: String = {
     Axis.axisName(axis) + "::" + (if (test == null) "node()" else test.toString)
   }
 }

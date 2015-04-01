@@ -110,5 +110,5 @@ class SuppliedParameterReference(var slotNumber: Int) extends Expression {
    * In the case of XSLT instructions, the toString() method gives an abstracted view of the syntax
    * @return a representation of the expression as a string
    */
-  override def toString(): String = "suppliedParam(" + slotNumber + ")"
+  override def toString: String = "suppliedParam(" + slotNumber + ")"
 }

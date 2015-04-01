@@ -170,7 +170,7 @@ class QNameValue(prefix: String, uri: String, localName: String) extends AtomicV
    * The toString() method returns the name in the form QName("uri", "local")
    * @return the name in in the form QName("uri", "local")
    */
-  override def toString(): String = {
+  override def toString: String = {
     "QName(\"" + getNamespaceURI + "\", \"" + getLocalName + 
       "\")"
   }

@@ -377,5 +377,5 @@ class StringValue protected () extends AtomicValue {
    */
   def effectiveBooleanValue(): Boolean = value.length > 0
 
-  override def toString(): String = "\"" + value + '\"'
+  override def toString: String = "\"" + value + '\"'
 }

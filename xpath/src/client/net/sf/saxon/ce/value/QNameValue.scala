@@ -171,7 +171,7 @@ class QNameValue(protected var qName: StructuredQName) extends AtomicValue {
    * The toString() method returns the name in the form QName("uri", "local")
    * @return the name in in the form QName("uri", "local")
    */
-  override def toString(): String = {
+  override def toString: String = {
     "QName(\"" + getNamespaceURI + "\", \"" + getLocalName + 
       "\")"
   }

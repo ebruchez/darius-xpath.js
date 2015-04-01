@@ -223,5 +223,5 @@ abstract class NumericValue extends AtomicValue with Comparable[_] {
    * Produce a string representation of the value
    * @return The result of casting the number to a string
    */
-  override def toString(): String = getStringValue
+  override def toString: String = getStringValue
 }

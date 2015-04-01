@@ -316,7 +316,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    *
    * @return a representation of the expression as a string
    */
-  override def toString(): String = {
+  override def toString: String = {
     val sb = new FastStringBuffer(FastStringBuffer.SMALL)
     sb.append("if (")
     for (i ← 0 until conditions.length) {

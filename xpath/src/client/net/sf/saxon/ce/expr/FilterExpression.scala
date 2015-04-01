@@ -535,7 +535,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    * in an XPath-like form, but there is no guarantee that the syntax will actually be true XPath.
    * In the case of XSLT instructions, the toString() method gives an abstracted view of the syntax
    */
-  override def toString(): String = {
+  override def toString: String = {
     "(" + start.toString + "[" + filter.toString + "])"
   }
 }

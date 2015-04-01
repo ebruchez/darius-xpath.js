@@ -252,7 +252,7 @@ class ForExpression extends Assignation {
    * In the case of XSLT instructions, the toString() method gives an abstracted view of the syntax
    * @return a representation of the expression as a string
    */
-  override def toString(): String = {
+  override def toString: String = {
     "for $" + getVariableName + " in " + 
       (if (sequence == null) "(...)" else sequence.toString) + 
       " return " + 

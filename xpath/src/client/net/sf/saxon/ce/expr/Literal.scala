@@ -289,5 +289,5 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
    * in an XPath-like form, but there is no guarantee that the syntax will actually be true XPath.
    * In the case of XSLT instructions, the toString() method gives an abstracted view of the syntax
    */
-  override def toString(): String = value.toString
+  override def toString: String = value.toString
 }

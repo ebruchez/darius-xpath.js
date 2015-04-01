@@ -178,5 +178,5 @@ class BooleanValue private (var value: Boolean) extends AtomicValue with Compara
    * Diagnostic display of this value as a string
    * @return a string representation of this value: "true()" or "false()"
    */
-  override def toString(): String = getStringValue + "()"
+  override def toString: String = getStringValue + "()"
 }

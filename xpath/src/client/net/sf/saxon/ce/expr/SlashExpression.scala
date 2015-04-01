@@ -304,7 +304,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * In the case of XSLT instructions, the toString() method gives an abstracted view of the syntax
    * @return a representation of the expression as a string
    */
-  override def toString(): String = start.toString + "/" + step.toString
+  override def toString: String = start.toString + "/" + step.toString
 
   /**
    * Get the first step in this expression. A path expression A/B/C is represented as (A/B)/C, but
