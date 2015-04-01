@@ -94,7 +94,7 @@ class XSLApplyTemplates extends StyleElement {
     try {
       val role = new RoleLocator(RoleLocator.INSTRUCTION, "xsl:apply-templates/select", 0)
       role.setErrorCode("XTTE0520")
-      select = TypeChecker.staticTypeCheck(select, SequenceType.NODE_SEQUENCE, false, role)
+      select = TypeChecker.staticTypeCheck(select, SequenceType.NODE_SEQUENCE, backwardsCompatible = false, role)
     } catch {
       case err: XPathException ⇒ compileError(err)
     }

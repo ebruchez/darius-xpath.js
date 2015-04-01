@@ -178,7 +178,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
     setStartExpression(visitor.typeCheck(start, contextItemType))
     val role0 = new RoleLocator(RoleLocator.BINARY_EXPR, "/", 0)
     role0.setErrorCode("XPTY0019")
-    setStartExpression(TypeChecker.staticTypeCheck(start, SequenceType.NODE_SEQUENCE, false, role0))
+    setStartExpression(TypeChecker.staticTypeCheck(start, SequenceType.NODE_SEQUENCE, backwardsCompatible = false, role0))
     setStepExpression(visitor.typeCheck(step, start.getItemType))
     if (start.isInstanceOf[ContextItemExpression]) {
       return step
@@ -186,8 +186,8 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
     if ((step.getSpecialProperties & StaticProperty.NON_CREATIVE) != 
       0) {
       val config = visitor.getConfiguration
-      setStartExpression(ExpressionTool.unsorted(config, start, false))
-      setStepExpression(ExpressionTool.unsorted(config, step, false))
+      setStartExpression(ExpressionTool.unsorted(config, start, retainAllNodes = false))
+      setStepExpression(ExpressionTool.unsorted(config, step, retainAllNodes = false))
       val p = simplifyDescendantPath(visitor.getStaticContext)
       if (p != null) {
         ExpressionTool.copyLocationInfo(this, p)

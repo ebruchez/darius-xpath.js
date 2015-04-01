@@ -132,7 +132,7 @@ class LiteralResultElement extends StyleElement {
         namespaceCodes.add(inscope.next())
       }
       val resolver = new InscopeNamespaceResolver(this)
-      val defaultNamespace = resolver.getURIForPrefix("", true)
+      val defaultNamespace = resolver.getURIForPrefix("", useDefault = true)
       if (defaultNamespace.isEmpty) {
         namespaceCodes.add(NamespaceBinding.DEFAULT_UNDECLARATION)
       }

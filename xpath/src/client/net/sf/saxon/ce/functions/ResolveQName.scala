@@ -28,7 +28,7 @@ class ResolveQName extends SystemFunction {
     val resolver = new InscopeNamespaceResolver(element)
     var qName: StructuredQName = null
     try {
-      qName = StructuredQName.fromLexicalQName(lexicalQName, resolver.getURIForPrefix("", true), resolver)
+      qName = StructuredQName.fromLexicalQName(lexicalQName, resolver.getURIForPrefix("", useDefault = true), resolver)
     } catch {
       case e: XPathException ⇒ {
         e.maybeSetLocation(getSourceLocator)

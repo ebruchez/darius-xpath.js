@@ -30,7 +30,7 @@ object KeyManager {
       context: XPathContext): AnyRef = {
     var `val`: AnyRef = null
     `val` = if (itemType == AtomicType.STRING || itemType == AtomicType.UNTYPED_ATOMIC || 
-      itemType == AtomicType.ANY_URI) if (collation == null) value.getStringValue else collation.getCollationKey(value.getStringValue) else value.getXPathComparable(false, 
+      itemType == AtomicType.ANY_URI) if (collation == null) value.getStringValue else collation.getCollationKey(value.getStringValue) else value.getXPathComparable(ordered = false,
       collation, context.getImplicitTimezone)
     `val`
   }
@@ -242,7 +242,7 @@ class KeyManager {
       if (foundItemTypes != null) {
         foundItemTypes.add(actualItemType)
       }
-      if (!Type.isComparable(actualItemType, soughtItemType, false)) {
+      if (!Type.isComparable(actualItemType, soughtItemType, ordered = false)) {
         //continue
       }
       var `val`: AnyRef = null

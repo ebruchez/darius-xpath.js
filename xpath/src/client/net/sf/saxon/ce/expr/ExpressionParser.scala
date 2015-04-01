@@ -673,7 +673,7 @@ class ExpressionParser {
     while (t.currentToken == Token.SLASH || t.currentToken == Token.SLSL) {
       val op = t.currentToken
       nextToken()
-      val next = parseStepExpression(false)
+      val next = parseStepExpression(firstInPattern = false)
       if (op == Token.SLASH) {
         exp = new SlashExpression(exp, next)
       } else {
@@ -702,7 +702,7 @@ class ExpressionParser {
     var op = Token.SLASH
     breakable {
       while (true) {
-        val next = parseStepExpression(false)
+        val next = parseStepExpression(firstInPattern = false)
         if (op == Token.SLASH) {
           exp = new SlashExpression(exp, next)
         } else {

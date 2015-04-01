@@ -106,9 +106,9 @@ class ValueComparison(p1: Expression, op: Int, p2: Expression) extends BinaryExp
     }
     val optionalAtomic = SequenceType.OPTIONAL_ATOMIC
     val role0 = new RoleLocator(RoleLocator.BINARY_EXPR, Token.tokens(operator), 0)
-    operand0 = TypeChecker.staticTypeCheck(operand0, optionalAtomic, false, role0)
+    operand0 = TypeChecker.staticTypeCheck(operand0, optionalAtomic, backwardsCompatible = false, role0)
     val role1 = new RoleLocator(RoleLocator.BINARY_EXPR, Token.tokens(operator), 1)
-    operand1 = TypeChecker.staticTypeCheck(operand1, optionalAtomic, false, role1)
+    operand1 = TypeChecker.staticTypeCheck(operand1, optionalAtomic, backwardsCompatible = false, role1)
     var p0 = operand0.getItemType.getAtomizedItemType
     var p1 = operand1.getItemType.getAtomizedItemType
     if (p0 == AtomicType.UNTYPED_ATOMIC) {

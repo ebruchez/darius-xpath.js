@@ -29,7 +29,7 @@ class Sanitizer(var rules: StripSpaceRules) {
 
   def sanitize(doc: HTMLDocumentWrapper): Unit = {
     xmlSpaceStack.push("default")
-    sanitizeChildren(doc.iterateAxis(Axis.CHILD, NodeKindTest.ELEMENT), false)
+    sanitizeChildren(doc.iterateAxis(Axis.CHILD, NodeKindTest.ELEMENT), strip = false)
   }
 
   private def sanitizeChildren(iterator: UnfailingIterator, strip: Boolean): Unit = {

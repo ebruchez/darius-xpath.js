@@ -95,7 +95,7 @@ class XSLParam extends XSLVariableDeclaration {
         pref.setSourceLocator(this)
         val role = new RoleLocator(RoleLocator.PARAM, getVariableDisplayName, 0)
         role.setErrorCode("XTTE0590")
-        conversion = TypeChecker.staticTypeCheck(pref, requiredType, false, role)
+        conversion = TypeChecker.staticTypeCheck(pref, requiredType, backwardsCompatible = false, role)
       }
       var inst: GeneralVariable = null
       if (global) {

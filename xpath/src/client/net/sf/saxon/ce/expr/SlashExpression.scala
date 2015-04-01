@@ -95,15 +95,15 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
     var start2 = visitor.typeCheck(start, contextItemType)
     val role0 = new RoleLocator(RoleLocator.BINARY_EXPR, "/", 0)
     role0.setErrorCode("XPTY0019")
-    setStartExpression(TypeChecker.staticTypeCheck(start2, SequenceType.NODE_SEQUENCE, false, role0))
+    setStartExpression(TypeChecker.staticTypeCheck(start2, SequenceType.NODE_SEQUENCE, backwardsCompatible = false, role0))
     setStepExpression(visitor.typeCheck(step, start.getItemType))
     val stepType = step.getItemType
     if (th.isSubType(stepType, Type.NODE_TYPE)) {
       if ((step.getSpecialProperties & StaticProperty.NON_CREATIVE) != 
         0) {
         val config = visitor.getConfiguration
-        start2 = ExpressionTool.unsorted(config, start, false)
-        val step2 = ExpressionTool.unsorted(config, step, false)
+        start2 = ExpressionTool.unsorted(config, start, retainAllNodes = false)
+        val step2 = ExpressionTool.unsorted(config, step, retainAllNodes = false)
         val path = new PathExpression(start2, step2)
         ExpressionTool.copyLocationInfo(this, path)
         var sortedPath = path.addDocumentSorter()

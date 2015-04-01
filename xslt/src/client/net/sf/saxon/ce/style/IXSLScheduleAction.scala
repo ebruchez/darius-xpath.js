@@ -42,7 +42,7 @@ class IXSLScheduleAction extends StyleElement {
       wait = typeCheck(wait)
       try {
         val role = new RoleLocator(RoleLocator.INSTRUCTION, "ixsl:schedule-action/wait", 0)
-        wait = TypeChecker.staticTypeCheck(wait, SequenceType.SINGLE_INTEGER, false, role)
+        wait = TypeChecker.staticTypeCheck(wait, SequenceType.SINGLE_INTEGER, backwardsCompatible = false, role)
       } catch {
         case err: XPathException ⇒ compileError(err)
       }

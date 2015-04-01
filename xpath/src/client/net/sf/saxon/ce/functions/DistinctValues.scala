@@ -20,7 +20,7 @@ object DistinctValues {
     def mapItem(item: Item): Item = {
       val value = item.asInstanceOf[AtomicValue]
       var key: AnyRef = null
-      key = if (value.isNaN) classOf[DistinctValues] else value.getXPathComparable(false, collator, implicitTimezone)
+      key = if (value.isNaN) classOf[DistinctValues] else value.getXPathComparable(ordered = false, collator, implicitTimezone)
       if (lookup.add(key)) {
         item
       } else {

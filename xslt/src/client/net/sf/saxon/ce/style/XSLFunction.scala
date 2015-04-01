@@ -204,7 +204,7 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
       if (resultType != null) {
         val role = new RoleLocator(RoleLocator.FUNCTION_RESULT, getObjectName.getDisplayName, 0)
         role.setErrorCode("XTTE0780")
-        exp2 = TypeChecker.staticTypeCheck(exp2, resultType, false, role)
+        exp2 = TypeChecker.staticTypeCheck(exp2, resultType, backwardsCompatible = false, role)
       }
     } catch {
       case err: XPathException ⇒ {

@@ -423,7 +423,7 @@ class REMatcher(program: REProgram) {
    */
   def anchoredMatch(search: UnicodeString): Boolean = {
     this.search = search
-    matchAt(0, true)
+    matchAt(0, anchored = true)
   }
 
   /**
@@ -441,13 +441,13 @@ class REMatcher(program: REProgram) {
     this.search = search
     if ((program.optimizationFlags & REProgram.OPT_HASBOL) == REProgram.OPT_HASBOL) {
       if (!program.flags.isMultiLine) {
-        return i == 0 && matchAt(i, false)
+        return i == 0 && matchAt(i, anchored = false)
       }
       while (!search.isEnd(i)) {
         if (isNewline(i)) {
           //continue
         }
-        if (matchAt(i, false)) {
+        if (matchAt(i, anchored = false)) {
           return true
         }
         while (!search.isEnd(i)) {
@@ -462,7 +462,7 @@ class REMatcher(program: REProgram) {
     }
     if (program.prefix == null) {
       while (!search.isEnd(i - 1)) {
-        if (matchAt(i, false)) {
+        if (matchAt(i, anchored = false)) {
           return true
         }
         i += 1
@@ -482,7 +482,7 @@ class REMatcher(program: REProgram) {
           } while ((search.charAt(j += 1) == prefix.charAt(k += 1)) && k < prefix.length);
         }
         if (k == prefix.length) {
-          if (matchAt(i, false)) {
+          if (matchAt(i, anchored = false)) {
             return true
           }
         }

@@ -93,11 +93,11 @@ class AnalyzeString(var select: Expression,
     }
     var role = new RoleLocator(RoleLocator.INSTRUCTION, "analyze-string/select", 0)
     val required = SequenceType.SINGLE_STRING
-    select = TypeChecker.staticTypeCheck(select, required, false, role)
+    select = TypeChecker.staticTypeCheck(select, required, backwardsCompatible = false, role)
     role = new RoleLocator(RoleLocator.INSTRUCTION, "analyze-string/regex", 0)
-    regex = TypeChecker.staticTypeCheck(regex, SequenceType.SINGLE_STRING, false, role)
+    regex = TypeChecker.staticTypeCheck(regex, SequenceType.SINGLE_STRING, backwardsCompatible = false, role)
     role = new RoleLocator(RoleLocator.INSTRUCTION, "analyze-string/flags", 0)
-    flags = TypeChecker.staticTypeCheck(flags, SequenceType.SINGLE_STRING, false, role)
+    flags = TypeChecker.staticTypeCheck(flags, SequenceType.SINGLE_STRING, backwardsCompatible = false, role)
     this
   }
 

@@ -57,7 +57,7 @@ class XSLKey extends StyleElement with StylesheetProcedure {
       try {
         val role = new RoleLocator(RoleLocator.INSTRUCTION, "xsl:key/use", 0)
         use = TypeChecker.staticTypeCheck(use, SequenceType.makeSequenceType(AtomicType.ANY_ATOMIC, StaticProperty.ALLOWS_ZERO_OR_MORE), 
-          false, role)
+          backwardsCompatible = false, role)
       } catch {
         case err: XPathException ⇒ compileError(err)
       }
@@ -124,7 +124,7 @@ class XSLKey extends StyleElement with StylesheetProcedure {
       try {
         val role = new RoleLocator(RoleLocator.INSTRUCTION, "xsl:key/use", 0)
         use = TypeChecker.staticTypeCheck(use, SequenceType.makeSequenceType(AtomicType.ANY_ATOMIC, StaticProperty.ALLOWS_ZERO_OR_MORE), 
-          false, role)
+          backwardsCompatible = false, role)
         use = makeExpressionVisitor().typeCheck(use, `match`.getNodeTest)
       } catch {
         case err: XPathException ⇒ compileError(err)

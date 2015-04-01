@@ -99,8 +99,8 @@ class GenericAtomicComparer(@BeanProperty var collator: StringCollator, var impl
         collator.compareStrings(a.getStringValue, b.getStringValue)
       }
     } else {
-      val ac = a.getXPathComparable(true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef]]
-      val bc = b.getXPathComparable(true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef] with AnyRef]//ORBEON with AnyRef is ugly!
+      val ac = a.getXPathComparable(ordered = true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef]]
+      val bc = b.getXPathComparable(ordered = true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef] with AnyRef]//ORBEON with AnyRef is ugly!
       if (ac == null || bc == null) {
         throw new ClassCastException("Objects are not comparable (" + Type.displayTypeName(a) + 
           ", " + 
@@ -133,8 +133,8 @@ class GenericAtomicComparer(@BeanProperty var collator: StringCollator, var impl
       a.asInstanceOf[CalendarValue].compareTo(b.asInstanceOf[CalendarValue], implicitTimezone) == 
         0
     } else {
-      val ac = a.getXPathComparable(false, collator, implicitTimezone)
-      val bc = b.getXPathComparable(false, collator, implicitTimezone)
+      val ac = a.getXPathComparable(ordered = false, collator, implicitTimezone)
+      val bc = b.getXPathComparable(ordered = false, collator, implicitTimezone)
       ac == bc
     }
   }

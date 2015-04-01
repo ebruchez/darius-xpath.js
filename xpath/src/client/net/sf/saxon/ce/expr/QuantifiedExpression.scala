@@ -34,7 +34,7 @@ class QuantifiedExpression extends Assignation {
       return Literal.makeLiteral(BooleanValue.get(operator != Token.SOME))
     }
     val config = visitor.getConfiguration
-    sequence = ExpressionTool.unsorted(config, sequence, false)
+    sequence = ExpressionTool.unsorted(config, sequence, retainAllNodes = false)
     val actualItemType = sequence.getItemType
     refineTypeInformation(actualItemType, StaticProperty.EXACTLY_ONE, null, sequence.getSpecialProperties, 
       visitor, this)

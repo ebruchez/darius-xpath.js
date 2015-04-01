@@ -59,53 +59,53 @@ object AtomicType {
     lookup.put(localName, `type`)
   }
 
-  var ANY_ATOMIC: AtomicType = makeAtomicType("anyAtomicType", AnyItemType.getInstance, true)
+  var ANY_ATOMIC: AtomicType = makeAtomicType("anyAtomicType", AnyItemType.getInstance, ordered = true)
 
-  var NUMERIC: AtomicType = makeAtomicType("numeric", ANY_ATOMIC, true)
+  var NUMERIC: AtomicType = makeAtomicType("numeric", ANY_ATOMIC, ordered = true)
 
-  var STRING: AtomicType = makeAtomicType("string", ANY_ATOMIC, true)
+  var STRING: AtomicType = makeAtomicType("string", ANY_ATOMIC, ordered = true)
 
-  var BOOLEAN: AtomicType = makeAtomicType("boolean", ANY_ATOMIC, true)
+  var BOOLEAN: AtomicType = makeAtomicType("boolean", ANY_ATOMIC, ordered = true)
 
-  var DURATION: AtomicType = makeAtomicType("duration", ANY_ATOMIC, false)
+  var DURATION: AtomicType = makeAtomicType("duration", ANY_ATOMIC, ordered = false)
 
-  var DATE_TIME: AtomicType = makeAtomicType("dateTime", ANY_ATOMIC, true)
+  var DATE_TIME: AtomicType = makeAtomicType("dateTime", ANY_ATOMIC, ordered = true)
 
-  var DATE: AtomicType = makeAtomicType("date", ANY_ATOMIC, true)
+  var DATE: AtomicType = makeAtomicType("date", ANY_ATOMIC, ordered = true)
 
-  var TIME: AtomicType = makeAtomicType("time", ANY_ATOMIC, true)
+  var TIME: AtomicType = makeAtomicType("time", ANY_ATOMIC, ordered = true)
 
-  var G_YEAR_MONTH: AtomicType = makeAtomicType("gYearMonth", ANY_ATOMIC, false)
+  var G_YEAR_MONTH: AtomicType = makeAtomicType("gYearMonth", ANY_ATOMIC, ordered = false)
 
-  var G_MONTH: AtomicType = makeAtomicType("gMonth", ANY_ATOMIC, false)
+  var G_MONTH: AtomicType = makeAtomicType("gMonth", ANY_ATOMIC, ordered = false)
 
-  var G_MONTH_DAY: AtomicType = makeAtomicType("gMonthDay", ANY_ATOMIC, false)
+  var G_MONTH_DAY: AtomicType = makeAtomicType("gMonthDay", ANY_ATOMIC, ordered = false)
 
-  var G_YEAR: AtomicType = makeAtomicType("gYear", ANY_ATOMIC, false)
+  var G_YEAR: AtomicType = makeAtomicType("gYear", ANY_ATOMIC, ordered = false)
 
-  var G_DAY: AtomicType = makeAtomicType("gDay", ANY_ATOMIC, false)
+  var G_DAY: AtomicType = makeAtomicType("gDay", ANY_ATOMIC, ordered = false)
 
-  var HEX_BINARY: AtomicType = makeAtomicType("hexBinary", ANY_ATOMIC, false)
+  var HEX_BINARY: AtomicType = makeAtomicType("hexBinary", ANY_ATOMIC, ordered = false)
 
-  var BASE64_BINARY: AtomicType = makeAtomicType("base64Binary", ANY_ATOMIC, false)
+  var BASE64_BINARY: AtomicType = makeAtomicType("base64Binary", ANY_ATOMIC, ordered = false)
 
-  var ANY_URI: AtomicType = makeAtomicType("anyURI", ANY_ATOMIC, true)
+  var ANY_URI: AtomicType = makeAtomicType("anyURI", ANY_ATOMIC, ordered = true)
 
-  var QNAME: AtomicType = makeAtomicType("QName", ANY_ATOMIC, false)
+  var QNAME: AtomicType = makeAtomicType("QName", ANY_ATOMIC, ordered = false)
 
-  var UNTYPED_ATOMIC: AtomicType = makeAtomicType("untypedAtomic", ANY_ATOMIC, true)
+  var UNTYPED_ATOMIC: AtomicType = makeAtomicType("untypedAtomic", ANY_ATOMIC, ordered = true)
 
-  var DECIMAL: AtomicType = makeAtomicType("decimal", NUMERIC, true)
+  var DECIMAL: AtomicType = makeAtomicType("decimal", NUMERIC, ordered = true)
 
-  var FLOAT: AtomicType = makeAtomicType("float", NUMERIC, true)
+  var FLOAT: AtomicType = makeAtomicType("float", NUMERIC, ordered = true)
 
-  var DOUBLE: AtomicType = makeAtomicType("double", NUMERIC, true)
+  var DOUBLE: AtomicType = makeAtomicType("double", NUMERIC, ordered = true)
 
-  var INTEGER: AtomicType = makeAtomicType("integer", DECIMAL, true)
+  var INTEGER: AtomicType = makeAtomicType("integer", DECIMAL, ordered = true)
 
-  var YEAR_MONTH_DURATION: AtomicType = makeAtomicType("yearMonthDuration", DURATION, true)
+  var YEAR_MONTH_DURATION: AtomicType = makeAtomicType("yearMonthDuration", DURATION, ordered = true)
 
-  var DAY_TIME_DURATION: AtomicType = makeAtomicType("dayTimeDuration", DURATION, true)
+  var DAY_TIME_DURATION: AtomicType = makeAtomicType("dayTimeDuration", DURATION, ordered = true)
 }
 
 /**

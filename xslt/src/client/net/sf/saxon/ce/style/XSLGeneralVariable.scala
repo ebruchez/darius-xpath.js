@@ -202,7 +202,7 @@ abstract class XSLGeneralVariable extends StyleElement {
           }
           val role = new RoleLocator(category, getVariableDisplayName, 0)
           role.setErrorCode(errorCode)
-          select = TypeChecker.staticTypeCheck(select, required, false, role)
+          select = TypeChecker.staticTypeCheck(select, required, backwardsCompatible = false, role)
         } else {
         }
       }
@@ -251,7 +251,7 @@ abstract class XSLGeneralVariable extends StyleElement {
             val role = new RoleLocator(RoleLocator.VARIABLE, getVariableDisplayName, 0)
             role.setErrorCode("XTTE0570")
             select = makeExpressionVisitor().simplify(select)
-            select = TypeChecker.staticTypeCheck(select, requiredType, false, role)
+            select = TypeChecker.staticTypeCheck(select, requiredType, backwardsCompatible = false, role)
           }
         } catch {
           case err: XPathException ⇒ {

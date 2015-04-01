@@ -111,8 +111,8 @@ class AtomicSortComparer protected (@BeanProperty var collator: StringCollator, 
                   collator.compareStrings(a.getStringValue, b.getStringValue)
               }
             } else {
-              val ac = a.getXPathComparable(true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef]]
-              val bc = b.getXPathComparable(true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef] with AnyRef] //ORBEON with AnyRef is ugly!
+              val ac = a.getXPathComparable(ordered = true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef]]
+              val bc = b.getXPathComparable(ordered = true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef] with AnyRef] //ORBEON with AnyRef is ugly!
               if (ac == null || bc == null) {
                 throw new scala.ClassCastException("Values are not comparable (" + Type.displayTypeName(a) +
                   ", " +

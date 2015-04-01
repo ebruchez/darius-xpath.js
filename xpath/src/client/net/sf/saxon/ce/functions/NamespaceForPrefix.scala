@@ -28,7 +28,7 @@ class NamespaceForPrefix extends SystemFunction {
     var prefix: String = null
     prefix = if (p == null) "" else p.getStringValue
     val resolver = new InscopeNamespaceResolver(element)
-    val uri = resolver.getURIForPrefix(prefix, true)
+    val uri = resolver.getURIForPrefix(prefix, useDefault = true)
     if (uri == null) {
       return null
     }

@@ -159,9 +159,9 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
     operand0 = visitor.typeCheck(operand0, contextItemType)
     operand1 = visitor.typeCheck(operand1, contextItemType)
     val role0 = new RoleLocator(RoleLocator.BINARY_EXPR, Token.tokens(operator), 0)
-    operand0 = TypeChecker.staticTypeCheck(operand0, SequenceType.NODE_SEQUENCE, false, role0)
+    operand0 = TypeChecker.staticTypeCheck(operand0, SequenceType.NODE_SEQUENCE, backwardsCompatible = false, role0)
     val role1 = new RoleLocator(RoleLocator.BINARY_EXPR, Token.tokens(operator), 1)
-    operand1 = TypeChecker.staticTypeCheck(operand1, SequenceType.NODE_SEQUENCE, false, role1)
+    operand1 = TypeChecker.staticTypeCheck(operand1, SequenceType.NODE_SEQUENCE, backwardsCompatible = false, role1)
     this
   }
 

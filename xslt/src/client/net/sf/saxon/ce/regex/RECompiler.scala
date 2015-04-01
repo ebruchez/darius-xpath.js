@@ -353,7 +353,7 @@ class RECompiler {
       ch match {
         case '[' ⇒ syntaxError("Unescaped '[' within square brackets")
         case '\\' ⇒ {
-          val cc = escape(true)
+          val cc = escape(inSquareBrackets = true)
           if (cc.isInstanceOf[IntValuePredicate]) {
             simpleChar = cc.asInstanceOf[IntValuePredicate].getTarget
             //break
@@ -532,7 +532,7 @@ class RECompiler {
         var c = pattern.charAt(idx + 1)
         if (pattern.charAt(idx) == '\\') {
           val idxEscape = idx
-          escape(false)
+          escape(inSquareBrackets = false)
           if (idx < len) {
             c = pattern.charAt(idx)
           }
@@ -551,7 +551,7 @@ class RECompiler {
         }
         case '\\' ⇒ {
           val idxBeforeEscape = idx
-          val charClass = escape(false)
+          val charClass = escape(inSquareBrackets = false)
           if (charClass.isInstanceOf[BackReference] || !charClass.isInstanceOf[IntValuePredicate]) {
             idx = idxBeforeEscape
             //break
@@ -627,7 +627,7 @@ class RECompiler {
     case '?' | '+' | '{' | '*' ⇒ syntaxError("No expression before quantifier")
     case '\\' ⇒ {
       val idxBeforeEscape = idx
-      val esc = escape(false)
+      val esc = escape(inSquareBrackets = false)
       if (esc.isInstanceOf[BackReference]) {
         val backreference = esc.asInstanceOf[BackReference].getTarget
         if (parens <= backreference) {

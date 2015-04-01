@@ -55,14 +55,14 @@ class StripSpaceRules {
     newRule.setRank((precedence << 16) + sequence)
     if (test.isInstanceOf[NodeKindTest]) {
       newRule.setAlwaysMatches(true)
-      anyElementRule = addRuleToList(newRule, anyElementRule, true)
+      anyElementRule = addRuleToList(newRule, anyElementRule, dropRemainder = true)
     } else if (test.isInstanceOf[NameTest]) {
       newRule.setAlwaysMatches(true)
       val fp = test.asInstanceOf[NameTest].getRequiredNodeName
       val chain = namedElementRules.get(fp)
-      namedElementRules.put(fp, addRuleToList(newRule, chain, true))
+      namedElementRules.put(fp, addRuleToList(newRule, chain, dropRemainder = true))
     } else {
-      unnamedElementRuleChain = addRuleToList(newRule, unnamedElementRuleChain, false)
+      unnamedElementRuleChain = addRuleToList(newRule, unnamedElementRuleChain, dropRemainder = false)
     }
     if (action == STRIP) {
       isStripping = true

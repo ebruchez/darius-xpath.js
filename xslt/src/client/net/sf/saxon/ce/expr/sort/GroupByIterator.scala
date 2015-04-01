@@ -80,7 +80,7 @@ class GroupByIterator(population: SequenceIterator,
         //break
       }
       var comparisonKey: AnyRef = null
-      comparisonKey = if (key.isNaN) classOf[DistinctValues] else key.getXPathComparable(false, collator, 
+      comparisonKey = if (key.isNaN) classOf[DistinctValues] else key.getXPathComparable(ordered = false, collator,
         c2.getImplicitTimezone)
       val g = index.get(comparisonKey)
       if (g == null) {

@@ -243,7 +243,7 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
       if (requiredType != null) {
         val role = new RoleLocator(RoleLocator.TEMPLATE_RESULT, getDiagnosticId, 0)
         role.setErrorCode("XTTE0505")
-        exp = TypeChecker.staticTypeCheck(exp, requiredType, false, role)
+        exp = TypeChecker.staticTypeCheck(exp, requiredType, backwardsCompatible = false, role)
       }
     } catch {
       case err: XPathException ⇒ compileError(err)

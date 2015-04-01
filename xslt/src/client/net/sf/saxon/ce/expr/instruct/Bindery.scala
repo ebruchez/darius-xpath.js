@@ -33,7 +33,7 @@ object Bindery {
       requiredType: SequenceType, 
       context: XPathContext): Sequence = {
     val role = new RoleLocator(RoleLocator.PARAM, qName, 0)
-    val e = TypeChecker.staticTypeCheck(new Literal(value), requiredType, false, role)
+    val e = TypeChecker.staticTypeCheck(new Literal(value), requiredType, backwardsCompatible = false, role)
     SequenceExtent.makeSequenceExtent(e.iterate(context))
   }
 }

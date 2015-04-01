@@ -152,9 +152,9 @@ class LocationPathPattern extends Pattern {
       var filter = visitor.typeCheck(filters(i), getNodeTest)
       filter = visitor.optimize(filter, getNodeTest)
       filters(i) = filter
-      if (Literal.isConstantBoolean(filter, true)) {
+      if (Literal.isConstantBoolean(filter, value = true)) {
         removeEntries += 1
-      } else if (Literal.isConstantBoolean(filter, false)) {
+      } else if (Literal.isConstantBoolean(filter, value = false)) {
         return new NodeTestPattern(EmptySequenceTest.getInstance)
       }
       i -= 1
@@ -165,7 +165,7 @@ class LocationPathPattern extends Pattern {
       } else {
         val f2 = Array.ofDim[Expression](filters.length - removeEntries)
         var j = 0
-        for (i ← 0 until filters.length if !Literal.isConstantBoolean(filters(i), true)) {
+        for (i ← 0 until filters.length if !Literal.isConstantBoolean(filters(i), value = true)) {
           f2(j) = filters(i)
           j += 1
         }

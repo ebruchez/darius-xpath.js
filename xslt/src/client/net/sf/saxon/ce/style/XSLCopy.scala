@@ -68,7 +68,7 @@ class XSLCopy extends StyleElement {
     try {
       val role = new RoleLocator(RoleLocator.INSTRUCTION, "xsl:copy/select", 0)
       role.setErrorCode("XTTE2170")
-      select = TypeChecker.staticTypeCheck(select, SequenceType.OPTIONAL_ITEM, false, role)
+      select = TypeChecker.staticTypeCheck(select, SequenceType.OPTIONAL_ITEM, backwardsCompatible = false, role)
     } catch {
       case err: XPathException ⇒ compileError(err)
     }

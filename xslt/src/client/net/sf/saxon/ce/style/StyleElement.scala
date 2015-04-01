@@ -534,7 +534,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
   protected def processExtensionElementAttribute(ns: String): Unit = {
     val ext = getAttributeValue(ns, "extension-element-prefixes")
     if (ext != null) {
-      extensionNamespaces = processPrefixList(ext, false)
+      extensionNamespaces = processPrefixList(ext, allowAll = false)
     }
   }
 
@@ -546,7 +546,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
   protected def processExcludedNamespaces(ns: String): Unit = {
     val ext = getAttributeValue(ns, "exclude-result-prefixes")
     if (ext != null) {
-      excludedNamespaces = processPrefixList(ext, true)
+      excludedNamespaces = processPrefixList(ext, allowAll = true)
     }
   }
 
@@ -577,7 +577,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
         } else if (allowAll && "#all" == s) {
           compileError("In exclude-result-prefixes, cannot mix #all with other values", "XTSE0020")
         }
-        val uri = resolver.getURIForPrefix(s, true)
+        val uri = resolver.getURIForPrefix(s, useDefault = true)
         if (uri == null) {
           compileError("Prefix " + s + " is undeclared", "XTSE1430")
         }

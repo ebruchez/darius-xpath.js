@@ -20,7 +20,7 @@ class Average extends Aggregate {
    * Determine the item type of the value returned by the function
    */
   override def getItemType: ItemType = {
-    val base = Atomizer.getAtomizedItemType(argument(0), false)
+    val base = Atomizer.getAtomizedItemType(argument(0), alwaysUntyped = false)
     if (base == AtomicType.UNTYPED_ATOMIC) {
       AtomicType.DOUBLE
     } else if (base == AtomicType.INTEGER) {

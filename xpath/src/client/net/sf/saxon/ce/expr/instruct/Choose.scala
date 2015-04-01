@@ -156,7 +156,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
     for (i ← 0 until actions.length) {
       actions(i) = TypeChecker.staticTypeCheck(actions(i), req, backwardsCompatible, role)
     }
-    if (!Literal.isConstantBoolean(conditions(conditions.length - 1), true) && 
+    if (!Literal.isConstantBoolean(conditions(conditions.length - 1), value = true) &&
       !Cardinality.allowsZero(req.getCardinality)) {
       val cond = if (conditions.length == 1) "the condition is not" else "none of the conditions is"
       val err = new XPathException("Conditional expression: If " + cond + " satisfied, an empty sequence will be returned, " + 
@@ -244,7 +244,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
     var includesTrue = false
     for (i ← 0 until actions.length) {
       card = Cardinality.union(card, actions(i).getCardinality)
-      if (Literal.isConstantBoolean(conditions(i), true)) {
+      if (Literal.isConstantBoolean(conditions(i), value = true)) {
         includesTrue = true
       }
     }

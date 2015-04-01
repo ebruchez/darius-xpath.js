@@ -42,14 +42,14 @@ class XSLNamespaceAlias extends StyleElement {
       resultPrefix = ""
     }
     val resolver = new InscopeNamespaceResolver(this)
-    stylesheetURI = resolver.getURIForPrefix(stylesheetPrefix, true)
+    stylesheetURI = resolver.getURIForPrefix(stylesheetPrefix, useDefault = true)
     if (stylesheetURI == null) {
       compileError("stylesheet-prefix " + stylesheetPrefix + " has not been declared", "XTSE0812")
       stylesheetURI = ""
       resultNamespaceBinding = NamespaceBinding.DEFAULT_UNDECLARATION
       return
     }
-    var resultURI = resolver.getURIForPrefix(resultPrefix, true)
+    var resultURI = resolver.getURIForPrefix(resultPrefix, useDefault = true)
     if (resultURI == null) {
       compileError("result-prefix " + resultPrefix + " has not been declared", "XTSE0812")
       stylesheetURI = ""

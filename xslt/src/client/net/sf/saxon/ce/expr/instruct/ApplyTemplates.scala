@@ -270,7 +270,7 @@ class ApplyTemplates protected () extends Instruction {
   def createsNewNodes(): Boolean = true
 
   def process(context: XPathContext): Unit = {
-    apply(context, false)
+    apply(context, returnTailCall = false)
   }
 
   def processLeavingTail(context: XPathContext): TailCall = apply(context, useTailRecursion)

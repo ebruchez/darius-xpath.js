@@ -83,7 +83,7 @@ class Id extends SystemFunction {
    */
   override def checkArguments(visitor: ExpressionVisitor): Unit = {
     super.checkArguments(visitor)
-    argument(0) = ExpressionTool.unsorted(visitor.getConfiguration, argument(0), false)
+    argument(0) = ExpressionTool.unsorted(visitor.getConfiguration, argument(0), retainAllNodes = false)
   }
 
   /**

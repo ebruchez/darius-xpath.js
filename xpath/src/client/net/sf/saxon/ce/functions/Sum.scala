@@ -88,7 +88,7 @@ class Sum extends Aggregate {
   def newInstance(): Sum = new Sum()
 
   override def getItemType: ItemType = {
-    var base = Atomizer.getAtomizedItemType(argument(0), false)
+    var base = Atomizer.getAtomizedItemType(argument(0), alwaysUntyped = false)
     if (base == AtomicType.UNTYPED_ATOMIC) {
       base = AtomicType.DOUBLE
     }

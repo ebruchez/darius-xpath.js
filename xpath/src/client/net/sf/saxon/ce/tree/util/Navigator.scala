@@ -544,7 +544,7 @@ object Navigator {
     if (node.getNodeKind != Type.DOCUMENT) {
       val parent = node.getParent
       if (parent != null) {
-        appendSequentialKey(parent, sb, false)
+        appendSequentialKey(parent, sb, addDocNr = false)
       }
     }
     sb.append(alphaKey(node.getSiblingPosition))
@@ -758,7 +758,7 @@ object Navigator {
   class FollowingEnumeration(var start: NodeInfo) extends UnfailingIterator {
 
     private var ancestorEnum: UnfailingIterator = getAncestorIterator(start, AnyNodeTest.getInstance, 
-      false)
+      includeSelf = false)
 
     private var siblingEnum: UnfailingIterator = null
 
@@ -817,7 +817,7 @@ object Navigator {
       extends UnfailingIterator {
 
     private var ancestorEnum: UnfailingIterator = getAncestorIterator(start, AnyNodeTest.getInstance, 
-      false)
+      includeSelf = false)
 
     private var siblingEnum: UnfailingIterator = null
 

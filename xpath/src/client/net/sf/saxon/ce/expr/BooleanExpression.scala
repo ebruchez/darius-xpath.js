@@ -75,20 +75,20 @@ class BooleanExpression(p1: Expression, operator: Int, p2: Expression) extends B
       operand1 = op1
     }
     if (operator == Token.AND) {
-      if (Literal.isConstantBoolean(operand0, false) || Literal.isConstantBoolean(operand1, false)) {
+      if (Literal.isConstantBoolean(operand0, value = false) || Literal.isConstantBoolean(operand1, value = false)) {
         return new Literal(BooleanValue.FALSE)
-      } else if (Literal.isConstantBoolean(operand0, true)) {
+      } else if (Literal.isConstantBoolean(operand0, value = true)) {
         return forceToBoolean(operand1, th)
-      } else if (Literal.isConstantBoolean(operand1, true)) {
+      } else if (Literal.isConstantBoolean(operand1, value = true)) {
         return forceToBoolean(operand0, th)
       }
     }
     if (operator == Token.OR) {
-      if (Literal.isConstantBoolean(operand0, true) || Literal.isConstantBoolean(operand1, true)) {
+      if (Literal.isConstantBoolean(operand0, value = true) || Literal.isConstantBoolean(operand1, value = true)) {
         return new Literal(BooleanValue.TRUE)
-      } else if (Literal.isConstantBoolean(operand0, false)) {
+      } else if (Literal.isConstantBoolean(operand0, value = false)) {
         return forceToBoolean(operand1, th)
-      } else if (Literal.isConstantBoolean(operand1, false)) {
+      } else if (Literal.isConstantBoolean(operand1, value = false)) {
         return forceToBoolean(operand0, th)
       }
     }

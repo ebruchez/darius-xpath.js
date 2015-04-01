@@ -44,7 +44,7 @@ class ProcessingInstruction(var name: Expression) extends SimpleNodeConstructor 
     name = visitor.typeCheck(name, contextItemType)
     adoptChildExpression(name)
     val role = new RoleLocator(RoleLocator.INSTRUCTION, "processing-instruction/name", 0)
-    name = TypeChecker.staticTypeCheck(name, SequenceType.SINGLE_STRING, false, role)
+    name = TypeChecker.staticTypeCheck(name, SequenceType.SINGLE_STRING, backwardsCompatible = false, role)
     adoptChildExpression(name)
   }
 

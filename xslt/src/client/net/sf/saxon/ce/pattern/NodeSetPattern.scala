@@ -38,7 +38,7 @@ class NodeSetPattern(protected var expression: Expression) extends Pattern {
   override def analyze(visitor: ExpressionVisitor, contextItemType: ItemType): Pattern = {
     expression = visitor.typeCheck(expression, contextItemType)
     val role = new RoleLocator(RoleLocator.VARIABLE, expression.toString, 0)
-    expression = TypeChecker.staticTypeCheck(expression, SequenceType.NODE_SEQUENCE, false, role)
+    expression = TypeChecker.staticTypeCheck(expression, SequenceType.NODE_SEQUENCE, backwardsCompatible = false, role)
     itemType = expression.getItemType
     this
   }

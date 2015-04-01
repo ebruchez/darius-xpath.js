@@ -156,7 +156,7 @@ class DocumentFn extends SystemFunction {
     if (expressionBaseURI == null) {
       super.checkArguments(visitor)
       expressionBaseURI = visitor.getStaticContext.getBaseURI
-      argument(0) = ExpressionTool.unsorted(visitor.getConfiguration, argument(0), false)
+      argument(0) = ExpressionTool.unsorted(visitor.getConfiguration, argument(0), retainAllNodes = false)
     }
   }
 

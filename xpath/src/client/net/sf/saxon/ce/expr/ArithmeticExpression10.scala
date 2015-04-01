@@ -30,9 +30,9 @@ class ArithmeticExpression10(p0: Expression, operator: Int, p1: Expression) exte
     }
     val atomicType = SequenceType.OPTIONAL_ATOMIC
     val role0 = new RoleLocator(RoleLocator.BINARY_EXPR, Token.tokens(operator), 0)
-    operand0 = TypeChecker.staticTypeCheck(operand0, atomicType, true, role0)
+    operand0 = TypeChecker.staticTypeCheck(operand0, atomicType, backwardsCompatible = true, role0)
     val role1 = new RoleLocator(RoleLocator.BINARY_EXPR, Token.tokens(operator), 1)
-    operand1 = TypeChecker.staticTypeCheck(operand1, atomicType, true, role1)
+    operand1 = TypeChecker.staticTypeCheck(operand1, atomicType, backwardsCompatible = true, role1)
     val itemType0 = operand0.getItemType
     if (itemType0.isInstanceOf[EmptySequenceTest]) {
       return Literal.makeLiteral(DoubleValue.NaN)

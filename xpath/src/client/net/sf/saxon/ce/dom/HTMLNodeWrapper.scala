@@ -323,12 +323,12 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
         if (nodeKind == Type.DOCUMENT)
           EmptyIterator.getInstance
         else
-          Navigator.getAncestorIterator(this, AnyNodeTest.getInstance, false)
+          Navigator.getAncestorIterator(this, AnyNodeTest.getInstance, includeSelf = false)
       case Axis.ANCESTOR_OR_SELF ⇒
         if (nodeKind == Type.DOCUMENT)
           SingletonIterator.makeIterator(this)
         else
-          Navigator.getAncestorIterator(this, AnyNodeTest.getInstance, true)
+          Navigator.getAncestorIterator(this, AnyNodeTest.getInstance, includeSelf = true)
       case Axis.ATTRIBUTE ⇒
         if (nodeKind != Type.ELEMENT)
           EmptyIterator.getInstance

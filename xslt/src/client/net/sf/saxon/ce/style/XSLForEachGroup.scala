@@ -106,7 +106,7 @@ class XSLForEachGroup extends StyleElement {
       groupBy = typeCheck(groupBy)
       try {
         val role = new RoleLocator(RoleLocator.INSTRUCTION, "xsl:for-each-group/group-by", 0)
-        groupBy = TypeChecker.staticTypeCheck(groupBy, SequenceType.ATOMIC_SEQUENCE, false, role)
+        groupBy = TypeChecker.staticTypeCheck(groupBy, SequenceType.ATOMIC_SEQUENCE, backwardsCompatible = false, role)
       } catch {
         case err: XPathException ⇒ compileError(err)
       }
@@ -115,7 +115,7 @@ class XSLForEachGroup extends StyleElement {
       try {
         val role = new RoleLocator(RoleLocator.INSTRUCTION, "xsl:for-each-group/group-adjacent", 0)
         role.setErrorCode("XTTE1100")
-        groupAdjacent = TypeChecker.staticTypeCheck(groupAdjacent, SequenceType.SINGLE_ATOMIC, false, 
+        groupAdjacent = TypeChecker.staticTypeCheck(groupAdjacent, SequenceType.SINGLE_ATOMIC, backwardsCompatible = false,
           role)
       } catch {
         case err: XPathException ⇒ compileError(err)
@@ -127,7 +127,7 @@ class XSLForEachGroup extends StyleElement {
       try {
         val role = new RoleLocator(RoleLocator.INSTRUCTION, "xsl:for-each-group/select", 0)
         role.setErrorCode("XTTE1120")
-        select = TypeChecker.staticTypeCheck(select, SequenceType.NODE_SEQUENCE, false, role)
+        select = TypeChecker.staticTypeCheck(select, SequenceType.NODE_SEQUENCE, backwardsCompatible = false, role)
       } catch {
         case err: XPathException ⇒ {
           val prefix = if (starting != null) "With group-starting-with attribute: " else "With group-ending-with attribute: "

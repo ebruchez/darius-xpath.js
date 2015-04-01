@@ -87,7 +87,7 @@ class GroupAdjacentIterator(_population: SequenceIterator,
     if (candidateKey.isNaN) {
       classOf[DistinctValues]
     } else {
-      candidateKey.getXPathComparable(false, collator, baseContext.getImplicitTimezone)
+      candidateKey.getXPathComparable(ordered = false, collator, baseContext.getImplicitTimezone)
     }
   }
 

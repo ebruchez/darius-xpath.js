@@ -40,7 +40,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
    *
    * @return an iterator containing the sub-expressions of this expression
    */
-  override def iterateSubExpressions(): Iterator[Expression] = iterateSubExpressions(true)
+  override def iterateSubExpressions(): Iterator[Expression] = iterateSubExpressions(includeSortKey = true)
 
   private def iterateSubExpressions(includeSortKey: Boolean): Iterator[Expression] = {
     val list = new ArrayList[Expression](8)

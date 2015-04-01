@@ -19,7 +19,7 @@ object IndexOf {
 
     def mapItem(item: Item): IntegerValue = {
       index += 1
-      if (Type.isComparable(searchType, item.asInstanceOf[AtomicValue].getItemType, false) && 
+      if (Type.isComparable(searchType, item.asInstanceOf[AtomicValue].getItemType, ordered = false) &&
         comparer.comparesEqual(item.asInstanceOf[AtomicValue], `val`)) {
         new IntegerValue(index)
       } else {

@@ -55,7 +55,7 @@ object StructuredQName {
     try {
       val parts = NameChecker.getQNameParts(Whitespace.trimWhitespace(lexicalName))
       val prefix = parts(0)
-      val uri = if (prefix == "") defaultURI else resolver.getURIForPrefix(prefix, false)
+      val uri = if (prefix == "") defaultURI else resolver.getURIForPrefix(prefix, useDefault = false)
       if (uri == null) {
         val de = new XPathException("Namespace prefix '" + parts(0) + "' has not been declared")
         de.setErrorCode("FONS0004")

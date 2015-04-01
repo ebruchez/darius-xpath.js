@@ -79,7 +79,7 @@ class ComputedAttribute(var attributeName: Expression, var namespace: Expression
       visitor.typeCheck(namespace, contextItemType)
       adoptChildExpression(namespace)
       role = new RoleLocator(RoleLocator.INSTRUCTION, "attribute/namespace", 0)
-      namespace = TypeChecker.staticTypeCheck(namespace, SequenceType.SINGLE_STRING, false, role)
+      namespace = TypeChecker.staticTypeCheck(namespace, SequenceType.SINGLE_STRING, backwardsCompatible = false, role)
     }
   }
 
@@ -172,7 +172,7 @@ class ComputedAttribute(var attributeName: Expression, var namespace: Expression
       if (prefix.length == 0) {
         uri = ""
       } else {
-        uri = nsContext.getURIForPrefix(prefix, false)
+        uri = nsContext.getURIForPrefix(prefix, useDefault = false)
         if (uri == null) {
           dynamicError("Undeclared prefix in attribute name: " + prefix, "XTDE0860")
         }
@@ -189,7 +189,7 @@ class ComputedAttribute(var attributeName: Expression, var namespace: Expression
           val prefixes = nsContext.iteratePrefixes()
           while (prefixes.hasNext) {
             val p = prefixes.next()
-            if (nsContext.getURIForPrefix(p, false) == uri) {
+            if (nsContext.getURIForPrefix(p, useDefault = false) == uri) {
               prefix = p
               //break
             }

@@ -232,7 +232,7 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
     operand1 = visitor.typeCheck(operand1, contextItemType)
     val atomicType = SequenceType.OPTIONAL_ATOMIC
     val role0 = new RoleLocator(RoleLocator.BINARY_EXPR, Token.tokens(operator), 0)
-    operand0 = TypeChecker.staticTypeCheck(operand0, atomicType, false, role0)
+    operand0 = TypeChecker.staticTypeCheck(operand0, atomicType, backwardsCompatible = false, role0)
     val itemType0 = operand0.getItemType
     if (itemType0.isInstanceOf[EmptySequenceTest]) {
       return new Literal(EmptySequence.getInstance)
@@ -246,7 +246,7 @@ class ArithmeticExpression(p0: Expression, operator: Int, p1: Expression) extend
       operand0 = new UntypedAtomicConverter(operand0, AtomicType.DOUBLE, false, role0)
     }
     val role1 = new RoleLocator(RoleLocator.BINARY_EXPR, Token.tokens(operator), 1)
-    operand1 = TypeChecker.staticTypeCheck(operand1, atomicType, false, role1)
+    operand1 = TypeChecker.staticTypeCheck(operand1, atomicType, backwardsCompatible = false, role1)
     val itemType1 = operand1.getItemType
     if (itemType1.isInstanceOf[EmptySequenceTest]) {
       return new Literal(EmptySequence.getInstance)

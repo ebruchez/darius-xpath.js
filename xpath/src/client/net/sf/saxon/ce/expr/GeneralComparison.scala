@@ -95,8 +95,8 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
     val config = visitor.getConfiguration
     operand0 = visitor.optimize(operand0, contextItemType)
     operand1 = visitor.optimize(operand1, contextItemType)
-    operand0 = ExpressionTool.unsorted(config, operand0, false)
-    operand1 = ExpressionTool.unsorted(config, operand1, false)
+    operand0 = ExpressionTool.unsorted(config, operand0, retainAllNodes = false)
+    operand1 = ExpressionTool.unsorted(config, operand1, retainAllNodes = false)
     this
   }
 
@@ -182,13 +182,13 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
       if (a0.isInstanceOf[NumericValue] || a1.isInstanceOf[NumericValue]) {
         val v0 = NumberFn.convert(a0)
         val v1 = NumberFn.convert(a1)
-        return ValueComparison.compare(v0, operator, v1, comparer, false)
+        return ValueComparison.compare(v0, operator, v1, comparer, checkTypes = false)
       }
       if (t0 == AtomicType.STRING || t1 == AtomicType.STRING || 
         (t0 == AtomicType.UNTYPED_ATOMIC && t1 == AtomicType.UNTYPED_ATOMIC)) {
         val s0 = a0.convert(AtomicType.STRING).asAtomic().asInstanceOf[StringValue]
         val s1 = a1.convert(AtomicType.STRING).asAtomic().asInstanceOf[StringValue]
-        return ValueComparison.compare(s0, operator, s1, comparer, false)
+        return ValueComparison.compare(s0, operator, s1, comparer, checkTypes = false)
       }
     }
     if (t0 == AtomicType.UNTYPED_ATOMIC) {
@@ -197,7 +197,7 @@ class GeneralComparison(p0: Expression, op: Int, p1: Expression) extends BinaryE
     if (t1 == AtomicType.UNTYPED_ATOMIC) {
       a1 = a1.convert(t0).asAtomic()
     }
-    ValueComparison.compare(a0, operator, a1, comparer, false)
+    ValueComparison.compare(a0, operator, a1, comparer, checkTypes = false)
   }
 
   /**

@@ -118,7 +118,7 @@ class XSLSort extends StyleElement {
     if (select != null) {
       try {
         val role = new RoleLocator(RoleLocator.INSTRUCTION, "xsl:sort/select", 0)
-        select = TypeChecker.staticTypeCheck(select, SequenceType.ATOMIC_SEQUENCE, false, role)
+        select = TypeChecker.staticTypeCheck(select, SequenceType.ATOMIC_SEQUENCE, backwardsCompatible = false, role)
       } catch {
         case err: XPathException ⇒ compileError(err)
       }

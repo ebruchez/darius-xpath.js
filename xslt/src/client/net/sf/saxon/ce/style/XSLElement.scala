@@ -85,7 +85,7 @@ class XSLElement extends StyleElement {
           parts(0) = ""
         }
       } else if (namespace == null) {
-        nsuri = resolver.getURIForPrefix(parts(0), true)
+        nsuri = resolver.getURIForPrefix(parts(0), useDefault = true)
         if (nsuri == null) {
           undeclaredNamespaceError(parts(0), "XTDE0830")
         }

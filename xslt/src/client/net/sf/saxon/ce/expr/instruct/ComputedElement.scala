@@ -66,7 +66,7 @@ class ComputedElement(var elementName: Expression,
     if (namespace != null) {
       namespace = visitor.typeCheck(namespace, contextItemType)
       role = new RoleLocator(RoleLocator.INSTRUCTION, "element/namespace", 0)
-      namespace = TypeChecker.staticTypeCheck(namespace, SequenceType.SINGLE_STRING, false, role)
+      namespace = TypeChecker.staticTypeCheck(namespace, SequenceType.SINGLE_STRING, backwardsCompatible = false, role)
     }
     if (Literal.isAtomic(elementName)) {
       try {
@@ -75,7 +75,7 @@ class ComputedElement(var elementName: Expression,
           val parts = NameChecker.checkQNameParts(`val`.getStringValue)
           if (namespace == null) {
             val prefix = parts(0)
-            val uri = getNamespaceResolver.getURIForPrefix(prefix, true)
+            val uri = getNamespaceResolver.getURIForPrefix(prefix, useDefault = true)
             if (uri == null) {
               val se = new XPathException("Prefix " + prefix + " has not been declared", "XPST0081")
               se.setIsStaticError(true)
@@ -167,7 +167,7 @@ class ComputedElement(var elementName: Expression,
       dynamicError("Computed element name has incorrect type", "XTDE0820")
     }
     if (namespace == null && uri == null) {
-      uri = nsContext.getURIForPrefix(prefix, true)
+      uri = nsContext.getURIForPrefix(prefix, useDefault = true)
       if (uri == null) {
         dynamicError("Undeclared prefix in element name: " + prefix, "XTDE0830")
       }

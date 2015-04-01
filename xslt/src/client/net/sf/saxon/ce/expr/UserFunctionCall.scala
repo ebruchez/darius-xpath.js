@@ -56,7 +56,7 @@ class UserFunctionCall extends FunctionCall {
     for (i ← 0 until n) {
       val role = new RoleLocator(RoleLocator.FUNCTION, compiledFunction.getFunctionName, i)
       role.setErrorCode("XTTE0790")
-      argument(i) = TypeChecker.staticTypeCheck(argument(i), compiledFunction.getArgumentType(i), false, 
+      argument(i) = TypeChecker.staticTypeCheck(argument(i), compiledFunction.getArgumentType(i), backwardsCompatible = false,
         role)
     }
   }

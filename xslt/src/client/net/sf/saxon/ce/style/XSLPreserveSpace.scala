@@ -55,7 +55,7 @@ class XSLPreserveSpace extends StyleElement {
           compileError("No prefix before ':*'")
         }
         val prefix = s.substring(0, s.length - 2)
-        val uri = resolver.getURIForPrefix(prefix, false)
+        val uri = resolver.getURIForPrefix(prefix, useDefault = false)
         nt = new NamespaceTest(Type.ELEMENT, uri)
         stripperRules.addRule(nt, preserve, decl.getModule)
       } else if (s.startsWith("*:")) {

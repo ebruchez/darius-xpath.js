@@ -182,12 +182,11 @@ object CastExpression {
       val qn = StructuredQName.fromLexicalQName(arg, "", env.getNamespaceResolver)
       new QNameValue(qn)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         if (err.getErrorCodeQName == null) {
           err.setErrorCode("FONS0004")
         }
         throw err
-      }
     }
   }
 }
@@ -224,7 +223,7 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
     operand = visitor.typeCheck(operand, contextItemType)
     val atomicType = SequenceType.makeSequenceType(AtomicType.ANY_ATOMIC, getCardinality)
     val role = new RoleLocator(RoleLocator.TYPE_OP, "cast as", 0)
-    operand = TypeChecker.staticTypeCheck(operand, atomicType, false, role)
+    operand = TypeChecker.staticTypeCheck(operand, atomicType, backwardsCompatible = false, role)
     val th = TypeHierarchy.getInstance
     val sourceType = operand.getItemType
     val r = th.relationship(sourceType, targetType)

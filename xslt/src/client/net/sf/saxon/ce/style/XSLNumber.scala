@@ -163,7 +163,7 @@ class XSLNumber extends StyleElement {
       try {
         val role = new RoleLocator(RoleLocator.INSTRUCTION, "xsl:number/select", 0)
         role.setErrorCode("XTTE1000")
-        select = TypeChecker.staticTypeCheck(select, SequenceType.SINGLE_NODE, false, role)
+        select = TypeChecker.staticTypeCheck(select, SequenceType.SINGLE_NODE, backwardsCompatible = false, role)
       } catch {
         case err: XPathException ⇒ compileError(err)
       }

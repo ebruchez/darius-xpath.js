@@ -210,7 +210,7 @@ abstract class GeneralVariable extends Instruction with Binding {
     val role = new RoleLocator(RoleLocator.VARIABLE, variableQName, 0)
     val r = requiredType
     if (r != null && select != null) {
-      select = TypeChecker.staticTypeCheck(select, requiredType, false, role)
+      select = TypeChecker.staticTypeCheck(select, requiredType, backwardsCompatible = false, role)
     }
   }
 

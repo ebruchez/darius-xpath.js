@@ -91,7 +91,7 @@ class KeyFn extends SystemFunction {
     if (checked) return
     checked = true
     super.checkArguments(visitor)
-    argument(1) = ExpressionTool.unsorted(visitor.getConfiguration, argument(1), false)
+    argument(1) = ExpressionTool.unsorted(visitor.getConfiguration, argument(1), retainAllNodes = false)
     if (argument(0).isInstanceOf[StringLiteral]) {
       var keyName: StructuredQName = null
       try {
