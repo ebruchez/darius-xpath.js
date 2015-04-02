@@ -4,7 +4,6 @@
 package client.net.sf.saxon.ce.`type`
 
 import client.net.sf.saxon.ce.`type`.TypeHierarchy._
-import client.net.sf.saxon.ce.om.StructuredQName
 import client.net.sf.saxon.ce.orbeon.{HashMap, Map}
 import client.net.sf.saxon.ce.pattern.{AnyNodeTest, EmptySequenceTest, NameTest, NodeTest}
 
@@ -171,28 +170,49 @@ class TypeHierarchy {
         } else if (t2.isInstanceOf[EmptySequenceTest]) {
           DISJOINT
         } else {
-          var nodeKindRelationship: Int = 0
           val m1 = t1.asInstanceOf[NodeTest].getNodeKindMask
           val m2 = t2.asInstanceOf[NodeTest].getNodeKindMask
+
           if ((m1 & m2) == 0) {
             return DISJOINT
-          } else nodeKindRelationship = if (m1 == m2) SAME_TYPE else if ((m1 & m2) == m1) SUBSUMED_BY else if ((m1 & m2) == m2) SUBSUMES else OVERLAPS
-          var nodeNameRelationship: Int = 0
-          var n1: StructuredQName = null
-          var n2: StructuredQName = null
-          if (t1.isInstanceOf[NameTest]) {
-            n1 = t1.asInstanceOf[NameTest].getRequiredNodeName
           }
-          if (t2.isInstanceOf[NameTest]) {
-            n2 = t2.asInstanceOf[NameTest].getRequiredNodeName
+
+          val nodeKindRelationship =
+              if (m1 == m2)
+                SAME_TYPE
+              else if ((m1 & m2) == m1)
+                SUBSUMED_BY
+              else if ((m1 & m2) == m2)
+                SUBSUMES
+              else
+                OVERLAPS
+
+          val n1 = t1 match {
+            case nameTest: NameTest ⇒ nameTest.getRequiredNodeName
+            case _ ⇒ null
           }
-          nodeNameRelationship = if (n1 == null) if (n2 == null) SAME_TYPE else SUBSUMES else if (n2 == null) SUBSUMED_BY else if (n1 == n2) SAME_TYPE else DISJOINT
+          val n2 = t2 match {
+            case nameTest: NameTest ⇒ nameTest.getRequiredNodeName
+            case _ ⇒ null
+          }
+
+          val nodeNameRelationship =
+            if (n1 == null) {
+              if (n2 == null) SAME_TYPE else SUBSUMES
+            } else if (n2 == null) {
+              SUBSUMED_BY
+            } else if (n1 == n2) {
+              SAME_TYPE
+            } else {
+              DISJOINT
+            }
+
           if (nodeKindRelationship == SAME_TYPE && nodeNameRelationship == SAME_TYPE) {
             SAME_TYPE
-          } else if ((nodeKindRelationship == SAME_TYPE || nodeKindRelationship == SUBSUMES) && 
+          } else if ((nodeKindRelationship == SAME_TYPE || nodeKindRelationship == SUBSUMES) &&
             (nodeNameRelationship == SAME_TYPE || nodeNameRelationship == SUBSUMES)) {
             SUBSUMES
-          } else if ((nodeKindRelationship == SAME_TYPE || nodeKindRelationship == SUBSUMED_BY) && 
+          } else if ((nodeKindRelationship == SAME_TYPE || nodeKindRelationship == SUBSUMED_BY) &&
             (nodeNameRelationship == SAME_TYPE || nodeNameRelationship == SUBSUMED_BY)) {
             SUBSUMED_BY
           } else if (nodeNameRelationship == DISJOINT) {
