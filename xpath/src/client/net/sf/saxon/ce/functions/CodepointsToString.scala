@@ -25,12 +25,11 @@ class CodepointsToString extends SystemFunction {
     while (true) {
       val nextInt = si.next().asInstanceOf[NumericValue]
       if (nextInt == null) {
-        //break
+        return StringValue.makeStringValue(sb.condense())
       }
       val next = nextInt.intValue()
-      if (next < 0 || next > Integer.MAX_VALUE || !NameChecker.isValidChar(next.toInt)) {
-        throw new XPathException("Invalid XML character [x " + Integer.toHexString(next.toInt) + 
-          ']', "FOCH0001")
+      if (next < 0 || next > Integer.MAX_VALUE || ! NameChecker.isValidChar(next.toInt)) {
+        throw new XPathException(s"Invalid XML character [x ${Integer.toHexString(next.toInt)}]", "FOCH0001")
       }
       if (next < 65536) {
         sb.append(next.toChar)
@@ -39,6 +38,6 @@ class CodepointsToString extends SystemFunction {
         sb.append(UTF16CharacterSet.lowSurrogate(next.toInt))
       }
     }
-    StringValue.makeStringValue(sb.condense())
+    throw new IllegalStateException
   }
 }
