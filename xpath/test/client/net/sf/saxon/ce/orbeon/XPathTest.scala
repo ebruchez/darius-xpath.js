@@ -50,5 +50,8 @@ object XPathTest extends TestSuite {
     'PredicateOptimization {
       assert(List(newDouble(7)) == compileAndRun("""(3, 7)[2]"""))
     }
+    'EmptySequence {
+      assert(Nil == compileAndRun("""()"""))
+    }
   }
 }

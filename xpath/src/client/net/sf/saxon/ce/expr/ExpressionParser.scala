@@ -773,7 +773,7 @@ class ExpressionParser {
       nextToken()
       if (t.currentToken == Token.RPAR) {
         nextToken()
-        new Literal(EmptySequence.getInstance)
+        return new Literal(EmptySequence.getInstance)
       }
       val seq = parseExpression()
       skipToken(Token.RPAR)
@@ -826,10 +826,9 @@ class ExpressionParser {
       try {
         axis = Axis.getAxisNumber(t.currentTokenValue)
       } catch {
-        case err: XPathException ⇒ {
+        case err: XPathException ⇒
           grumble(err.getMessage)
           axis = Axis.CHILD
-        }
       }
       val principalNodeType = Axis.principalNodeType(axis)
       nextToken()
@@ -1106,14 +1105,13 @@ class ExpressionParser {
     try {
       fcall = env.getFunctionLibrary.bind(functionName, arguments, env, defaultContainer)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         if (err.getErrorCodeQName == null) {
           err.setErrorCode("XPST0017")
           err.setIsStaticError(true)
         }
         grumble(err.getMessage, err.getErrorCodeQName)
         return null
-      }
     }
     if (fcall == null) {
       val msg = "Cannot find a matching " + arguments.length + "-argument function named " + 
