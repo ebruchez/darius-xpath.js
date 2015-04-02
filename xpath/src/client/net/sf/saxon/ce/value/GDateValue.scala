@@ -48,9 +48,7 @@ object GDateValue {
   }
 
   private def badDate(msg: String, value: CharSequence): ValidationFailure = {
-    new ValidationFailure("Invalid date " + Err.wrap(value, Err.VALUE) + " (" + 
-      msg + 
-      ")", "FORG0001")
+    new ValidationFailure("Invalid date " + Err.wrap(value, Err.VALUE) + " (" + msg + ")", "FORG0001")
   }
 
   /**
@@ -82,9 +80,7 @@ object GDateValue {
 abstract class GDateValue extends CalendarValue {
 
   protected var year: Int = _
-
   protected var month: Int = _
-
   protected var day: Int = _
 
   /**
@@ -178,11 +174,12 @@ abstract class GDateValue extends CalendarValue {
 
     case Component.MONTH ⇒ new IntegerValue(month)
     case Component.DAY ⇒ new IntegerValue(day)
-    case Component.TIMEZONE ⇒ if (hasTimezone) {
-      DayTimeDurationValue.fromMilliseconds(60000L * getTimezoneInMinutes)
-    } else {
-      null
-    }
-    case _ ⇒ throw new IllegalArgumentException("Unknown component for date: " + component)
+    case Component.TIMEZONE ⇒
+      if (hasTimezone)
+        DayTimeDurationValue.fromMilliseconds(60000L * getTimezoneInMinutes)
+      else
+        null
+    case _ ⇒
+      throw new IllegalArgumentException(s"Unknown component for date: $component")
   }
 }
