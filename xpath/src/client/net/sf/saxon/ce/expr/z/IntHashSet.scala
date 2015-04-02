@@ -191,8 +191,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
     nbit = 1
     nmax = 2
     while (nmax < capacity * 4 && nmax < MAX_SIZE) {
-
-      nbit
+      nbit += 1
       nmax *= 2
     }
     val nold = _nmax
