@@ -137,17 +137,17 @@ class VennExpression(p1: Expression, op: Int, p2: Expression) extends BinaryExpr
           0) return operand0
 
     }
-    if (operand0.isInstanceOf[PathExpression] && operand1.isInstanceOf[PathExpression] && 
-      operator == Token.UNION) {
-      val path1 = operand0.asInstanceOf[PathExpression]
-      val path2 = operand1.asInstanceOf[PathExpression]
-      if (path1.getFirstStep == path2.getFirstStep) {
-        val venn = new VennExpression(path1.getRemainingSteps, operator, path2.getRemainingSteps)
-        ExpressionTool.copyLocationInfo(this, venn)
-        val path = new PathExpression(path1.getFirstStep, venn)
-        ExpressionTool.copyLocationInfo(this, path)
-        return visitor.simplify(path)
-      }
+    operand0 match {
+      case path1: PathExpression if operand1.isInstanceOf[PathExpression] && operator == Token.UNION ⇒
+        val path2 = operand1.asInstanceOf[PathExpression]
+        if (path1.getFirstStep == path2.getFirstStep) {
+          val venn = new VennExpression(path1.getRemainingSteps, operator, path2.getRemainingSteps)
+          ExpressionTool.copyLocationInfo(this, venn)
+          val path = new PathExpression(path1.getFirstStep, venn)
+          ExpressionTool.copyLocationInfo(this, path)
+          return visitor.simplify(path)
+        }
+      case _ ⇒
     }
     this
   }

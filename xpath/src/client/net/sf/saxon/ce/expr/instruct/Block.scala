@@ -319,29 +319,30 @@ class Block extends Instruction {
     var currentLiteralList: List[Item] = null
     for (i ← 0 until _children.length) {
       if (Literal.isEmptySequence(_children(i))) {
-      } else if (_children(i).isInstanceOf[Block]) {
-        flushCurrentLiteralList(currentLiteralList, targetList)
-        currentLiteralList = null
-        _children(i).asInstanceOf[Block].flatten(targetList)
-      } else if (_children(i).isInstanceOf[Literal]) {
-        val iterator = _children(i).asInstanceOf[Literal].getValue.iterate()
-        if (currentLiteralList == null) {
-          currentLiteralList = new ArrayList[Item](10)
-        }
-        import Breaks._
-        breakable {
-          while (true) {
-            val item = iterator.next()
-            if (item == null) {
-              break()
-            }
-            currentLiteralList.add(item)
+      } else _children(i) match {
+        case block: Block ⇒
+          flushCurrentLiteralList(currentLiteralList, targetList)
+          currentLiteralList = null
+          block.flatten(targetList)
+        case literal: Literal ⇒
+          val iterator = literal.getValue.iterate()
+          if (currentLiteralList == null) {
+            currentLiteralList = new ArrayList[Item](10)
           }
-        }
-      } else {
-        flushCurrentLiteralList(currentLiteralList, targetList)
-        currentLiteralList = null
-        targetList.add(_children(i))
+          import Breaks._
+          breakable {
+            while (true) {
+              val item = iterator.next()
+              if (item == null) {
+                break()
+              }
+              currentLiteralList.add(item)
+            }
+          }
+        case _ ⇒
+          flushCurrentLiteralList(currentLiteralList, targetList)
+          currentLiteralList = null
+          targetList.add(_children(i))
       }
     }
     flushCurrentLiteralList(currentLiteralList, targetList)

@@ -93,10 +93,11 @@ class GenericAtomicComparer(@BeanProperty var collator: StringCollator, var impl
       return +1
     }
     if (a.isInstanceOf[StringValue] && b.isInstanceOf[StringValue]) {
-      if (collator.isInstanceOf[CodepointCollator]) {
-        collator.asInstanceOf[CodepointCollator].compareCS(a.getStringValue, b.getStringValue)
-      } else {
-        collator.compareStrings(a.getStringValue, b.getStringValue)
+      collator match {
+        case codepointCollator: CodepointCollator ⇒
+          codepointCollator.compareCS(a.getStringValue, b.getStringValue)
+        case _ ⇒
+          collator.compareStrings(a.getStringValue, b.getStringValue)
       }
     } else {
       val ac = a.getXPathComparable(ordered = true, collator, implicitTimezone).asInstanceOf[Comparable[AnyRef]]
@@ -125,17 +126,17 @@ class GenericAtomicComparer(@BeanProperty var collator: StringCollator, var impl
    * @throws ClassCastException if the objects are not comparable
    */
   def comparesEqual(a: AtomicValue, b: AtomicValue): Boolean = {
-    if (a.isInstanceOf[StringValue] && b.isInstanceOf[StringValue]) {
-      val result = collator.comparesEqual(a.getStringValue, b.getStringValue)
-      //println(result)
-      result
-    } else if (a.isInstanceOf[CalendarValue] && b.isInstanceOf[CalendarValue]) {
-      a.asInstanceOf[CalendarValue].compareTo(b.asInstanceOf[CalendarValue], implicitTimezone) == 
-        0
-    } else {
-      val ac = a.getXPathComparable(ordered = false, collator, implicitTimezone)
-      val bc = b.getXPathComparable(ordered = false, collator, implicitTimezone)
-      ac == bc
+    a match {
+      case _: StringValue if b.isInstanceOf[StringValue] ⇒
+        val result = collator.comparesEqual(a.getStringValue, b.getStringValue)
+        //println(result)
+        result
+      case calendarValue: CalendarValue if b.isInstanceOf[CalendarValue] ⇒
+        calendarValue.compareTo(b.asInstanceOf[CalendarValue], implicitTimezone) == 0
+      case _ ⇒
+        val ac = a.getXPathComparable(ordered = false, collator, implicitTimezone)
+        val bc = b.getXPathComparable(ordered = false, collator, implicitTimezone)
+        ac == bc
     }
   }
 }

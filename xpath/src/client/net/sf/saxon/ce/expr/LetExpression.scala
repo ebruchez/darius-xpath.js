@@ -37,7 +37,10 @@ class LetExpression extends Assignation with TailCallReturner {
     val role = new RoleLocator(RoleLocator.VARIABLE, getVariableQName, 0)
     val th = TypeHierarchy.getInstance
     val actualItemType = sequence.getItemType
-    refineTypeInformation(actualItemType, sequence.getCardinality, if (sequence.isInstanceOf[Literal]) sequence.asInstanceOf[Literal].getValue else null,
+    refineTypeInformation(actualItemType, sequence.getCardinality, sequence match {
+      case literal: Literal ⇒ literal.getValue
+      case _ ⇒ null
+    },
       sequence.getSpecialProperties, visitor, this)
     action = visitor.typeCheck(action, contextItemType)
     this
@@ -85,9 +88,10 @@ class LetExpression extends Assignation with TailCallReturner {
    */
   override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
     val env = visitor.getStaticContext
-    if (action.isInstanceOf[VariableReference] && 
-      action.asInstanceOf[VariableReference].getBinding == this) {
-      return visitor.optimize(sequence, contextItemType)
+    action match {
+      case reference: VariableReference if reference.getBinding == this ⇒
+        return visitor.optimize(sequence, contextItemType)
+      case _ ⇒
     }
 //ORBEON XSLT
 //    if (sequence.isInstanceOf[DocumentInstr] && sequence.asInstanceOf[DocumentInstr].isTextOnly) {
@@ -158,10 +162,11 @@ class LetExpression extends Assignation with TailCallReturner {
       while (true) {
         val `val` = let.eval(context)
         context.setLocalVariable(let.getLocalSlotNumber, `val`)
-        if (let.action.isInstanceOf[LetExpression]) {
-          let = let.action.asInstanceOf[LetExpression]
-        } else {
-          break()
+        let.action match {
+          case letExpression: LetExpression ⇒
+            let = letExpression
+          case _ ⇒
+            break()
         }
       }
     }
@@ -189,10 +194,11 @@ class LetExpression extends Assignation with TailCallReturner {
       while (true) {
         val `val` = let.eval(context)
         context.setLocalVariable(let.getLocalSlotNumber, `val`)
-        if (let.action.isInstanceOf[LetExpression]) {
-          let = let.action.asInstanceOf[LetExpression]
-        } else {
-          break()
+        let.action match {
+          case letExpression: LetExpression ⇒
+            let = letExpression
+          case _ ⇒
+            break()
         }
       }
     }
@@ -209,10 +215,11 @@ class LetExpression extends Assignation with TailCallReturner {
       while (true) {
         val `val` = let.eval(context)
         context.setLocalVariable(let.getLocalSlotNumber, `val`)
-        if (let.action.isInstanceOf[LetExpression]) {
-          let = let.action.asInstanceOf[LetExpression]
-        } else {
-          break()
+        let.action match {
+          case letExpression: LetExpression ⇒
+            let = letExpression
+          case _ ⇒
+            break()
         }
       }
     }
@@ -294,18 +301,20 @@ class LetExpression extends Assignation with TailCallReturner {
       while (true) {
         val `val` = let.eval(context)
         context.setLocalVariable(let.getLocalSlotNumber, `val`)
-        if (let.action.isInstanceOf[LetExpression]) {
-          let = let.action.asInstanceOf[LetExpression]
-        } else {
-          break()
+        let.action match {
+          case letExpression: LetExpression ⇒
+            let = letExpression
+          case _ ⇒
+            break()
         }
       }
     }
-    if (let.action.isInstanceOf[TailCallReturner]) {
-      let.action.asInstanceOf[TailCallReturner].processLeavingTail(context)
-    } else {
-      let.action.process(context)
-      null
+    let.action match {
+      case tailCallReturner: TailCallReturner ⇒
+        tailCallReturner.processLeavingTail(context)
+      case _ ⇒
+        let.action.process(context)
+        null
     }
   }
 

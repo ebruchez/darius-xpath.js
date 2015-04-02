@@ -233,19 +233,21 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
       upcast = true
       return this
     }
-    if (operand.isInstanceOf[Literal]) {
-      val literalOperand = operand.asInstanceOf[Literal].getValue
-      if (literalOperand.isInstanceOf[AtomicValue]) {
-        val av = evaluateItem(new EarlyEvaluationContext(visitor.getConfiguration)).asInstanceOf[AtomicValue]
-        return Literal.makeLiteral(av)
-      }
-      if (literalOperand.isInstanceOf[EmptySequence]) {
-        if (allowEmpty) {
-          return operand
-        } else {
-          typeError("Cast can never succeed: the operand must not be an empty sequence", "XPTY0004")
+    operand match {
+      case literal: Literal ⇒
+        val literalOperand = literal.getValue
+        if (literalOperand.isInstanceOf[AtomicValue]) {
+          val av = evaluateItem(new EarlyEvaluationContext(visitor.getConfiguration)).asInstanceOf[AtomicValue]
+          return Literal.makeLiteral(av)
         }
-      }
+        if (literalOperand.isInstanceOf[EmptySequence]) {
+          if (allowEmpty) {
+            return operand
+          } else {
+            typeError("Cast can never succeed: the operand must not be an empty sequence", "XPTY0004")
+          }
+        }
+      case _ ⇒
     }
     if (sourceType != EmptySequenceTest.getInstance) {
       val p = sourceType.getAtomizedItemType
@@ -278,31 +280,37 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
       return e2
     }
     if (targetType == AtomicType.UNTYPED_ATOMIC) {
-      if (operand.isInstanceOf[StringFn]) {
-        val e = operand.asInstanceOf[StringFn].getArguments(0)
-        if (e.getItemType.isInstanceOf[AtomicType] && e.getCardinality == StaticProperty.EXACTLY_ONE) {
-          operand = e
-        }
+      operand match {
+        case stringFn: StringFn ⇒
+          val e = stringFn.getArguments(0)
+          if (e.getItemType.isInstanceOf[AtomicType] && e.getCardinality == StaticProperty.EXACTLY_ONE) {
+            operand = e
+          }
+        case _ ⇒
       }
     }
-    if (operand.isInstanceOf[StringFn]) {
-      val e = operand.asInstanceOf[StringFn].getArguments(0)
-      val et = e.getItemType
-      if (et.isInstanceOf[AtomicType] && e.getCardinality == StaticProperty.EXACTLY_ONE && 
-        th.isSubType(et, targetType)) {
-        return e
-      }
-    }
-    if (operand.isInstanceOf[CastExpression]) {
-      val it = operand.asInstanceOf[CastExpression].targetType
-      if (th.isSubType(it, AtomicType.STRING) || th.isSubType(it, AtomicType.UNTYPED_ATOMIC)) {
-        val e = operand.asInstanceOf[CastExpression].getBaseExpression
+    operand match {
+      case stringFn: StringFn ⇒
+        val e = stringFn.getArguments(0)
         val et = e.getItemType
-        if (et.isInstanceOf[AtomicType] && e.getCardinality == StaticProperty.EXACTLY_ONE && 
+        if (et.isInstanceOf[AtomicType] && e.getCardinality == StaticProperty.EXACTLY_ONE &&
           th.isSubType(et, targetType)) {
           return e
         }
-      }
+      case _ ⇒
+    }
+    operand match {
+      case castExpression: CastExpression ⇒
+        val it = castExpression.targetType
+        if (th.isSubType(it, AtomicType.STRING) || th.isSubType(it, AtomicType.UNTYPED_ATOMIC)) {
+          val e = castExpression.getBaseExpression
+          val et = e.getItemType
+          if (et.isInstanceOf[AtomicType] && e.getCardinality == StaticProperty.EXACTLY_ONE &&
+            th.isSubType(et, targetType)) {
+            return e
+          }
+        }
+      case _ ⇒
     }
     if (!Cardinality.allowsZero(operand.getCardinality)) {
       allowEmpty = false
@@ -348,15 +356,16 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
       return value.convert(targetType).asInstanceOf[AtomicValue]
     }
     val result = value.convert(targetType)
-    if (result.isInstanceOf[ValidationFailure]) {
-      val err = result.asInstanceOf[ValidationFailure]
-      val code = err.getErrorCodeQName
-      var lcode = if (code == null) null else code.getLocalName
-      if (lcode == null) {
-        lcode = "FORG0001"
-      }
-      dynamicError(err.getMessage, lcode)
-      return null
+    result match {
+      case err: ValidationFailure ⇒
+        val code = err.getErrorCodeQName
+        var lcode = if (code == null) null else code.getLocalName
+        if (lcode == null) {
+          lcode = "FORG0001"
+        }
+        dynamicError(err.getMessage, lcode)
+        return null
+      case _ ⇒
     }
     result.asInstanceOf[AtomicValue]
   }

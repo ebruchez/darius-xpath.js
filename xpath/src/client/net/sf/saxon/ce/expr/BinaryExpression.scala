@@ -185,24 +185,25 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
    * Is this expression the same as another expression?
    */
   override def equals(other: Any): Boolean = {
-    if (other.isInstanceOf[BinaryExpression]) {
-      val b = other.asInstanceOf[BinaryExpression]
-      if (operator == b.operator) {
-        if (operand0 == b.operand0 && operand1 == b.operand1) {
+    other match {
+      case b: BinaryExpression ⇒
+        if (operator == b.operator) {
+          if (operand0 == b.operand0 && operand1 == b.operand1) {
+            return true
+          }
+          if (isCommutative(operator) && operand0 == b.operand1 && operand1 == b.operand0) {
+            return true
+          }
+          if (isAssociative(operator) &&
+            pairwiseEqual(flattenExpression(new ArrayList(4)), b.flattenExpression(new ArrayList(4)))) {
+            return true
+          }
+        }
+        if (isInverse(operator, b.operator) && operand0 == b.operand1 &&
+          operand1 == b.operand0) {
           return true
         }
-        if (isCommutative(operator) && operand0 == b.operand1 && operand1 == b.operand0) {
-          return true
-        }
-        if (isAssociative(operator) && 
-          pairwiseEqual(flattenExpression(new ArrayList(4)), b.flattenExpression(new ArrayList(4)))) {
-          return true
-        }
-      }
-      if (isInverse(operator, b.operator) && operand0 == b.operand1 && 
-        operand1 == b.operand0) {
-        return true
-      }
+      case _ ⇒
     }
     false
   }
@@ -215,31 +216,31 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
    * @return the list of expressions
    */
   private def flattenExpression(list: List[Expression]): List[Expression] = {
-    if (operand0.isInstanceOf[BinaryExpression] && 
-      operand0.asInstanceOf[BinaryExpression].operator == operator) {
-      operand0.asInstanceOf[BinaryExpression].flattenExpression(list)
-    } else {
-      val h = operand0.hashCode
-      list.add(operand0)
-      var i = list.size - 1
-      while (i > 0 && h > list.get(i - 1).hashCode) {
-        list.set(i, list.get(i - 1))
-        list.set(i - 1, operand0)
-        i -= 1
-      }
+    operand0 match {
+      case binaryExpression: BinaryExpression if binaryExpression.operator == operator ⇒
+        binaryExpression.flattenExpression(list)
+      case _ ⇒
+        val h = operand0.hashCode
+        list.add(operand0)
+        var i = list.size - 1
+        while (i > 0 && h > list.get(i - 1).hashCode) {
+          list.set(i, list.get(i - 1))
+          list.set(i - 1, operand0)
+          i -= 1
+        }
     }
-    if (operand1.isInstanceOf[BinaryExpression] && 
-      operand1.asInstanceOf[BinaryExpression].operator == operator) {
-      operand1.asInstanceOf[BinaryExpression].flattenExpression(list)
-    } else {
-      val h = operand1.hashCode
-      list.add(operand1)
-      var i = list.size - 1
-      while (i > 0 && h > list.get(i - 1).hashCode) {
-        list.set(i, list.get(i - 1))
-        list.set(i - 1, operand1)
-        i -= 1
-      }
+    operand1 match {
+      case binaryExpression: BinaryExpression if binaryExpression.operator == operator ⇒
+        binaryExpression.flattenExpression(list)
+      case _ ⇒
+        val h = operand1.hashCode
+        list.add(operand1)
+        var i = list.size - 1
+        while (i > 0 && h > list.get(i - 1).hashCode) {
+          list.set(i, list.get(i - 1))
+          list.set(i - 1, operand1)
+          i -= 1
+        }
     }
     list
   }

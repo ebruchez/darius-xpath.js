@@ -24,26 +24,27 @@ object Atomizer {
     if (in.isInstanceOf[AnyItemType]) {
       return AtomicType.ANY_ATOMIC
     }
-    if (in.isInstanceOf[NodeTest]) {
-      if (in.isInstanceOf[EmptySequenceTest]) {
-        return in
-      }
-      val kinds = in.asInstanceOf[NodeTest].getNodeKindMask
-      if (alwaysUntyped) {
-        if ((kinds | STRING_KINDS) == STRING_KINDS) {
-          return AtomicType.STRING
+    in match {
+      case test: NodeTest ⇒
+        if (in.isInstanceOf[EmptySequenceTest]) {
+          return in
         }
-        if ((kinds | UNTYPED_IF_UNTYPED_KINDS) == UNTYPED_IF_UNTYPED_KINDS) {
-          return AtomicType.UNTYPED_ATOMIC
+        val kinds = test.getNodeKindMask
+        if (alwaysUntyped) {
+          if ((kinds | STRING_KINDS) == STRING_KINDS) {
+            return AtomicType.STRING
+          }
+          if ((kinds | UNTYPED_IF_UNTYPED_KINDS) == UNTYPED_IF_UNTYPED_KINDS) {
+            return AtomicType.UNTYPED_ATOMIC
+          }
+        } else {
+          if ((kinds | UNTYPED_KINDS) == UNTYPED_KINDS) {
+            return AtomicType.UNTYPED_ATOMIC
+          }
         }
-      } else {
-        if ((kinds | UNTYPED_KINDS) == UNTYPED_KINDS) {
-          return AtomicType.UNTYPED_ATOMIC
-        }
-      }
-      in.getAtomizedItemType
-    } else {
-      in
+        in.getAtomizedItemType
+      case _ ⇒
+        in
     }
   }
 
@@ -92,23 +93,25 @@ class Atomizer(sequence: Expression) extends UnaryExpression(sequence) {
    */
   override def simplify(visitor: ExpressionVisitor): Expression = {
     operand = visitor.simplify(operand)
-    if (operand.isInstanceOf[Literal]) {
-      val `val` = operand.asInstanceOf[Literal].getValue
-      if (`val`.isInstanceOf[AtomicValue]) {
-        return operand
-      }
-      val iter = `val`.iterate()
-      while (true) {
-        val i = iter.next()
-        if (i == null) {
+    operand match {
+      case literal: Literal ⇒
+        val `val` = literal.getValue
+        if (`val`.isInstanceOf[AtomicValue]) {
           return operand
         }
-        if (i.isInstanceOf[NodeInfo]) {
-          return this
+        val iter = `val`.iterate()
+        while (true) {
+          val i = iter.next()
+          if (i == null) {
+            return operand
+          }
+          if (i.isInstanceOf[NodeInfo]) {
+            return this
+          }
         }
-      }
-    } else if (operand.isInstanceOf[ValueOf]) {
-      return operand.asInstanceOf[ValueOf].convertToCastAsString()
+      case valueOf: ValueOf ⇒
+        return valueOf.convertToCastAsString()
+      case _ ⇒
     }
     this
   }
@@ -151,18 +154,22 @@ class Atomizer(sequence: Expression) extends UnaryExpression(sequence) {
       if (th.isSubType(operand.getItemType, AtomicType.ANY_ATOMIC)) {
         return operand
       }
-      if (operand.isInstanceOf[ValueOf]) {
-        return operand.asInstanceOf[ValueOf].convertToCastAsString()
+      operand match {
+        case valueOf: ValueOf ⇒
+          return valueOf.convertToCastAsString()
+        case _ ⇒
       }
-      if (operand.isInstanceOf[Block]) {
-        val children = operand.asInstanceOf[Block].getChildren
-        val atomizedChildren = new Array[Expression](children.length)
-        for (i ← 0 until children.length) {
-          atomizedChildren(i) = new Atomizer(children(i))
-        }
-        val newBlock = new Block()
-        newBlock.setChildren(atomizedChildren)
-        return newBlock.typeCheck(visitor, contextItemType).optimize(visitor, contextItemType)
+      operand match {
+        case block: Block ⇒
+          val children = block.getChildren
+          val atomizedChildren = new Array[Expression](children.length)
+          for (i ← 0 until children.length) {
+            atomizedChildren(i) = new Atomizer(children(i))
+          }
+          val newBlock = new Block()
+          newBlock.setChildren(atomizedChildren)
+          return newBlock.typeCheck(visitor, contextItemType).optimize(visitor, contextItemType)
+        case _ ⇒
       }
     }
     exp

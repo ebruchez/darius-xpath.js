@@ -54,12 +54,14 @@ class RootExpression extends SingleNodeExpression {
     if (current == null) {
       dynamicError("Finding root of tree: the context item is undefined", "XPDY0002")
     }
-    if (current.isInstanceOf[NodeInfo]) {
-      val doc = current.asInstanceOf[NodeInfo].getDocumentRoot
-      if (doc == null) {
-        dynamicError("The root of the tree containing the context item is not a document node", "XPDY0050")
-      }
-      return doc
+    current match {
+      case info: NodeInfo ⇒
+        val doc = info.getDocumentRoot
+        if (doc == null) {
+          dynamicError("The root of the tree containing the context item is not a document node", "XPDY0050")
+        }
+        return doc
+      case _ ⇒
     }
     typeError("Finding root of tree: the context item is not a node", "XPTY0020")
     null

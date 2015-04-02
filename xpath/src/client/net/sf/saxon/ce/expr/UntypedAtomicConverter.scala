@@ -62,21 +62,21 @@ class UntypedAtomicConverter(sequence: Expression,
       return this
     }
     singleton = `type`.isInstanceOf[AtomicType] && !Cardinality.allowsMany(operand.getCardinality)
-    if (operand.isInstanceOf[Atomizer] && `type` == AtomicType.UNTYPED_ATOMIC && 
-      requiredItemType == AtomicType.STRING && 
-      operand.asInstanceOf[Atomizer].getBaseExpression.getItemType.isInstanceOf[NodeTest]) {
-      val nodeExp = operand.asInstanceOf[Atomizer].getBaseExpression
-      if (nodeExp.getCardinality != StaticProperty.EXACTLY_ONE) {
-        val fn = SystemFunction.makeSystemFunction("string", Array(new ContextItemExpression())).asInstanceOf[SystemFunction]
-        fn.setContainer(getContainer)
-        val map = new ForEach(nodeExp, fn, false)
-        map.setContainer(getContainer)
-        return map
-      } else {
-        val fn = SystemFunction.makeSystemFunction("string", Array(nodeExp)).asInstanceOf[SystemFunction]
-        fn.setContainer(getContainer)
-        return fn
-      }
+    operand match {
+      case atomizer: Atomizer if `type` == AtomicType.UNTYPED_ATOMIC && requiredItemType == AtomicType.STRING && atomizer.getBaseExpression.getItemType.isInstanceOf[NodeTest] ⇒
+        val nodeExp = atomizer.getBaseExpression
+        if (nodeExp.getCardinality != StaticProperty.EXACTLY_ONE) {
+          val fn = SystemFunction.makeSystemFunction("string", Array(new ContextItemExpression())).asInstanceOf[SystemFunction]
+          fn.setContainer(getContainer)
+          val map = new ForEach(nodeExp, fn, false)
+          map.setContainer(getContainer)
+          return map
+        } else {
+          val fn = SystemFunction.makeSystemFunction("string", Array(nodeExp)).asInstanceOf[SystemFunction]
+          fn.setContainer(getContainer)
+          return fn
+        }
+      case _ ⇒
     }
     if (`type` == AtomicType.ANY_ATOMIC || `type`.isInstanceOf[AnyItemType] || 
       `type` == AtomicType.UNTYPED_ATOMIC) {
@@ -106,15 +106,17 @@ class UntypedAtomicConverter(sequence: Expression,
     if (e2 != this) {
       return e2
     }
-    if (operand.isInstanceOf[CastExpression]) {
-      val it = operand.asInstanceOf[CastExpression].getTargetType
-      if (th.isSubType(it, AtomicType.UNTYPED_ATOMIC)) {
-        val e = operand.asInstanceOf[CastExpression].getBaseExpression
-        val et = e.getItemType
-        if (et.isInstanceOf[AtomicType] && th.isSubType(et, requiredItemType)) {
-          return e
+    operand match {
+      case castExpression: CastExpression ⇒
+        val it = castExpression.getTargetType
+        if (th.isSubType(it, AtomicType.UNTYPED_ATOMIC)) {
+          val e = castExpression.getBaseExpression
+          val et = e.getItemType
+          if (et.isInstanceOf[AtomicType] && th.isSubType(et, requiredItemType)) {
+            return e
+          }
         }
-      }
+      case _ ⇒
     }
     this
   }
@@ -142,23 +144,22 @@ class UntypedAtomicConverter(sequence: Expression,
    * @return the mapping function
    */
   def mapItem(item: Item): Item = {
-    if (item.isInstanceOf[UntypedAtomicValue]) {
-      val `val` = convertItem(item.asInstanceOf[UntypedAtomicValue])
-      `val`.asInstanceOf[AtomicValue]
-    } else {
-      item
+    item match {
+      case untypedAtomicValue: UntypedAtomicValue ⇒
+        convertItem(untypedAtomicValue).asInstanceOf[AtomicValue]
+      case _ ⇒
+        item
     }
   }
 
   private def convertItem(item: UntypedAtomicValue): ConversionResult = {
     val `val` = item.convert(requiredItemType)
-    if (`val`.isInstanceOf[ValidationFailure]) {
-      var msg = role.composeRequiredMessage(requiredItemType)
-      msg += ". " + `val`.asInstanceOf[ValidationFailure].getMessage
-      val err = new XPathException(msg)
-      err.setErrorCode(role.getErrorCode)
-      err.setLocator(this.getSourceLocator)
-      throw err
+    `val` match {
+      case failure: ValidationFailure ⇒
+        var msg = role.composeRequiredMessage(requiredItemType)
+        msg += s". ${failure.getMessage}"
+        throw new XPathException(msg, role.getErrorCode, this.getSourceLocator)
+      case _ ⇒
     }
     `val`
   }
@@ -170,10 +171,11 @@ class UntypedAtomicConverter(sequence: Expression,
     val item = operand.evaluateItem(context)
     if (item == null) {
       null
-    } else if (item.isInstanceOf[UntypedAtomicValue]) {
-      convertItem(item.asInstanceOf[UntypedAtomicValue]).asAtomic()
-    } else {
-      item
+    } else item match {
+      case untypedAtomicValue: UntypedAtomicValue ⇒
+        convertItem(untypedAtomicValue).asAtomic()
+      case _ ⇒
+        item
     }
   }
 }

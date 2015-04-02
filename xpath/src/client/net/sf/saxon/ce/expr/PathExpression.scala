@@ -51,13 +51,14 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
 
   private var state: Int = 0
 
-  if (step.isInstanceOf[PathExpression]) {
-    val stepPath = step.asInstanceOf[PathExpression]
-    if (isFilteredAxisPath(stepPath.getControllingExpression) && 
-      isFilteredAxisPath(stepPath.getControlledExpression)) {
-      setStartExpression(new PathExpression(start, stepPath.start))
-      setStepExpression(stepPath.step)
-    }
+  step match {
+    case stepPath: PathExpression ⇒
+      if (isFilteredAxisPath(stepPath.getControllingExpression) &&
+        isFilteredAxisPath(stepPath.getControlledExpression)) {
+        setStartExpression(new PathExpression(start, stepPath.start))
+        setStepExpression(stepPath.step)
+      }
+    case _ ⇒
   }
 
   override def isHybrid: Boolean = false
@@ -101,15 +102,16 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
 
   private def simplifyDescendantPath(env: StaticContext): PathExpression = {
     var st = start
-    if (start.isInstanceOf[AxisExpression]) {
-      val stax = start.asInstanceOf[AxisExpression]
-      if (stax.getAxis != Axis.DESCENDANT_OR_SELF) {
-        return null
-      }
-      val cie = new ContextItemExpression()
-      ExpressionTool.copyLocationInfo(this, cie)
-      st = new PathExpression(cie, stax)
-      ExpressionTool.copyLocationInfo(this, st)
+    start match {
+      case stax: AxisExpression ⇒
+        if (stax.getAxis != Axis.DESCENDANT_OR_SELF) {
+          return null
+        }
+        val cie = new ContextItemExpression()
+        ExpressionTool.copyLocationInfo(this, cie)
+        st = new PathExpression(cie, stax)
+        ExpressionTool.copyLocationInfo(this, st)
+      case _ ⇒
     }
     if (!st.isInstanceOf[PathExpression]) {
       return null
@@ -212,12 +214,13 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
     }
     state = 3
     val lastStep = getLastStep
-    if (lastStep.isInstanceOf[FilterExpression] && 
-      !lastStep.asInstanceOf[FilterExpression].isPositional(th)) {
-      val leading = getLeadingSteps
-      val p2 = new PathExpression(leading, lastStep.asInstanceOf[FilterExpression].getControllingExpression)
-      val f2 = new FilterExpression(p2, lastStep.asInstanceOf[FilterExpression].getFilter)
-      return f2.optimize(visitor, contextItemType)
+    lastStep match {
+      case filterExpression: FilterExpression if !filterExpression.isPositional(th) ⇒
+        val leading = getLeadingSteps
+        val p2 = new PathExpression(leading, filterExpression.getControllingExpression)
+        val f2 = new FilterExpression(p2, filterExpression.getFilter)
+        return f2.optimize(visitor, contextItemType)
+      case _ ⇒
     }
     setStartExpression(visitor.optimize(start, contextItemType))
     setStepExpression(step.optimize(visitor, start.getItemType))
@@ -343,12 +346,13 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
    *         after expanding any nested path expressions
    */
   override def getRemainingSteps: Expression = {
-    if (start.isInstanceOf[PathExpression]) {
-      val rem = new PathExpression(start.asInstanceOf[PathExpression].getRemainingSteps, step)
-      ExpressionTool.copyLocationInfo(start, rem)
-      rem
-    } else {
-      step
+    start match {
+      case pathExpression: PathExpression ⇒
+        val rem = new PathExpression(pathExpression.getRemainingSteps, step)
+        ExpressionTool.copyLocationInfo(start, rem)
+        rem
+      case _ ⇒
+        step
     }
   }
 

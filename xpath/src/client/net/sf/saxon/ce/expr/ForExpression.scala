@@ -130,9 +130,10 @@ class ForExpression extends Assignation {
     if (e2 != null && e2 != this) {
       return visitor.optimize(e2, contextItemType)
     }
-    if (action.isInstanceOf[VariableReference] && 
-      action.asInstanceOf[VariableReference].getBinding == this) {
-      return sequence
+    action match {
+      case variableReference: VariableReference if variableReference.getBinding == this ⇒
+        return sequence
+      case _ ⇒
     }
     if (sequence.getCardinality == StaticProperty.EXACTLY_ONE) {
       val let = new LetExpression()

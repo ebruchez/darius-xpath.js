@@ -25,14 +25,13 @@ object FilterExpression {
       operator: Int, 
       th: TypeHierarchy): Expression = {
     if (th.isSubType(comparand.getItemType, AtomicType.INTEGER)) operator match {
-      case Token.FEQ ⇒ {
+      case Token.FEQ ⇒
         if (Literal.isConstantOne(comparand)) {
           new FirstItemExpression(start)
         } else {
           SystemFunction.makeSystemFunction("subsequence", Array(start, comparand, new Literal(IntegerValue.PLUS_ONE)))
         }
-      }
-      case Token.FLT ⇒ {
+      case Token.FLT ⇒
         val args = new Array[Expression](3)
         args(0) = start
         args(1) = new Literal(new IntegerValue(1))
@@ -44,18 +43,15 @@ object FilterExpression {
           args(2) = new ArithmeticExpression(comparand, Token.MINUS, new Literal(new IntegerValue(1)))
         }
         SystemFunction.makeSystemFunction("subsequence", args)
-      }
-      case Token.FLE ⇒ {
+      case Token.FLE ⇒
         val args = new Array[Expression](3)
         args(0) = start
         args(1) = new Literal(new IntegerValue(1))
         args(2) = comparand
         SystemFunction.makeSystemFunction("subsequence", args)
-      }
-      case Token.FNE ⇒ {
+      case Token.FNE ⇒
         SystemFunction.makeSystemFunction("remove", Array(start, comparand))
-      }
-      case Token.FGT ⇒ {
+      case Token.FGT ⇒
         val args = new Array[Expression](2)
         args(0) = start
         if (Literal.isAtomic(comparand)) {
@@ -66,10 +62,8 @@ object FilterExpression {
           args(1) = new ArithmeticExpression(comparand, Token.PLUS, new Literal(new IntegerValue(1)))
         }
         SystemFunction.makeSystemFunction("subsequence", args)
-      }
-      case Token.FGE ⇒ {
+      case Token.FGE ⇒
         SystemFunction.makeSystemFunction("subsequence", Array(start, comparand))
-      }
       case _ ⇒ throw new IllegalArgumentException("operator")
     } else {
       null
@@ -131,9 +125,10 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    * @return an integer representing the data type
    */
   def getItemType: ItemType = {
-    if (filter.isInstanceOf[InstanceOfExpression] && 
-      filter.asInstanceOf[InstanceOfExpression].getBaseExpression.isInstanceOf[ContextItemExpression]) {
-      return filter.asInstanceOf[InstanceOfExpression].getRequiredItemType
+    filter match {
+      case instanceOfExpression: InstanceOfExpression if instanceOfExpression.getBaseExpression.isInstanceOf[ContextItemExpression] ⇒
+        return instanceOfExpression.getRequiredItemType
+      case _ ⇒
     }
     start.getItemType
   }
@@ -232,12 +227,14 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
       filter = filter2
       adoptChildExpression(filter2)
     }
-    if (filter.isInstanceOf[Literal] && filter.asInstanceOf[Literal].getValue.isInstanceOf[BooleanValue]) {
-      if (filter.asInstanceOf[Literal].getValue.asInstanceOf[BooleanValue].getBooleanValue) {
-        return start
-      } else {
-        return new Literal(EmptySequence.getInstance)
-      }
+    filter match {
+      case literal: Literal if literal.getValue.isInstanceOf[BooleanValue] ⇒
+        if (literal.getValue.asInstanceOf[BooleanValue].getBooleanValue) {
+          return start
+        } else {
+          return new Literal(EmptySequence.getInstance)
+        }
+      case _ ⇒
     }
     filterIsPositional = isPositionalFilter(filter, th)
     val subsequence = tryToRewritePositionalFilter(visitor)
@@ -267,38 +264,41 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    * @return the rewritten expression if a rewrite was possible, or null otherwise
    */
   private def tryToRewritePositionalFilter(visitor: ExpressionVisitor): Expression = {
-    if (filter.isInstanceOf[Literal]) {
-      val `val` = filter.asInstanceOf[Literal].getValue
-      if (`val`.isInstanceOf[NumericValue]) {
-        if (`val`.asInstanceOf[NumericValue].isWholeNumber) {
-          try {
-            val lvalue = `val`.asInstanceOf[NumericValue].intValue()
-            if (lvalue <= 0) {
-              return Literal.makeEmptySequence()
-            } else if (lvalue == 1) {
-              return new FirstItemExpression(start)
+    filter match {
+      case literal: Literal ⇒
+        val `val` = literal.getValue
+        `val` match {
+          case numericValue: NumericValue ⇒
+            if (numericValue.isWholeNumber) {
+              try {
+                val lvalue = numericValue.intValue()
+                if (lvalue <= 0) {
+                  return Literal.makeEmptySequence()
+                } else if (lvalue == 1) {
+                  return new FirstItemExpression(start)
+                } else {
+                  return SystemFunction.makeSystemFunction("subsequence", Array(start, filter, new Literal(IntegerValue.PLUS_ONE)))
+                }
+              } catch {
+                case err: XPathException ⇒ return null
+              }
             } else {
-              return SystemFunction.makeSystemFunction("subsequence", Array(start, filter, new Literal(IntegerValue.PLUS_ONE)))
+              return Literal.makeEmptySequence()
             }
-          } catch {
-            case err: XPathException ⇒ return null
-          }
-        } else {
-          return Literal.makeEmptySequence()
+          case _ ⇒
+            return if (ExpressionTool.effectiveBooleanValue(`val`.iterate())) start else Literal.makeEmptySequence()
         }
-      } else {
-        return if (ExpressionTool.effectiveBooleanValue(`val`.iterate())) start else Literal.makeEmptySequence()
-      }
+      case _ ⇒
     }
     if (filter.isInstanceOf[ComparisonExpression]) {
       val th = TypeHierarchy.getInstance
       val operands = filter.asInstanceOf[ComparisonExpression].getOperands
       var operator = filter.asInstanceOf[ComparisonExpression].getSingletonOperator
       var comparand: Expression = null
-      if (operands(0).isInstanceOf[Position] && 
+      if (operands(0).isInstanceOf[Position] &&
         th.isSubType(operands(1).getItemType, AtomicType.NUMERIC)) {
         comparand = operands(1)
-      } else if (operands(1).isInstanceOf[Position] && 
+      } else if (operands(1).isInstanceOf[Position] &&
         th.isSubType(operands(0).getItemType, AtomicType.NUMERIC)) {
         comparand = operands(0)
         operator = Token.inverse(operator)
@@ -410,15 +410,16 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    *         filter predicate is guaranteed to select at most one item from the sequence being filtered
    */
   def computeCardinality(): Int = {
-    if (filter.isInstanceOf[Literal] && 
-      filter.asInstanceOf[Literal].getValue.isInstanceOf[NumericValue]) {
-      if (filter.asInstanceOf[Literal].getValue.asInstanceOf[NumericValue]
-        .compareTo(1) == 0 &&
-        !Cardinality.allowsZero(start.getCardinality)) {
-        return StaticProperty.ALLOWS_ONE
-      } else {
-        return StaticProperty.ALLOWS_ZERO_OR_ONE
-      }
+    filter match {
+      case literal: Literal if literal.getValue.isInstanceOf[NumericValue] ⇒
+        if (literal.getValue.asInstanceOf[NumericValue]
+          .compareTo(1) == 0 &&
+          !Cardinality.allowsZero(start.getCardinality)) {
+          return StaticProperty.ALLOWS_ONE
+        } else {
+          return StaticProperty.ALLOWS_ZERO_OR_ONE
+        }
+      case _ ⇒
     }
     if (filterIsIndependentNumeric) {
       return StaticProperty.ALLOWS_ZERO_OR_ONE
@@ -445,9 +446,10 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    * @return true if the two expressions are statically equivalent
    */
   override def equals(other: Any): Boolean = {
-    if (other.isInstanceOf[FilterExpression]) {
-      val f = other.asInstanceOf[FilterExpression]
-      return (start eq f.start) && (filter eq f.filter)
+    other match {
+      case f: FilterExpression ⇒
+        return (start eq f.start) && (filter eq f.filter)
+      case _ ⇒
     }
     false
   }
@@ -471,20 +473,26 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
   override def iterate(context: XPathContext): SequenceIterator = {
     var startExp = start
     var startValue: Sequence = null
-    if (startExp.isInstanceOf[Literal]) {
-      startValue = startExp.asInstanceOf[Literal].getValue
-    } else if (startExp.isInstanceOf[VariableReference]) {
-      startValue = startExp.asInstanceOf[VariableReference].evaluateVariable(context)
-      startExp = new Literal(startValue)
+    startExp match {
+      case literal: Literal ⇒
+        startValue = literal.getValue
+      case reference: VariableReference ⇒
+        startValue = reference.evaluateVariable(context)
+        startExp = new Literal(startValue)
+      case _ ⇒
     }
     if (startValue.isInstanceOf[EmptySequence]) {
       return EmptyIterator.getInstance
     }
     var filterValue: Sequence = null
-    if (filter.isInstanceOf[Literal]) {
-      filterValue = filter.asInstanceOf[Literal].getValue
-    } else if (filter.isInstanceOf[VariableReference]) {
-      filterValue = filter.asInstanceOf[VariableReference].evaluateVariable(context)
+    filter match {
+      case literal: Literal ⇒
+        filterValue = literal.getValue
+      case _ ⇒ filter match {
+        case reference: VariableReference ⇒
+          filterValue = reference.evaluateVariable(context)
+        case _ ⇒
+      }
     }
 //ORBEON unused? can't see how SequenceTool can be a NumericValue
 //    if (filterValue.isInstanceOf[SequenceTool]) {

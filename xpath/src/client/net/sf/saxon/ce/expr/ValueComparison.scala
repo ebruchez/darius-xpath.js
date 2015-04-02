@@ -169,25 +169,26 @@ class ValueComparison(p1: Expression, op: Int, p2: Expression) extends BinaryExp
     }
     if (operand0.isInstanceOf[Count] && Literal.isAtomic(operand1)) {
       val value1 = operand1.asInstanceOf[Literal].getValue.asInstanceOf[AtomicValue]
-      if (value1.isInstanceOf[NumericValue] && 
-        value1.asInstanceOf[NumericValue].compareTo(0) == 0) {
-        if (operator == Token.FEQ || operator == Token.FLE) {
-          return SystemFunction.makeSystemFunction("empty", Array(operand0.asInstanceOf[FunctionCall].argument(0)))
-        } else if (operator == Token.FNE || operator == Token.FGT) {
-          return SystemFunction.makeSystemFunction("exists", Array(operand0.asInstanceOf[FunctionCall].argument(0)))
-        } else if (operator == Token.FGE) {
-          return Literal.makeLiteral(BooleanValue.TRUE)
-        } else {
-          return Literal.makeLiteral(BooleanValue.FALSE)
-        }
-      } else if (value1.isInstanceOf[IntegerValue] && (operator == Token.FGT || operator == Token.FGE)) {
-        var `val` = value1.asInstanceOf[IntegerValue].intValue()
-        if (operator == Token.FGT) {
-          `val` += 1
-        }
-        val filter = new FilterExpression(operand0.asInstanceOf[FunctionCall].argument(0), Literal.makeLiteral(new IntegerValue(new BigDecimal(`val`))))
-        ExpressionTool.copyLocationInfo(this, filter)
-        return SystemFunction.makeSystemFunction("exists", Array(filter))
+      value1 match {
+        case numericValue: NumericValue if numericValue.compareTo(0) == 0 ⇒
+          if (operator == Token.FEQ || operator == Token.FLE) {
+            return SystemFunction.makeSystemFunction("empty", Array(operand0.asInstanceOf[FunctionCall].argument(0)))
+          } else if (operator == Token.FNE || operator == Token.FGT) {
+            return SystemFunction.makeSystemFunction("exists", Array(operand0.asInstanceOf[FunctionCall].argument(0)))
+          } else if (operator == Token.FGE) {
+            return Literal.makeLiteral(BooleanValue.TRUE)
+          } else {
+            return Literal.makeLiteral(BooleanValue.FALSE)
+          }
+        case integerValue: IntegerValue if operator == Token.FGT || operator == Token.FGE ⇒
+          var `val` = integerValue.intValue()
+          if (operator == Token.FGT) {
+            `val` += 1
+          }
+          val filter = new FilterExpression(operand0.asInstanceOf[FunctionCall].argument(0), Literal.makeLiteral(new IntegerValue(new BigDecimal(`val`))))
+          ExpressionTool.copyLocationInfo(this, filter)
+          return SystemFunction.makeSystemFunction("exists", Array(filter))
+        case _ ⇒
       }
     }
     if (operand1.isInstanceOf[Count] && Literal.isAtomic(operand0)) {

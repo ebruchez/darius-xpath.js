@@ -154,13 +154,12 @@ class SortKeyDefinition {
       sortProperties(i) = visitor.typeCheck(sortProperties(i), contextItemType)
     }
     val language = sortProperties(LANG)
-    if (language.isInstanceOf[StringLiteral] && 
-      language.asInstanceOf[StringLiteral].getStringValue
-      .length != 
-      0) {
-      if (!StringValue.isValidLanguageCode(language.asInstanceOf[StringLiteral].getStringValue)) {
-        throw new XPathException("The lang attribute of xsl:sort must be a valid language code", "XTDE0030")
-      }
+    language match {
+      case literal: StringLiteral if literal.getStringValue.length != 0 ⇒
+        if (!StringValue.isValidLanguageCode(literal.getStringValue)) {
+          throw new XPathException("The lang attribute of xsl:sort must be a valid language code", "XTDE0030")
+        }
+      case _ ⇒
     }
   }
 

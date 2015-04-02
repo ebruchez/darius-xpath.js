@@ -265,11 +265,12 @@ class StandardErrorListener extends ErrorListener {
     var err = _err
     var loc = err.getLocator
     while (loc == null) {
-      if (err.getCause.isInstanceOf[XPathException]) {
-        err = err.getCause.asInstanceOf[XPathException]
-        loc = err.getLocator
-      } else {
-        return ""
+      err.getCause match {
+        case xpathException: XPathException ⇒
+          err = xpathException
+          loc = err.getLocator
+        case _ ⇒
+          return ""
       }
     }
     getLocationMessageText(loc)

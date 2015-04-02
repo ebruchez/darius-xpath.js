@@ -79,11 +79,13 @@ class VariableReference extends Expression {
       binding = null
       return Literal.makeLiteral(constantValue)
     }
-    if (binding.isInstanceOf[Expression]) {
-      inLoop = visitor.isLoopingSubexpression(binding.asInstanceOf[Expression])
-//ORBEON XSLT
-//    } else if (binding.isInstanceOf[UserFunctionParameter]) {
-//      inLoop = visitor.isLoopingSubexpression(null)
+    binding match {
+      case ancestor: Expression ⇒
+        inLoop = visitor.isLoopingSubexpression(ancestor)
+      //ORBEON XSLT
+      //    } else if (binding.isInstanceOf[UserFunctionParameter]) {
+      //      inLoop = visitor.isLoopingSubexpression(null)
+      case _ ⇒
     }
     this
   }
@@ -165,12 +167,13 @@ class VariableReference extends Expression {
     if (staticType == null) {
       if (binding == null) {
         StaticProperty.ALLOWS_ZERO_OR_MORE
-      } else if (binding.isInstanceOf[LetExpression]) {
-        binding.getRequiredType.getCardinality
-      } else if (binding.isInstanceOf[Assignation]) {
-        StaticProperty.EXACTLY_ONE
-      } else {
-        binding.getRequiredType.getCardinality
+      } else binding match {
+        case _: LetExpression ⇒
+          binding.getRequiredType.getCardinality
+        case _: Assignation ⇒
+          StaticProperty.EXACTLY_ONE
+        case _ ⇒
+          binding.getRequiredType.getCardinality
       }
     } else {
       staticType.getCardinality
@@ -185,11 +188,13 @@ class VariableReference extends Expression {
   override def computeSpecialProperties(): Int = {
     var p = super.computeSpecialProperties()
     p |= StaticProperty.NON_CREATIVE
-    if (binding.isInstanceOf[Assignation]) {
-      val exp = binding.asInstanceOf[Assignation].getSequence
-      if (exp != null) {
-        p |= (exp.getSpecialProperties & StaticProperty.NOT_UNTYPED)
-      }
+    binding match {
+      case assignation: Assignation ⇒
+        val exp = assignation.getSequence
+        if (exp != null) {
+          p |= (exp.getSpecialProperties & StaticProperty.NOT_UNTYPED)
+        }
+      case _ ⇒
     }
     if (staticType != null && !Cardinality.allowsMany(staticType.getCardinality) && 
       staticType.getPrimaryType.isInstanceOf[NodeTest]) {

@@ -57,16 +57,15 @@ class FilterIterator(_base: SequenceIterator, protected var filter: Expression, 
       if (iterator.next() != null) {
         ExpressionTool.ebvError("sequence of two or more atomic values")
       }
-      if (first.isInstanceOf[BooleanValue]) {
-        first.asInstanceOf[BooleanValue].getBooleanValue
-      } else if (first.isInstanceOf[StringValue]) {
-        first.getStringValue.length != 0
-      } else if (first.isInstanceOf[NumericValue]) {
-        first.asInstanceOf[NumericValue].compareTo(base.position()) == 
-          0
-      } else {
-        ExpressionTool.ebvError("sequence starting with an atomic value other than a boolean, number, or string")
-        false
+      first match {
+        case value: BooleanValue ⇒
+          value.getBooleanValue
+        case _: StringValue ⇒
+          first.getStringValue.length != 0
+        case value: NumericValue ⇒
+          value.compareTo(base.position()) == 0
+        case _ ⇒
+          ExpressionTool.ebvError("sequence starting with an atomic value other than a boolean, number, or string")
       }
     }
   }

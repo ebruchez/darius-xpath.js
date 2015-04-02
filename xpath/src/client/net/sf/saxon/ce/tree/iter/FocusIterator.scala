@@ -89,8 +89,10 @@ class FocusIterator(var base: SequenceIterator) extends SequenceIterator {
    */
   def last(): Int = {
     if (_last == -1) {
-      if (base.isInstanceOf[LastPositionFinder]) {
-        _last = base.asInstanceOf[LastPositionFinder].getLastPosition
+      base match {
+        case finder: LastPositionFinder ⇒
+          _last = finder.getLastPosition
+        case _ ⇒
       }
       if (_last == -1) {
         _last = Count.count(base.getAnother)

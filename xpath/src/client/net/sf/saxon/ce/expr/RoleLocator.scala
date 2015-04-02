@@ -69,7 +69,10 @@ class RoleLocator(var kind: Int, var operation: AnyRef, var operand: Int) {
    */
   def getMessage: String = {
     var name: String = null
-    name = if (operation.isInstanceOf[String]) operation.asInstanceOf[String] else operation.asInstanceOf[StructuredQName].getDisplayName
+    name = operation match {
+      case s: String              ⇒ s
+      case qName: StructuredQName ⇒ qName.getDisplayName
+    }
     kind match {
       case FUNCTION ⇒ ordinal(operand + 1) + " argument of " +
         (if (name.length == 0) "anonymous function" else name + "()")

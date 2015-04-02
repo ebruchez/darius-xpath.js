@@ -91,25 +91,27 @@ abstract class SimpleNodeConstructor extends Instruction {
     if (select != null) {
       val th = TypeHierarchy.getInstance
       select = visitor.typeCheck(select, contextItemType)
-      if (select.isInstanceOf[ValueOf]) {
-        val valSelect = select.asInstanceOf[ValueOf].getContentExpression
-        if (th.isSubType(valSelect.getItemType, AtomicType.STRING) && 
-          !Cardinality.allowsMany(valSelect.getCardinality)) {
-          select = valSelect
-        }
+      select match {
+        case valueOf: ValueOf ⇒
+          val valSelect = valueOf.getContentExpression
+          if (th.isSubType(valSelect.getItemType, AtomicType.STRING) &&
+            !Cardinality.allowsMany(valSelect.getCardinality)) {
+            select = valSelect
+          }
+        case _ ⇒
       }
-      if (select.isInstanceOf[StringFn]) {
-        val fn = select.asInstanceOf[StringFn]
-        val arg = fn.getArguments(0)
-        if (arg.getItemType == AtomicType.UNTYPED_ATOMIC && !Cardinality.allowsMany(arg.getCardinality)) {
-          select = arg
-        }
-      } else if (select.isInstanceOf[CastExpression] && 
-        select.asInstanceOf[CastExpression].getTargetType == AtomicType.STRING) {
-        val arg = select.asInstanceOf[CastExpression].getBaseExpression
-        if (arg.getItemType == AtomicType.UNTYPED_ATOMIC && !Cardinality.allowsMany(arg.getCardinality)) {
-          select = arg
-        }
+      select match {
+        case stringFn: StringFn ⇒
+          val arg = stringFn.getArguments(0)
+          if (arg.getItemType == AtomicType.UNTYPED_ATOMIC && !Cardinality.allowsMany(arg.getCardinality)) {
+            select = arg
+          }
+        case castExpression: CastExpression if castExpression.getTargetType == AtomicType.STRING ⇒
+          val arg = castExpression.getBaseExpression
+          if (arg.getItemType == AtomicType.UNTYPED_ATOMIC && !Cardinality.allowsMany(arg.getCardinality)) {
+            select = arg
+          }
+        case _ ⇒
       }
       adoptChildExpression(select)
     }

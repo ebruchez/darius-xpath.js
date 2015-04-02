@@ -161,12 +161,13 @@ class PromotionOffer {
 //        return child
 //      }
     case UNORDERED ⇒
-      if (child.isInstanceOf[Reverse]) {
-        child.asInstanceOf[Reverse].getArguments(0)
-      } else if (child.isInstanceOf[DocumentSorter] && !retainAllNodes) {
-        child.asInstanceOf[DocumentSorter].getBaseExpression
-      } else
-        null
+      child match {
+        case reverse: Reverse ⇒
+          reverse.getArguments(0)
+        case sorter: DocumentSorter if !retainAllNodes ⇒
+          sorter.getBaseExpression
+        case _ ⇒ null
+      }
     case _ ⇒
         throw new UnsupportedOperationException("Unknown promotion action " + action)
   }

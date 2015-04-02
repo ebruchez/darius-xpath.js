@@ -312,10 +312,11 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * @return the first step in the expression, after expanding any nested path expressions
    */
   def getFirstStep: Expression = {
-    if (start.isInstanceOf[SlashExpression]) {
-      start.asInstanceOf[SlashExpression].getFirstStep
-    } else {
-      start
+    start match {
+      case slashExpression: SlashExpression ⇒
+        slashExpression.getFirstStep
+      case _ ⇒
+        start
     }
   }
 
@@ -341,10 +342,11 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * @return the last step in the expression, after expanding any nested path expressions
    */
   def getLastStep: Expression = {
-    if (step.isInstanceOf[SlashExpression]) {
-      step.asInstanceOf[SlashExpression].getLastStep
-    } else {
-      step
+    step match {
+      case slashExpression: SlashExpression ⇒
+        slashExpression.getLastStep
+      case _ ⇒
+        step
     }
   }
 
@@ -354,12 +356,13 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * after expanding any nested path expressions
    */
   def getLeadingSteps: Expression = {
-    if (step.isInstanceOf[SlashExpression]) {
-      val rem = new SlashExpression(start, step.asInstanceOf[SlashExpression].getLeadingSteps)
-      ExpressionTool.copyLocationInfo(start, rem)
-      rem
-    } else {
-      start
+    step match {
+      case slashExpression: SlashExpression ⇒
+        val rem = new SlashExpression(start, slashExpression.getLeadingSteps)
+        ExpressionTool.copyLocationInfo(start, rem)
+        rem
+      case _ ⇒
+        start
     }
   }
 }

@@ -69,8 +69,10 @@ abstract class Expression {
       traceProperties = new ArrayList[Array[String]]()
     }
     var strValue: String = null
-    strValue = if (value.isInstanceOf[Literal]) value.asInstanceOf[Literal].getValue.asInstanceOf[StringValue]
-      .getPrimitiveStringValue else value.toString
+    strValue = value match {
+      case literal: Literal ⇒ literal.getValue.asInstanceOf[StringValue].getPrimitiveStringValue
+      case _ ⇒ value.toString
+    }
     val entry = Array(name, strValue)
     traceProperties.add(entry)
   }

@@ -347,11 +347,12 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
     if (i >= 0) {
       enterConditionTrace(i)
       var tail: TailCall = null
-      if (actions(i).isInstanceOf[TailCallReturner]) {
-        tail = actions(i).asInstanceOf[TailCallReturner].processLeavingTail(context)
-      } else {
-        actions(i).process(context)
-        tail = null
+      actions(i) match {
+        case tailCallReturner: TailCallReturner ⇒
+          tail = tailCallReturner.processLeavingTail(context)
+        case _ ⇒
+          actions(i).process(context)
+          tail = null
       }
       leaveConditionTrace(i)
       return tail
@@ -373,10 +374,9 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
       try {
         b = conditions(i).effectiveBooleanValue(context)
       } catch {
-        case e: XPathException ⇒ {
+        case e: XPathException ⇒
           e.maybeSetLocation(conditions(i).getSourceLocator)
           throw e
-        }
       }
       if (b) {
         return i

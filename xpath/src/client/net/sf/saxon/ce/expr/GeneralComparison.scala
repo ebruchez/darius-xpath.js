@@ -21,10 +21,11 @@ object GeneralComparison {
    * @throws XPathException if atomization fails
    */
   private def atomize(v: Sequence): SequenceIterator = {
-    if (v.isInstanceOf[AtomicValue]) {
-      SingletonIterator.makeIterator(v.asInstanceOf[AtomicValue])
-    } else {
-      Atomizer.getAtomizingIterator(v.iterate())
+    v match {
+      case item: AtomicValue ⇒
+        SingletonIterator.makeIterator(item)
+      case _ ⇒
+        Atomizer.getAtomizingIterator(v.iterate())
     }
   }
 

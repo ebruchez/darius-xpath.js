@@ -96,23 +96,27 @@ object ExpressionTool {
    * @return an integer constant identifying the evaluation mode
    */
   def lazyEvaluationMode(exp: Expression): Int = {
-    if (exp.isInstanceOf[Literal]) {
-      NO_EVALUATION_NEEDED
-    } else if (exp.isInstanceOf[VariableReference]) {
-      EVALUATE_VARIABLE
-    } else if (exp.isInstanceOf[SuppliedParameterReference]) {
-      EVALUATE_SUPPLIED_PARAMETER
-    } else if ((exp.getDependencies & 
-      (StaticProperty.DEPENDS_ON_POSITION | StaticProperty.DEPENDS_ON_LAST | 
-      StaticProperty.DEPENDS_ON_CURRENT_ITEM | 
-      StaticProperty.DEPENDS_ON_CURRENT_GROUP | 
-      StaticProperty.DEPENDS_ON_REGEX_GROUP)) != 
-      0) {
-      eagerEvaluationMode(exp)
-    } else if (exp.isInstanceOf[ErrorExpression]) {
-      CALL_EVALUATE_ITEM
-    } else {
-      eagerEvaluationMode(exp)
+    exp match {
+      case _: Literal ⇒
+        NO_EVALUATION_NEEDED
+      case _: VariableReference ⇒
+        EVALUATE_VARIABLE
+      case _: SuppliedParameterReference ⇒
+        EVALUATE_SUPPLIED_PARAMETER
+      case _ ⇒
+        if ((exp.getDependencies & (
+              StaticProperty.DEPENDS_ON_POSITION      |
+              StaticProperty.DEPENDS_ON_LAST          |
+              StaticProperty.DEPENDS_ON_CURRENT_ITEM  |
+              StaticProperty.DEPENDS_ON_CURRENT_GROUP |
+              StaticProperty.DEPENDS_ON_REGEX_GROUP)
+          ) != 0) {
+          eagerEvaluationMode(exp)
+        } else if (exp.isInstanceOf[ErrorExpression]) {
+          CALL_EVALUATE_ITEM
+        } else {
+          eagerEvaluationMode(exp)
+        }
     }
   }
 
@@ -215,22 +219,26 @@ object ExpressionTool {
    */
   def allocateSlots(exp: Expression, _nextFree: Int): Int = {
     var nextFree = _nextFree
-    if (exp.isInstanceOf[Assignation]) {
-      exp.asInstanceOf[Assignation].setSlotNumber(nextFree)
-      nextFree += 1
+    exp match {
+      case assignation: Assignation ⇒
+        assignation.setSlotNumber(nextFree)
+        nextFree += 1
+      case _ ⇒
     }
-    if (exp.isInstanceOf[VariableReference]) {
-      val varRef = exp.asInstanceOf[VariableReference]
-      val binding = varRef.getBinding
-      if (exp.isInstanceOf[LocalVariableReference]) {
-        varRef.asInstanceOf[LocalVariableReference].setSlotNumber(binding.getLocalSlotNumber)
-      }
-      if (binding.isInstanceOf[Assignation] && binding.getLocalSlotNumber < 0) {
-        val decl = binding.asInstanceOf[Assignation]
-        val msg = "*** Internal Saxon error: local variable " + decl.getVariableName + 
-          " encountered whose binding has been deleted"
-        throw new IllegalStateException(msg)
-      }
+    exp match {
+      case varRef: VariableReference ⇒
+        val binding = varRef.getBinding
+        if (exp.isInstanceOf[LocalVariableReference]) {
+          varRef.asInstanceOf[LocalVariableReference].setSlotNumber(binding.getLocalSlotNumber)
+        }
+        binding match {
+          case decl: Assignation if binding.getLocalSlotNumber < 0 ⇒
+            val msg = "*** Internal Saxon error: local variable " + decl.getVariableName +
+              " encountered whose binding has been deleted"
+            throw new IllegalStateException(msg)
+          case _ ⇒
+        }
+      case _ ⇒
     }
     val children = exp.iterateSubExpressions()
     while (children.hasNext) {
@@ -257,15 +265,15 @@ object ExpressionTool {
       if (iterator.next() != null) {
         ebvError("a sequence of two or more atomic values")
       }
-      if (first.isInstanceOf[BooleanValue]) {
-        first.asInstanceOf[BooleanValue].getBooleanValue
-      } else if (first.isInstanceOf[StringValue]) {
-        !first.asInstanceOf[StringValue].isZeroLength
-      } else if (first.isInstanceOf[NumericValue]) {
-        first.asInstanceOf[NumericValue].effectiveBooleanValue()
-      } else {
-        ebvError("a sequence starting with an atomic value other than a boolean, number, string, or URI")
-        false
+      first match {
+        case value: BooleanValue ⇒
+          value.getBooleanValue
+        case value: StringValue ⇒
+          ! value.isZeroLength
+        case value: NumericValue ⇒
+          value.effectiveBooleanValue()
+        case _ ⇒
+          ebvError("a sequence starting with an atomic value other than a boolean, number, string, or URI")
       }
     }
   }
@@ -275,7 +283,7 @@ object ExpressionTool {
    * @param reason the nature of the error
    * @throws XPathException
    */
-  def ebvError(reason: String): Unit = {
+  def ebvError(reason: String): Nothing = {
     val err = new XPathException("Effective boolean value is not defined for " + reason)
     err.setErrorCode("FORG0006")
     err.setIsTypeError(true)
@@ -288,8 +296,7 @@ object ExpressionTool {
    * @return true if the value of the expression depends on the context item, position, or size
    */
   def dependsOnFocus(exp: Expression): Boolean = {
-    (exp.getDependencies & StaticProperty.DEPENDS_ON_FOCUS) !=
-      0
+    (exp.getDependencies & StaticProperty.DEPENDS_ON_FOCUS) != 0
   }
 
   /**
@@ -302,19 +309,18 @@ object ExpressionTool {
     if (bindingList == null || bindingList.length == 0) {
       return false
     }
-    if (e.isInstanceOf[VariableReference]) {
-      (0 until bindingList.length).find(e.asInstanceOf[VariableReference].getBinding == bindingList(_))
-        .map(_ ⇒ true)
-        .getOrElse(false)
-    } else {
-      val children = e.iterateSubExpressions()
-      while (children.hasNext) {
-        val child = children.next()
-        if (dependsOnVariable(child, bindingList)) {
-          return true
+    e match {
+      case variableReference: VariableReference ⇒
+        (0 until bindingList.length).exists(variableReference.getBinding eq bindingList(_))
+      case _ ⇒
+        val children = e.iterateSubExpressions()
+        while (children.hasNext) {
+          val child = children.next()
+          if (dependsOnVariable(child, bindingList)) {
+            return true
+          }
         }
-      }
-      false
+        false
     }
   }
 
@@ -325,9 +331,10 @@ object ExpressionTool {
    * @return true if the expression contains a call on the function
    */
   def callsFunction(exp: Expression, qName: StructuredQName): Boolean = {
-    if (exp.isInstanceOf[FunctionCall] && 
-      (exp.asInstanceOf[FunctionCall].getFunctionName == qName)) {
-      return true
+    exp match {
+      case functionCall: FunctionCall if functionCall.getFunctionName == qName ⇒
+        return true
+      case _ ⇒
     }
     val iter = exp.iterateSubExpressions()
     while (iter.hasNext) {
@@ -371,14 +378,14 @@ object ExpressionTool {
    * @param list a list to be populated with the references to this variable
    */
   def gatherVariableReferences(exp: Expression, binding: Binding, list: List[VariableReference]): Unit = {
-    if (exp.isInstanceOf[VariableReference] && 
-      exp.asInstanceOf[VariableReference].getBinding == binding) {
-      list.add(exp.asInstanceOf[VariableReference])
-    } else {
-      val iter = exp.iterateSubExpressions()
-      while (iter.hasNext) {
-        gatherVariableReferences(iter.next(), binding, list)
-      }
+    exp match {
+      case variableRef: VariableReference if variableRef.getBinding eq binding ⇒
+        list.add(variableRef)
+      case _ ⇒
+        val iter = exp.iterateSubExpressions()
+        while (iter.hasNext) {
+          gatherVariableReferences(iter.next(), binding, list)
+        }
     }
   }
 
@@ -389,16 +396,17 @@ object ExpressionTool {
    * @param newBinding the new binding to which the variables should be rebound
    */
   def rebindVariableReferences(exp: Expression, oldBinding: Binding, newBinding: Binding): Unit = {
-    if (exp.isInstanceOf[VariableReference]) {
-      if (exp.asInstanceOf[VariableReference].getBinding == oldBinding) {
-        exp.asInstanceOf[VariableReference].fixup(newBinding)
-      }
-    } else {
-      val iter = exp.iterateSubExpressions()
-      while (iter.hasNext) {
-        val e = iter.next()
-        rebindVariableReferences(e, oldBinding, newBinding)
-      }
+    exp match {
+      case variableRef: VariableReference ⇒
+        if (variableRef.getBinding eq oldBinding) {
+          variableRef.fixup(newBinding)
+        }
+      case _ ⇒
+        val iter = exp.iterateSubExpressions()
+        while (iter.hasNext) {
+          val e = iter.next()
+          rebindVariableReferences(e, oldBinding, newBinding)
+        }
     }
   }
 }

@@ -109,43 +109,45 @@ object TypeChecker {
       }
     }
     if (!itemTypeOK) {
-      if (reqItemType.isInstanceOf[AtomicType]) {
-        if (!suppliedItemType.isInstanceOf[AtomicType] && !(suppliedCard == StaticProperty.EMPTY)) {
-          exp = new Atomizer(exp)
-          suppliedItemType = exp.getItemType
-          suppliedCard = exp.getCardinality
-          cardOK = Cardinality.subsumes(reqCard, suppliedCard)
-        }
-        if ((suppliedItemType == AtomicType.UNTYPED_ATOMIC) && 
-          !(reqItemType == AtomicType.UNTYPED_ATOMIC || reqItemType == AtomicType.ANY_ATOMIC)) {
-          exp = new UntypedAtomicConverter(exp, reqItemType.asInstanceOf[AtomicType], true, role)
-          itemTypeOK = true
-          suppliedItemType = reqItemType
-        }
-        if ((suppliedItemType == AtomicType.ANY_ATOMIC) && 
-          !(reqItemType == AtomicType.UNTYPED_ATOMIC || reqItemType == AtomicType.ANY_ATOMIC) && 
-          (exp.getSpecialProperties & StaticProperty.NOT_UNTYPED) == 
-          0) {
-          exp = new UntypedAtomicConverter(exp, reqItemType.asInstanceOf[AtomicType], false, role)
-        }
-        if (reqItemType == AtomicType.DOUBLE &&
-          th.relationship(suppliedItemType, AtomicType.NUMERIC) !=
-            TypeHierarchy.DISJOINT) {
-          exp = new PromoteToDouble(exp)
-          suppliedItemType = AtomicType.DOUBLE
-          suppliedCard = -1
-        } else if (reqItemType == AtomicType.FLOAT && 
-          th.relationship(suppliedItemType, AtomicType.NUMERIC) != 
-          TypeHierarchy.DISJOINT && 
-          !th.isSubType(suppliedItemType, AtomicType.DOUBLE)) {
-          exp = new PromoteToFloat(exp)
-          suppliedItemType = if (reqItemType == AtomicType.DOUBLE) AtomicType.DOUBLE else AtomicType.FLOAT
-          suppliedCard = -1
-        }
-        if (reqItemType == AtomicType.STRING && th.isSubType(suppliedItemType, AtomicType.ANY_URI)) {
-          suppliedItemType = AtomicType.STRING
-          itemTypeOK = true
-        }
+      reqItemType match {
+        case atomicType: AtomicType ⇒
+          if (!suppliedItemType.isInstanceOf[AtomicType] && !(suppliedCard == StaticProperty.EMPTY)) {
+            exp = new Atomizer(exp)
+            suppliedItemType = exp.getItemType
+            suppliedCard = exp.getCardinality
+            cardOK = Cardinality.subsumes(reqCard, suppliedCard)
+          }
+          if ((suppliedItemType == AtomicType.UNTYPED_ATOMIC) &&
+            !(reqItemType == AtomicType.UNTYPED_ATOMIC || reqItemType == AtomicType.ANY_ATOMIC)) {
+            exp = new UntypedAtomicConverter(exp, atomicType, true, role)
+            itemTypeOK = true
+            suppliedItemType = reqItemType
+          }
+          if ((suppliedItemType == AtomicType.ANY_ATOMIC) &&
+            !(reqItemType == AtomicType.UNTYPED_ATOMIC || reqItemType == AtomicType.ANY_ATOMIC) &&
+            (exp.getSpecialProperties & StaticProperty.NOT_UNTYPED) ==
+              0) {
+            exp = new UntypedAtomicConverter(exp, atomicType, false, role)
+          }
+          if (reqItemType == AtomicType.DOUBLE &&
+            th.relationship(suppliedItemType, AtomicType.NUMERIC) !=
+              TypeHierarchy.DISJOINT) {
+            exp = new PromoteToDouble(exp)
+            suppliedItemType = AtomicType.DOUBLE
+            suppliedCard = -1
+          } else if (reqItemType == AtomicType.FLOAT &&
+            th.relationship(suppliedItemType, AtomicType.NUMERIC) !=
+              TypeHierarchy.DISJOINT &&
+            !th.isSubType(suppliedItemType, AtomicType.DOUBLE)) {
+            exp = new PromoteToFloat(exp)
+            suppliedItemType = if (reqItemType == AtomicType.DOUBLE) AtomicType.DOUBLE else AtomicType.FLOAT
+            suppliedCard = -1
+          }
+          if (reqItemType == AtomicType.STRING && th.isSubType(suppliedItemType, AtomicType.ANY_URI)) {
+            suppliedItemType = AtomicType.STRING
+            itemTypeOK = true
+          }
+        case _ ⇒
       }
     }
     if (itemTypeOK && cardOK) {

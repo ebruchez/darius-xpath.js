@@ -60,7 +60,10 @@ class MappingIterator(var base: SequenceIterator, var action: MappingFunction)
 
   def getAnother: SequenceIterator = {
     val newBase = base.getAnother
-    val newAction = if (action.isInstanceOf[StatefulMappingFunction]) action.asInstanceOf[StatefulMappingFunction].getAnother(null).asInstanceOf[MappingFunction] else action
+    val newAction = action match {
+      case function: StatefulMappingFunction ⇒ function.getAnother(null).asInstanceOf[MappingFunction]
+      case _ ⇒ action
+    }
     new MappingIterator(newBase, newAction)
   }
 }

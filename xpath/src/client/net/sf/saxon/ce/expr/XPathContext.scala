@@ -229,7 +229,10 @@ class XPathContext(var controller: Controller) {
    * be incorrect.
    */
   def setCurrentIterator(iter: SequenceIterator): FocusIterator = {
-    currentIterator = if (iter.isInstanceOf[FocusIterator]) iter.asInstanceOf[FocusIterator] else new FocusIterator(iter)
+    currentIterator = iter match {
+      case focusIterator: FocusIterator ⇒ focusIterator
+      case _                            ⇒ new FocusIterator(iter)
+    }
     currentIterator
   }
 

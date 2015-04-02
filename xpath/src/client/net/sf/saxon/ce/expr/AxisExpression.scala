@@ -195,22 +195,23 @@ class AxisExpression(@BeanProperty var axis: Byte, var test: NodeTest) extends E
    */
   override def iterate(context: XPathContext): SequenceIterator = {
     val item = context.getContextItem
-    if (item.isInstanceOf[NodeInfo]) {
-      if (test == null) {
-        item.asInstanceOf[NodeInfo].iterateAxis(axis, AnyNodeTest.getInstance)
-      } else {
-        item.asInstanceOf[NodeInfo].iterateAxis(axis, test)
-      }
-    } else {
-      val cName = toString
-      val isAtomic = item.isInstanceOf[AtomicValue]
-      val appendText = " is " + (if (isAtomic) "not a node" else "undefined")
-      val code = if (isAtomic) "XPTY0020" else "XPDY0002"
-      val err = new XPathException("The context item for axis step " + cName + appendText)
-      err.setErrorCode(code)
-      err.setLocator(getSourceLocator)
-      err.setIsTypeError(true)
-      throw err
+    item match {
+      case info: NodeInfo ⇒
+        if (test == null) {
+          info.iterateAxis(axis, AnyNodeTest.getInstance)
+        } else {
+          info.iterateAxis(axis, test)
+        }
+      case _ ⇒
+        val cName = toString
+        val isAtomic = item.isInstanceOf[AtomicValue]
+        val appendText = " is " + (if (isAtomic) "not a node" else "undefined")
+        val code = if (isAtomic) "XPTY0020" else "XPDY0002"
+        val err = new XPathException("The context item for axis step " + cName + appendText)
+        err.setErrorCode(code)
+        err.setLocator(getSourceLocator)
+        err.setIsTypeError(true)
+        throw err
     }
   }
 
