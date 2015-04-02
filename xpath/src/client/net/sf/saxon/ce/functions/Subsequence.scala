@@ -24,22 +24,16 @@ object Subsequence {
    * @return an iterator over the requested subsequence
    * @throws XPathException (probably can't happen)
    */
-  def makeIterator(base: SequenceIterator, min: Int, max: Int): SequenceIterator = {
+  def makeIterator(base: SequenceIterator, min: Int, max: Int): SequenceIterator =
     new ItemMappingIterator(base, new SubsequenceMappingFunction(base, min, max))
-  }
 
-  private class SubsequenceMappingFunction(var base: SequenceIterator, var min: Int, var max: Int)
+  private class SubsequenceMappingFunction(base: SequenceIterator, min: Int, max: Int)
       extends ItemMappingFunction with StatefulMappingFunction {
 
-    private val pos: Int = 0
+    private var pos: Int = 0
 
-    /**
-     * Map one item to another item.
-     *
-     * @param item The input item to be mapped.
-     * @return either the output item, or null.
-     */
     def mapItem(item: Item): Item = {
+      pos += 1
       val position = pos
       if (position > max) {
         throw new ItemMappingIterator.EarlyExitException()
@@ -47,16 +41,8 @@ object Subsequence {
       if (position >= min) item else null
     }
 
-    /**
-     * Return a clone of this MappingFunction, with the state reset to its state at the beginning
-     * of the underlying iteration
-     *
-     * @return a clone of this MappingFunction
-     * @param newBaseIterator the cloned SequenceIterator to which the new mapping function will be applied
-     */
-    def getAnother(newBaseIterator: SequenceIterator): StatefulMappingFunction = {
+    def getAnother(newBaseIterator: SequenceIterator): StatefulMappingFunction =
       new SubsequenceMappingFunction(newBaseIterator, min, max)
-    }
   }
 }
 

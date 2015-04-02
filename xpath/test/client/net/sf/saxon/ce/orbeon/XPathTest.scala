@@ -29,10 +29,13 @@ object XPathTest extends TestSuite {
     compileAndRun(expr) map (_.getStringValue)
 
   def newInteger(i: Int) =
-    new value.IntegerValue(42)
+    new value.IntegerValue(i)
 
   def newDecimal(s: String) =
     new value.DecimalValue(new java.math.BigDecimal(s))
+
+  def newDouble(d: Double) =
+    new  value.DoubleValue(d)
 
   override def tests = TestSuite {
     'MinFunctionOnInteger {
@@ -43,6 +46,9 @@ object XPathTest extends TestSuite {
     }
     'MinFunctionOnNumbers {
       assert(List(newDecimal("42.2")) == compileAndRun("""min((44, 42.2, 43E0))"""))
+    }
+    'PredicateOptimization {
+      assert(List(newDouble(7)) == compileAndRun("""(3, 7)[2]"""))
     }
   }
 }
