@@ -81,6 +81,7 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     case _                                          ⇒ new UntypedAtomicValue(getStringValue)
   }
 
+  // Q: Couldn't this check that the underlying node is the same?
   def isSameNodeInfo(other: NodeInfo): Boolean =
     other match {
       case ow: HTMLNodeWrapper ⇒
