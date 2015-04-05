@@ -17,4 +17,6 @@ libraryDependencies += "be.doeraene" %%% "scalajs-jquery" % "0.8.0"
 
 libraryDependencies += "com.lihaoyi" %%% "utest" % "0.3.0" % "test"
 
+libraryDependencies += "com.lihaoyi" %%% "scalarx" % "0.2.8"
+
 testFrameworks += new TestFramework("utest.runner.Framework")
