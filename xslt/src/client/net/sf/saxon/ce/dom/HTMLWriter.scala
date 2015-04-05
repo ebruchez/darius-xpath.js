@@ -306,13 +306,12 @@ class HTMLWriter extends Receiver {
         } else {
           throw new XPathException(err.getMessage)
         }
-        case exc: Exception ⇒ {
-          val xpe = new XPathException("Error on startElement in HTMLWriter for element '" + 
-            localName + 
-            "': " + 
+        case exc: Exception ⇒
+          val xpe = new XPathException("Error on startElement in HTMLWriter for element '" +
+            localName +
+            "': " +
             exc.getMessage)
           throw xpe
-        }
       }
     }
     currentNode = element
@@ -380,12 +379,11 @@ class HTMLWriter extends Receiver {
         currentNode.appendChild(text)
       }
     } catch {
-      case e: Exception ⇒ {
+      case e: Exception ⇒
         val desc = if (nextSibling != null && level == 0) "inserting" else "appending"
         throw new XPathException("DOM error " + desc + " text node with value: '" + chars.toString +
           "' to node with name: " +
           currentNode.getNodeName)
-      }
     }
   }
 
@@ -417,11 +415,10 @@ class HTMLWriter extends Receiver {
         appendChild(currentNode, newNode)
       }
     } catch {
-      case e: Exception ⇒ {
+      case e: Exception ⇒
         val desc = if (nextSibling != null && level == 0) "inserting" else "appending"
         throw new XPathException("DOM error " + desc + " " + nodeType + " node to node with name: " +
           currentNode.getNodeName)
-      }
     }
   }
 

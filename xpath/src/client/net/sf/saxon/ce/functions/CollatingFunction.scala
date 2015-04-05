@@ -116,12 +116,11 @@ abstract class CollatingFunction extends SystemFunction {
         collationName
       }
     } catch {
-      case e: URISyntaxException ⇒ {
+      case e: URISyntaxException ⇒
         val err = new XPathException("Collation name '" + collationName + "' is not a valid URI")
         err.setErrorCode("FOCH0002")
         err.setLocator(this.getSourceLocator)
         throw err
-      }
     }
   }
 

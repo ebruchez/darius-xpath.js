@@ -207,10 +207,9 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
         exp2 = TypeChecker.staticTypeCheck(exp2, resultType, backwardsCompatible = false, role)
       }
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.maybeSetLocation(this)
         compileError(err)
-      }
     }
     if (exp2 != exp) {
       compiledFunction.setBody(exp2)
@@ -224,10 +223,9 @@ class XSLFunction extends StyleElement with StylesheetProcedure {
     try {
       exp2 = exp.optimize(visitor, null)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.maybeSetLocation(this)
         compileError(err)
-      }
     }
     if (exp2 != exp) {
       compiledFunction.setBody(exp2)

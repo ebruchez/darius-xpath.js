@@ -97,10 +97,9 @@ class XSLSort extends StyleElement {
           collationString = collationURI.toString
         }
       } catch {
-        case err: URI.URISyntaxException ⇒ {
+        case err: URI.URISyntaxException ⇒
           compileError("Collation name '" + collationString + "' is not a valid URI")
           collationString = NamespaceConstant.CODEPOINT_COLLATION_URI
-        }
       }
       stringCollator = getConfiguration.getNamedCollation(collationString)
       if (stringCollator == null) {

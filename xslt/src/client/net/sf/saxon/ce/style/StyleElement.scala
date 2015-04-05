@@ -282,7 +282,7 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     try {
       qName = StructuredQName.fromLexicalQName(lexicalQName, "", new InscopeNamespaceResolver(this))
     } catch {
-      case e: XPathException ⇒ {
+      case e: XPathException ⇒
         e.setIsStaticError(true)
         val code = e.getErrorCodeLocalPart
         if ("FONS0004" == code) {
@@ -293,7 +293,6 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
           e.setErrorCode("XTSE0020")
         }
         throw e
-      }
     }
     if (NamespaceConstant.isReserved(qName.getNamespaceURI)) {
       val err = new XPathException("Namespace prefix " + qName.getPrefix + " refers to a reserved namespace")
@@ -462,14 +461,13 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     try {
       ExpressionTool.make(expression, getStaticContext, this, 0, Token.EOF, this)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.setLocator(this)
         compileError(err)
         val erexp = new ErrorExpression(err)
         erexp.setSourceLocator(this)
         erexp.setContainer(this)
         erexp
-      }
     }
   }
 
@@ -482,10 +480,9 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     try {
       Pattern.make(pattern, getStaticContext, this)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         compileError(err)
         new NodeTestPattern(AnyNodeTest.getInstance)
-      }
     }
   }
 
@@ -499,10 +496,9 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
     try {
       AttributeValueTemplate.make(expression, this, getStaticContext)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         compileError(err)
         new StringLiteral(expression)
-      }
     }
   }
 
@@ -519,10 +515,9 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
       parser.setLanguage(ExpressionParser.XPATH)
       parser.parseSequenceType(sequenceType, getStaticContext)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         compileError(err)
         SequenceType.ANY_SEQUENCE
-      }
     }
   }
 
@@ -661,10 +656,9 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
               uri = collationURI.toString
             }
           } catch {
-            case err: URI.URISyntaxException ⇒ {
+            case err: URI.URISyntaxException ⇒
               compileError("default collation '" + uri + "' is not a valid URI")
               uri = NamespaceConstant.CODEPOINT_COLLATION_URI
-            }
           }
           if (getConfiguration.getNamedCollation(uri) != null) {
             defaultCollationName = uri
@@ -1244,14 +1238,12 @@ abstract class StyleElement extends ElementImpl with Container with SourceLocato
       try {
         name = makeQName(asetname)
       } catch {
-        case err: NamespaceException ⇒ {
+        case err: NamespaceException ⇒
           compileError(err.getMessage, "XTSE0710")
           name = null
-        }
-        case err: XPathException ⇒ {
+        case err: XPathException ⇒
           compileError(err.getMessage, "XTSE0710")
           name = null
-        }
       }
       val found = psm.getAttributeSets(name, list)
       if (!found) {

@@ -98,10 +98,9 @@ object DocumentFn {
       controller.addUnavailableOutputDestination(documentKey)
       getFragment(newdoc, fragmentId, c)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         pool.markUnavailable(documentKey)
         null
-      }
     }
   }
 

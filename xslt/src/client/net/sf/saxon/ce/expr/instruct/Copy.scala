@@ -51,14 +51,13 @@ class Copy(var select: Expression, var copyNamespaces: Boolean, inheritNamespace
       select = visitor.typeCheck(select, contextItemType)
       adoptChildExpression(select)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         if (err.getErrorCodeLocalPart == "XPDY0002") {
           err.setErrorCode("XTTE0945")
           err.maybeSetLocation(getSourceLocator)
         }
         select = new Literal(EmptySequence.getInstance)
         throw err
-      }
     }
     val selectItemType = select.getItemType
     if (selectItemType.isInstanceOf[NodeTest]) selectItemType.asInstanceOf[NodeTest].getRequiredNodeKind match {

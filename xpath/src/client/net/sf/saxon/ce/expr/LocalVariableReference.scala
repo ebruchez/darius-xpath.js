@@ -62,12 +62,11 @@ class LocalVariableReference(binding: Binding) extends VariableReference(binding
     try {
       c.getStackFrame(slotNumber)
     } catch {
-      case err: ArrayIndexOutOfBoundsException ⇒ {
+      case err: ArrayIndexOutOfBoundsException ⇒
         if (slotNumber == -999) {
           throw new ArrayIndexOutOfBoundsException("Local variable " + getDisplayName + " has not been allocated a stack frame slot")
         }
         throw err
-      }
     }
   }
 }

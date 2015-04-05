@@ -30,10 +30,9 @@ class ResolveQName extends SystemFunction {
     try {
       qName = StructuredQName.fromLexicalQName(lexicalQName, resolver.getURIForPrefix("", useDefault = true), resolver)
     } catch {
-      case e: XPathException ⇒ {
+      case e: XPathException ⇒
         e.maybeSetLocation(getSourceLocator)
         throw e
-      }
     }
     new QNameValue(qName)
   }

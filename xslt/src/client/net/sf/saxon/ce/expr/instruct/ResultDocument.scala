@@ -267,10 +267,9 @@ class ResultDocument(var href: Expression,
       content.process(c2)
       out.endDocument()
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.maybeSetLocation(getSourceLocator)
         throw err
-      }
     }
     controller.closeResult(out, c2)
     if (command == APIcommand.UPDATE_HTML) {

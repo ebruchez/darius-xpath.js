@@ -111,12 +111,11 @@ class IntegerValue(value: Int) extends DecimalValue(value) {
     try {
       new IntegerValue(getDecimalValue.remainder(other.getDecimalValue))
     } catch {
-      case err: ArithmeticException ⇒ {
+      case err: ArithmeticException ⇒
         var e: XPathException = null
-        e = if (BigInteger.valueOf(other.intValue()).signum() == 0) new XPathException("Integer modulo zero", 
+        e = if (BigInteger.valueOf(other.intValue()).signum() == 0) new XPathException("Integer modulo zero",
           "FOAR0001") else new XPathException("Integer mod operation failure", err)
         throw e
-      }
     }
   }
 

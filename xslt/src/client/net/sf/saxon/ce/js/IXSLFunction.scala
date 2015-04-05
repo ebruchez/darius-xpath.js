@@ -257,7 +257,7 @@ class IXSLFunction(var localName: String, arguments: Array[Expression]) extends 
             val result = getValueFromTypeValuePair(jsObj)
             convertFromJavaScript(result, context.getConfiguration)
           } catch {
-            case e: Exception ⇒ {
+            case e: Exception ⇒
               var doRetry = false
               for (i ← 0 until argument.length - 2 if jsGetArrayItem(jsArgs, i) == null) {
                 jsSetArrayItem(jsArgs, i, jsArray(0))
@@ -276,7 +276,6 @@ class IXSLFunction(var localName: String, arguments: Array[Expression]) extends 
                 "' with " +
                 (argument.length - 2) +
                 " argument(s).")
-            }
           }
         } else {
           throw new XPathException("JavaScriptException in ixsl:call(): Call target object is null or undefined")
@@ -328,15 +327,13 @@ class IXSLFunction(var localName: String, arguments: Array[Expression]) extends 
         EmptyIterator.getInstance
       }
     } catch {
-      case e: XPathException ⇒ {
+      case e: XPathException ⇒
         e.maybeSetLocation(this.getSourceLocator)
         throw e
-      }
-      case e: Exception ⇒ {
+      case e: Exception ⇒
         val xe = new XPathException("Exception in ixsl:" + localName + "() " + e.getMessage)
         xe.maybeSetLocation(this.getSourceLocator)
         throw xe
-      }
     }
   }
 }

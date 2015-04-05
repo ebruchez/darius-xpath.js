@@ -83,10 +83,9 @@ class XSLForEachGroup extends StyleElement {
               collationName = new StringLiteral(collationURI.toString)
             }
           } catch {
-            case err: URI.URISyntaxException ⇒ {
+            case err: URI.URISyntaxException ⇒
               compileError("Collation name '" + collationName + "' is not a valid URI", "XTDE1110")
               collationName = new StringLiteral(NamespaceConstant.CODEPOINT_COLLATION_URI)
-            }
           }
         }
       }
@@ -129,10 +128,9 @@ class XSLForEachGroup extends StyleElement {
         role.setErrorCode("XTTE1120")
         select = TypeChecker.staticTypeCheck(select, SequenceType.NODE_SEQUENCE, backwardsCompatible = false, role)
       } catch {
-        case err: XPathException ⇒ {
+        case err: XPathException ⇒
           val prefix = if (starting != null) "With group-starting-with attribute: " else "With group-ending-with attribute: "
           compileError(prefix + err.getMessage, err.getErrorCodeQName)
-        }
       }
     }
   }
@@ -161,10 +159,9 @@ class XSLForEachGroup extends StyleElement {
       new ForEachGroup(select, makeExpressionVisitor().simplify(action), algorithm, key, collationName, 
         getBaseURI, makeSortKeys(decl))
     } catch {
-      case e: XPathException ⇒ {
+      case e: XPathException ⇒
         compileError(e)
         null
-      }
     }
   }
 }

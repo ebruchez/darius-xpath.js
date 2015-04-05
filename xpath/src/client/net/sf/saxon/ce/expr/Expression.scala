@@ -378,10 +378,9 @@ abstract class Expression {
           out.append(it, NodeInfo.ALL_NAMESPACES)
         }
       } catch {
-        case e: XPathException ⇒ {
+        case e: XPathException ⇒
           e.maybeSetLocation(this.getSourceLocator)
           throw e
-        }
       }
     } else {
       throw new AssertionError("process() is not implemented in the subclass " + getClass)

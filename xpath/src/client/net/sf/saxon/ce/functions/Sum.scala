@@ -31,10 +31,9 @@ object Sum {
       try {
         sum = sum.convert(AtomicType.DOUBLE).asAtomic()
       } catch {
-        case e: XPathException ⇒ {
+        case e: XPathException ⇒
           e.maybeSetLocation(location)
           throw e
-        }
       }
     }
     sum match {

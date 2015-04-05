@@ -70,10 +70,9 @@ class XSLPreserveSpace extends StyleElement {
         try {
           qn = StructuredQName.fromLexicalQName(s, getDefaultXPathNamespace, resolver)
         } catch {
-          case err: XPathException ⇒ {
+          case err: XPathException ⇒
             compileError("Element name " + s + " is not a valid QName", "XTSE0280")
             return null
-          }
         }
         nt = new NameTest(Type.ELEMENT, qn)
         stripperRules.addRule(nt, preserve, decl.getModule)

@@ -123,10 +123,9 @@ abstract class ElementCreator extends ParentNodeConstructor {
       out.endElement()
       null
     } catch {
-      case e: XPathException ⇒ {
+      case e: XPathException ⇒
         e.maybeSetLocation(getSourceLocator)
         throw e
-      }
     }
   }
 
@@ -165,10 +164,9 @@ abstract class ElementCreator extends ParentNodeConstructor {
       seq.reset()
       result
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.maybeSetLocation(getSourceLocator)
         throw err
-      }
     }
   }
 }

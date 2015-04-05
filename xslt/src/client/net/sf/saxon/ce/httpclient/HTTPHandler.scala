@@ -53,10 +53,9 @@ class HTTPHandler {
     try {
       val response = builder.sendRequest(null, callback)
     } catch {
-      case e: RequestException ⇒ {
+      case e: RequestException ⇒
         responseState = State.ERROR
         errorMessage = e.getMessage
-      }
     }
   }
 }

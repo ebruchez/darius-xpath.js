@@ -112,14 +112,13 @@ object StringValue {
           "XPTY0004")
       }
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         val vf = new ValidationFailure(err.getMessage)
         vf.setErrorCodeQName(err.getErrorCodeQName)
         if (vf.getErrorCodeQName == null) {
           vf.setErrorCode("FORG0001")
         }
         vf
-      }
     }
   }
 

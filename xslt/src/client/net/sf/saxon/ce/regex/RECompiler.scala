@@ -352,7 +352,7 @@ class RECompiler {
       simpleChar = -1
       ch match {
         case '[' ⇒ syntaxError("Unescaped '[' within square brackets")
-        case '\\' ⇒ {
+        case '\\' ⇒
           val cc = escape(inSquareBrackets = true)
           if (cc.isInstanceOf[IntValuePredicate]) {
             simpleChar = cc.asInstanceOf[IntValuePredicate].getTarget
@@ -363,7 +363,6 @@ class RECompiler {
             } else addend = if (addend == null) cc else makeUnion(addend, cc)
             //continue
           }
-        }
         case '-' ⇒ if (thereFollows("-[")) {
           idx += 1
           subtrahend = parseCharacterClass()
@@ -549,7 +548,7 @@ class RECompiler {
         case '{' | '?' | '*' | '+' ⇒ if (lenAtom == 0) {
           syntaxError("No expression before quantifier")
         }
-        case '\\' ⇒ {
+        case '\\' ⇒
           val idxBeforeEscape = idx
           val charClass = escape(inSquareBrackets = false)
           if (charClass.isInstanceOf[BackReference] || !charClass.isInstanceOf[IntValuePredicate]) {
@@ -559,7 +558,6 @@ class RECompiler {
           fsb.appendWideChar(charClass.asInstanceOf[IntValuePredicate].getTarget)
           lenAtom += 1
           //break
-        }
         case '^' | '$' ⇒ if (isXPath) {
           //break
         }
@@ -625,7 +623,7 @@ class RECompiler {
     case ']' ⇒ syntaxError("Mismatched class")
     case 0 ⇒ syntaxError("Unexpected end of input")
     case '?' | '+' | '{' | '*' ⇒ syntaxError("No expression before quantifier")
-    case '\\' ⇒ {
+    case '\\' ⇒
       val idxBeforeEscape = idx
       val esc = escape(inSquareBrackets = false)
       if (esc.isInstanceOf[BackReference]) {
@@ -644,7 +642,6 @@ class RECompiler {
         flags(0) &= ~NODE_NULLABLE
         emitCharacterClass(esc)
       }
-    }
   }
 
   /**
@@ -698,7 +695,7 @@ class RECompiler {
       greedy = false
     }
     if (greedy) quantifierType match {
-      case '{' ⇒ {
+      case '{' ⇒
         val bracketEnd = idx
         val bracketMin = this.bracketMin
         val bracketOpt = this.bracketOpt
@@ -738,8 +735,7 @@ class RECompiler {
         }
         idx = bracketEnd
         //break
-      }
-      case '?' ⇒ {
+      case '?' ⇒
         val maybe = new Operation.OpMaybe()
         insertNode(maybe, ret)
         val nothing = new Operation.OpNothing()
@@ -747,14 +743,12 @@ class RECompiler {
         setNextOfEnd(ret, n)
         setNextOfEnd(ret + 1, n)
         //break
-      }
-      case '*' ⇒ {
+      case '*' ⇒
         val star = new Operation.OpStar()
         insertNode(star, ret)
         setNextOfEnd(ret + 1, ret)
         //break
-      }
-      case '+' ⇒ {
+      case '+' ⇒
         val continu = new Operation.OpContinue()
         insertNode(continu, ret)
         val plus = new Operation.OpPlus()
@@ -762,30 +756,26 @@ class RECompiler {
         setNextOfEnd(ret + 1, n)
         setNextOfEnd(n, ret)
         //break
-      }
     } else quantifierType match {
-      case '?' ⇒ {
+      case '?' ⇒
         val reluctantMaybe = new Operation.OpReluctantMaybe()
         insertNode(reluctantMaybe, ret)
         val n = appendNode(new Operation.OpNothing())
         setNextOfEnd(ret, n)
         setNextOfEnd(ret + 1, n)
         //break
-      }
-      case '*' ⇒ {
+      case '*' ⇒
         val reluctantStar = new Operation.OpReluctantStar()
         insertNode(reluctantStar, ret)
         setNextOfEnd(ret + 1, ret)
         //break
-      }
-      case '+' ⇒ {
+      case '+' ⇒
         insertNode(new Operation.OpContinue(), ret)
         val n = appendNode(new Operation.OpReluctantPlus())
         setNextOfEnd(n, ret)
         setNextOfEnd(ret + 1, n)
         //break
-      }
-      case '{' ⇒ {
+      case '{' ⇒
         val bracketEnd = idx
         val bracketMin = this.bracketMin
         val bracketOpt = this.bracketOpt
@@ -821,7 +811,6 @@ class RECompiler {
         }
         idx = bracketEnd
         //break
-      }
     }
     ret
   }

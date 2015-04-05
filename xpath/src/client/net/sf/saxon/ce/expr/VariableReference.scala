@@ -263,17 +263,15 @@ class VariableReference extends Expression {
     try {
       evaluateVariable(c).iterate()
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.maybeSetLocation(getSourceLocator)
         throw err
-      }
-      case err: AssertionError ⇒ {
-        val msg = err.getMessage + ". Variable reference $" + getDisplayName + 
+      case err: AssertionError ⇒
+        val msg = err.getMessage + ". Variable reference $" + getDisplayName +
           (if (getSystemId == null) "" else " of " + getSystemId)
         val logger = Logger.getLogger("VariableReference")
         logger.severe("internal null reference error: " + msg)
         throw new XPathException(msg)
-      }
     }
   }
 
@@ -281,10 +279,9 @@ class VariableReference extends Expression {
     try {
       SequenceTool.asItem(evaluateVariable(c))
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.maybeSetLocation(getSourceLocator)
         throw err
-      }
     }
   }
 
@@ -293,10 +290,9 @@ class VariableReference extends Expression {
       val actual = evaluateVariable(c)
       SequenceTool.process(actual.iterate(), c)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.maybeSetLocation(getSourceLocator)
         throw err
-      }
     }
   }
 

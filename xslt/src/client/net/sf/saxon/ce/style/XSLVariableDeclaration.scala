@@ -116,10 +116,9 @@ abstract class XSLVariableDeclaration extends XSLGeneralVariable with VariableDe
       try {
         exp2 = exp2.optimize(visitor, AnyNodeTest.getInstance)
       } catch {
-        case err: XPathException ⇒ {
+        case err: XPathException ⇒
           err.maybeSetLocation(this)
           compileError(err)
-        }
       }
       val numberOfSlots = ExpressionTool.allocateSlots(exp2, 0)
       compiledVariable.asInstanceOf[GlobalVariable].setContainsLocals(numberOfSlots)

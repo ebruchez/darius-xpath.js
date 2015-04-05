@@ -104,10 +104,9 @@ class XSLAnalyzeString extends StyleElement {
       new AnalyzeString(select, regex, flags, if (matchingBlock == null) null else matchingBlock.simplify(visitor),
         if (nonMatchingBlock == null) null else nonMatchingBlock.simplify(visitor))
     } catch {
-      case e: XPathException ⇒ {
+      case e: XPathException ⇒
         compileError(e)
         null
-      }
     }
   }
 }

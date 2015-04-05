@@ -220,7 +220,7 @@ class ApplyTemplates protected () extends Instruction {
     try {
       select = visitor.typeCheck(select, contextItemType)
     } catch {
-      case e: XPathException ⇒ {
+      case e: XPathException ⇒
         if (implicitSelect) {
           val code = e.getErrorCodeLocalPart
           if ("XPTY0020" == code) {
@@ -236,7 +236,6 @@ class ApplyTemplates protected () extends Instruction {
           }
         }
         throw e
-      }
     }
     adoptChildExpression(select)
     if (Literal.isEmptySequence(select)) {

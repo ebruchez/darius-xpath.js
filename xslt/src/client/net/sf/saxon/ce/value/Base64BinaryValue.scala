@@ -294,11 +294,10 @@ class Base64BinaryValue(s: CharSequence) extends AtomicValue {
   try {
     decoder.translate(s)
   } catch {
-    case e: IllegalArgumentException ⇒ {
+    case e: IllegalArgumentException ⇒
       val err = new XPathException(e.getMessage)
       err.setErrorCode("FORG0001")
       throw err
-    }
   }
 
   /**

@@ -62,14 +62,12 @@ class XSLApplyTemplates extends StyleElement {
         try {
           modeName = makeQName(modeAttribute)
         } catch {
-          case err: NamespaceException ⇒ {
+          case err: NamespaceException ⇒
             compileError(err.getMessage, "XTSE0280")
             modeName = null
-          }
-          case err: XPathException ⇒ {
+          case err: XPathException ⇒
             compileError("Mode name " + Err.wrap(modeAttribute) + " is not a valid QName", err.getErrorCodeQName)
             modeName = null
-          }
         }
       }
     }

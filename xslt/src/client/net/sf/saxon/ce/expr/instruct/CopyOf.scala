@@ -111,13 +111,12 @@ class CopyOf(var select: Expression, var copyNamespaces: Boolean) extends Instru
         val source = item.asInstanceOf[NodeInfo]
         val kind = source.getNodeKind
         kind match {
-          case Type.ELEMENT ⇒ {
+          case Type.ELEMENT ⇒
             if (copyBaseURI) {
               out.setSystemId(computeNewBaseUri(source))
             }
             source.copy(out, copyOptions)
             //break
-          }
           case Type.ATTRIBUTE ⇒ try {
             context.getReceiver.attribute(source.getNodeName, source.getStringValue)
           } catch {
@@ -136,14 +135,13 @@ class CopyOf(var select: Expression, var copyNamespaces: Boolean) extends Instru
           } catch {
             case err: NoOpenStartTagException ⇒ dynamicError(err.getMessage, err.getErrorCodeLocalPart)
           }
-          case Type.DOCUMENT ⇒ {
+          case Type.DOCUMENT ⇒
             out.setPipelineConfiguration(out.getPipelineConfiguration)
             if (copyBaseURI) {
               out.setSystemId(source.getBaseURI)
             }
             source.copy(out, copyOptions)
             //break
-          }
           case _ ⇒ throw new IllegalArgumentException("Unknown node kind " + source.getNodeKind)
         }
       } else {

@@ -169,14 +169,13 @@ class XSLTemplate extends StyleElement with StylesheetProcedure {
       }
     } catch {
       case err: NamespaceException ⇒ compileError(err.getMessage, "XTSE0280")
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.maybeSetErrorCode("XTSE0280")
         if (err.getErrorCodeLocalPart == "XTSE0020") {
           err.setErrorCode("XTSE0550")
         }
         err.setIsStaticError(true)
         compileError(err)
-      }
     }
     prioritySpecified = priorityAtt != null
     if (prioritySpecified) {

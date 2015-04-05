@@ -102,7 +102,7 @@ class GlobalVariable extends GeneralVariable with Container {
       val value = getSelectValue(context)
       b.saveGlobalVariableValue(this, value)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         b.setNotExecuting(this)
         if (err.isInstanceOf[XPathException.Circularity]) {
           err.setErrorCode("XTDE0640")
@@ -111,7 +111,6 @@ class GlobalVariable extends GeneralVariable with Container {
         } else {
           throw err
         }
-      }
     }
   }
 }

@@ -125,12 +125,11 @@ class XSLGeneralIncorporate extends StyleElement {
       importer.setInputTypeAnnotations(includedSheet.getInputTypeAnnotationsAttribute | incModule.getInputTypeAnnotations)
       incModule
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.setErrorCode("XTSE0165")
         err.setIsStaticError(true)
         compileError(err)
         null
-      }
     }
   }
 

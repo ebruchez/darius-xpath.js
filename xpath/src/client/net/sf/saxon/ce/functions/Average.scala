@@ -45,10 +45,9 @@ class Average extends Aggregate {
       try {
         item = item.convert(AtomicType.DOUBLE).asAtomic()
       } catch {
-        case e: XPathException ⇒ {
+        case e: XPathException ⇒
           e.maybeSetLocation(getSourceLocator)
           throw e
-        }
       }
     }
     item match {

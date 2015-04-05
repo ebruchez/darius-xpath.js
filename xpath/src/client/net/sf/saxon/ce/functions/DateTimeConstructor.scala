@@ -24,10 +24,9 @@ class DateTimeConstructor extends SystemFunction {
     try {
       DateTimeValue.makeDateTimeValue(arg0.asInstanceOf[DateValue], arg1.asInstanceOf[TimeValue])
     } catch {
-      case e: XPathException ⇒ {
+      case e: XPathException ⇒
         e.maybeSetLocation(getSourceLocator)
         throw e
-      }
     }
   }
 }

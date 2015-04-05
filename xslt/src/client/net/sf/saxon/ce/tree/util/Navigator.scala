@@ -367,7 +367,7 @@ object Navigator {
    * @throws XPathException on any failure reported by the Receiver
    */
   def copy(node: NodeInfo, out: Receiver, copyOptions: Int) node.getNodeKind match {
-    case Type.DOCUMENT ⇒ {
+    case Type.DOCUMENT ⇒
       out.startDocument()
       val children0 = node.iterateAxis(Axis.CHILD, AnyNodeTest.getInstance)
       while (true) {
@@ -379,8 +379,7 @@ object Navigator {
       }
       out.endDocument()
       //break
-    }
-    case Type.ELEMENT ⇒ {
+    case Type.ELEMENT ⇒
       out.startElement(node.getNodeName, 0)
       if ((copyOptions & CopyOptions.LOCAL_NAMESPACES) != 0) {
         val localNamespaces = node.getDeclaredNamespaces(null)
@@ -413,30 +412,24 @@ object Navigator {
       }
       out.endElement()
       return
-    }
-    case Type.ATTRIBUTE ⇒ {
+    case Type.ATTRIBUTE ⇒
       out.attribute(node.getNodeName, node.getStringValue)
       return
-    }
-    case Type.TEXT ⇒ {
+    case Type.TEXT ⇒
       val value = node.getStringValue
       if (value.length != 0) {
         out.characters(value)
       }
       return
-    }
-    case Type.COMMENT ⇒ {
+    case Type.COMMENT ⇒
       out.comment(node.getStringValue)
       return
-    }
-    case Type.PROCESSING_INSTRUCTION ⇒ {
+    case Type.PROCESSING_INSTRUCTION ⇒
       out.processingInstruction(node.getLocalPart, node.getStringValue)
       return
-    }
-    case Type.NAMESPACE ⇒ {
+    case Type.NAMESPACE ⇒
       out.namespace(new NamespaceBinding(node.getLocalPart, node.getStringValue), 0)
       return
-    }
     case _}
 
   /**

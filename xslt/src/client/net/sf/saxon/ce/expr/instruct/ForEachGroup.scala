@@ -298,16 +298,14 @@ class ForEachGroup(var select: Expression,
     val population = select.iterate(context)
     var groupIterator: GroupIterator = null
     algorithm match {
-      case GROUP_BY ⇒ {
+      case GROUP_BY ⇒
         val c2 = context.newMinorContext()
         c2.setCurrentIterator(population)
         groupIterator = new GroupByIterator(population, key, c2, getCollator(context))
         //break
-      }
-      case GROUP_ADJACENT ⇒ {
+      case GROUP_ADJACENT ⇒
         groupIterator = new GroupAdjacentIterator(population, key, context, getCollator(context))
         //break
-      }
       case GROUP_STARTING ⇒ groupIterator = new GroupStartingIterator(population, key.asInstanceOf[PatternSponsor].getPattern,
         context)
       case GROUP_ENDING ⇒ groupIterator = new GroupEndingIterator(population, key.asInstanceOf[PatternSponsor].getPattern,

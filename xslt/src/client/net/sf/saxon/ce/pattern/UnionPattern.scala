@@ -225,13 +225,12 @@ class UnionPattern(protected var p1: Pattern, protected var p2: Pattern) extends
    * @param other the other object
    */
   override def equals(other: Any): Boolean = other match {
-    case other: UnionPattern ⇒ {
+    case other: UnionPattern ⇒
       val s0 = new HashSet[Pattern](10)
       gatherComponentPatterns(s0)
       val s1 = new HashSet[Pattern](10)
       other.gatherComponentPatterns(s1)
       s0 == s1
-    }
     case _ ⇒ false
   }
 

@@ -95,10 +95,9 @@ class LocalParamBlock(params: Array[LocalParam]) extends Instruction {
         val param = children(i)
         context.setLocalVariable(param.getSlotNumber, param.getSelectValue(context))
       } catch {
-        case e: XPathException ⇒ {
+        case e: XPathException ⇒
           e.maybeSetLocation(children(i).getSourceLocator)
           throw e
-        }
       }
     }
     null

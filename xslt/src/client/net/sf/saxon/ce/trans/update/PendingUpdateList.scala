@@ -61,10 +61,9 @@ class PendingUpdateList(config: Configuration) {
         }
         list = new ArrayList[PendingUpdateAction]()
       } catch {
-        case e: Exception ⇒ {
+        case e: Exception ⇒
           logger.severe("Error on DOM write action: " + state + " " + e.getMessage)
           throw new XPathException(e)
-        }
       }
     }
   }

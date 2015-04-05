@@ -146,10 +146,9 @@ class ResolveURI extends SystemFunction {
       val resolved = makeAbsolute(relative, base)
       new AnyURIValue(resolved.toString)
     } catch {
-      case err: URISyntaxException ⇒ {
+      case err: URISyntaxException ⇒
         dynamicError(msgBase + Err.wrap(base) + " is invalid: " + err.getMessage, "FORG0002")
         null
-      }
     }
   }
 }

@@ -295,10 +295,9 @@ class LiteralResultElement extends StyleElement {
       builder.close()
       builder.getCurrentRoot.asInstanceOf[DocumentImpl]
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.setLocator(this)
         throw err
-      }
     }
   }
 }

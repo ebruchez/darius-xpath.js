@@ -68,15 +68,14 @@ class GroupAdjacentIterator(_population: SequenceIterator,
           return
         }
       } catch {
-        case e: ClassCastException ⇒ {
-          val err = new XPathException("Grouping key values are of non-comparable types (" + 
-            Type.displayTypeName(currentKey) + 
-            " and " + 
-            Type.displayTypeName(candidateKey) + 
+        case e: ClassCastException ⇒
+          val err = new XPathException("Grouping key values are of non-comparable types (" +
+            Type.displayTypeName(currentKey) +
+            " and " +
+            Type.displayTypeName(candidateKey) +
             ')')
           err.setIsTypeError(true)
           throw err
-        }
       }
     }
     _next = null

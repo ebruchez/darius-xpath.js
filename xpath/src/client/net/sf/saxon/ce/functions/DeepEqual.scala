@@ -72,12 +72,11 @@ object DeepEqual {
       }
     } catch {
       case err: ClassCastException ⇒ result = false
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         if ("FOTY0015" == err.getErrorCodeLocalPart && NamespaceConstant.ERR == err.getErrorCodeNamespace) {
           throw err
         }
         result = false
-      }
     }
     result
   }

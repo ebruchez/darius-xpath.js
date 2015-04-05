@@ -207,11 +207,10 @@ abstract class XSLGeneralVariable extends StyleElement {
         }
       }
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         err.setLocator(this)
         compileError(err)
         select = new ErrorExpression(err)
-      }
     }
   }
 
@@ -254,11 +253,10 @@ abstract class XSLGeneralVariable extends StyleElement {
             select = TypeChecker.staticTypeCheck(select, requiredType, backwardsCompatible = false, role)
           }
         } catch {
-          case err: XPathException ⇒ {
+          case err: XPathException ⇒
             err.setLocator(this)
             compileError(err)
             select = new ErrorExpression(err)
-          }
         }
         `var`.setSelectExpression(select)
       }

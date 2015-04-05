@@ -30,10 +30,9 @@ class GlobalParam extends GlobalVariable {
     try {
       wasSupplied = b.useGlobalParameter(getVariableQName, getSlotNumber, getRequiredType, context)
     } catch {
-      case e: XPathException ⇒ {
+      case e: XPathException ⇒
         e.maybeSetLocation(getSourceLocator)
         throw e
-      }
     }
     val `val` = b.getGlobalVariable(getSlotNumber)
     if (wasSupplied || `val` != null) {

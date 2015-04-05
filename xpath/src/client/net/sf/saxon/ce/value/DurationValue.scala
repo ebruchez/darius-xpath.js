@@ -434,13 +434,12 @@ class DurationValue protected () extends AtomicValue {
    * @throws ClassCastException if the other value is not an xs:duration or subtype thereof
    */
   override def equals(other: Any): Boolean = other match {
-    case other: DurationValue ⇒ {
+    case other: DurationValue ⇒
       val d1 = this
       val d2 = other
-      d1.negative == d2.negative && d1.months == d2.months && 
-        d1.seconds == d2.seconds && 
+      d1.negative == d2.negative && d1.months == d2.months &&
+        d1.seconds == d2.seconds &&
         d1.microseconds == d2.microseconds
-    }
     case _ ⇒ false
   }
 

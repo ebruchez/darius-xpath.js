@@ -73,10 +73,9 @@ class XSLElement extends StyleElement {
       try {
         parts = NameChecker.getQNameParts(qName)
       } catch {
-        case e: QNameException ⇒ {
+        case e: QNameException ⇒
           compileError("Invalid element name: " + qName, "XTDE0820")
           return null
-        }
       }
       var nsuri: String = null
       if (namespace.isInstanceOf[StringLiteral]) {

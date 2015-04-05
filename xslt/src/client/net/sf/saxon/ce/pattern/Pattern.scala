@@ -343,7 +343,7 @@ abstract class Pattern extends Container with SourceLocator {
       } else {
         EmptyIterator.getInstance
       }
-      case Type.ATTRIBUTE ⇒ {
+      case Type.ATTRIBUTE ⇒
         val allElements = doc.iterateAxis(Axis.DESCENDANT, NodeKindTest.ELEMENT)
         val atts = new MappingFunction() {
 
@@ -363,8 +363,7 @@ abstract class Pattern extends Container with SourceLocator {
           }
         }
         new ItemMappingIterator(allAttributes, test)
-      }
-      case Type.ELEMENT | Type.COMMENT | Type.TEXT | Type.PROCESSING_INSTRUCTION ⇒ {
+      case Type.ELEMENT | Type.COMMENT | Type.TEXT | Type.PROCESSING_INSTRUCTION ⇒
         val allDescendants = doc.iterateAxis(Axis.DESCENDANT, NodeKindTest.makeNodeKindTest(kind))
         val test = new ItemMappingFunction() {
 
@@ -377,13 +376,12 @@ abstract class Pattern extends Container with SourceLocator {
           }
         }
         new ItemMappingIterator(allDescendants, test)
-      }
-      case Type.NODE ⇒ {
+      case Type.NODE ⇒
         val allChildren = doc.iterateAxis(Axis.DESCENDANT, AnyNodeTest.getInstance)
         val attsOrSelf = new MappingFunction() {
 
           def map(item: Item): SequenceIterator = {
-            return new PrependIterator(item.asInstanceOf[NodeInfo], item.asInstanceOf[NodeInfo].iterateAxis(Axis.ATTRIBUTE, 
+            return new PrependIterator(item.asInstanceOf[NodeInfo], item.asInstanceOf[NodeInfo].iterateAxis(Axis.ATTRIBUTE,
               AnyNodeTest.getInstance))
           }
         }
@@ -399,7 +397,6 @@ abstract class Pattern extends Container with SourceLocator {
           }
         }
         new ItemMappingIterator(attributesOrSelf, test)
-      }
       case Type.NAMESPACE ⇒ throw new UnsupportedOperationException("Patterns can't match namespace nodes")
       case _ ⇒ throw new UnsupportedOperationException("Unknown node kind")
     }

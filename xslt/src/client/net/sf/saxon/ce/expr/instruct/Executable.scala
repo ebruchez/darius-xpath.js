@@ -138,12 +138,11 @@ class Executable(config: Configuration) {
     try {
       setStylesheetDocument(loadStylesheetModule(doc))
     } catch {
-      case e: XPathException ⇒ {
+      case e: XPathException ⇒
         if (errorCount == 0) {
           errorCount += 1
         }
         message = e.getMessage + ". "
-      }
     }
     if (errorCount > 0) {
       throw new XPathException("Failed to compile stylesheet. " + message + errorCount + 

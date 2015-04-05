@@ -85,7 +85,7 @@ class ComputedElement(var elementName: Expression,
           }
         }
       } catch {
-        case e: XPathException ⇒ {
+        case e: XPathException ⇒
           val code = e.getErrorCodeLocalPart
           if (code == null || code == "FORG0001") {
             e.setErrorCode("XTDE0820")
@@ -95,7 +95,6 @@ class ComputedElement(var elementName: Expression,
           e.maybeSetLocation(getSourceLocator)
           e.setIsStaticError(true)
           throw e
-        }
       }
     }
     super.typeCheck(visitor, contextItemType)
@@ -155,13 +154,12 @@ class ComputedElement(var elementName: Expression,
         prefix = parts(0)
         localName = parts(1)
       } catch {
-        case err: QNameException ⇒ {
+        case err: QNameException ⇒
           var message = "Invalid element name. " + err.getMessage
           if (rawName.length == 0) {
             message = "Supplied element name is a zero-length string"
           }
           dynamicError(message, "XTDE0820")
-        }
       }
     } else {
       dynamicError("Computed element name has incorrect type", "XTDE0820")

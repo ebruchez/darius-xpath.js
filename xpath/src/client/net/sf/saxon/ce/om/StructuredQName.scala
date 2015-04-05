@@ -63,11 +63,10 @@ object StructuredQName {
       }
       new StructuredQName(parts(0), uri, parts(1))
     } catch {
-      case e: QNameException ⇒ {
+      case e: QNameException ⇒
         val de = new XPathException(e.getMessage)
         de.setErrorCode("FOCA0002")
         throw de
-      }
     }
   }
 
@@ -169,7 +168,7 @@ class StructuredQName(prefix: String, var uri: String, localName: String) extend
    * excluding any prefix
    */
   override def equals(other: Any): Boolean = other match {
-    case other: StructuredQName ⇒ {
+    case other: StructuredQName ⇒
       val sq2 = other
       if (localNameStart != sq2.localNameStart || prefixStart != sq2.prefixStart) {
         return false
@@ -183,7 +182,6 @@ class StructuredQName(prefix: String, var uri: String, localName: String) extend
         i -= 1
       }
       true
-    }
     case _ ⇒ false
   }
 

@@ -237,7 +237,7 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
     val kind = pattern.getNodeKind
     val nodeName = if (pattern.getNodeTest.isInstanceOf[NameTest]) pattern.getNodeTest.asInstanceOf[NameTest].getRequiredNodeName else null
     kind match {
-      case Type.ELEMENT ⇒ {
+      case Type.ELEMENT ⇒
         if (nodeName == null) {
           unnamedElementRuleChain = addRuleToList(newRule, unnamedElementRuleChain)
         } else {
@@ -245,8 +245,7 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
           namedElementRuleChains.put(nodeName, addRuleToList(newRule, chain))
         }
         //break
-      }
-      case Type.ATTRIBUTE ⇒ {
+      case Type.ATTRIBUTE ⇒
         if (nodeName == null) {
           unnamedAttributeRuleChain = addRuleToList(newRule, unnamedAttributeRuleChain)
         } else {
@@ -254,7 +253,6 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
           namedAttributeRuleChains.put(nodeName, addRuleToList(newRule, chain))
         }
         //break
-      }
       case Type.NODE ⇒ genericNodeRuleChain = addRuleToList(newRule, genericNodeRuleChain)
       case Type.DOCUMENT ⇒ documentRuleChain = addRuleToList(newRule, documentRuleChain)
       case Type.TEXT ⇒ textRuleChain = addRuleToList(newRule, textRuleChain)
@@ -358,22 +356,20 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
     var bestRule: Rule = null
     node.getNodeKind match {
       case Type.DOCUMENT ⇒ unnamedNodeChain = documentRuleChain
-      case Type.ELEMENT ⇒ {
+      case Type.ELEMENT ⇒
         unnamedNodeChain = unnamedElementRuleChain
         val namedNodeChain = namedElementRuleChains.get(node.getNodeName)
         if (namedNodeChain != null) {
           bestRule = searchRuleChain(node, context, null, namedNodeChain)
         }
         //break
-      }
-      case Type.ATTRIBUTE ⇒ {
+      case Type.ATTRIBUTE ⇒
         unnamedNodeChain = unnamedAttributeRuleChain
         val namedNodeChain = namedAttributeRuleChains.get(node.getNodeName)
         if (namedNodeChain != null) {
           bestRule = searchRuleChain(node, context, null, namedNodeChain)
         }
         //break
-      }
       case Type.TEXT ⇒ unnamedNodeChain = textRuleChain
       case Type.COMMENT ⇒ unnamedNodeChain = commentRuleChain
       case Type.PROCESSING_INSTRUCTION ⇒ unnamedNodeChain = processingInstructionRuleChain
@@ -442,18 +438,16 @@ class Mode(usage: Int, @BeanProperty var modeName: StructuredQName) {
     var unnamedNodeChain: Rule = null
     node.getNodeKind match {
       case Type.DOCUMENT ⇒ unnamedNodeChain = documentRuleChain
-      case Type.ELEMENT ⇒ {
+      case Type.ELEMENT ⇒
         unnamedNodeChain = unnamedElementRuleChain
         val namedNodeChain = namedElementRuleChains.get(node.getNodeName)
         bestRule = searchRuleChain(node, context, null, namedNodeChain, filter)
         //break
-      }
-      case Type.ATTRIBUTE ⇒ {
+      case Type.ATTRIBUTE ⇒
         unnamedNodeChain = unnamedAttributeRuleChain
         val namedNodeChain = namedAttributeRuleChains.get(node.getNodeName)
         bestRule = searchRuleChain(node, context, null, namedNodeChain, filter)
         //break
-      }
       case Type.TEXT ⇒ unnamedNodeChain = textRuleChain
       case Type.COMMENT ⇒ unnamedNodeChain = commentRuleChain
       case Type.PROCESSING_INSTRUCTION ⇒ unnamedNodeChain = processingInstructionRuleChain

@@ -225,11 +225,10 @@ class Xslt20ProcessorImpl extends EntryPoint {
       try {
         styleDoc = config.buildDocument(absStyleURI)
       } catch {
-        case e: XPathException ⇒ {
+        case e: XPathException ⇒
           val reportURI = if (absSourceURI != null) absSourceURI else styleURI
-          throw new XPathException("Failed to load XSLT stylesheet " + reportURI + ": " + 
+          throw new XPathException("Failed to load XSLT stylesheet " + reportURI + ": " +
             e.getMessage)
-        }
       }
       config.getDocumentPool.add(styleDoc, absStyleURI)
       val body = getBodyElement
@@ -338,10 +337,9 @@ class Xslt20ProcessorImpl extends EntryPoint {
               try {
                 responseNode = XMLDOM.parseXML(response.getText).asInstanceOf[Node]
               } catch {
-                case e: Exception ⇒ {
+                case e: Exception ⇒
                   handleException(new RuntimeException(e.getMessage), "onResponseReceived")
                   return
-                }
               }
               val responseDoc = config.wrapXMLDocument(responseNode, URI)
               val result = invokeTransform(responseDoc, transformTarget)
@@ -382,10 +380,9 @@ class Xslt20ProcessorImpl extends EntryPoint {
       }
       invokeTransform(fetchedSourceDoc, target)
     } catch {
-      case e: Exception ⇒ {
+      case e: Exception ⇒
         handleException(e, "renderXML")
         null
-      }
     }
   }
 
@@ -494,10 +491,9 @@ class Xslt20ProcessorImpl extends EntryPoint {
       }
       outResult
     } catch {
-      case e: Exception ⇒ {
+      case e: Exception ⇒
         handleException(e, "invokeTransform")
         null
-      }
     }
   }
 

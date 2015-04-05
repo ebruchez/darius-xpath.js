@@ -62,12 +62,11 @@ class KeyFn extends SystemFunction {
     try {
       super.typeCheck(visitor, contextItemType)
     } catch {
-      case err: XPathException ⇒ {
+      case err: XPathException ⇒
         if ("XPDY0002" == err.getErrorCodeLocalPart) {
           dynamicError("Cannot call the key() function when there is no context node", "XTDE1270")
         }
         throw err
-      }
     }
   }
 
@@ -98,15 +97,14 @@ class KeyFn extends SystemFunction {
         keyName = StructuredQName.fromLexicalQName(argument(0).asInstanceOf[StringLiteral].getStringValue, 
           "", nsContext)
       } catch {
-        case e: XPathException ⇒ {
-          val err = new XPathException("Error in key name " + 
-            argument(0).asInstanceOf[StringLiteral].getStringValue + 
-            ": " + 
+        case e: XPathException ⇒
+          val err = new XPathException("Error in key name " +
+            argument(0).asInstanceOf[StringLiteral].getStringValue +
+            ": " +
             e.getMessage)
           err.setLocator(getSourceLocator)
           err.setErrorCode("XTDE1260")
           throw err
-        }
       }
       staticKeySet = visitor.getExecutable.getKeyManager.getKeyDefinitionSet(keyName)
       if (staticKeySet == null) {
@@ -153,14 +151,14 @@ class KeyFn extends SystemFunction {
     try {
       arg2 = argument(2).evaluateItem(context)
     } catch {
-      case e: XPathException ⇒ {
+      case e: XPathException ⇒
         val code = e.getErrorCodeLocalPart
         if ("XPDY0002" == code) {
           dynamicError("Cannot call the key() function when there is no context item", "XTDE1270")
           return null
         } else if ("XPDY0050" == code) {
-          dynamicError("In the key() function," + 
-            " the node supplied in the third argument (or the context node if absent)" + 
+          dynamicError("In the key() function," +
+            " the node supplied in the third argument (or the context node if absent)" +
             " must be in a tree whose root is a document node", "XTDE1270")
           return null
         } else if ("XPTY0020" == code) {
@@ -168,7 +166,6 @@ class KeyFn extends SystemFunction {
           return null
         }
         throw e
-      }
     }
     val origin = arg2.asInstanceOf[NodeInfo]
     val root = origin.getRoot
@@ -218,10 +215,9 @@ class KeyFn extends SystemFunction {
         }
         allResults = keyManager.selectByKey(selectedKeySet, doc, keyValue, context)
       } catch {
-        case e: XPathException ⇒ {
+        case e: XPathException ⇒
           e.maybeSetLocation(getSourceLocator)
           throw e
-        }
       }
     }
     if (origin == doc) {

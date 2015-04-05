@@ -75,10 +75,9 @@ class XSLPerformSort extends StyleElement {
       try {
         new SortExpression(makeExpressionVisitor().simplify(body), sortKeys)
       } catch {
-        case e: XPathException ⇒ {
+        case e: XPathException ⇒
           compileError(e)
           null
-        }
       }
     }
   }
