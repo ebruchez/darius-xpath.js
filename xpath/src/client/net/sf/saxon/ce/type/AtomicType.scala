@@ -164,7 +164,7 @@ class AtomicType private (var localName: String) extends ItemType {
 
   /**
    * Get the type from which this item type is derived by restriction. This
-   * is the supertype in the XPath type heirarchy, as distinct from the Schema
+   * is the supertype in the XPath type hierarchy, as distinct from the Schema
    * base type: this means that the supertype of xs:boolean is xs:anyAtomicType,
    * whose supertype is item() (rather than xs:anySimpleType).
    *

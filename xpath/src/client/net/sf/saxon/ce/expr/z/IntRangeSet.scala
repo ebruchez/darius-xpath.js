@@ -108,7 +108,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
       } else {
         return true
       }
-    } while (i != j);
+    } while (i != j)
     false
   }
 
@@ -165,7 +165,7 @@ class IntRangeSet extends AbstractIntSet with Serializable with IntSet {
       } else {
         return false
       }
-    } while (i != j);
+    } while (i != j)
     if (i > 0 && endPoints(i - 1) + 1 == value) {
       i -= 1
     } else if (i < used - 1 && startPoints(i + 1) - 1 == value) {

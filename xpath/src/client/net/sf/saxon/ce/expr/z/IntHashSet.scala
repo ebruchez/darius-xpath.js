@@ -138,7 +138,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
           return true
         }
         r = hash(_values(i))
-      } while ((i <= r && r < j) || (r < j && j < i) || (j < i && i <= r));
+      } while ((i <= r && r < j) || (r < j && j < i) || (j < i && i <= r))
       _values(j) = _values(i)
     }
     throw new IllegalStateException()
