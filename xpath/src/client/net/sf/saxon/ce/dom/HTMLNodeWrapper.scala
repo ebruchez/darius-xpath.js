@@ -82,24 +82,24 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
   }
 
   // Q: Couldn't this check that the underlying node is the same?
+  // DOM Level 3 [says](http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-isSameNode):
+  //
+  // > provides a way to determine whether two Node references returned by the implementation reference the same object.
+  // > When two Node references are references to the same object, even if through a proxy, the references may be used
+  // > completely interchangeably, such that all attributes have the same values and calling the same DOM method on
+  // > either reference always has exactly the same effect
+  //
+  // Firefox [removed `isSameNode`](https://bugzilla.mozilla.org/show_bug.cgi?id=687400) and seems to indicate that
+  // reference equality does the same (in JS, use `===` for strict equality).
+  //
+  // DOM4 also [removes](http://www.w3.org/TR/dom/#node) `isSameNode`.
+  //
+  // NOTE: This is called a lot!
+  //
   def isSameNodeInfo(other: NodeInfo): Boolean =
     other match {
-      case ow: HTMLNodeWrapper ⇒
-        nodeKind match {
-          case Type.ELEMENT ⇒
-            ow.getNodeKind == Type.ELEMENT                &&
-              getLocalPart == ow.getLocalPart             &&
-              getURI == ow.getURI                         &&
-              getSiblingPosition == ow.getSiblingPosition &&
-              getParent.isSameNodeInfo(ow.getParent)
-          case _ ⇒
-            ow.getNodeKind == getNodeKind                 &&
-              getStringValue == ow.getStringValue         &&
-              getSiblingPosition == ow.getSiblingPosition &&
-              getParent.isSameNodeInfo(ow.getParent)
-        }
-      case _ ⇒
-        false
+      case otherWrapper: HTMLNodeWrapper ⇒ node eq otherWrapper.node
+      case _                             ⇒ false
     }
 
   override def equals(other: Any): Boolean = other match {
