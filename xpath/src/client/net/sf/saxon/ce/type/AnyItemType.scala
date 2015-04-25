@@ -12,7 +12,7 @@ object AnyItemType {
   /**
    * Factory method to get the singleton instance
    */
-  def getInstance(): AnyItemType = theInstance
+  def getInstance: AnyItemType = theInstance
 }
 
 /**

@@ -14,7 +14,7 @@ object ComparableAtomicValueComparer {
    * Get the singleton instance of this class
    * @return  the singleton instance of this class
    */
-  def getInstance(): ComparableAtomicValueComparer = THE_INSTANCE
+  def getInstance: ComparableAtomicValueComparer = THE_INSTANCE
 }
 
 /**

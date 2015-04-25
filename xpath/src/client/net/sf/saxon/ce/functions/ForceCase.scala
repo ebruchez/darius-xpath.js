@@ -31,7 +31,7 @@ class ForceCase(_operation: Int) extends SystemFunction {
       return StringValue.EMPTY_STRING
     }
     var s = sv.getStringValue
-    s = if (operation == UPPERCASE) s.toUpperCase() else s.toLowerCase()
+    s = if (operation == UPPERCASE) s.toUpperCase else s.toLowerCase
     StringValue.makeStringValue(s)
   }
 }

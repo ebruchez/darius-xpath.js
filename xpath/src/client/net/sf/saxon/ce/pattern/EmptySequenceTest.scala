@@ -13,7 +13,7 @@ object EmptySequenceTest {
   /**
    * Get a NoNodeTest instance
    */
-  def getInstance(): EmptySequenceTest = THE_INSTANCE
+  def getInstance: EmptySequenceTest = THE_INSTANCE
 }
 
 /**

@@ -9,7 +9,7 @@ object CodepointCollator {
 
   private val theInstance: CodepointCollator = new CodepointCollator()
 
-  def getInstance(): CodepointCollator = theInstance
+  def getInstance: CodepointCollator = theInstance
 }
 
 /**

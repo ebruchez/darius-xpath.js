@@ -232,17 +232,17 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
     }
     docWrapper.getDocType match {
       case DocTypeNONHTML ⇒ name
-      case DocTypeHTML    ⇒ name.toLowerCase()
+      case DocTypeHTML    ⇒ name.toLowerCase
       case DocTypeXHTML ⇒
         val ns = getURI
         if (ns != null && ns == NamespaceConstant.XHTML) {
-          name.toLowerCase()
+          name.toLowerCase
         } else {
           name
         }
 
       case _ ⇒ if (name.matches("[A-Z]+")) {
-        name.toLowerCase()
+        name.toLowerCase
       } else {
         name
       }

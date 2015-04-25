@@ -13,7 +13,7 @@ object AnyNodeTest {
   /**
    * Get an instance of AnyNodeTest
    */
-  def getInstance(): AnyNodeTest = THE_INSTANCE
+  def getInstance: AnyNodeTest = THE_INSTANCE
 }
 
 /**

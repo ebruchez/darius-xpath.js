@@ -7,7 +7,7 @@ object IntUniversalSet {
 
   private var THE_INSTANCE: IntUniversalSet = new IntUniversalSet()
 
-  def getInstance(): IntUniversalSet = THE_INSTANCE
+  def getInstance: IntUniversalSet = THE_INSTANCE
 }
 
 /**

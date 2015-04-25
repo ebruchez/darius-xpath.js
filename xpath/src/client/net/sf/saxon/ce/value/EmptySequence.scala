@@ -15,7 +15,7 @@ object EmptySequence {
   /**
    * Get the implicit instance of this class
    */
-  def getInstance(): EmptySequence = THE_INSTANCE
+  def getInstance: EmptySequence = THE_INSTANCE
 }
 
 /**

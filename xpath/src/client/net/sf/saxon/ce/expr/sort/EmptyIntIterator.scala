@@ -13,7 +13,7 @@ object EmptyIntIterator {
    * Get the singular instance of this class
    * @return the singular instance
    */
-  def getInstance(): EmptyIntIterator = THE_INSTANCE
+  def getInstance: EmptyIntIterator = THE_INSTANCE
 }
 
 /**

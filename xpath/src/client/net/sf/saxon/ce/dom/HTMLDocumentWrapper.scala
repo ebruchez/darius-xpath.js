@@ -77,7 +77,7 @@ class HTMLDocumentWrapper(
         if (elem == null) {
           return null
         } else {
-          val rawLocal = elem.asInstanceOf[HTMLNodeWrapper].getRawLocalName.toLowerCase()
+          val rawLocal = elem.asInstanceOf[HTMLNodeWrapper].getRawLocalName.toLowerCase
           if (rawLocal == "html") {
             val nb = elem.getDeclaredNamespaces(null)
             for (nBinding ← nb if nBinding.getURI == NamespaceConstant.XHTML) {

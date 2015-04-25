@@ -13,7 +13,7 @@ object ConstructorFunctionLibrary {
 
   val THE_INSTANCE: ConstructorFunctionLibrary = new ConstructorFunctionLibrary()
 
-  def getInstance(): ConstructorFunctionLibrary = THE_INSTANCE
+  def getInstance: ConstructorFunctionLibrary = THE_INSTANCE
 }
 
 /**

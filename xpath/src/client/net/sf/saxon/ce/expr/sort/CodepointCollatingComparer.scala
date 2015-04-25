@@ -17,7 +17,7 @@ object CodepointCollatingComparer {
    * Get the singular instance of this class
    * @return the singleton instance
    */
-  def getInstance(): CodepointCollatingComparer = THE_INSTANCE
+  def getInstance: CodepointCollatingComparer = THE_INSTANCE
 }
 
 /**

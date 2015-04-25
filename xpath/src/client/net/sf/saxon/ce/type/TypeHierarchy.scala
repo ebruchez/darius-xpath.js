@@ -11,7 +11,7 @@ object TypeHierarchy {
 
   private val THE_INSTANCE: TypeHierarchy = new TypeHierarchy()
 
-  def getInstance(): TypeHierarchy = THE_INSTANCE
+  def getInstance: TypeHierarchy = THE_INSTANCE
 
   /**
    * Constant denoting relationship between two types: A is the same type as B

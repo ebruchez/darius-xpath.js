@@ -10,7 +10,7 @@ object CaseInsensitiveCollator {
 
   private val theInstance: CaseInsensitiveCollator = new CaseInsensitiveCollator()
 
-  def getInstance(): CaseInsensitiveCollator = theInstance
+  def getInstance: CaseInsensitiveCollator = theInstance
 }
 
 /**
@@ -43,5 +43,5 @@ class CaseInsensitiveCollator extends StringCollator {
    * is that if two values are equal under the collation, then the collation keys are
    * compare correctly under the equals() method.
    */
-  def getCollationKey(s: String): AnyRef = s.toLowerCase()
+  def getCollationKey(s: String): AnyRef = s.toLowerCase
 }

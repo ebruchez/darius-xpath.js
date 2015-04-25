@@ -17,7 +17,7 @@ object EmptyIterator {
    * @return an EmptyIterator (in practice, this always returns the same
    *     one)
    */
-  def getInstance(): EmptyIterator = theInstance
+  def getInstance: EmptyIterator = theInstance
 }
 
 /**

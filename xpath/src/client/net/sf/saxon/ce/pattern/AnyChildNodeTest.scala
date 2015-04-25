@@ -14,7 +14,7 @@ object AnyChildNodeTest {
    * Get the singular instance of this class
    * @return the singular instance
    */
-  def getInstance(): AnyChildNodeTest = THE_INSTANCE
+  def getInstance: AnyChildNodeTest = THE_INSTANCE
 }
 
 /**

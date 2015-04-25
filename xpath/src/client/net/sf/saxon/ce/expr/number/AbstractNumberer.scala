@@ -152,7 +152,7 @@ abstract class AbstractNumberer extends Numberer {
         return toRoman(number)
       }
       case 'I' ⇒ if (letterValue == null || letterValue.length == 0 || letterValue == "traditional") {
-        return toRoman(number).toUpperCase()
+        return toRoman(number).toUpperCase
       }
       case '①' ⇒
         if (number == 0 || number > 20) {
@@ -309,9 +309,9 @@ abstract class AbstractNumberer extends Numberer {
     var s: String = null
     s = if (number == 0) "Zero" else toWords(number)
     if (wordCase == UPPER_CASE) {
-      s.toUpperCase()
+      s.toUpperCase
     } else if (wordCase == LOWER_CASE) {
-      s.toLowerCase()
+      s.toLowerCase
     } else {
       s
     }

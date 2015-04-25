@@ -255,9 +255,9 @@ object FormatDate {
         primary = "1"
       }
       if ("N" == primary) {
-        return s.toUpperCase()
+        return s.toUpperCase
       } else if ("n" == primary) {
-        return s.toLowerCase()
+        return s.toLowerCase
       } else {
         return s
       }

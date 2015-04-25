@@ -147,9 +147,9 @@ class Numberer_en extends AbstractNumberer {
       }
     }
     if (wordCase == AbstractNumberer.UPPER_CASE) {
-      s.toUpperCase()
+      s.toUpperCase
     } else if (wordCase == AbstractNumberer.LOWER_CASE) {
-      s.toLowerCase()
+      s.toLowerCase
     } else {
       s
     }
