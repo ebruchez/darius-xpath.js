@@ -57,7 +57,7 @@ trait Receiver {
   /**
    * Notify the start of an element
    * @param qName the name of the element.
-   * @param properties bit-significant properties of the element node. If there are no revelant
+   * @param properties bit-significant properties of the element node. If there are no relevant
    * properties, zero is supplied. The definitions of the bits are in class [[ReceiverOptions]]
    */
   def startElement(qName: StructuredQName, properties: Int): Unit
