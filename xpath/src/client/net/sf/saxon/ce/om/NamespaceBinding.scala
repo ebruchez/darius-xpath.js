@@ -5,15 +5,10 @@ package client.net.sf.saxon.ce.om
 
 import client.net.sf.saxon.ce.lib.NamespaceConstant
 
-import scala.beans.BeanProperty
-
 object NamespaceBinding {
-
-  val XML = new NamespaceBinding("xml", NamespaceConstant.XML)
-
+  val XML                   = new NamespaceBinding("xml", NamespaceConstant.XML)
   val DEFAULT_UNDECLARATION = new NamespaceBinding("", "")
-
-  val EMPTY_ARRAY = new Array[NamespaceBinding](0)
+  val EMPTY_ARRAY           = new Array[NamespaceBinding](0)
 }
 
 /**
@@ -21,11 +16,12 @@ object NamespaceBinding {
  * virtue of the URI being set to a zero length string.
  * @since 9.4
  */
-class NamespaceBinding(@BeanProperty var prefix: String, var uri: String) {
+case class NamespaceBinding(prefix: String, uri: String) {
 
-  if (prefix == null || uri == null) {
-    throw new NullPointerException()
-  }
+  require(prefix ne null)
+  require(uri    ne null)
+  
+  def getPrefix = prefix
 
   /**
    * Get the URI part of the binding
@@ -34,17 +30,4 @@ class NamespaceBinding(@BeanProperty var prefix: String, var uri: String) {
    * prefixes, it indicates that the prefix is not bound to any namespace and therefore cannot be used.
    */
   def getURI: String = uri
-
-  /**
-   * Test if this namespace binding is the same as another
-   * @param obj the comparand
-   * @return true if the comparand is a Namespace binding of the same prefix to the same URI
-   */
-  override def equals(obj: Any): Boolean = {
-    obj.isInstanceOf[NamespaceBinding] && 
-      prefix == obj.asInstanceOf[NamespaceBinding].getPrefix && 
-      uri == obj.asInstanceOf[NamespaceBinding].getURI
-  }
-
-  override def hashCode(): Int = prefix.hashCode ^ uri.hashCode
 }
