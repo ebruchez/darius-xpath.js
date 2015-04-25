@@ -3,14 +3,11 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.linked
 
-import client.net.sf.saxon.ce.event.Receiver
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`.Type
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.event.Receiver
 
 /**
- * A node in the XML parse tree representing character content<P>
+ * A node in the XML parse tree representing character content
  * @author Michael H. Kay
  */
 class TextImpl(var content: String) extends NodeImpl {
@@ -27,13 +24,13 @@ class TextImpl(var content: String) extends NodeImpl {
    * Return the character value of the node.
    * @return the string value of the node
    */
-  def getStringValue(): String = content
+  def getStringValue: String = content
 
   /**
    * Return the type of node.
    * @return Type.TEXT
    */
-  def getNodeKind(): Int = Type.TEXT
+  def getNodeKind: Int = Type.TEXT
 
   /**
    * Copy this node to a given outputter

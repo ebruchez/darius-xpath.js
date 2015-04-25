@@ -3,8 +3,6 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.linked
 
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * System IDs are not held in nodes in the tree, because they are usually the same
@@ -33,8 +31,8 @@ class SystemIdMap {
       return
     }
     if (sequenceNumbers.length <= allocated + 1) {
-      val s = Array.ofDim[Int](allocated * 2)
-      val u = Array.ofDim[String](allocated * 2)
+      val s = new Array[Int](allocated * 2)
+      val u = new Array[String](allocated * 2)
       System.arraycopy(sequenceNumbers, 0, s, 0, allocated)
       System.arraycopy(uris, 0, u, 0, allocated)
       sequenceNumbers = s

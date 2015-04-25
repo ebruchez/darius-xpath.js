@@ -8,12 +8,10 @@ import client.net.sf.saxon.ce.om.AttributeCollection
 import client.net.sf.saxon.ce.om.NamespaceBinding
 import client.net.sf.saxon.ce.om.NodeInfo
 import client.net.sf.saxon.ce.om.StructuredQName
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
- * Interface NodeFactory. <br>
- * A Factory for nodes used to build a tree. <br>
+ * Interface NodeFactory.
+ * A Factory for nodes used to build a tree.
  * Currently only allows Element nodes to be user-constructed.
  * @author Michael H. Kay
  */
@@ -32,12 +30,14 @@ trait NodeFactory {
    * @param baseURI Indicates the source document base URI
    * @param sequenceNumber Sequence number to be assigned to represent document order.
    */
-  def makeElementNode(parent: NodeInfo, 
-      nameCode: StructuredQName, 
-      attlist: AttributeCollection, 
-      namespaces: Array[NamespaceBinding], 
-      namespacesUsed: Int, 
-      pipe: PipelineConfiguration, 
-      baseURI: String, 
-      sequenceNumber: Int): ElementImpl
+  def makeElementNode(
+    parent: NodeInfo, 
+    nameCode: StructuredQName, 
+    attlist: AttributeCollection, 
+    namespaces: Array[NamespaceBinding], 
+    namespacesUsed: Int, 
+    pipe: PipelineConfiguration, 
+    baseURI: String, 
+    sequenceNumber: Int
+  ): ElementImpl
 }

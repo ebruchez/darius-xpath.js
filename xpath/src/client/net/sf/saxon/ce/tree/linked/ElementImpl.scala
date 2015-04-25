@@ -3,22 +3,19 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.linked
 
+import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.event.Receiver
 import client.net.sf.saxon.ce.lib.NamespaceConstant
 import client.net.sf.saxon.ce.om._
 import client.net.sf.saxon.ce.pattern.AnyNodeTest
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
 import client.net.sf.saxon.ce.tree.util.NamespaceIterator
 import client.net.sf.saxon.ce.tree.util.Navigator
-import client.net.sf.saxon.ce.`type`.Type
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
-import scala.collection.JavaConversions._
+
+import scala.beans.BeanProperty
 
 /**
- * ElementImpl implements an element with no attributes or namespace declarations.<P>
+ * ElementImpl implements an element with no attributes or namespace declarations.
  * This class is an implementation of NodeInfo.
  * @author Michael H. Kay
  */
@@ -78,17 +75,16 @@ class ElementImpl extends ParentNodeImpl {
    * implements the javax.xml.transform.Source interface, allowing a node to be
    * used directly as the Source of a transformation
    */
-  def setSystemId(uri: String): Unit = {
+  override def setSystemId(uri: String): Unit = {
     getPhysicalRoot.setSystemId(getRawSequenceNumber, uri)
   }
 
   /**
    * Get the root node
    */
-  def getRoot(): NodeInfo = {
+  override def getRoot: NodeInfo = {
     val up = getRawParent
-    if (up == null || 
-      (up.isInstanceOf[DocumentImpl] && up.asInstanceOf[DocumentImpl].isImaginary)) {
+    if ((up eq null) || (up.isInstanceOf[DocumentImpl] && up.asInstanceOf[DocumentImpl].isImaginary)) {
       this
     } else {
       up.getRoot
@@ -103,36 +99,33 @@ class ElementImpl extends ParentNodeImpl {
    *     root, returns null.
    * @since 8.4
    */
-  def getDocumentRoot(): DocumentInfo = {
-    val root = getRoot
-    if (root.isInstanceOf[DocumentInfo]) {
-      root.asInstanceOf[DocumentInfo]
-    } else {
-      null
+  override def getDocumentRoot: DocumentInfo =
+    getRoot match {
+      case documentInfo: DocumentInfo ⇒ documentInfo
+      case _                          ⇒ null
     }
-  }
 
   /**
    * Get the system ID of the entity containing this element node.
    */
-  def getSystemId(): String = {
+  override def getSystemId: String = {
     val root = getPhysicalRoot
-    if (root == null) null else root.getSystemId(getRawSequenceNumber)
+    if (root eq null) null else root.getSystemId(getRawSequenceNumber)
   }
 
   /**
    * Get the base URI of this element node. This will be the same as the System ID unless
    * xml:base has been used.
    */
-  def getBaseURI(): String = Navigator.getBaseURI(this)
+  override def getBaseURI: String = Navigator.getBaseURI(this)
 
-  def getNodeName(): StructuredQName = elementName
+  override def getNodeName: StructuredQName = elementName
 
   /**
    * Get a character string that uniquely identifies this node
    * @param buffer to contain the generated ID
    */
-  def generateId(buffer: FastStringBuffer): Unit = {
+  override def generateId(buffer: FastStringBuffer): Unit = {
     val sequence = getRawSequenceNumber
     if (sequence >= 0) {
       getPhysicalRoot.generateId(buffer)
@@ -149,40 +142,34 @@ class ElementImpl extends ParentNodeImpl {
    * Return the kind of node.
    * @return Type.ELEMENT
    */
-  def getNodeKind(): Int = Type.ELEMENT
+  def getNodeKind: Int = Type.ELEMENT
 
   /**
    * Copy this node to a given outputter (supporting xsl:copy-of)
    * @param out The outputter
-   * @param copyOptions
    */
   def copy(out: Receiver, copyOptions: Int): Unit = {
     out.startElement(getNodeName, 0)
     var childCopyOptions = copyOptions & ~CopyOptions.ALL_NAMESPACES
     if ((copyOptions & CopyOptions.LOCAL_NAMESPACES) != 0) {
-      val localNamespaces = getDeclaredNamespaces(null)
-      for (i ← 0 until localNamespaces.length) {
-        val ns = localNamespaces(i)
-        if (ns == null) {
-          //break
-        }
+      getDeclaredNamespaces(null) takeWhile (_ ne null) foreach { ns ⇒
         out.namespace(ns, 0)
       }
     } else if ((copyOptions & CopyOptions.ALL_NAMESPACES) != 0) {
       NamespaceIterator.sendNamespaces(this, out)
       childCopyOptions |= CopyOptions.LOCAL_NAMESPACES
     }
-    if (attributeList != null) {
+    if (attributeList ne null) {
       for (i ← 0 until attributeList.getLength) {
         val nc = attributeList.getStructuredQName(i)
-        if (nc != null) {
+        if (nc ne null) {
           out.attribute(nc, attributeList.getValue(i))
         }
       }
     }
     out.startContent()
     var next = getFirstChild.asInstanceOf[NodeImpl]
-    while (next != null) {
+    while (next ne null) {
       next.copy(out, childCopyOptions)
       next = next.getNextSibling.asInstanceOf[NodeImpl]
     }
@@ -195,7 +182,7 @@ class ElementImpl extends ParentNodeImpl {
    * @param namespacesUsed the number of entries in the list that are used
    */
   def setNamespaceDeclarations(namespaces: Array[NamespaceBinding], namespacesUsed: Int): Unit = {
-    namespaceList = Array.ofDim[NamespaceBinding](namespacesUsed)
+    namespaceList = new Array[NamespaceBinding](namespacesUsed)
     System.arraycopy(namespaces, 0, namespaceList, 0, namespacesUsed)
   }
 
@@ -213,13 +200,14 @@ class ElementImpl extends ParentNodeImpl {
     val iter = iterateAxis(Axis.NAMESPACE, AnyNodeTest.getInstance)
     while (true) {
       val ns = iter.next().asInstanceOf[NodeInfo]
-      if (ns == null) {
+      if (ns eq null) {
         return null
       }
       if (ns.getStringValue == uri) {
-        ns.getLocalPart
+        return ns.getLocalPart
       }
     }
+    throw new IllegalStateException
   }
 
   /**
@@ -234,11 +222,11 @@ class ElementImpl extends ParentNodeImpl {
    *         If the bottom half is zero, then this is a namespace undeclaration rather than a declaration.
    *         The XML namespace is never included in the list. If the supplied array is larger than required,
    *         then the first unused entry will be set to -1.
-   *         <p/>
-   *         <p>For a node other than an element, the method returns null.</p>
+   *         
+   *         For a node other than an element, the method returns null.
    */
-  def getDeclaredNamespaces(buffer: Array[NamespaceBinding]): Array[NamespaceBinding] = {
-    if (namespaceList == null) NamespaceBinding.EMPTY_ARRAY else namespaceList
+  override def getDeclaredNamespaces(buffer: Array[NamespaceBinding]): Array[NamespaceBinding] = {
+    if (namespaceList eq null) NamespaceBinding.EMPTY_ARRAY else namespaceList
   }
 
   /**
@@ -247,17 +235,17 @@ class ElementImpl extends ParentNodeImpl {
    * namespace attributes. The attribute names will be in expanded form, with prefixes
    * replaced by URIs
    */
-  def getAttributeList(): AttributeCollection = {
-    if (attributeList == null) AttributeCollection.EMPTY_ATTRIBUTE_COLLECTION else attributeList
+  def getAttributeList: AttributeCollection = {
+    if (attributeList eq null) AttributeCollection.EMPTY_ATTRIBUTE_COLLECTION else attributeList
   }
 
   /**
    * Get the value of a given attribute of this node
-   * @param uri the namespace URI of the attribute name, or "" if the attribute is not in a namepsace
+   * @param uri the namespace URI of the attribute name, or "" if the attribute is not in a namespace
    * @param localName the local part of the attribute name
-   *  @return the attribute value if it exists or null if not
+   * @return the attribute value if it exists or null if not
    */
   def getAttributeValue(uri: String, localName: String): String = {
-    if (attributeList == null) null else attributeList.getValue(uri, localName)
+    if (attributeList eq null) null else attributeList.getValue(uri, localName)
   }
 }

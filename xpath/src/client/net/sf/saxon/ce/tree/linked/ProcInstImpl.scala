@@ -3,36 +3,40 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.linked
 
-import client.net.sf.saxon.ce.event.Receiver
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.`type`.Type
+import client.net.sf.saxon.ce.event.Receiver
+import client.net.sf.saxon.ce.om.StructuredQName
 import client.net.sf.saxon.ce.value.AtomicValue
 import client.net.sf.saxon.ce.value.StringValue
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
- * CommentImpl is an implementation of a Comment node
+ * ProcInstImpl is an implementation of ProcInstInfo used by the Propagator to construct
+ * its trees.
  * @author Michael H. Kay
  */
-class CommentImpl(content: String) extends NodeImpl {
+class ProcInstImpl(var localName: String, var content: String) extends NodeImpl {
 
-  var comment: String = content
+  /**
+   * Get the name of the node
+   *
+   * @return the name of the node, as a StructuredQName. Return null for an unnamed node.
+   */
+  override def getNodeName: StructuredQName = new StructuredQName("", "", localName)
 
-  def getStringValue(): String = comment
+  def getStringValue: String = content
 
   /**
    * Get the typed value of this node.
    * Returns the string value, as an instance of xs:string
    */
-  def getTypedValue(): AtomicValue = new StringValue(getStringValue)
+  override def getTypedValue: AtomicValue = new StringValue(getStringValue)
 
-  def getNodeKind(): Int = Type.COMMENT
+  def getNodeKind: Int = Type.PROCESSING_INSTRUCTION
 
   /**
    * Copy this node to a given outputter
    */
   def copy(out: Receiver, copyOptions: Int): Unit = {
-    out.comment(comment)
+    out.processingInstruction(getLocalPart, content)
   }
 }

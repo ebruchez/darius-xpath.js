@@ -4,10 +4,8 @@
 package client.net.sf.saxon.ce.tree.linked
 
 import client.net.sf.saxon.ce.om.NodeInfo
+import client.net.sf.saxon.ce.tree.linked.ParentNodeImpl._
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import ParentNodeImpl._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object ParentNodeImpl {
 
@@ -33,11 +31,11 @@ abstract class ParentNodeImpl extends NodeImpl {
    * For nodes added by XQUery Update, the sequence number is -1L
    * @return the sequence number if there is one, or -1L otherwise.
    */
-  protected def getSequenceNumber(): Array[Int] = Array(getRawSequenceNumber, 0)
+  override protected def getSequenceNumber: Array[Int] = Array(getRawSequenceNumber, 0)
 
-  protected def getRawSequenceNumber(): Int = sequence
+  protected[linked] def getRawSequenceNumber: Int = sequence
 
-  protected def setRawSequenceNumber(seq: Int): Unit = {
+  protected[linked] def setRawSequenceNumber(seq: Int): Unit = {
     sequence = seq
   }
 
@@ -46,83 +44,82 @@ abstract class ParentNodeImpl extends NodeImpl {
    * @param children null if there are no children, a single NodeInfo if there is one child, an array of NodeInfo
    * if there are multiple children
    */
-  protected def setChildren(children: AnyRef): Unit = {
+  protected[linked] def setChildren(children: AnyRef): Unit = {
     this.children = children
   }
 
   /**
    * Determine if the node has any children.
    */
-  def hasChildNodes(): Boolean = children != null
+  override def hasChildNodes: Boolean = children ne null
 
   /**
    * Get all children of this node, as an array
    * @return an array containing all the children
    */
-  def allChildren(): Array[NodeImpl] = {
-    if (children == null) {
-      EMPTY_NODE_LIST
-    } else if (children.isInstanceOf[NodeImpl]) {
-      Array(children.asInstanceOf[NodeImpl])
-    } else {
-      children.asInstanceOf[Array[NodeImpl]]
+  def allChildren(): Array[NodeImpl] =
+    children match {
+      case null               ⇒ EMPTY_NODE_LIST
+      case nodeImpl: NodeImpl ⇒ Array(nodeImpl)
+      case _                  ⇒ children.asInstanceOf[Array[NodeImpl]]
     }
-  }
 
   /**
    * Get the first child node of the element
    * @return the first child node of the required type, or null if there are no children
    */
-  def getFirstChild(): NodeInfo = {
-    if (children == null) return null
-    if (children.isInstanceOf[NodeImpl]) return children.asInstanceOf[NodeImpl]
-    children.asInstanceOf[Array[NodeImpl]](0)
-  }
+  override def getFirstChild: NodeInfo =
+    children match {
+      case null               ⇒ null
+      case nodeImpl: NodeImpl ⇒ nodeImpl
+      case _                  ⇒ children.asInstanceOf[Array[NodeImpl]](0)
+    }
 
   /**
    * Get the last child node of the element
    * @return the last child of the element, or null if there are no children
    */
-  def getLastChild(): NodeInfo = {
-    if (children == null) return null
-    if (children.isInstanceOf[NodeImpl]) return children.asInstanceOf[NodeImpl]
-    val n = children.asInstanceOf[Array[NodeImpl]]
-    n(n.length - 1)
-  }
+  override def getLastChild: NodeInfo =
+    children match {
+      case null               ⇒ null
+      case nodeImpl: NodeImpl ⇒ nodeImpl
+      case _                  ⇒
+        val n = children.asInstanceOf[Array[NodeImpl]]; n(n.length - 1)
+    }
 
   /**
    * Get the nth child node of the element (numbering from 0)
    * @param n identifies the required child
    * @return the last child of the element, or null if there is no n'th child
    */
-  protected def getNthChild(n: Int): NodeImpl = {
-    if (children == null) return null
-    if (children.isInstanceOf[NodeImpl]) {
-      return if (n == 0) children.asInstanceOf[NodeImpl] else null
+  protected[linked] def getNthChild(n: Int): NodeImpl =
+    children match {
+      case null               ⇒ null
+      case nodeImpl: NodeImpl ⇒ if (n == 0) nodeImpl else null
+      case _                  ⇒
+        val nodes = children.asInstanceOf[Array[NodeImpl]]
+        if (n < 0 || n >= nodes.length) return null
+        nodes(n)
     }
-    val nodes = children.asInstanceOf[Array[NodeImpl]]
-    if (n < 0 || n >= nodes.length) return null
-    nodes(n)
-  }
 
   /**
    * Return the string-value of the node, that is, the concatenation
    * of the character content of all descendent elements and text nodes.
    * @return the accumulated character content of the element, including descendant elements.
    */
-  def getStringValue(): String = {
+  def getStringValue: String = {
     var sb: FastStringBuffer = null
     var next = getFirstChild.asInstanceOf[NodeImpl]
-    while (next != null) {
+    while (next ne null) {
       if (next.isInstanceOf[TextImpl]) {
-        if (sb == null) {
+        if (sb eq null) {
           sb = new FastStringBuffer(FastStringBuffer.SMALL)
         }
         sb.append(next.getStringValue)
       }
       next = next.getNextInDocument(this)
     }
-    if (sb == null) return ""
+    if (sb eq null) return ""
     sb.toString
   }
 
@@ -134,19 +131,19 @@ abstract class ParentNodeImpl extends NodeImpl {
    * parent property and sibling position)
    * @param index the position where the child is to be added
    */
-  protected def addChild(node: NodeImpl, index: Int): Unit = {
+  protected[linked] def addChild(node: NodeImpl, index: Int): Unit = {
     synchronized {
-      var c: Array[NodeImpl] = null
-      if (children == null) {
-        c = Array.ofDim[NodeImpl](10)
-      } else if (children.isInstanceOf[NodeImpl]) {
-        c = Array.ofDim[NodeImpl](10)
-        c(0) = children.asInstanceOf[NodeImpl]
-      } else {
-        c = children.asInstanceOf[Array[NodeImpl]]
+      var c = children match {
+        case null ⇒ new Array[NodeImpl](10)
+        case nodeImpl: NodeImpl ⇒
+          val c = new Array[NodeImpl](10)
+          c(0) = nodeImpl
+          c
+        case _ ⇒
+          children.asInstanceOf[Array[NodeImpl]]
       }
       if (index >= c.length) {
-        val kids = Array.ofDim[NodeImpl](c.length * 2)
+        val kids = new Array[NodeImpl](c.length * 2)
         System.arraycopy(c, 0, kids, 0, c.length)
         c = kids
       }
@@ -170,7 +167,7 @@ abstract class ParentNodeImpl extends NodeImpl {
           children = children.asInstanceOf[Array[NodeImpl]](0)
         }
       } else {
-        val kids = Array.ofDim[NodeImpl](size)
+        val kids = new Array[NodeImpl](size)
         System.arraycopy(children, 0, kids, 0, size)
         children = kids
       }

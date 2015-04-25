@@ -3,26 +3,23 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.linked
 
+import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.event.Receiver
 import client.net.sf.saxon.ce.om.NodeInfo
 import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.trans.XPathException
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.Type
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * A node in the "linked" tree representing an attribute. Note that this is
- * generated only "on demand", when the attribute is selected by a path expression.<P>
+ * generated only "on demand", when the attribute is selected by a path expression.
  *
- * <p>It is possible for multiple AttributeImpl objects to represent the same attribute node.
+ * It is possible for multiple AttributeImpl objects to represent the same attribute node.
  * The identity of an attribute node is determined by the identity of the element, and the index
  * position of the attribute within the element. Index positions are not reused when an attribute
- * is deleted, and are retained when an attribute is renamed.</p>
+ * is deleted, and are retained when an attribute is renamed.
  *
- * <p>This object no longer caches information such as the name code and string value, because
- * these would become invalid when the element node is modified.</p>
+ * This object no longer caches information such as the name code and string value, because
+ * these would become invalid when the element node is modified.
  *
  * @author Michael H. Kay
  */
@@ -35,8 +32,8 @@ class AttributeImpl(element: ElementImpl, index: Int) extends NodeImpl {
   /**
    * Get the name of the node
    */
-  def getNodeName(): StructuredQName = {
-    if (getRawParent == null || getSiblingPosition == -1) {
+  override def getNodeName: StructuredQName = {
+    if ((getRawParent eq null) || getSiblingPosition == -1) {
       return null
     }
     getRawParent.asInstanceOf[ElementImpl].getAttributeList
@@ -48,11 +45,11 @@ class AttributeImpl(element: ElementImpl, index: Int) extends NodeImpl {
    * @return true if this Node object and the supplied Node object represent the
    * same node in the tree.
    */
-  def isSameNodeInfo(other: NodeInfo): Boolean = {
-    if (!other.isInstanceOf[AttributeImpl]) {
+  override def isSameNodeInfo(other: NodeInfo): Boolean = {
+    if (! other.isInstanceOf[AttributeImpl]) {
       return false
     }
-    if (this == other) {
+    if (this eq other) {
       return true
     }
     val otherAtt = other.asInstanceOf[AttributeImpl]
@@ -76,7 +73,7 @@ class AttributeImpl(element: ElementImpl, index: Int) extends NodeImpl {
    * least-significant word, while namespaces, attributes, text nodes, comments, and PIs have
    * the top word the same as their owner and the bottom half reflecting their relative position.
    */
-  protected def getSequenceNumber(): Array[Int] = {
+  override protected def getSequenceNumber: Array[Int] = {
     Array(getRawParent.getRawSequenceNumber, 0x8000 + getSiblingPosition)
   }
 
@@ -84,13 +81,13 @@ class AttributeImpl(element: ElementImpl, index: Int) extends NodeImpl {
    * Return the type of node.
    * @return Node.ATTRIBUTE
    */
-  def getNodeKind(): Int = Type.ATTRIBUTE
+  def getNodeKind: Int = Type.ATTRIBUTE
 
   /**
    * Return the character value of the node.
    * @return the attribute value
    */
-  def getStringValue(): String = {
+  def getStringValue: String = {
     getRawParent.asInstanceOf[ElementImpl].getAttributeList
       .getValue(getSiblingPosition)
   }
@@ -98,23 +95,23 @@ class AttributeImpl(element: ElementImpl, index: Int) extends NodeImpl {
   /**
    * Get next sibling - not defined for attributes
    */
-  def getNextSibling(): NodeInfo = null
+  override def getNextSibling: NodeInfo = null
 
   /**
    * Get previous sibling - not defined for attributes
    */
-  def getPreviousSibling(): NodeInfo = null
+  override def getPreviousSibling: NodeInfo = null
 
   /**
    * Get the previous node in document order (skipping attributes)
    */
-  def getPreviousInDocument(): NodeImpl = getParent.asInstanceOf[NodeImpl]
+  override def getPreviousInDocument: NodeImpl = getParent.asInstanceOf[NodeImpl]
 
   /**
    * Get the next node in document order (skipping attributes)
    */
-  def getNextInDocument(anchor: NodeImpl): NodeImpl = {
-    if (anchor == this) return null
+  override def getNextInDocument(anchor: NodeImpl): NodeImpl = {
+    if (anchor eq this) return null
     getParent.asInstanceOf[NodeImpl].getNextInDocument(anchor)
   }
 
@@ -122,7 +119,7 @@ class AttributeImpl(element: ElementImpl, index: Int) extends NodeImpl {
    * Get sequential key. Returns key of owning element with the attribute index as a suffix
    * @param buffer a buffer to which the generated ID will be written
    */
-  def generateId(buffer: FastStringBuffer): Unit = {
+  override def generateId(buffer: FastStringBuffer): Unit = {
     getParent.generateId(buffer)
     buffer.append('a')
     buffer.append(Integer toString getSiblingPosition)

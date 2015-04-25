@@ -6,25 +6,24 @@ package client.net.sf.saxon.ce.tree.linked
 import client.net.sf.saxon.ce.event.Builder
 import client.net.sf.saxon.ce.event.PipelineConfiguration
 import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.trans.XPathException
-import java.util.ArrayList
-import LinkedTreeBuilder._
-//remove if not needed
-import scala.collection.JavaConversions._
+import client.net.sf.saxon.ce.orbeon.ArrayList
+import client.net.sf.saxon.ce.tree.linked.LinkedTreeBuilder._
 
 object LinkedTreeBuilder {
 
   private class DefaultNodeFactory extends NodeFactory {
 
-    def makeElementNode(parent: NodeInfo, 
-        nameCode: StructuredQName, 
-        attlist: AttributeCollection, 
-        namespaces: Array[NamespaceBinding], 
-        namespacesUsed: Int, 
-        pipe: PipelineConfiguration, 
-        baseURI: String, 
-        sequenceNumber: Int): ElementImpl = {
-      val e = new ElementImpl()
+    def makeElementNode(
+      parent         : NodeInfo, 
+      nameCode       : StructuredQName, 
+      attlist        : AttributeCollection, 
+      namespaces     : Array[NamespaceBinding], 
+      namespacesUsed : Int, 
+      pipe           : PipelineConfiguration, 
+      baseURI        : String, 
+      sequenceNumber : Int
+    ): ElementImpl = {
+      val e = new ElementImpl
       if (namespacesUsed > 0) {
         e.setNamespaceDeclarations(namespaces, namespacesUsed)
       }
@@ -43,27 +42,16 @@ object LinkedTreeBuilder {
 class LinkedTreeBuilder extends Builder {
 
   private var currentNode: ParentNodeImpl = _
-
   private var contentStarted: Boolean = false
-
-  private var nodeFactory: NodeFactory = new DefaultNodeFactory()
-
+  private var nodeFactory: NodeFactory = new DefaultNodeFactory
   private var size: Array[Int] = new Array[Int](100)
-
   private var depth: Int = 0
-
   private var arrays: ArrayList[Array[NodeImpl]] = new ArrayList[Array[NodeImpl]](20)
-
   private var elementNameCode: StructuredQName = _
-
   private var attributes: AttributeCollection = _
-
   private var namespaces: Array[NamespaceBinding] = _
-
   private var namespacesUsed: Int = _
-
   private var allocateSequenceNumbers: Boolean = true
-
   private var nextNodeNumber: Int = 1
 
   /**
@@ -72,17 +60,13 @@ class LinkedTreeBuilder extends Builder {
    * @return the root of the tree that is currently being built, or that has been most recently built
    *         using this builder
    */
-  def getCurrentRoot(): NodeInfo = {
-    val physicalRoot = currentRoot
-    if (physicalRoot.isInstanceOf[DocumentImpl] && 
-      physicalRoot.asInstanceOf[DocumentImpl].isImaginary) {
-      physicalRoot.asInstanceOf[DocumentImpl].getDocumentElement
-    } else {
-      physicalRoot
+  override def getCurrentRoot: NodeInfo =
+    currentRoot match {
+      case documentImpl: DocumentImpl if documentImpl.isImaginary ⇒ documentImpl.getDocumentElement
+      case physicalRoot                                           ⇒ physicalRoot
     }
-  }
 
-  def reset(): Unit = {
+  override def reset(): Unit = {
     super.reset()
     currentNode = null
     nodeFactory = null
@@ -113,7 +97,7 @@ class LinkedTreeBuilder extends Builder {
   /**
    * Open the stream of Receiver events
    */
-  def open(): Unit = {
+  override def open(): Unit = {
     started = true
     depth = 0
     size(depth) = 0
@@ -147,8 +131,8 @@ class LinkedTreeBuilder extends Builder {
   /**
    * Close the stream of Receiver events
    */
-  def close(): Unit = {
-    if (currentNode == null) {
+  override def close(): Unit = {
+    if (currentNode eq null) {
       return
     }
     currentNode.compact(size(depth))
@@ -162,7 +146,7 @@ class LinkedTreeBuilder extends Builder {
    * Notify the start of an element
    */
   def startElement(qName: StructuredQName, properties: Int): Unit = {
-    if (currentNode == null) {
+    if (currentNode eq null) {
       startDocument()
       currentRoot.asInstanceOf[DocumentImpl].setImaginary(true)
     }
@@ -176,22 +160,23 @@ class LinkedTreeBuilder extends Builder {
     if (contentStarted) {
       throw new IllegalStateException("namespace() called after startContent()")
     }
-    if (namespaces == null) {
-      namespaces = Array.ofDim[NamespaceBinding](5)
+    if (namespaces eq null) {
+      namespaces = new Array[NamespaceBinding](5)
     }
     if (namespacesUsed == namespaces.length) {
-      val ns2 = Array.ofDim[NamespaceBinding](namespaces.length * 2)
+      val ns2 = new Array[NamespaceBinding](namespaces.length * 2)
       System.arraycopy(namespaces, 0, ns2, 0, namespacesUsed)
       namespaces = ns2
     }
-    namespaces(namespacesUsed += 1) = nsBinding
+    namespaces(namespacesUsed) = nsBinding
+    namespacesUsed += 1
   }
 
   def attribute(nameCode: StructuredQName, value: CharSequence): Unit = {
     if (contentStarted) {
       throw new IllegalStateException("attribute() called after startContent()")
     }
-    if (attributes == null) {
+    if (attributes eq null) {
       attributes = new AttributeCollection()
     }
     attributes.addAttribute(nameCode, value.toString)
@@ -202,29 +187,44 @@ class LinkedTreeBuilder extends Builder {
       throw new IllegalStateException("startContent() called more than once")
     }
     contentStarted = true
-    if (attributes == null) {
+    if (attributes eq null) {
       attributes = AttributeCollection.EMPTY_ATTRIBUTE_COLLECTION
     } else {
       attributes.compact()
     }
     var nslist = namespaces
-    if (nslist == null || namespacesUsed == 0) {
+    if ((nslist eq null) || namespacesUsed == 0) {
       nslist = NamespaceBinding.EMPTY_ARRAY
     }
-    val elem = nodeFactory.makeElementNode(currentNode, elementNameCode, attributes, nslist, namespacesUsed, 
-      pipe, getSystemId, if (allocateSequenceNumbers) nextNodeNumber += 1 else -1)
+    val elem = nodeFactory.makeElementNode(
+      currentNode, 
+      elementNameCode, 
+      attributes, 
+      nslist, 
+      namespacesUsed, 
+      pipe,
+      getSystemId,
+      if (allocateSequenceNumbers) {
+        nextNodeNumber += 1
+        nextNodeNumber
+      } else {
+        -1
+      }
+    )
     namespacesUsed = 0
     attributes = null
     while (depth >= arrays.size) {
-      arrays.add(Array.ofDim[NodeImpl](20))
+      arrays.add(new Array[NodeImpl](20))
     }
     elem.setChildren(arrays.get(depth))
-    currentNode.addChild(elem, size(depth) += 1)
+    currentNode.addChild(elem, size(depth))
+    size(depth) += 1
     if (depth >= size.length - 1) {
-      val newsize = Array.ofDim[Int](size.length * 2)
+      val newsize = new Array[Int](size.length * 2)
       System.arraycopy(size, 0, newsize, 0, size.length)
       size = newsize
     }
+    depth += 1
     size(depth) = 0
     namespacesUsed = 0
     if (currentNode.isInstanceOf[DocumentInfo]) {
@@ -237,7 +237,7 @@ class LinkedTreeBuilder extends Builder {
    * Notify the end of an element
    */
   def endElement(): Unit = {
-    if (!contentStarted) {
+    if (! contentStarted) {
       throw new IllegalStateException("missing call on startContent()")
     }
     currentNode.compact(size(depth))
@@ -249,16 +249,18 @@ class LinkedTreeBuilder extends Builder {
    * Notify a text node. Adjacent text nodes must have already been merged
    */
   def characters(chars: CharSequence): Unit = {
-    if (!contentStarted) {
+    if (! contentStarted) {
       throw new IllegalStateException("missing call on startContent()")
     }
     if (chars.length > 0) {
       val prev = currentNode.getNthChild(size(depth) - 1)
-      if (prev.isInstanceOf[TextImpl]) {
-        prev.asInstanceOf[TextImpl].appendStringValue(chars.toString)
-      } else {
-        val n = new TextImpl(chars.toString)
-        currentNode.addChild(n, size(depth) += 1)
+      prev match {
+        case textImpl: TextImpl ⇒
+          textImpl.appendStringValue(chars.toString)
+        case _ ⇒
+          val n = new TextImpl(chars.toString)
+          currentNode.addChild(n, size(depth))
+          size(depth) += 1
       }
     }
   }
@@ -267,11 +269,12 @@ class LinkedTreeBuilder extends Builder {
    * Notify a processing instruction
    */
   def processingInstruction(name: String, remainder: CharSequence): Unit = {
-    if (!contentStarted) {
+    if (! contentStarted) {
       throw new IllegalStateException("missing call on startContent()")
     }
     val pi = new ProcInstImpl(name, remainder.toString)
-    currentNode.addChild(pi, size(depth) += 1)
+    currentNode.addChild(pi, size(depth))
+    size(depth) += 1
   }
 
   /**
@@ -282,7 +285,8 @@ class LinkedTreeBuilder extends Builder {
       throw new IllegalStateException("missing call on startContent()")
     }
     val comment = new CommentImpl(chars.toString)
-    currentNode.addChild(comment, size(depth) += 1)
+    currentNode.addChild(comment, size(depth))
+    size(depth) += 1
   }
 
   /**
@@ -290,14 +294,14 @@ class LinkedTreeBuilder extends Builder {
    * @return the most recently started document or element node (to which children are currently being added)
    * In the case of elements, this is only available after startContent() has been called
    */
-  def getCurrentParentNode(): ParentNodeImpl = currentNode
+  def getCurrentParentNode: ParentNodeImpl = currentNode
 
   /**
    * Get the current text, comment, or processing instruction node
    * @return if any text, comment, or processing instruction nodes have been added to the current parent
    * node, then return that text, comment, or PI; otherwise return null
    */
-  def getCurrentLeafNode(): NodeImpl = {
+  def getCurrentLeafNode: NodeImpl = {
     currentNode.getLastChild.asInstanceOf[NodeImpl]
   }
 
@@ -309,6 +313,7 @@ class LinkedTreeBuilder extends Builder {
    * @param element the element to be grafted in as a new child.
    */
   def graftElement(element: ElementImpl): Unit = {
-    currentNode.addChild(element, size(depth) += 1)
+    currentNode.addChild(element, size(depth))
+    size(depth) += 1
   }
 }

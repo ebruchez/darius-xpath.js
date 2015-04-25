@@ -3,6 +3,7 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package client.net.sf.saxon.ce.tree.linked
 
+import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.event.Builder
 import client.net.sf.saxon.ce.om._
 import client.net.sf.saxon.ce.orbeon.Configuration
@@ -11,15 +12,12 @@ import client.net.sf.saxon.ce.pattern.NameTest
 import client.net.sf.saxon.ce.pattern.NodeTest
 import client.net.sf.saxon.ce.tree.NamespaceNode
 import client.net.sf.saxon.ce.tree.iter._
+import client.net.sf.saxon.ce.tree.linked.NodeImpl._
 import client.net.sf.saxon.ce.tree.util.FastStringBuffer
 import client.net.sf.saxon.ce.tree.util.Navigator
-import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.value.AbstractNode
 import client.net.sf.saxon.ce.value.AtomicValue
 import client.net.sf.saxon.ce.value.UntypedAtomicValue
-import NodeImpl._
-//remove if not needed
-import scala.collection.JavaConversions._
 
 object NodeImpl {
 
@@ -87,7 +85,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * Set the index position. For internal use only
    * @param index the position of the node among its siblings, counting from zero.
    */
-  protected def setSiblingPosition(index: Int): Unit = {
+  protected[linked] def setSiblingPosition(index: Int): Unit = {
     this.index = index
   }
 
@@ -113,7 +111,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * @return true if this Node object and the supplied Node object represent the
    *         same node in the tree.
    */
-  def isSameNodeInfo(other: NodeInfo): Boolean = this == other
+  def isSameNodeInfo(other: NodeInfo): Boolean = this eq other
 
   /**
    * The equals() method compares nodes for identity. It is defined to give the same result
@@ -167,7 +165,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * For nodes added by XQuery Update, the sequence number is -1L
    * @return the sequence number if there is one as an array containing two integers
    */
-  protected def getSequenceNumber(): Array[Int] = {
+  protected def getSequenceNumber: Array[Int] = {
     var prev = this
     var i = 0
     while (true) {
@@ -178,6 +176,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
       prev = prev.getPreviousInDocument
       i += 1
     }
+    throw new IllegalStateException
   }
 
   /**
@@ -213,7 +212,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
   /**
    * Get the configuration
    */
-  def getConfiguration(): Configuration = getPhysicalRoot.getConfiguration
+  def getConfiguration: Configuration = getPhysicalRoot.getConfiguration
 
   /**
    * Get the URI part of the name of this node. This is the URI corresponding to the
@@ -224,7 +223,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    */
   def getURI: String = {
     val qName = getNodeName
-    if (qName == null) "" else qName.getNamespaceURI
+    if (qName eq null) "" else qName.getNamespaceURI
   }
 
   /**
@@ -236,7 +235,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    */
   def getDisplayName: String = {
     val qName = getNodeName
-    if (qName == null) "" else qName.getDisplayName
+    if (qName eq null) "" else qName.getDisplayName
   }
 
   /**
@@ -247,7 +246,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    */
   def getLocalPart: String = {
     val qName = getNodeName
-    if (qName == null) "" else qName.getLocalName
+    if (qName eq null) "" else qName.getLocalName
   }
 
   /**
@@ -255,24 +254,23 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    *
    * @return The Node object describing the containing element or root node.
    */
-  def getParent: NodeInfo = {
-    if (parent.isInstanceOf[DocumentImpl] && parent.asInstanceOf[DocumentImpl].isImaginary) {
-      return null
+  def getParent: NodeInfo =
+    parent match {
+      case documentImpl: DocumentImpl if documentImpl.isImaginary ⇒ null
+      case _                                                      ⇒ parent
     }
-    parent
-  }
 
   /**
    * Get the raw value of the parent pointer. This will usually be the same as the parent node
    * in the XDM model, but in the case of a parentless element it will be a pointer to the "imaginary"
    * document node which is not properly part of the tree.
    */
-  protected def getRawParent(): ParentNodeImpl = parent
+  protected def getRawParent: ParentNodeImpl = parent
 
   /**
    * Set the raw parent pointer
    */
-  protected def setRawParent(parent: ParentNodeImpl): Unit = {
+  protected[linked] def setRawParent(parent: ParentNodeImpl): Unit = {
     this.parent = parent
   }
 
@@ -282,8 +280,8 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * @return The previous sibling node. Returns null if the current node is the first
    *         child of its parent.
    */
-  def getPreviousSibling(): NodeInfo = {
-    if (parent == null) {
+  def getPreviousSibling: NodeInfo = {
+    if (parent eq null) {
       return null
     }
     parent.getNthChild(index - 1)
@@ -295,8 +293,8 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * @return The next sibling node of the required type. Returns null if the current node is the last
    *         child of its parent.
    */
-  def getNextSibling(): NodeInfo = {
-    if (parent == null) {
+  def getNextSibling: NodeInfo = {
+    if (parent eq null) {
       return null
     }
     parent.getNthChild(index + 1)
@@ -307,14 +305,14 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    *
    * @return null
    */
-  def getFirstChild(): NodeInfo = null
+  def getFirstChild: NodeInfo = null
 
   /**
    * Get last child - default implementation used for leaf nodes
    *
    * @return null
    */
-  def getLastChild(): NodeInfo = null
+  def getLastChild: NodeInfo = null
 
   /**
    * Return an enumeration over the nodes reached by the given axis from this node
@@ -324,52 +322,58 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * @return an AxisIterator that scans the nodes reached by the axis in turn.
    */
   def iterateAxis(axisNumber: Byte, nodeTest: NodeTest): UnfailingIterator = axisNumber match {
-    case Axis.ANCESTOR ⇒ new SteppingIterator(this, new Navigator.ParentFunction(nodeTest), false)
-    case Axis.ANCESTOR_OR_SELF ⇒ new SteppingIterator(this, new Navigator.ParentFunction(nodeTest),
-      true)
+    case Axis.ANCESTOR ⇒ 
+      new SteppingIterator(this, new Navigator.ParentFunction(nodeTest), false)
+    case Axis.ANCESTOR_OR_SELF ⇒ 
+      new SteppingIterator(this, new Navigator.ParentFunction(nodeTest), true)
     case Axis.ATTRIBUTE ⇒
       if (getNodeKind != Type.ELEMENT) {
         EmptyIterator.getInstance
       }
-      var atts = this.asInstanceOf[ElementImpl].getAttributeList
-      if (nodeTest.isInstanceOf[NameTest]) {
-        val index = atts.findByStructuredQName(nodeTest.asInstanceOf[NameTest].getRequiredNodeName)
-        if (index < 0) {
+      val atts = this.asInstanceOf[ElementImpl].getAttributeList
+      nodeTest match {
+        case nameTest: NameTest ⇒
+          val index = atts.findByStructuredQName(nameTest.getRequiredNodeName)
+          if (index < 0) {
+            EmptyIterator.getInstance
+          } else {
+            val a = new AttributeImpl(this.asInstanceOf[ElementImpl], index)
+            SingletonIterator.makeIterator(a)
+          }
+        case _ ⇒
+          val nodes = new Array[AttributeImpl](atts.getLength)
+          for (i ← 0 until atts.getLength) {
+            nodes(i) = new AttributeImpl(this.asInstanceOf[ElementImpl], i)
+          }
+          Navigator.newAxisFilter(new ArrayIterator(nodes), nodeTest)
+      }
+    case Axis.CHILD ⇒
+      this match {
+        case parentNodeImpl: ParentNodeImpl ⇒
+          val all = new ArrayIterator(parentNodeImpl.allChildren())
+          if (nodeTest == AnyNodeTest.getInstance) {
+            all
+          } else {
+            Navigator.newAxisFilter(all, nodeTest)
+          }
+        case _ ⇒
           EmptyIterator.getInstance
-        } else {
-          val a = new AttributeImpl(this.asInstanceOf[ElementImpl], index)
-          SingletonIterator.makeIterator(a)
-        }
-      } else {
-        val nodes = Array.ofDim[AttributeImpl](atts.getLength)
-        for (i ← 0 until atts.getLength) {
-          nodes(i) = new AttributeImpl(this.asInstanceOf[ElementImpl], i)
-        }
-        Navigator.newAxisFilter(new ArrayIterator(nodes), nodeTest)
       }
-
-    case Axis.CHILD ⇒ if (this.isInstanceOf[ParentNodeImpl]) {
-      val all = new ArrayIterator(this.asInstanceOf[ParentNodeImpl].allChildren())
-      if (nodeTest == AnyNodeTest.getInstance) {
-        all
+    case Axis.DESCENDANT ⇒
+      if (getNodeKind == Type.DOCUMENT && nodeTest.isInstanceOf[NameTest] &&
+        nodeTest.getRequiredNodeKind == Type.ELEMENT) {
+        this.asInstanceOf[DocumentImpl].getAllElements(nodeTest.asInstanceOf[NameTest].getRequiredNodeName)
+      } else if (hasChildNodes) {
+        new SteppingIterator(this, new NextDescendantFunction(this, nodeTest), false)
       } else {
-        Navigator.newAxisFilter(all, nodeTest)
+        EmptyIterator.getInstance
       }
-    } else {
-      EmptyIterator.getInstance
-    }
-    case Axis.DESCENDANT ⇒ if (getNodeKind == Type.DOCUMENT && nodeTest.isInstanceOf[NameTest] &&
-      nodeTest.getRequiredNodeKind == Type.ELEMENT) {
-      this.asInstanceOf[DocumentImpl].getAllElements(nodeTest.asInstanceOf[NameTest].getRequiredNodeName)
-    } else if (hasChildNodes()) {
-      new SteppingIterator(this, new NextDescendantFunction(this, nodeTest), false)
-    } else {
-      EmptyIterator.getInstance
-    }
-    case Axis.DESCENDANT_OR_SELF ⇒ new SteppingIterator(this, new NextDescendantFunction(this, nodeTest),
-      true)
-    case Axis.FOLLOWING ⇒ Navigator.newAxisFilter(new Navigator.FollowingEnumeration(this), nodeTest)
-    case Axis.FOLLOWING_SIBLING ⇒ new SteppingIterator(this, new NextSiblingFunction(nodeTest), false)
+    case Axis.DESCENDANT_OR_SELF ⇒
+      new SteppingIterator(this, new NextDescendantFunction(this, nodeTest), true)
+    case Axis.FOLLOWING ⇒ 
+      Navigator.newAxisFilter(new Navigator.FollowingEnumeration(this), nodeTest)
+    case Axis.FOLLOWING_SIBLING ⇒ 
+      new SteppingIterator(this, new NextSiblingFunction(nodeTest), false)
     case Axis.NAMESPACE ⇒
       if (getNodeKind != Type.ELEMENT) {
         EmptyIterator.getInstance
@@ -377,17 +381,19 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
       NamespaceNode.makeIterator(this, nodeTest)
 
     case Axis.PARENT ⇒
-      var parent = getParent
-      if (parent == null) {
+      val parent = getParent
+      if (parent eq null) {
         EmptyIterator.getInstance
       }
       Navigator.filteredSingleton(parent, nodeTest)
-
-    case Axis.PRECEDING ⇒ Navigator.newAxisFilter(new Navigator.PrecedingEnumeration(this, false), nodeTest)
-    case Axis.PRECEDING_SIBLING ⇒ new SteppingIterator(this, new PrecedingSiblingFunction(nodeTest),
-      false)
-    case Axis.SELF ⇒ Navigator.filteredSingleton(this, nodeTest)
-    case _ ⇒ throw new IllegalArgumentException("Unknown axis number " + axisNumber)
+    case Axis.PRECEDING ⇒ 
+      Navigator.newAxisFilter(new Navigator.PrecedingEnumeration(this, false), nodeTest)
+    case Axis.PRECEDING_SIBLING ⇒ 
+      new SteppingIterator(this, new PrecedingSiblingFunction(nodeTest), false)
+    case Axis.SELF ⇒ 
+      Navigator.filteredSingleton(this, nodeTest)
+    case _ ⇒ 
+      throw new IllegalArgumentException("Unknown axis number " + axisNumber)
   }
 
   /**
@@ -397,7 +403,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    */
   def getRoot: NodeInfo = {
     val parent = getParent
-    if (parent == null) {
+    if (parent eq null) {
       this
     } else {
       parent.getRoot
@@ -412,7 +418,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    */
   def getDocumentRoot: DocumentInfo = {
     val parent = getParent
-    if (parent == null) {
+    if (parent eq null) {
       null
     } else {
       parent.getDocumentRoot
@@ -425,9 +431,9 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * @return the document node, which may be imaginary. In the case of a node that has been detached
    * from the tree by means of a delete() operation, this method returns null.
    */
-  def getPhysicalRoot(): DocumentImpl = {
+  def getPhysicalRoot: DocumentImpl = {
     var up = parent
-    while (up != null && !up.isInstanceOf[DocumentImpl]) {
+    while ((up ne null) && ! up.isInstanceOf[DocumentImpl]) {
       up = up.getRawParent
     }
     up.asInstanceOf[DocumentImpl]
@@ -442,30 +448,31 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    */
   def getNextInDocument(anchor: NodeImpl): NodeImpl = {
     var next = getFirstChild.asInstanceOf[NodeImpl]
-    if (next != null) {
+    if (next ne null) {
       return next
     }
-    if (this == anchor) {
+    if (this eq anchor) {
       return null
     }
     next = getNextSibling.asInstanceOf[NodeImpl]
-    if (next != null) {
+    if (next ne null) {
       return next
     }
     var parent = this
     while (true) {
       parent = parent.getParent.asInstanceOf[NodeImpl]
-      if (parent == null) {
+      if (parent eq null) {
         return null
       }
-      if (parent == anchor) {
+      if (parent eq anchor) {
         return null
       }
       next = parent.getNextSibling.asInstanceOf[NodeImpl]
-      if (next != null) {
-        next
+      if (next ne null) {
+        return next
       }
     }
+    throw new IllegalStateException
   }
 
   /**
@@ -473,17 +480,17 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    *
    * @return the previous node in the document, or null if there is no such node
    */
-  def getPreviousInDocument(): NodeImpl = {
+  def getPreviousInDocument: NodeImpl = {
     val prev = getPreviousSibling.asInstanceOf[NodeImpl]
-    if (prev != null) {
+    if (prev ne null) {
       return prev.getLastDescendantOrSelf
     }
     getParent.asInstanceOf[NodeImpl]
   }
 
-  private def getLastDescendantOrSelf(): NodeImpl = {
+  private def getLastDescendantOrSelf: NodeImpl = {
     val last = getLastChild.asInstanceOf[NodeImpl]
-    if (last == null) {
+    if (last eq null) {
       return this
     }
     last.getLastDescendantOrSelf
@@ -501,8 +508,8 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    *         If the bottom half is zero, then this is a namespace undeclaration rather than a declaration.
    *         The XML namespace is never included in the list. If the supplied array is larger than required,
    *         then the first unused entry will be set to -1.
-   *         <p/>
-   *         <p>For a node other than an element, the method returns null.</p>
+   *         
+   *         For a node other than an element, the method returns null.
    */
   def getDeclaredNamespaces(buffer: Array[NamespaceBinding]): Array[NamespaceBinding] = null
 
@@ -512,7 +519,7 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
    * @return <code>true</code> if the node has any children,
    *         <code>false</code> if the node has no children.
    */
-  def hasChildNodes: Boolean = getFirstChild != null
+  def hasChildNodes: Boolean = getFirstChild ne null
 
   /**
    * Get a Builder suitable for building nodes that can be attached to this document.

@@ -5,9 +5,6 @@ package client.net.sf.saxon.ce.event
 
 import client.net.sf.saxon.ce.om.NodeInfo
 import client.net.sf.saxon.ce.orbeon.Configuration
-import client.net.sf.saxon.ce.trans.XPathException
-//remove if not needed
-import scala.collection.JavaConversions._
 
 /**
  * The abstract Builder class is responsible for taking a stream of SAX events
@@ -18,18 +15,12 @@ import scala.collection.JavaConversions._
 abstract class Builder extends Receiver {
 
   protected var pipe: PipelineConfiguration = _
-
   protected var config: Configuration = _
-
   protected var systemId: String = _
-
   protected var baseURI: String = _
-
   protected var currentRoot: NodeInfo = _
-
   protected var started: Boolean = false
-
-  protected var open: Boolean = false
+  protected var _open: Boolean = false
 
   def setPipelineConfiguration(pipe: PipelineConfiguration): Unit = {
     this.pipe = pipe
@@ -42,7 +33,7 @@ abstract class Builder extends Receiver {
    * Get the Configuration
    * @return the Saxon configuration
    */
-  def getConfiguration(): Configuration = config
+  def getConfiguration: Configuration = config
 
   /**
    * The SystemId is equivalent to the document-uri property defined in the XDM data model.
@@ -62,7 +53,7 @@ abstract class Builder extends Receiver {
    * executing a query or transformation.
    * @return the SystemId, that is, the document-uri.
    */
-  def getSystemId(): String = systemId
+  def getSystemId: String = systemId
 
   /**
    * Set the base URI of the document node of the tree being constructed by this builder
@@ -76,14 +67,14 @@ abstract class Builder extends Receiver {
    * Get the base URI of the document node of the tree being constructed by this builder
    * @return the base URI
    */
-  def getBaseURI(): String = baseURI
+  def getBaseURI: String = baseURI
 
   def open(): Unit = {
-    open = true
+    _open = true
   }
 
   def close(): Unit = {
-    open = false
+    _open = false
   }
 
   /**
@@ -92,7 +83,7 @@ abstract class Builder extends Receiver {
    * @return the root of the tree that is currently being built, or that has been most recently built
    * using this builder
    */
-  def getCurrentRoot(): NodeInfo = currentRoot
+  def getCurrentRoot: NodeInfo = currentRoot
 
   /**
    * Reset the builder to its initial state. The most important effect of calling this
@@ -108,6 +99,6 @@ abstract class Builder extends Receiver {
     baseURI = null
     currentRoot = null
     started = false
-    open = false
+    _open = false
   }
 }
