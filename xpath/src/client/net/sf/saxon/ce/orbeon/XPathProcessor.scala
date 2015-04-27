@@ -16,73 +16,101 @@
 package client.net.sf.saxon.ce.orbeon
 
 import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.dom.HTMLDocumentWrapper
+import client.net.sf.saxon.ce.event.PipelineConfiguration
 import client.net.sf.saxon.ce.expr._
 import client.net.sf.saxon.ce.functions._
-import client.net.sf.saxon.ce.om.{Item, Sequence}
+import client.net.sf.saxon.ce.om.DocumentInfo
+import client.net.sf.saxon.ce.om.Item
+import client.net.sf.saxon.ce.om.Sequence
 import client.net.sf.saxon.ce.sxpath.SimpleContainer
 import client.net.sf.saxon.ce.{value ⇒ svalue}
+import org.orbeon.darius.api.API
 import org.scalajs.dom.raw
-import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery}
+import org.scalajs.jquery.JQuery
+import org.scalajs.jquery.JQueryEventObject
+import org.scalajs.jquery.jQuery
 import rx._
 import rx.ops._
+import upickle._
 
-import scala.collection.immutable
+import scala.collection.{immutable ⇒ i}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import scala.scalajs.js
+import scala.scalajs.js.Dynamic.{global ⇒ g}
 import scala.scalajs.js.annotation.JSExport
-import scala.util.{Failure, Success, Try}
+import scala.util.Failure
+import scala.util.Success
+import scala.util.Try
+
+@JSExport
+case class TestFoo(i: Int, s: String, d: Double)
+
+sealed trait Message
+case class ExprReq  (expr: String)                          extends Message
+case class ExprRes  (message: Option[String])               extends Message
+case class XMLReq   (expr: String)                          extends Message
+case class XMLRes   (message: Option[String])               extends Message
+case class ResultRes(items: Either[String, i.List[String]]) extends Message
+
+object WindowMain extends js.JSApp {
+  
+  import XPathProcessor._
+  
+  private def postResponse(m: Message) = g.postMessage(write(m))
+  
+  val exprStringVar  = Var[String]("")
+  val xmlStringVar   = Var[String]("")
+
+  val compiledExprRx = Rx(compileExpression(exprStringVar(), GlobalConfiguration))
+  val parsedXMLRx    = Rx(DariusXMLParsing.parseString(xmlStringVar(), GlobalConfiguration))
+  
+  compiledExprRx foreach {
+    case Success(_) ⇒ postResponse(ExprRes(None))
+    case Failure(t) ⇒ postResponse(ExprRes(Option(t.getMessage)))
+  }
+  
+  parsedXMLRx foreach {
+    case Success(_) ⇒ postResponse(XMLRes(None))
+    case Failure(t) ⇒ postResponse(XMLRes(Option(t.getMessage)))
+  }
+
+  val resultRx = Rx {
+    for {
+      compiledExpr @ CompiledExpression(config, _, _) ← compiledExprRx()
+      parsedXML    ← parsedXMLRx()
+      result       ← runExpression(compiledExpr, parsedXML)
+    } yield
+      result
+  }
+  
+  resultRx foreach {
+    case Success(items) ⇒ postResponse(ResultRes(Right(items map (_.getStringValue))))
+    case Failure(t)     ⇒ postResponse(ResultRes(Left(t.getMessage)))
+  }
+  
+  def main(): Unit = {
+    if (g.document == js.undefined) {
+      println("initializeWorker()")
+      g.onmessage = (e: raw.MessageEvent) ⇒ read[Message](e.data.asInstanceOf[String]) match {
+        case ExprReq(expr) ⇒ exprStringVar() = expr
+        case XMLReq(xml)   ⇒ xmlStringVar()  = xml
+        case _             ⇒
+      }
+    }
+  }
+}
 
 @JSExport
 object XPathProcessor {
+  
+  val GlobalConfiguration = new Configuration
 
   case class CompiledExpression(config: Configuration, expr: Expression, slots: Int)
 
   val DebounceDelay = 200.millis
 
   implicit val scheduler = new DomScheduler
-
-  private object XMLParsing {
-
-    val SearchDOMErrorExpression = compileExpression(
-      """
-        (
-          (: Firefox places a root `parsererror` element :)
-          for $t in /*:parsererror[namespace-uri() = 'http://www.mozilla.org/newlayout/xml/parsererror.xml']/text()
-            return substring-before(substring-after($t, 'XML Parsing Error: '), 'Location:'),
-          (: Chrome/Safari places a nested `parsererror` element :)
-          /*/*:parsererror/*:div/string()
-        )[1]
-      """
-    )
-
-    val DOMParser = new raw.DOMParser
-
-    // DOMParser has insane error handling. Instead of throwing an exception with relevant information, it returns an
-    // error document, or a document with an error element. The result is different between Firefox and Chrome. I don't
-    // know whether this works with IE. The standard says to follow the Firefox behavior:
-    // http://www.w3.org/TR/DOM-Parsing/#methods
-    def findXMLError(doc: raw.Document) = {
-      SearchDOMErrorExpression flatMap {
-        case compiledExpr @ CompiledExpression(config, _, _) ⇒
-          runExpression(compiledExpr, new HTMLDocumentWrapper(doc, null, config))
-      } map {
-        case List(errorString: svalue.StringValue) ⇒ Some(errorString.getStringValue)
-        case _                                     ⇒ None
-      }
-    }
-
-    def parseXML(s: String): Try[raw.Document] = {
-
-      val newDocument = DOMParser.parseFromString(s, "application/xml")
-
-      findXMLError(newDocument) match {
-        case Success(Some(errorMessage)) ⇒ Failure(new Exception(errorMessage))
-        case Success(None)               ⇒ Success(newDocument)
-        case Failure(t)                  ⇒ Failure(t)
-      }
-    }
-  }
 
   private object UI {
 
@@ -105,9 +133,13 @@ object XPathProcessor {
         rx() = newValue
     }
   }
-
+  
   @JSExport
   def initialize(): Unit = {
+    
+    val worker = new raw.Worker("target/scala-2.11/saxon-ce-scala-worker.js")
+    
+    def postRequest(m: Message) = worker.postMessage(write(m))
 
     // Model
     val exprStringVar         = Var(UI.exprInput.value.toString)
@@ -115,62 +147,59 @@ object XPathProcessor {
 
     val debouncedExprStringRx = exprStringVar.debounce(DebounceDelay)
     val debouncedXmlStringRx  = xmlStringVar.debounce(DebounceDelay)
-
-    val compiledExprRx        = Rx(compileExpression(debouncedExprStringRx()))
-    val parsedXMLRx           = Rx(XMLParsing.parseXML(debouncedXmlStringRx()))
-
-    val resultRx = Rx {
-      for {
-        compiledExpr @ CompiledExpression(config, _, _) ← compiledExprRx()
-        parsedXML    ← parsedXMLRx()
-        result       ← runExpression(compiledExpr, new HTMLDocumentWrapper(parsedXML, null, config))
-      } yield
-        result
+    
+    debouncedExprStringRx foreach { value ⇒
+      postRequest(ExprReq(value))
     }
-
-    // Alerts
-    compiledExprRx foreach {
-      case Success(_) ⇒ UI.toggleAlert(UI.exprInput, None)
-      case Failure(t) ⇒ UI.toggleAlert(UI.exprInput, Some(t.getMessage))
+    
+    debouncedXmlStringRx foreach { value ⇒
+      postRequest(XMLReq(value))
     }
-
-    parsedXMLRx foreach {
-      case Success(_) ⇒ UI.toggleAlert(UI.xmlInput, None)
-      case Failure(t) ⇒ UI.toggleAlert(UI.xmlInput, Some(t.getMessage))
-    }
-
-    resultRx foreach {
-      case Success(_) ⇒ UI.toggleAlert(UI.results, None)
-      case Failure(t) ⇒ UI.toggleAlert(UI.results, Some(t.getMessage))
-    }
-
+    
+    val resultVar = Var[Option[Either[String, i.List[String]]]](None)
+    
     // Result
-    resultRx foreach { result ⇒
-      result foreach { items ⇒
-        UI.results.children("li").detach()
-        for (item ← items) {
-          val itemString = item.getStringValue
-          UI.results.append(s"""<li class="list-group-item">$itemString</li>""")
-        }
+    resultVar foreach { result ⇒
+      result foreach {
+        case Right(items) ⇒
+          UI.toggleAlert(UI.results, None)
+          UI.results.children("li").detach()
+          for (item ← items) {
+            UI.results.append(s"""<li class="list-group-item">$item</li>""")
+          }
+        case Left(message) ⇒
+          UI.toggleAlert(UI.results, Option(message))
       }
     }
 
+    // Events
     UI.exprInput.keyup(UI.keyChange(UI.exprInput.value.toString, exprStringVar) _)
     UI.xmlInput.keyup(UI.keyChange(UI.xmlInput.value.toString, xmlStringVar) _)
+    
+    // Message handler
+    worker.onmessage = (e: js.Any) ⇒ {
+      
+      val serializedMessage = e.asInstanceOf[raw.MessageEvent].data.asInstanceOf[String]
+      
+      read[Message](serializedMessage) match {
+        case ExprRes(message) ⇒ UI.toggleAlert(UI.exprInput, message)
+        case XMLRes(message)  ⇒ UI.toggleAlert(UI.xmlInput, message)
+        case ResultRes(items) ⇒ resultVar() = Some(items)
+        case _                ⇒
+      }
+    }
   }
 
   val ns = Map(
     "xs" → "http://www.w3.org/2001/XMLSchema"
   )
 
-  def compileExpression(expression: String): Try[CompiledExpression] = Try {
+  def compileExpression(expression: String, config: Configuration): Try[CompiledExpression] = Try {
 
     val library = SystemFunctionLibrary.getSystemFunctionLibrary(StandardFunction.CORE)
 
     val executable    = new Executable
     val container     = new SimpleContainer(executable)
-
-    val config        = new Configuration
     val staticContext = new ShareableXPathStaticContext(config, ns, library)
 
     var expr = ExpressionTool.make(expression, staticContext, container, 0, Token.EOF, container)
@@ -196,7 +225,7 @@ object XPathProcessor {
     case i ⇒ i
   }
 
-  def runExpression(compiledExpr: CompiledExpression, contextItem: Item): Try[immutable.List[Item]] = Try {
+  def runExpression(compiledExpr: CompiledExpression, contextItem: Item): Try[i.List[Item]] = Try {
 
     val CompiledExpression(config, expr, slots) = compiledExpr
 
@@ -205,9 +234,20 @@ object XPathProcessor {
     val xpc = new XPathContext(controller)
     xpc.setStackFrame(slots, new Array[Sequence](slots))
     xpc.setSingletonFocus(contextItem)
-
+    
     val seqIt = expr.iterate(xpc)
-
+    
     scala.collection.Iterator.continually(seqIt.next()).takeWhile(_ ne null).map(convertItem).toList
+  }
+}
+
+object DariusXMLParsing {
+  def parseString(s: String, config: Configuration): Try[DocumentInfo] = Try {
+    val pipelineConfig = new PipelineConfiguration()
+    pipelineConfig.setConfiguration(config)
+    val builder = new LinkedTreeDocumentHandler(pipelineConfig)
+    API.parseString(s, builder)
+    println("xxx2")
+    builder.result.asInstanceOf[DocumentInfo]
   }
 }
