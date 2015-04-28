@@ -699,7 +699,6 @@ object Navigator {
           descendants = null
         }
       }
-      val xxx =
       if (children != null) {
         val n = children.next().asInstanceOf[NodeInfo]
         if (n != null) {
@@ -743,7 +742,6 @@ object Navigator {
            next()
         }
       }
-      xxx
     }
 
     def getAnother: UnfailingIterator = {
