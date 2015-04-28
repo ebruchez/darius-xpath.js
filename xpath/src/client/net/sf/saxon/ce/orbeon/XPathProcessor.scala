@@ -26,6 +26,7 @@ import client.net.sf.saxon.ce.sxpath.SimpleContainer
 import client.net.sf.saxon.ce.{value ⇒ svalue}
 import org.orbeon.darius.api.API
 import org.scalajs.dom.raw
+import org.scalajs.dom.raw.HTMLScriptElement
 import org.scalajs.jquery.JQuery
 import org.scalajs.jquery.JQueryEventObject
 import org.scalajs.jquery.jQuery
@@ -38,13 +39,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic.{global ⇒ g}
-import scala.scalajs.js.annotation.JSExport
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
-@JSExport
-case class TestFoo(i: Int, s: String, d: Double)
 
 sealed trait Message
 case class ExprReq  (expr: String)                          extends Message
@@ -53,55 +51,69 @@ case class XMLReq   (expr: String)                          extends Message
 case class XMLRes   (message: Option[String])               extends Message
 case class ResultRes(items: Either[String, i.List[String]]) extends Message
 
-object WindowMain extends js.JSApp {
+object CommonMain extends js.JSApp {
+  def main(): Unit =
+    if (g.document == js.undefined)
+      WorkerMain.main()
+  else
+      XPathProcessor.main()
+}
+
+object WorkerMain {
   
   import XPathProcessor._
+  import DariusXMLParsing._
   
   private def postResponse(m: Message) = g.postMessage(write(m))
   
-  val exprStringVar  = Var[String]("")
-  val xmlStringVar   = Var[String]("")
+  // What we receive from the client (initially empty)
+  val exprStringVar  = Var[Option[String]](None)
+  val xmlStringVar   = Var[Option[String]](None)
 
-  val compiledExprRx = Rx(compileExpression(exprStringVar(), GlobalConfiguration))
-  val parsedXMLRx    = Rx(DariusXMLParsing.parseString(xmlStringVar(), GlobalConfiguration))
+  val compiledExprRx = Rx(exprStringVar() map (compileExpression(_, GlobalConfiguration)))
+  val parsedXMLRx    = Rx(xmlStringVar()  map (parseString(_, GlobalConfiguration)))
   
   compiledExprRx foreach {
-    case Success(_) ⇒ postResponse(ExprRes(None))
-    case Failure(t) ⇒ postResponse(ExprRes(Option(t.getMessage)))
+    case Some(Success(_)) ⇒ postResponse(ExprRes(None))
+    case Some(Failure(t)) ⇒ postResponse(ExprRes(Option(t.getMessage)))
+    case None             ⇒
   }
   
   parsedXMLRx foreach {
-    case Success(_) ⇒ postResponse(XMLRes(None))
-    case Failure(t) ⇒ postResponse(XMLRes(Option(t.getMessage)))
+    case Some(Success(_)) ⇒ postResponse(XMLRes(None))
+    case Some(Failure(t)) ⇒ postResponse(XMLRes(Option(t.getMessage)))
+    case None             ⇒
   }
 
   val resultRx = Rx {
     for {
-      compiledExpr @ CompiledExpression(config, _, _) ← compiledExprRx()
-      parsedXML    ← parsedXMLRx()
-      result       ← runExpression(compiledExpr, parsedXML)
-    } yield
-      result
+      tryCompiledExpr ← compiledExprRx()
+      tryParsedXML    ← parsedXMLRx()
+    } yield {
+      for {
+        compiledExpr  ← tryCompiledExpr
+        parsedXML     ← tryParsedXML
+        result        ← runExpression(compiledExpr, parsedXML)
+      } yield
+        result
+    }
   }
   
   resultRx foreach {
-    case Success(items) ⇒ postResponse(ResultRes(Right(items map (_.getStringValue))))
-    case Failure(t)     ⇒ postResponse(ResultRes(Left(t.getMessage)))
+    case Some(Success(items)) ⇒ postResponse(ResultRes(Right(items map (_.getStringValue))))
+    case Some(Failure(t))     ⇒ postResponse(ResultRes(Left(t.getMessage)))
+    case None                 ⇒
   }
   
   def main(): Unit = {
-    if (g.document == js.undefined) {
-      println("initializeWorker()")
-      g.onmessage = (e: raw.MessageEvent) ⇒ read[Message](e.data.asInstanceOf[String]) match {
-        case ExprReq(expr) ⇒ exprStringVar() = expr
-        case XMLReq(xml)   ⇒ xmlStringVar()  = xml
-        case _             ⇒
-      }
+    g.onmessage = (e: raw.MessageEvent) ⇒ read[Message](e.data.asInstanceOf[String]) match {
+      case ExprReq(expr) ⇒ exprStringVar() = Option(expr)
+      case XMLReq(xml)   ⇒ xmlStringVar()  = Option(xml)
+      case _             ⇒
     }
   }
 }
 
-@JSExport
 object XPathProcessor {
   
   val GlobalConfiguration = new Configuration
@@ -134,10 +146,9 @@ object XPathProcessor {
     }
   }
   
-  @JSExport
-  def initialize(): Unit = {
+  def main(): Unit = {
     
-    val worker = new raw.Worker("target/scala-2.11/saxon-ce-scala-worker.js")
+    val worker = new raw.Worker(jQuery("#scalajs-combined-script")(0).asInstanceOf[HTMLScriptElement].src)
     
     def postRequest(m: Message) = worker.postMessage(write(m))
 
@@ -247,7 +258,6 @@ object DariusXMLParsing {
     pipelineConfig.setConfiguration(config)
     val builder = new LinkedTreeDocumentHandler(pipelineConfig)
     API.parseString(s, builder)
-    println("xxx2")
     builder.result.asInstanceOf[DocumentInfo]
   }
 }
