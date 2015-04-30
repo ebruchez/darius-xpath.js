@@ -1,12 +1,15 @@
-## What is this?
+## What is Darius XPath?
 
-A port of the XPath processor of [Saxon-CE][1] to [Scala.js][2].
+An XPath 2.0 processor based on [Saxon-CE][1] running in the Web browser via [Scala.js][2].
 
 Only the XPath processor is ported. The full XSLT processor files are present but do not compile.
 
 ## Try it out
 
-The demo app is [here][3].
+Check the [demo app][3]. It does the following:
+
+- uses a Web worker to perform XML parsing, XPath compilation, and XPath execution
+- XML parsing in the worker is done using [Darius XML][4]
 
 ## Status
 
@@ -20,7 +23,7 @@ This should be considered a demo, nothing more for now.
 
 ## Building and running locally
 
-Use `sbt fastOptJS` and `sbt fullOptJS`, then load `index-dev.html` or `index.html`.
+Use `sbt fastOptJSCombine` and `sbt fullOptJSCombine`, then load `index-dev.html` or `index.html`.
 
 ## Licenses
 
@@ -28,4 +31,5 @@ The Saxon files and their translations are under the MPL license. Other files ar
 
 [1]: http://www.saxonica.com/ce/index.xml
 [2]: http://www.scala-js.org/
-[3]: http://ebruchez.github.io/saxon.scala.js/
+[3]: http://ebruchez.github.io/darius-xpath.js/
+[4]: https://github.com/ebruchez/darius-xml.js
