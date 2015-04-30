@@ -14,10 +14,10 @@
         <div class="container-fluid">
 
             <div class="starter-template">
-                <h1>Saxon.scala.js</h1>
+                <h1>Darius XPath</h1>
                 <p class="lead">
-                    The <a href="http://www.saxonica.com/ce/index.xml">Saxon</a> XPath 2.0 processor running in the web browser
-                    via <a href="http://www.scala-js.org/">Scala.js</a>.
+                    An XPath 2.0 processor based on <a href="http://www.saxonica.com/ce/index.xml">Saxon</a> and
+                    running in the web browser via <a href="http://www.scala-js.org/">Scala.js</a>.
                 </p>
             </div>
 
@@ -329,11 +329,7 @@
         </div>
 
         <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/2.1.1/jquery.js"></script>
-        <script type="text/javascript" src="./target/scala-2.11/saxon-ce-scala-opt-combined.js"></script>
-        <!--<script type="text/javascript" src="./target/scala-2.11/saxon-ce-scala-launcher.js"></script>-->
-        <script type="text/javascript">
-            client.net.sf.saxon.ce.orbeon.XPathProcessor().initialize();
-        </script>
+        <script type="text/javascript" src="./target/scala-2.11/saxon-ce-scala-opt-combined.js" id="scalajs-combined-script"></script>
 
     </body>
 </html>
