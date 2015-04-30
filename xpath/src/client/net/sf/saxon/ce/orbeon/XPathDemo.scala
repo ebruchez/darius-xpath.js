@@ -43,7 +43,6 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
-
 sealed trait Message
 case class ExprReq  (expr: String)                          extends Message
 case class ExprRes  (message: Option[String])               extends Message
@@ -51,20 +50,22 @@ case class XMLReq   (expr: String)                          extends Message
 case class XMLRes   (message: Option[String])               extends Message
 case class ResultRes(items: Either[String, i.List[String]]) extends Message
 
-object CommonMain extends js.JSApp {
+object Launcher extends js.JSApp {
   def main(): Unit =
     if (js.isUndefined(g.document))
-      WorkerMain.main()
+      XMLWorker.main()
   else
-      XPathProcessor.main()
+      XPathDemo.main()
 }
 
-object WorkerMain {
+object XMLWorker {
   
   import XPathProcessor._
   import DariusXMLParsing._
   
-  private def postResponse(m: Message) = g.postMessage(write(m))
+  val GlobalConfiguration = new Configuration
+  
+  def postResponse(m: Message) = g.postMessage(write(m))
   
   // What we receive from the client (initially empty)
   val exprStringVar  = Var[Option[String]](None)
@@ -114,17 +115,13 @@ object WorkerMain {
   }
 }
 
-object XPathProcessor {
-  
-  val GlobalConfiguration = new Configuration
-
-  case class CompiledExpression(config: Configuration, expr: Expression, slots: Int)
+object XPathDemo { 
 
   val DebounceDelay = 200.millis
 
   implicit val scheduler = new DomScheduler
 
-  private object UI {
+  object UI {
 
     def exprInput = jQuery("#expression-textarea")
     def xmlInput  = jQuery("#input-textarea")
@@ -200,8 +197,13 @@ object XPathProcessor {
       }
     }
   }
+}
 
-  val ns = Map(
+object XPathProcessor {
+
+  case class CompiledExpression(config: Configuration, expr: Expression, slots: Int)
+  
+  val DefaultNamespaces = Map(
     "xs" → "http://www.w3.org/2001/XMLSchema"
   )
 
@@ -211,7 +213,7 @@ object XPathProcessor {
 
     val executable    = new Executable
     val container     = new SimpleContainer(executable)
-    val staticContext = new ShareableXPathStaticContext(config, ns, library)
+    val staticContext = new ShareableXPathStaticContext(config, DefaultNamespaces, library)
 
     var expr = ExpressionTool.make(expression, staticContext, container, 0, Token.EOF, container)
 
@@ -224,18 +226,18 @@ object XPathProcessor {
   }
 
   // Saxon StringValue doesn't support equals()
-  private class StringValueWithEquals(cs: CharSequence) extends svalue.StringValue(cs) {
+  class StringValueWithEquals(cs: CharSequence) extends svalue.StringValue(cs) {
     override def equals(other: Any): Boolean = other match {
       case s: svalue.StringValue ⇒ codepointEquals(s)
       case o ⇒ false
     }
   }
 
-  private def convertItem(item: Item) = item match {
+  def convertItem(item: Item) = item match {
     case s: svalue.StringValue ⇒ new StringValueWithEquals(s.getPrimitiveStringValue)
     case i ⇒ i
   }
-
+  
   def runExpression(compiledExpr: CompiledExpression, contextItem: Item): Try[i.List[Item]] = Try {
 
     val CompiledExpression(config, expr, slots) = compiledExpr
@@ -253,6 +255,7 @@ object XPathProcessor {
 }
 
 object DariusXMLParsing {
+  
   def parseString(s: String, config: Configuration): Try[DocumentInfo] = Try {
     val pipelineConfig = new PipelineConfiguration()
     pipelineConfig.setConfiguration(config)
