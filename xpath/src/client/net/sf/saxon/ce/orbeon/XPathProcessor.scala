@@ -53,7 +53,7 @@ case class ResultRes(items: Either[String, i.List[String]]) extends Message
 
 object CommonMain extends js.JSApp {
   def main(): Unit =
-    if (g.document == js.undefined)
+    if (js.isUndefined(g.document))
       WorkerMain.main()
   else
       XPathProcessor.main()
