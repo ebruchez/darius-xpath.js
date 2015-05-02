@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/saxon-ce-scala.iml" filepath="$PROJECT_DIR$/.idea/modules/saxon-ce-scala.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/saxon-ce-scala-build.iml" filepath="$PROJECT_DIR$/.idea/modules/saxon-ce-scala-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dariusXPath.iml" filepath="$PROJECT_DIR$/.idea/modules/dariusXPath.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dariusXPath-build.iml" filepath="$PROJECT_DIR$/.idea/modules/dariusXPath-build.iml" />
     </modules>
   </component>
 </project>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.net.sf.saxon.ce.orbeon
+package client.net.sf.saxon.ce.demo
 
 import client.net.sf.saxon.ce.`type`.Type
 import client.net.sf.saxon.ce.event.PipelineConfiguration
@@ -22,6 +22,11 @@ import client.net.sf.saxon.ce.functions._
 import client.net.sf.saxon.ce.om.DocumentInfo
 import client.net.sf.saxon.ce.om.Item
 import client.net.sf.saxon.ce.om.Sequence
+import client.net.sf.saxon.ce.orbeon.Configuration
+import client.net.sf.saxon.ce.orbeon.Controller
+import client.net.sf.saxon.ce.orbeon.Executable
+import client.net.sf.saxon.ce.orbeon.LinkedTreeDocumentHandler
+import client.net.sf.saxon.ce.orbeon.ShareableXPathStaticContext
 import client.net.sf.saxon.ce.sxpath.SimpleContainer
 import client.net.sf.saxon.ce.{value ⇒ svalue}
 import org.orbeon.darius.api.API
@@ -60,8 +65,8 @@ object Launcher extends js.JSApp {
 
 object XMLWorker {
   
-  import XPathProcessor._
   import DariusXMLParsing._
+  import XPathProcessor._
   
   val GlobalConfiguration = new Configuration
   

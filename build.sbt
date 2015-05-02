@@ -1,9 +1,9 @@
 enablePlugins(ScalaJSPlugin)
 
-lazy val scala = (project in file(".")).
+lazy val dariusXPath = (project in file(".")).
   settings(
     organization := "org.orbeon",
-    name         := "Saxon-CE-Scala",
+    name         := "darius-xpath",
     version      := "1.0",
     scalaVersion := "2.11.6",
     version      := "SNAPSHOT",
@@ -18,7 +18,7 @@ lazy val scala = (project in file(".")).
     libraryDependencies += "com.lihaoyi"  %%% "utest"          % "0.3.0" % "test",
     libraryDependencies += "com.lihaoyi"  %%% "scalarx"        % "0.2.8",
     libraryDependencies += "com.lihaoyi"  %%% "upickle"        % "0.2.8",
-    libraryDependencies += "org.orbeon"   %%% "darius"         % "SNAPSHOT",
+    libraryDependencies += "org.orbeon"   %%% "darius-xml"     % "SNAPSHOT",
     
     testFrameworks      += new TestFramework("utest.runner.Framework"),
     
@@ -36,7 +36,7 @@ def combine(optFile: File) = {
   
   val Format = "((.+)-(fastopt|opt)).js".r
   
-  val combinedName = optFile.getName match { case Format(name, _, _) ⇒ s"$name-combined.js" }
+  val combinedName = optFile.getName match { case Format(name, _, _)   ⇒ s"$name-combined.js" }
   val launcherName = optFile.getName match { case Format(_, prefix, _) ⇒ s"$prefix-launcher.js" }
   
   val combinedFile  = outputDir / combinedName

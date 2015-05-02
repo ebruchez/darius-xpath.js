@@ -15,6 +15,7 @@
  */
 package client.net.sf.saxon.ce.orbeon
 
+import client.net.sf.saxon.ce.demo.XPathProcessor
 import client.net.sf.saxon.ce.value
 import utest._
 
