@@ -1,10 +1,10 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.parser
+package org.orbeon.darius.xpath.expr.parser
 
-import client.net.sf.saxon.ce.expr.{Expression, StaticContext}
-import client.net.sf.saxon.ce.om.StructuredQName
+import org.orbeon.darius.xpath.expr.{Expression, StaticContext}
+import org.orbeon.darius.xpath.om.StructuredQName
 
 /**
  *  A code injector can be used to add code to the expression tree (for example, diagnostic tracing code)

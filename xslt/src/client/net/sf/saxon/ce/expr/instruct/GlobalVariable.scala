@@ -1,14 +1,14 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.expr.Container
-import client.net.sf.saxon.ce.expr.ExpressionTool
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.trans.XPathException
+import org.orbeon.darius.xpath.Controller
+import org.orbeon.darius.xpath.expr.Container
+import org.orbeon.darius.xpath.expr.ExpressionTool
+import org.orbeon.darius.xpath.expr.XPathContext
+import org.orbeon.darius.xpath.om.Sequence
+import org.orbeon.darius.xpath.trans.XPathException
 import scala.reflect.{BeanProperty, BooleanBeanProperty}
 //remove if not needed
 import scala.collection.JavaConversions._

@@ -1,18 +1,18 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
 import java.util.Iterator
 
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.expr.instruct.GeneralVariable._
-import client.net.sf.saxon.ce.om.{Item, Sequence, SequenceIterator, StructuredQName}
-import client.net.sf.saxon.ce.pattern.EmptySequenceTest
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.value.SequenceType
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.expr.instruct.GeneralVariable._
+import org.orbeon.darius.xpath.om.{Item, Sequence, SequenceIterator, StructuredQName}
+import org.orbeon.darius.xpath.pattern.EmptySequenceTest
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.EmptyIterator
+import org.orbeon.darius.xpath.value.SequenceType
 
 object GeneralVariable {
 

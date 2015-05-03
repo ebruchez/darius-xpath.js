@@ -1,15 +1,15 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.sort
+package org.orbeon.darius.xpath.expr.sort
 
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.pattern.Pattern
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.ListIterator
-import client.net.sf.saxon.ce.value.AtomicValue
+import org.orbeon.darius.xpath.expr.XPathContext
+import org.orbeon.darius.xpath.om.Item
+import org.orbeon.darius.xpath.om.SequenceIterator
+import org.orbeon.darius.xpath.pattern.Pattern
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.ListIterator
+import org.orbeon.darius.xpath.value.AtomicValue
 import java.util.List
 
 import scala.collection.JavaConversions._

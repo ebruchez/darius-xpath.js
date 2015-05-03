@@ -1,22 +1,22 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.LogController
-import client.net.sf.saxon.ce.event.Receiver
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.functions.SystemFunction
-import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.SequenceType
-import client.net.sf.saxon.ce.value.StringValue
-import client.net.sf.saxon.ce.value.Whitespace
+import org.orbeon.darius.xpath.LogController
+import org.orbeon.darius.xpath.event.Receiver
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.functions.SystemFunction
+import org.orbeon.darius.xpath.lib.NamespaceConstant
+import org.orbeon.darius.xpath.om._
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.`type`.AtomicType
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.`type`.TypeHierarchy
+import org.orbeon.darius.xpath.value.AtomicValue
+import org.orbeon.darius.xpath.value.SequenceType
+import org.orbeon.darius.xpath.value.StringValue
+import org.orbeon.darius.xpath.value.Whitespace
 import com.google.gwt.logging.client.LogConfiguration
 import java.util.Iterator
 //remove if not needed
@@ -119,7 +119,7 @@ class ComputedElement(var elementName: Expression,
    * @param offer details of the offer, for example the offer to move
    *              expressions that don't depend on the context to an outer level in
    *              the containing expression
-   * @throws client.net.sf.saxon.ce.trans.XPathException if any error is detected
+   * @throws org.orbeon.darius.xpath.trans.XPathException if any error is detected
    */
   protected def promoteInst(offer: PromotionOffer): Unit = {
     elementName = doPromotion(elementName, offer)

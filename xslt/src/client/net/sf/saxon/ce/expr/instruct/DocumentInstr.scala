@@ -1,27 +1,27 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.event.Builder
-import client.net.sf.saxon.ce.event.PipelineConfiguration
-import client.net.sf.saxon.ce.event.Receiver
-import client.net.sf.saxon.ce.event.SequenceReceiver
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.functions.StringJoin
-import client.net.sf.saxon.ce.functions.SystemFunction
-import client.net.sf.saxon.ce.om.DocumentInfo
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.pattern.NodeKindTest
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value.StringValue
-import client.net.sf.saxon.ce.value.TextFragmentValue
-import client.net.sf.saxon.ce.value.UntypedAtomicValue
+import org.orbeon.darius.xpath.Controller
+import org.orbeon.darius.xpath.event.Builder
+import org.orbeon.darius.xpath.event.PipelineConfiguration
+import org.orbeon.darius.xpath.event.Receiver
+import org.orbeon.darius.xpath.event.SequenceReceiver
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.functions.StringJoin
+import org.orbeon.darius.xpath.functions.SystemFunction
+import org.orbeon.darius.xpath.om.DocumentInfo
+import org.orbeon.darius.xpath.om.Item
+import org.orbeon.darius.xpath.om.SequenceIterator
+import org.orbeon.darius.xpath.pattern.NodeKindTest
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.util.FastStringBuffer
+import org.orbeon.darius.xpath.`type`.AtomicType
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.value.StringValue
+import org.orbeon.darius.xpath.value.TextFragmentValue
+import org.orbeon.darius.xpath.value.UntypedAtomicValue
 import scala.reflect.{BeanProperty, BooleanBeanProperty}
 //remove if not needed
 import scala.collection.JavaConversions._
@@ -52,7 +52,7 @@ class DocumentInstr(@BooleanBeanProperty var textOnly: Boolean, var constantText
    * as a different expression). The default implementation does nothing.
    *
    * @return the simplified expression
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if an error is discovered during expression rewriting
    * @param visitor an expression visitor
    */

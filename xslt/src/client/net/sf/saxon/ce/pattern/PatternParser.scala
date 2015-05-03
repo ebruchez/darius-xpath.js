@@ -1,11 +1,11 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.pattern
+package org.orbeon.darius.xpath.pattern
 
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.functions.Id
-import client.net.sf.saxon.ce.trans.XPathException
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.functions.Id
+import org.orbeon.darius.xpath.trans.XPathException
 
 /**
  * Parser for XSLT patterns. This is created by overriding selected parts of the standard ExpressionParser.

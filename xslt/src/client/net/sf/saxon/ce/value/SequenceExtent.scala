@@ -1,20 +1,20 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.value
+package org.orbeon.darius.xpath.value
 
-import client.net.sf.saxon.ce.expr.LastPositionFinder
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.ArrayIterator
-import client.net.sf.saxon.ce.tree.iter.GroundedIterator
-import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.AnyItemType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
+import org.orbeon.darius.xpath.expr.LastPositionFinder
+import org.orbeon.darius.xpath.om.Item
+import org.orbeon.darius.xpath.om.Sequence
+import org.orbeon.darius.xpath.om.SequenceIterator
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.ArrayIterator
+import org.orbeon.darius.xpath.tree.iter.GroundedIterator
+import org.orbeon.darius.xpath.tree.iter.UnfailingIterator
+import org.orbeon.darius.xpath.tree.util.FastStringBuffer
+import org.orbeon.darius.xpath.`type`.AnyItemType
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.`type`.Type
 import java.util.ArrayList
 import java.util.LinkedList
 import java.util.List
@@ -153,7 +153,7 @@ class SequenceExtent(@transient var value: Array[Item]) extends Sequence {
    * Simplify this SequenceExtent
    * @return a Value holding the items delivered by the SequenceIterator. If the
    * sequence is empty the result will be an instance of [[EmptySequence]]. If it is of length
-   * one, the result will be an [[AtomicValue]] or a [[client.net.sf.saxon.ce.om.NodeInfo]].
+   * one, the result will be an [[AtomicValue]] or a [[org.orbeon.darius.xpath.om.NodeInfo]].
    * In all other cases, the [[SequenceExtent]] will be returned unchanged.
    */
   def simplify(): Sequence = {

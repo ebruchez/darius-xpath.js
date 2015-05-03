@@ -1,16 +1,16 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.lib.StandardErrorListener
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.AnyItemType
-import client.net.sf.saxon.ce.`type`.ItemType
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.lib.StandardErrorListener
+import org.orbeon.darius.xpath.om.Item
+import org.orbeon.darius.xpath.om.SequenceIterator
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.util.FastStringBuffer
+import org.orbeon.darius.xpath.`type`.AnyItemType
+import org.orbeon.darius.xpath.`type`.ItemType
 import java.util.Iterator
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -36,7 +36,7 @@ class Message(var select: Expression, var terminate: Expression) extends Instruc
    * Simplify an expression. This performs any static optimization (by rewriting the expression
    * as a different expression). The default implementation does nothing.
    * @return the simplified expression
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if an error is discovered during expression rewriting
    * @param visitor an expression visitor
    */

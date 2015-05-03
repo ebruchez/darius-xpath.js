@@ -1,13 +1,13 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.trans
+package org.orbeon.darius.xpath.trans
 
-import client.net.sf.saxon.ce.expr.instruct.Template
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.pattern._
-import client.net.sf.saxon.ce.style.StylesheetModule
-import client.net.sf.saxon.ce.`type`.Type
+import org.orbeon.darius.xpath.expr.instruct.Template
+import org.orbeon.darius.xpath.om.StructuredQName
+import org.orbeon.darius.xpath.pattern._
+import org.orbeon.darius.xpath.style.StylesheetModule
+import org.orbeon.darius.xpath.`type`.Type
 import java.util.HashMap
 import StripSpaceRules._
 //remove if not needed
@@ -134,7 +134,7 @@ class StripSpaceRules {
    * @param bestRule the best rule so far in terms of precedence and priority (may be null)
    * @param head the rule at the head of the chain to be searched
    * @return the best match rule found in the chain, or the previous best rule, or null
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    */
   private def searchRuleChain(fingerprint: StructuredQName, bestRule: Rule, head: Rule): Rule = {
     while (head != null) {

@@ -1,22 +1,22 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.tree.util
+package org.orbeon.darius.xpath.tree.util
 
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.event.Receiver
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.ItemMappingFunction
-import client.net.sf.saxon.ce.expr.UnfailingItemMappingIterator
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.functions.Count
-import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.pattern._
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter._
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.SequenceExtent
+import org.orbeon.darius.xpath.Controller
+import org.orbeon.darius.xpath.event.Receiver
+import org.orbeon.darius.xpath.expr.Expression
+import org.orbeon.darius.xpath.expr.ItemMappingFunction
+import org.orbeon.darius.xpath.expr.UnfailingItemMappingIterator
+import org.orbeon.darius.xpath.expr.XPathContext
+import org.orbeon.darius.xpath.functions.Count
+import org.orbeon.darius.xpath.lib.NamespaceConstant
+import org.orbeon.darius.xpath.om._
+import org.orbeon.darius.xpath.pattern._
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter._
+import org.orbeon.darius.xpath.`type`.Type
+import org.orbeon.darius.xpath.value.SequenceExtent
 import java.util.ArrayList
 import java.util.List
 //remove if not needed
@@ -363,7 +363,7 @@ object Navigator {
    * @param node            The node to be copied
    * @param out             The receiver to which events will be sent
    * @param copyOptions     Options for copying namespaces, type annotations, etc,
-   *                        as defined in [[client.net.sf.saxon.ce.om.CopyOptions]]
+   *                        as defined in [[org.orbeon.darius.xpath.om.CopyOptions]]
    * @throws XPathException on any failure reported by the Receiver
    */
   def copy(node: NodeInfo, out: Receiver, copyOptions: Int) node.getNodeKind match {

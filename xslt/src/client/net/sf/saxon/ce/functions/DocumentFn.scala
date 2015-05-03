@@ -1,21 +1,21 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.functions
+package org.orbeon.darius.xpath.functions
 
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.dom.HTMLDocumentWrapper
-import client.net.sf.saxon.ce.dom.Sanitizer
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.expr.sort.DocumentOrderIterator
-import client.net.sf.saxon.ce.expr.sort.GlobalOrderComparer
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.orbeon.Configuration
-import client.net.sf.saxon.ce.trans.StripSpaceRules
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.SourceLocator
-import client.net.sf.saxon.ce.tree.util.URI
-import client.net.sf.saxon.ce.value.Cardinality
+import org.orbeon.darius.xpath.Controller
+import org.orbeon.darius.xpath.dom.HTMLDocumentWrapper
+import org.orbeon.darius.xpath.dom.Sanitizer
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.expr.sort.DocumentOrderIterator
+import org.orbeon.darius.xpath.expr.sort.GlobalOrderComparer
+import org.orbeon.darius.xpath.om._
+import org.orbeon.darius.xpath.orbeon.Configuration
+import org.orbeon.darius.xpath.trans.StripSpaceRules
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.util.SourceLocator
+import org.orbeon.darius.xpath.tree.util.URI
+import org.orbeon.darius.xpath.value.Cardinality
 import DocumentFn._
 
 import scala.collection.JavaConversions._

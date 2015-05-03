@@ -1,24 +1,24 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.LogController
-import client.net.sf.saxon.ce.SaxonceApi
-import client.net.sf.saxon.ce.client.HTTPHandler
-import client.net.sf.saxon.ce.dom.HTMLDocumentWrapper
-import client.net.sf.saxon.ce.dom.Sanitizer
-import client.net.sf.saxon.ce.dom.XMLDOM
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.functions.ResolveURI
-import client.net.sf.saxon.ce.om.DocumentInfo
-import client.net.sf.saxon.ce.om.DocumentPool
-import client.net.sf.saxon.ce.pattern.EmptySequenceTest
-import client.net.sf.saxon.ce.trans.StripSpaceRules
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.URI
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value.IntegerValue
+import org.orbeon.darius.xpath.LogController
+import org.orbeon.darius.xpath.SaxonceApi
+import org.orbeon.darius.xpath.client.HTTPHandler
+import org.orbeon.darius.xpath.dom.HTMLDocumentWrapper
+import org.orbeon.darius.xpath.dom.Sanitizer
+import org.orbeon.darius.xpath.dom.XMLDOM
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.functions.ResolveURI
+import org.orbeon.darius.xpath.om.DocumentInfo
+import org.orbeon.darius.xpath.om.DocumentPool
+import org.orbeon.darius.xpath.pattern.EmptySequenceTest
+import org.orbeon.darius.xpath.trans.StripSpaceRules
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.util.URI
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.value.IntegerValue
 import com.google.gwt.dom.client.Node
 import com.google.gwt.http.client.Request
 import com.google.gwt.http.client.RequestCallback
@@ -57,7 +57,7 @@ class ScheduleExecution(var call: CallTemplate, var wait: Expression, var href: 
    *
    * @param visitor an expression visitor
    * @return the simplified expression
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if an error is discovered during expression rewriting
    */
   def simplify(visitor: ExpressionVisitor): Expression = {
@@ -88,7 +88,7 @@ class ScheduleExecution(var call: CallTemplate, var wait: Expression, var href: 
    * Handle promotion offers, that is, non-local tree rewrites.
    *
    * @param offer The type of rewrite being offered
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *
    */
   protected def promoteInst(offer: PromotionOffer): Unit = {

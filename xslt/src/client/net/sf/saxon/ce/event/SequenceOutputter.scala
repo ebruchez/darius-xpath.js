@@ -1,18 +1,18 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.event
+package org.orbeon.darius.xpath.event
 
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.tree.iter.ListIterator
-import client.net.sf.saxon.ce.tree.util.Orphan
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.EmptySequence
-import client.net.sf.saxon.ce.value.SequenceExtent
-import client.net.sf.saxon.ce.Controller
+import org.orbeon.darius.xpath.om._
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.EmptyIterator
+import org.orbeon.darius.xpath.tree.iter.ListIterator
+import org.orbeon.darius.xpath.tree.util.Orphan
+import org.orbeon.darius.xpath.`type`.Type
+import org.orbeon.darius.xpath.value.AtomicValue
+import org.orbeon.darius.xpath.value.EmptySequence
+import org.orbeon.darius.xpath.value.SequenceExtent
+import org.orbeon.darius.xpath.Controller
 import java.util.ArrayList
 //remove if not needed
 import scala.collection.JavaConversions._
@@ -104,7 +104,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
 
   /**
    * Create a tree to hold a document or element node.
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    */
   private def createTree(): Unit = {
     val pipe = getPipelineConfiguration
@@ -183,7 +183,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
    * Note that unlike SAX2 startPrefixMapping(), this call is made AFTER writing the start tag.
    * @param nsBinding The namespace code
    * @param properties Allows special properties to be passed if required
-   * @throws client.net.sf.saxon.ce.trans.XPathException if there is no start tag to write to (created using writeStartTag),
+   * @throws org.orbeon.darius.xpath.trans.XPathException if there is no start tag to write to (created using writeStartTag),
    * or if character content has been written since the start tag was written.
    */
   def namespace(nsBinding: NamespaceBinding, properties: Int): Unit = {
@@ -204,7 +204,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
    *
    * @param nameCode An integer code representing the name of the attribute, as held in the Name Pool
    * @param value The value of the attribute
-   * @throws client.net.sf.saxon.ce.trans.XPathException if there is no start tag to write to (created using writeStartTag),
+   * @throws org.orbeon.darius.xpath.trans.XPathException if there is no start tag to write to (created using writeStartTag),
    * or if character content has been written since the start tag was written.
    */
   def attribute(nameCode: StructuredQName, value: CharSequence): Unit = {
@@ -223,7 +223,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
   /**
    * The startContent() event is notified after all namespaces and attributes of an element
    * have been notified, and before any child nodes are notified.
-   * @throws client.net.sf.saxon.ce.trans.XPathException for any failure
+   * @throws org.orbeon.darius.xpath.trans.XPathException for any failure
    */
   def startContent(): Unit = {
     inStartTag = false
@@ -234,7 +234,7 @@ class SequenceOutputter(var controller: Controller, estimatedSize: Int) extends 
   /**
    * Produce text content output. <BR>
    * @param s The String to be output
-   * @throws client.net.sf.saxon.ce.trans.XPathException for any failure
+   * @throws org.orbeon.darius.xpath.trans.XPathException for any failure
    */
   def characters(s: CharSequence): Unit = {
     if (level == 0) {

@@ -1,15 +1,15 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.style
+package org.orbeon.darius.xpath.style
 
-import client.net.sf.saxon.ce.expr.Container
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.StaticContext
-import client.net.sf.saxon.ce.expr.UserFunctionCall
-import client.net.sf.saxon.ce.functions.FunctionLibrary
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.trans.XPathException
+import org.orbeon.darius.xpath.expr.Container
+import org.orbeon.darius.xpath.expr.Expression
+import org.orbeon.darius.xpath.expr.StaticContext
+import org.orbeon.darius.xpath.expr.UserFunctionCall
+import org.orbeon.darius.xpath.functions.FunctionLibrary
+import org.orbeon.darius.xpath.om.StructuredQName
+import org.orbeon.darius.xpath.trans.XPathException
 import scala.reflect.{BeanProperty, BooleanBeanProperty}
 //remove if not needed
 import scala.collection.JavaConversions._
@@ -57,7 +57,7 @@ class StylesheetFunctionLibrary(sheet: PrincipalStylesheetModule, @BooleanBeanPr
    * @param container
    * @return An object representing the extension function to be called, if one is found;
    * null if no extension function was found matching the required name and arity.
-   * @throws client.net.sf.saxon.ce.trans.XPathException if a function is found with the required name and arity, but
+   * @throws org.orbeon.darius.xpath.trans.XPathException if a function is found with the required name and arity, but
    * the implementation of the function cannot be loaded or used; or if an error occurs
    * while searching for the function; or if this function library "owns" the namespace containing
    * the function call, but no function was found.

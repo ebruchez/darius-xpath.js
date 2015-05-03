@@ -1,33 +1,33 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.Controller.APIcommand
-import client.net.sf.saxon.ce.LogController
-import client.net.sf.saxon.ce.dom.HTMLDocumentWrapper
-import client.net.sf.saxon.ce.dom.HTMLDocumentWrapper.DocType
-import client.net.sf.saxon.ce.dom.HTMLNodeWrapper
-import client.net.sf.saxon.ce.dom.XMLDOM
-import client.net.sf.saxon.ce.event.PipelineConfiguration
-import client.net.sf.saxon.ce.event.Receiver
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.functions.FunctionLibrary
-import client.net.sf.saxon.ce.functions.ResolveURI
-import client.net.sf.saxon.ce.js.JSObjectValue
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.pattern.EmptySequenceTest
-import client.net.sf.saxon.ce.pattern.NodeKindTest
-import client.net.sf.saxon.ce.style.StyleElement
-import client.net.sf.saxon.ce.sxpath.AbstractStaticContext
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.trans.update.DeleteAction
-import client.net.sf.saxon.ce.trans.update.InsertAction
-import client.net.sf.saxon.ce.trans.update.PendingUpdateList
-import client.net.sf.saxon.ce.tree.util.URI
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
+import org.orbeon.darius.xpath.Controller
+import org.orbeon.darius.xpath.Controller.APIcommand
+import org.orbeon.darius.xpath.LogController
+import org.orbeon.darius.xpath.dom.HTMLDocumentWrapper
+import org.orbeon.darius.xpath.dom.HTMLDocumentWrapper.DocType
+import org.orbeon.darius.xpath.dom.HTMLNodeWrapper
+import org.orbeon.darius.xpath.dom.XMLDOM
+import org.orbeon.darius.xpath.event.PipelineConfiguration
+import org.orbeon.darius.xpath.event.Receiver
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.functions.FunctionLibrary
+import org.orbeon.darius.xpath.functions.ResolveURI
+import org.orbeon.darius.xpath.js.JSObjectValue
+import org.orbeon.darius.xpath.om._
+import org.orbeon.darius.xpath.pattern.EmptySequenceTest
+import org.orbeon.darius.xpath.pattern.NodeKindTest
+import org.orbeon.darius.xpath.style.StyleElement
+import org.orbeon.darius.xpath.sxpath.AbstractStaticContext
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.trans.update.DeleteAction
+import org.orbeon.darius.xpath.trans.update.InsertAction
+import org.orbeon.darius.xpath.trans.update.PendingUpdateList
+import org.orbeon.darius.xpath.tree.util.URI
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.`type`.Type
 import com.google.gwt.dom.client.Document
 import com.google.gwt.dom.client.Node
 import com.google.gwt.logging.client.LogConfiguration
@@ -93,7 +93,7 @@ class ResultDocument(var href: Expression,
    * as a different expression). The default implementation does nothing.
    * @param visitor an expression visitor
    * @return the simplified expression
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if an error is discovered during expression rewriting
    */
   def simplify(visitor: ExpressionVisitor): Expression = {

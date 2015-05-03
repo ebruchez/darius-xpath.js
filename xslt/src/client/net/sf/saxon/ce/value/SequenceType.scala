@@ -1,14 +1,14 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.value
+package org.orbeon.darius.xpath.value
 
-import client.net.sf.saxon.ce.expr.StaticProperty
-import client.net.sf.saxon.ce.pattern.AnyNodeTest
-import client.net.sf.saxon.ce.pattern.EmptySequenceTest
-import client.net.sf.saxon.ce.`type`.AnyItemType
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
+import org.orbeon.darius.xpath.expr.StaticProperty
+import org.orbeon.darius.xpath.pattern.AnyNodeTest
+import org.orbeon.darius.xpath.pattern.EmptySequenceTest
+import org.orbeon.darius.xpath.`type`.AnyItemType
+import org.orbeon.darius.xpath.`type`.AtomicType
+import org.orbeon.darius.xpath.`type`.ItemType
 import SequenceType._
 import scala.reflect.{BeanProperty, BooleanBeanProperty}
 //remove if not needed

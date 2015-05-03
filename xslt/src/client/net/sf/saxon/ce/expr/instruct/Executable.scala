@@ -1,17 +1,17 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
 import java.util.{HashMap, HashSet}
 
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.functions.FunctionLibraryList
-import client.net.sf.saxon.ce.om.{CopyOptions, DocumentInfo, Sequence, StructuredQName}
-import client.net.sf.saxon.ce.orbeon.Configuration
-import client.net.sf.saxon.ce.trans._
-import client.net.sf.saxon.ce.tree.linked.{DocumentImpl, LinkedTreeBuilder}
-import client.net.sf.saxon.ce.value.DecimalValue
+import org.orbeon.darius.xpath.Controller
+import org.orbeon.darius.xpath.functions.FunctionLibraryList
+import org.orbeon.darius.xpath.om.{CopyOptions, DocumentInfo, Sequence, StructuredQName}
+import org.orbeon.darius.xpath.orbeon.Configuration
+import org.orbeon.darius.xpath.trans._
+import org.orbeon.darius.xpath.tree.linked.{DocumentImpl, LinkedTreeBuilder}
+import org.orbeon.darius.xpath.value.DecimalValue
 
 import scala.beans.BeanProperty
 
@@ -131,7 +131,7 @@ class Executable(config: Configuration) {
   /**
    * Prepare a stylesheet from a Source document
    * @param doc the source document containing the stylesheet
-   * @throws client.net.sf.saxon.ce.trans.XPathException if compilation of the stylesheet fails for any reason
+   * @throws org.orbeon.darius.xpath.trans.XPathException if compilation of the stylesheet fails for any reason
    */
   def prepare(doc: DocumentInfo): Unit = {
     var message = ""
@@ -157,7 +157,7 @@ class Executable(config: Configuration) {
    * whitespace, comments, and PIs
    * @return the root Document node of the tree containing the stylesheet
    *         module
-   * @throws client.net.sf.saxon.ce.trans.XPathException if XML parsing or tree
+   * @throws org.orbeon.darius.xpath.trans.XPathException if XML parsing or tree
    *                        construction fails
    */
   def loadStylesheetModule(rawDoc: DocumentInfo): DocumentImpl = {
@@ -190,7 +190,7 @@ class Executable(config: Configuration) {
    * Create a PreparedStylesheet from a supplied DocumentInfo
    * Note: the document must have been built using the StyleNodeFactory
    * @param doc the document containing the stylesheet module
-   * @throws client.net.sf.saxon.ce.trans.XPathException if the document supplied
+   * @throws org.orbeon.darius.xpath.trans.XPathException if the document supplied
    *                        is not a stylesheet
    */
   protected def setStylesheetDocument(doc: DocumentImpl): Unit = {
@@ -250,7 +250,7 @@ class Executable(config: Configuration) {
    * Report a compile time error. This calls the errorListener to output details
    * of the error, and increments an error count.
    * @param err the exception containing details of the error
-   * @throws client.net.sf.saxon.ce.trans.XPathException if the ErrorListener decides that the
+   * @throws org.orbeon.darius.xpath.trans.XPathException if the ErrorListener decides that the
    *                              error should be reported
    */
   def reportError(err: XPathException): Unit = {

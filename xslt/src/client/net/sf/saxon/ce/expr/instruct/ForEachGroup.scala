@@ -1,22 +1,22 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.LogController
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.expr.sort._
-import client.net.sf.saxon.ce.lib.StringCollator
-import client.net.sf.saxon.ce.lib.TraceListener
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.pattern.PatternSponsor
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.FocusIterator
-import client.net.sf.saxon.ce.tree.util.URI
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.TypeHierarchy
-import client.net.sf.saxon.ce.value.StringValue
+import org.orbeon.darius.xpath.LogController
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.expr.sort._
+import org.orbeon.darius.xpath.lib.StringCollator
+import org.orbeon.darius.xpath.lib.TraceListener
+import org.orbeon.darius.xpath.om.Item
+import org.orbeon.darius.xpath.om.SequenceIterator
+import org.orbeon.darius.xpath.pattern.PatternSponsor
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.FocusIterator
+import org.orbeon.darius.xpath.tree.util.URI
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.`type`.TypeHierarchy
+import org.orbeon.darius.xpath.value.StringValue
 import com.google.gwt.logging.client.LogConfiguration
 import java.util.ArrayList
 import java.util.Iterator

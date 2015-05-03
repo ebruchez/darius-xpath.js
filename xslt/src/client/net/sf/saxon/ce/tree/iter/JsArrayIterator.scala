@@ -1,12 +1,12 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.tree.iter
+package org.orbeon.darius.xpath.tree.iter
 
-import client.net.sf.saxon.ce.js.IXSLFunction
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.orbeon.Configuration
+import org.orbeon.darius.xpath.js.IXSLFunction
+import org.orbeon.darius.xpath.om.Item
+import org.orbeon.darius.xpath.om.Sequence
+import org.orbeon.darius.xpath.orbeon.Configuration
 import com.google.gwt.core.client.JavaScriptObject
 import com.google.gwt.core.client.JsArray
 //remove if not needed

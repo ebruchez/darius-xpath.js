@@ -1,18 +1,18 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.om.DocumentInfo
-import client.net.sf.saxon.ce.om.DocumentPool
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.URI
-import client.net.sf.saxon.ce.value.EmptySequence
-import client.net.sf.saxon.ce.value.SequenceExtent
-import client.net.sf.saxon.ce.value.SequenceType
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.om.DocumentInfo
+import org.orbeon.darius.xpath.om.DocumentPool
+import org.orbeon.darius.xpath.om.Sequence
+import org.orbeon.darius.xpath.om.StructuredQName
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.util.URI
+import org.orbeon.darius.xpath.value.EmptySequence
+import org.orbeon.darius.xpath.value.SequenceExtent
+import org.orbeon.darius.xpath.value.SequenceType
 import java.util.HashMap
 import Bindery._
 //remove if not needed
@@ -135,7 +135,7 @@ class Bindery {
    * @param binding the global variable in question
    * @return true if evaluation of the variable should proceed; false if it is found that the variable has now been
    * evaluated in another thread.
-   * @throws client.net.sf.saxon.ce.trans.XPathException If an attempt is made to set the flag when it is already set, this means
+   * @throws org.orbeon.darius.xpath.trans.XPathException If an attempt is made to set the flag when it is already set, this means
    * the definition of the variable is circular.
    */
   def setExecuting(binding: GlobalVariable): Boolean = {

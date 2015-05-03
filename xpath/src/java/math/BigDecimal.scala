@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream
 import java.io.Serializable
 import java.util.Arrays
 
-import client.net.sf.saxon.ce.orbeon.Util
+import org.orbeon.darius.xpath.orbeon.Util
 
 /**
  * Companion object for {@code BigDecimal}

@@ -1,13 +1,13 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.`type`
+package org.orbeon.darius.xpath.`type`
 
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.pattern.AnyNodeTest
-import client.net.sf.saxon.ce.pattern.EmptySequenceTest
-import client.net.sf.saxon.ce.pattern.NameTest
-import client.net.sf.saxon.ce.pattern.NodeTest
+import org.orbeon.darius.xpath.om.StructuredQName
+import org.orbeon.darius.xpath.pattern.AnyNodeTest
+import org.orbeon.darius.xpath.pattern.EmptySequenceTest
+import org.orbeon.darius.xpath.pattern.NameTest
+import org.orbeon.darius.xpath.pattern.NodeTest
 import java.util.HashMap
 import java.util.Map
 import TypeHierarchy._

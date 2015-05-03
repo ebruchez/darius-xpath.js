@@ -1,16 +1,16 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.pattern
+package org.orbeon.darius.xpath.pattern
 
 import java.util.Iterator
 
-import client.net.sf.saxon.ce.`type`.{AtomicType, ItemType}
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.om.{Item, NodeInfo, SequenceIterator}
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.SingletonIterator
-import client.net.sf.saxon.ce.value.BooleanValue
+import org.orbeon.darius.xpath.`type`.{AtomicType, ItemType}
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.om.{Item, NodeInfo, SequenceIterator}
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.SingletonIterator
+import org.orbeon.darius.xpath.value.BooleanValue
 
 import scala.beans.BeanProperty
 
@@ -59,7 +59,7 @@ class PatternSponsor(@BeanProperty var pattern: Pattern) extends Expression {
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        [[client.net.sf.saxon.ce.type.Type#ITEM_TYPE]]
+   *                        [[org.orbeon.darius.xpath.type.Type#ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
@@ -82,7 +82,7 @@ class PatternSponsor(@BeanProperty var pattern: Pattern) extends Expression {
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        [[client.net.sf.saxon.ce.type.Type#ITEM_TYPE]]
+   *                        [[org.orbeon.darius.xpath.type.Type#ITEM_TYPE]]
    * @return the original expression, rewritten to perform necessary
    *         run-time type checks, and to perform other type-related
    *         optimizations
@@ -127,7 +127,7 @@ class PatternSponsor(@BeanProperty var pattern: Pattern) extends Expression {
    * @return if the offer is not accepted, return this expression unchanged.
    *         Otherwise return the result of rewriting the expression to promote
    *         this subexpression
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if any error is detected
    */
   override def promote(offer: PromotionOffer, parent: Expression): Expression = {
@@ -165,8 +165,8 @@ class PatternSponsor(@BeanProperty var pattern: Pattern) extends Expression {
 
   /**
    * Determine which aspects of the context the expression depends on. The result is
-   * a bitwise-or'ed value composed from constants such as [[client.net.sf.saxon.ce.expr.StaticProperty#DEPENDS_ON_CONTEXT_ITEM]] and
-   * [[client.net.sf.saxon.ce.expr.StaticProperty#DEPENDS_ON_CURRENT_ITEM]]. The default implementation combines the intrinsic
+   * a bitwise-or'ed value composed from constants such as [[org.orbeon.darius.xpath.expr.StaticProperty#DEPENDS_ON_CONTEXT_ITEM]] and
+   * [[org.orbeon.darius.xpath.expr.StaticProperty#DEPENDS_ON_CURRENT_ITEM]]. The default implementation combines the intrinsic
    * dependencies of this expression with the dependencies of the subexpressions,
    * computed recursively. This is overridden for expressions such as FilterExpression
    * where a subexpression's dependencies are not necessarily inherited by the parent
@@ -208,7 +208,7 @@ class PatternSponsor(@BeanProperty var pattern: Pattern) extends Expression {
    * @return the node or atomic value that results from evaluating the
    *         expression; or null to indicate that the result is an empty
    *         sequence
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if any dynamic error occurs evaluating the
    *          expression
    */
@@ -226,7 +226,7 @@ class PatternSponsor(@BeanProperty var pattern: Pattern) extends Expression {
    * @param context supplies the context for evaluation
    * @return a SequenceIterator that can be used to iterate over the result
    *         of the expression
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if any dynamic error occurs evaluating the
    *          expression
    */
@@ -240,7 +240,7 @@ class PatternSponsor(@BeanProperty var pattern: Pattern) extends Expression {
    *
    * @param context The context in which the expression is to be evaluated
    * @return the effective boolean value
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if any dynamic error occurs evaluating the
    *          expression
    */
@@ -261,7 +261,7 @@ class PatternSponsor(@BeanProperty var pattern: Pattern) extends Expression {
    * @return the value of the expression, evaluated in the current context.
    *         The expression must return a string or (); if the value of the
    *         expression is (), this method returns "".
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *                            if any dynamic error occurs evaluating the
    *                            expression
    * @throws ClassCastException if the result type of the

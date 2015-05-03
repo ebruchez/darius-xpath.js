@@ -1,17 +1,17 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.value
+package org.orbeon.darius.xpath.value
 
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.functions.Component
-import client.net.sf.saxon.ce.trans.Err
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ConversionResult
-import client.net.sf.saxon.ce.`type`.ValidationFailure
+import org.orbeon.darius.xpath.Controller
+import org.orbeon.darius.xpath.expr.XPathContext
+import org.orbeon.darius.xpath.functions.Component
+import org.orbeon.darius.xpath.trans.Err
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.util.FastStringBuffer
+import org.orbeon.darius.xpath.`type`.AtomicType
+import org.orbeon.darius.xpath.`type`.ConversionResult
+import org.orbeon.darius.xpath.`type`.ValidationFailure
 import com.google.gwt.regexp.shared.MatchResult
 import com.google.gwt.regexp.shared.RegExp
 import java.math.BigDecimal
@@ -454,7 +454,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    *
    * @param duration the duration to be added (may be negative)
    * @return the new date
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if the duration is an xs:duration, as distinct from
    *          a subclass thereof
    */
@@ -494,7 +494,7 @@ class DateTimeValue private () extends CalendarValue with Comparable[_] {
    * @param other   the other point in time
    * @param context the XPath dynamic context
    * @return the duration as an xs:dayTimeDuration
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          for example if one value is a date and the other is a time
    */
   def subtract(other: CalendarValue, context: XPathContext): DayTimeDurationValue = {

@@ -1,25 +1,25 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.event.NoOpenStartTagException
-import client.net.sf.saxon.ce.event.SequenceReceiver
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.ExpressionVisitor
-import client.net.sf.saxon.ce.expr.PromotionOffer
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.om.CopyOptions
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.Navigator
-import client.net.sf.saxon.ce.tree.util.URI
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
+import org.orbeon.darius.xpath.event.NoOpenStartTagException
+import org.orbeon.darius.xpath.event.SequenceReceiver
+import org.orbeon.darius.xpath.expr.Expression
+import org.orbeon.darius.xpath.expr.ExpressionVisitor
+import org.orbeon.darius.xpath.expr.PromotionOffer
+import org.orbeon.darius.xpath.expr.XPathContext
+import org.orbeon.darius.xpath.lib.NamespaceConstant
+import org.orbeon.darius.xpath.om.CopyOptions
+import org.orbeon.darius.xpath.om.Item
+import org.orbeon.darius.xpath.om.NodeInfo
+import org.orbeon.darius.xpath.om.SequenceIterator
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.util.Navigator
+import org.orbeon.darius.xpath.tree.util.URI
+import org.orbeon.darius.xpath.`type`.AtomicType
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.`type`.Type
 import java.util.Iterator
 //remove if not needed
 import scala.collection.JavaConversions._

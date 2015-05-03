@@ -1,15 +1,15 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.regex
+package org.orbeon.darius.xpath.regex
 
 import java.util.HashMap
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.expr.z._
-import client.net.sf.saxon.ce.om.{Axis, DocumentInfo, NameChecker, NodeInfo}
-import client.net.sf.saxon.ce.orbeon.Configuration
-import client.net.sf.saxon.ce.pattern.{NameTest, NodeKindTest}
-import client.net.sf.saxon.ce.tree.util.Navigator
+import org.orbeon.darius.xpath.`type`.Type
+import org.orbeon.darius.xpath.expr.z._
+import org.orbeon.darius.xpath.om.{Axis, DocumentInfo, NameChecker, NodeInfo}
+import org.orbeon.darius.xpath.orbeon.Configuration
+import org.orbeon.darius.xpath.pattern.{NameTest, NodeKindTest}
+import org.orbeon.darius.xpath.tree.util.Navigator
 
 import scala.collection.JavaConversions._
 import scala.util.control.Breaks

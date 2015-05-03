@@ -1,11 +1,11 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.trans
+package org.orbeon.darius.xpath.trans
 
-import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.tree.util.SourceLocator
+import org.orbeon.darius.xpath.lib.NamespaceConstant
+import org.orbeon.darius.xpath.om.StructuredQName
+import org.orbeon.darius.xpath.tree.util.SourceLocator
 import com.google.gwt.logging.client.LogConfiguration
 import org.xml.sax.Locator
 import XPathException._
@@ -172,7 +172,7 @@ class XPathException(message: String) extends Exception() {
 
   /**
    * Set the error code. The error code is a QName; this method sets the local part of the name,
-   * setting the namespace of the error code to the standard system namespace [[client.net.sf.saxon.ce.lib.NamespaceConstant#ERR]]
+   * setting the namespace of the error code to the standard system namespace [[org.orbeon.darius.xpath.lib.NamespaceConstant#ERR]]
    * @param code The local part of the name of the error code
    */
   def setErrorCode(code: String): Unit = {

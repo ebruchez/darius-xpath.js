@@ -1,9 +1,9 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.`type`
+package org.orbeon.darius.xpath.`type`
 
-import client.net.sf.saxon.ce.om.Item
+import org.orbeon.darius.xpath.om.Item
 //remove if not needed
 import scala.collection.JavaConversions._
 
@@ -18,7 +18,7 @@ import scala.collection.JavaConversions._
  *
  * <p>Saxon assumes that apart from [[AnyItemType]] (which corresponds to <code>item()</item>
  * and matches anything), every ItemType will be either a [[AtomicType]], or a
- *  [[client.net.sf.saxon.ce.pattern.NodeTest]]. User-defined implementations of ItemType must therefore extend one of those
+ *  [[org.orbeon.darius.xpath.pattern.NodeTest]]. User-defined implementations of ItemType must therefore extend one of those
  * three classes/interfaces.</p>
  * @see AtomicType
  * @see client.net.sf.saxon.ce.pattern.NodeTest

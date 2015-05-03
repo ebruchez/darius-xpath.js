@@ -1,23 +1,23 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.event._
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NamespaceBinding
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.pattern.NodeKindTest
-import client.net.sf.saxon.ce.pattern.NodeTest
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.NamespaceIterator
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.EmptySequence
+import org.orbeon.darius.xpath.Controller
+import org.orbeon.darius.xpath.event._
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.om.Item
+import org.orbeon.darius.xpath.om.NamespaceBinding
+import org.orbeon.darius.xpath.om.NodeInfo
+import org.orbeon.darius.xpath.om.StructuredQName
+import org.orbeon.darius.xpath.pattern.NodeKindTest
+import org.orbeon.darius.xpath.pattern.NodeTest
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.util.NamespaceIterator
+import org.orbeon.darius.xpath.`type`.AtomicType
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.`type`.Type
+import org.orbeon.darius.xpath.value.EmptySequence
 import java.util.Iterator
 //remove if not needed
 import scala.collection.JavaConversions._
@@ -37,7 +37,7 @@ class Copy(var select: Expression, var copyNamespaces: Boolean, inheritNamespace
    * as a different expression). The default implementation does nothing.
    *
    * @return the simplified expression
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if an error is discovered during expression rewriting
    * @param visitor an expression visitor
    */

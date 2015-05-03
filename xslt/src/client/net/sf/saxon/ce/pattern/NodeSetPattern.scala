@@ -1,15 +1,15 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.pattern
+package org.orbeon.darius.xpath.pattern
 
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.SequenceType
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.om.NodeInfo
+import org.orbeon.darius.xpath.om.SequenceIterator
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.`type`.Type
+import org.orbeon.darius.xpath.value.SequenceType
 import java.util.Arrays
 import java.util.Iterator
 
@@ -61,7 +61,7 @@ class NodeSetPattern(protected var expression: Expression) extends Pattern {
    * such as constant values and variable references where promotion would give no performance
    * advantage. This method is always called at compile time.
    * <p/>
-   * <p>Unlike the corresponding method on [[client.net.sf.saxon.ce.expr.Expression]], this method does not return anything:
+   * <p>Unlike the corresponding method on [[org.orbeon.darius.xpath.expr.Expression]], this method does not return anything:
    * it can make internal changes to the pattern, but cannot return a different pattern. Only certain
    * kinds of promotion are applicable within a pattern: specifically, promotions affecting local
    * variable references within the pattern.
@@ -70,7 +70,7 @@ class NodeSetPattern(protected var expression: Expression) extends Pattern {
    *              expressions that don't depend on the context to an outer level in
    *              the containing expression
    * @param parent
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if any error is detected
    */
   override def promote(offer: PromotionOffer, parent: Expression): Unit = {

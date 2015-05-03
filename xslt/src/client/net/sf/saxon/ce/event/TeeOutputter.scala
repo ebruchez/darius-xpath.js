@@ -1,13 +1,13 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.event
+package org.orbeon.darius.xpath.event
 
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NamespaceBinding
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.trans.XPathException
+import org.orbeon.darius.xpath.om.Item
+import org.orbeon.darius.xpath.om.NamespaceBinding
+import org.orbeon.darius.xpath.om.NodeInfo
+import org.orbeon.darius.xpath.om.StructuredQName
+import org.orbeon.darius.xpath.trans.XPathException
 //remove if not needed
 import scala.collection.JavaConversions._
 

@@ -1,13 +1,13 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.tree.iter
+package org.orbeon.darius.xpath.tree.iter
 
-import client.net.sf.saxon.ce.expr.LastPositionFinder
-import client.net.sf.saxon.ce.functions.Count
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.trans.XPathException
+import org.orbeon.darius.xpath.expr.LastPositionFinder
+import org.orbeon.darius.xpath.functions.Count
+import org.orbeon.darius.xpath.om.Item
+import org.orbeon.darius.xpath.om.SequenceIterator
+import org.orbeon.darius.xpath.trans.XPathException
 //remove if not needed
 import scala.collection.JavaConversions._
 
@@ -38,7 +38,7 @@ class FocusIterator(var base: SequenceIterator) extends SequenceIterator {
    *         on next() has returned null, no further calls should be made. The preferred
    *         action for an iterator if subsequent calls on next() are made is to return
    *         null again, and all implementations within Saxon follow this rule.
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if an error occurs retrieving the next item
    * @since 8.4
    */
@@ -114,7 +114,7 @@ class FocusIterator(var base: SequenceIterator) extends SequenceIterator {
    *
    * @return a SequenceIterator that iterates over the same items,
    *         positioned before the first item
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if any error occurs
    * @since 8.4
    */

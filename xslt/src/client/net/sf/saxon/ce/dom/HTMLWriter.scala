@@ -1,18 +1,18 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.dom
+package org.orbeon.darius.xpath.dom
 
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.Controller.APIcommand
-import client.net.sf.saxon.ce.event.PipelineConfiguration
-import client.net.sf.saxon.ce.event.Receiver
-import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.om.NamespaceBinding
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.orbeon.Configuration
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.value.Whitespace
+import org.orbeon.darius.xpath.Controller
+import org.orbeon.darius.xpath.Controller.APIcommand
+import org.orbeon.darius.xpath.event.PipelineConfiguration
+import org.orbeon.darius.xpath.event.Receiver
+import org.orbeon.darius.xpath.lib.NamespaceConstant
+import org.orbeon.darius.xpath.om.NamespaceBinding
+import org.orbeon.darius.xpath.om.StructuredQName
+import org.orbeon.darius.xpath.orbeon.Configuration
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.value.Whitespace
 import com.google.gwt.core.client.JavaScriptException
 import com.google.gwt.core.client.JavaScriptObject
 import com.google.gwt.dom.client._

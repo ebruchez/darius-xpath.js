@@ -1,12 +1,12 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr
+package org.orbeon.darius.xpath.expr
 
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.om.{Item, Sequence, SequenceIterator}
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.value.{SequenceExtent, SequenceTool}
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.om.{Item, Sequence, SequenceIterator}
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.value.{SequenceExtent, SequenceTool}
 
 /**
  * A TailCallLoop wraps the body of a function that contains tail-recursive function calls. On completion

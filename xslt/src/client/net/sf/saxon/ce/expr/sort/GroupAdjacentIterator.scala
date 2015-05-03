@@ -1,18 +1,18 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.sort
+package org.orbeon.darius.xpath.expr.sort
 
 import java.util.{ArrayList, List}
 
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.expr.{Expression, XPathContext}
-import client.net.sf.saxon.ce.functions.DistinctValues
-import client.net.sf.saxon.ce.lib.StringCollator
-import client.net.sf.saxon.ce.om.{Item, SequenceIterator}
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.{FocusIterator, ListIterator}
-import client.net.sf.saxon.ce.value.AtomicValue
+import org.orbeon.darius.xpath.`type`.Type
+import org.orbeon.darius.xpath.expr.{Expression, XPathContext}
+import org.orbeon.darius.xpath.functions.DistinctValues
+import org.orbeon.darius.xpath.lib.StringCollator
+import org.orbeon.darius.xpath.om.{Item, SequenceIterator}
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.{FocusIterator, ListIterator}
+import org.orbeon.darius.xpath.value.AtomicValue
 
 /**
  * A GroupAdjacentIterator iterates over a sequence of groups defined by

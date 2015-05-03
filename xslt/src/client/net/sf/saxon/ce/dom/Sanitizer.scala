@@ -1,18 +1,18 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.dom
+package org.orbeon.darius.xpath.dom
 
-import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.om.Axis
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.pattern.AnyNodeTest
-import client.net.sf.saxon.ce.pattern.NodeKindTest
-import client.net.sf.saxon.ce.trans.StripSpaceRules
-import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
-import client.net.sf.saxon.ce.tree.util.Navigator
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.Whitespace
+import org.orbeon.darius.xpath.lib.NamespaceConstant
+import org.orbeon.darius.xpath.om.Axis
+import org.orbeon.darius.xpath.om.NodeInfo
+import org.orbeon.darius.xpath.pattern.AnyNodeTest
+import org.orbeon.darius.xpath.pattern.NodeKindTest
+import org.orbeon.darius.xpath.trans.StripSpaceRules
+import org.orbeon.darius.xpath.tree.iter.UnfailingIterator
+import org.orbeon.darius.xpath.tree.util.Navigator
+import org.orbeon.darius.xpath.`type`.Type
+import org.orbeon.darius.xpath.value.Whitespace
 import java.util.LinkedList
 import java.util.Stack
 import scala.collection.JavaConverters._

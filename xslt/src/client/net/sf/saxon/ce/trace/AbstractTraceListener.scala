@@ -1,20 +1,20 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.trace
+package org.orbeon.darius.xpath.trace
 
-import client.net.sf.saxon.ce.Version
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.expr.parser.CodeInjector
-import client.net.sf.saxon.ce.lib.GenericLogHandler
-import client.net.sf.saxon.ce.lib.StandardErrorListener
-import client.net.sf.saxon.ce.lib.TraceListener
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.NodeInfo
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.tree.util.Navigator
-import client.net.sf.saxon.ce.value.Whitespace
+import org.orbeon.darius.xpath.Version
+import org.orbeon.darius.xpath.expr.XPathContext
+import org.orbeon.darius.xpath.expr.parser.CodeInjector
+import org.orbeon.darius.xpath.lib.GenericLogHandler
+import org.orbeon.darius.xpath.lib.StandardErrorListener
+import org.orbeon.darius.xpath.lib.TraceListener
+import org.orbeon.darius.xpath.om.Item
+import org.orbeon.darius.xpath.om.NodeInfo
+import org.orbeon.darius.xpath.om.StructuredQName
+import org.orbeon.darius.xpath.tree.util.FastStringBuffer
+import org.orbeon.darius.xpath.tree.util.Navigator
+import org.orbeon.darius.xpath.value.Whitespace
 import java.util.Iterator
 import java.util.logging.Logger
 import AbstractTraceListener._

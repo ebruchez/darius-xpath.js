@@ -1,24 +1,24 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.style
+package org.orbeon.darius.xpath.style
 
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.RoleLocator
-import client.net.sf.saxon.ce.expr.StringLiteral
-import client.net.sf.saxon.ce.expr.TypeChecker
-import client.net.sf.saxon.ce.expr.instruct.Executable
-import client.net.sf.saxon.ce.expr.instruct.NumberInstruction
-import client.net.sf.saxon.ce.expr.instruct.ValueOf
-import client.net.sf.saxon.ce.expr.number.NumberFormatter
-import client.net.sf.saxon.ce.expr.number.Numberer_en
-import client.net.sf.saxon.ce.lib.Numberer
-import client.net.sf.saxon.ce.pattern.NodeKindTest
-import client.net.sf.saxon.ce.pattern.Pattern
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value.SequenceType
-import client.net.sf.saxon.ce.value.StringValue
+import org.orbeon.darius.xpath.expr.Expression
+import org.orbeon.darius.xpath.expr.RoleLocator
+import org.orbeon.darius.xpath.expr.StringLiteral
+import org.orbeon.darius.xpath.expr.TypeChecker
+import org.orbeon.darius.xpath.expr.instruct.Executable
+import org.orbeon.darius.xpath.expr.instruct.NumberInstruction
+import org.orbeon.darius.xpath.expr.instruct.ValueOf
+import org.orbeon.darius.xpath.expr.number.NumberFormatter
+import org.orbeon.darius.xpath.expr.number.Numberer_en
+import org.orbeon.darius.xpath.lib.Numberer
+import org.orbeon.darius.xpath.pattern.NodeKindTest
+import org.orbeon.darius.xpath.pattern.Pattern
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.value.SequenceType
+import org.orbeon.darius.xpath.value.StringValue
 import XSLNumber._
 //remove if not needed
 import scala.collection.JavaConversions._

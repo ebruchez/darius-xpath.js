@@ -1,18 +1,18 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce
+package org.orbeon.darius.xpath
 
 import org.timepedia.exporter.client.Export
 import org.timepedia.exporter.client.ExportPackage
 import org.timepedia.exporter.client.Exportable
-import client.net.sf.saxon.ce.Controller.APIcommand
-import client.net.sf.saxon.ce.js.IXSLFunction
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.om.Sequence
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.JsArrayIterator
+import org.orbeon.darius.xpath.Controller.APIcommand
+import org.orbeon.darius.xpath.js.IXSLFunction
+import org.orbeon.darius.xpath.om.SequenceIterator
+import org.orbeon.darius.xpath.om.StructuredQName
+import org.orbeon.darius.xpath.om.Sequence
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.JsArrayIterator
 import com.google.gwt.core.client.JavaScriptObject
 import com.google.gwt.dom.client.Document
 import com.google.gwt.dom.client.Node

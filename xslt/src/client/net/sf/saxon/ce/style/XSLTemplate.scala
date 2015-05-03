@@ -1,25 +1,25 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.style
+package org.orbeon.darius.xpath.style
 
-import client.net.sf.saxon.ce.LogController
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.expr.instruct.Executable
-import client.net.sf.saxon.ce.expr.instruct.Template
-import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.om.NamespaceException
-import client.net.sf.saxon.ce.om.StructuredQName
-import client.net.sf.saxon.ce.pattern.Pattern
-import client.net.sf.saxon.ce.trans.Mode
-import client.net.sf.saxon.ce.trans.RuleManager
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.linked.NodeImpl
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.DecimalValue
-import client.net.sf.saxon.ce.value.SequenceType
-import client.net.sf.saxon.ce.value.Whitespace
+import org.orbeon.darius.xpath.LogController
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.expr.instruct.Executable
+import org.orbeon.darius.xpath.expr.instruct.Template
+import org.orbeon.darius.xpath.lib.NamespaceConstant
+import org.orbeon.darius.xpath.om.NamespaceException
+import org.orbeon.darius.xpath.om.StructuredQName
+import org.orbeon.darius.xpath.pattern.Pattern
+import org.orbeon.darius.xpath.trans.Mode
+import org.orbeon.darius.xpath.trans.RuleManager
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.linked.NodeImpl
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.`type`.Type
+import org.orbeon.darius.xpath.value.DecimalValue
+import org.orbeon.darius.xpath.value.SequenceType
+import org.orbeon.darius.xpath.value.Whitespace
 import com.google.gwt.logging.client.LogConfiguration
 import java.util.List
 import scala.reflect.{BeanProperty, BooleanBeanProperty}

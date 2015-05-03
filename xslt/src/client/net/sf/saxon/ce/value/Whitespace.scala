@@ -1,9 +1,9 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.value
+package org.orbeon.darius.xpath.value
 
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
+import org.orbeon.darius.xpath.tree.util.FastStringBuffer
 import java.util.ArrayList
 import java.util.List
 //remove if not needed

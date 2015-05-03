@@ -1,19 +1,19 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.value
+package org.orbeon.darius.xpath.value
 
-import client.net.sf.saxon.ce.event.SequenceReceiver
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.js.JSObjectType
-import client.net.sf.saxon.ce.js.JSObjectValue
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.pattern._
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
-import client.net.sf.saxon.ce.`type`.AnyItemType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
+import org.orbeon.darius.xpath.event.SequenceReceiver
+import org.orbeon.darius.xpath.expr.XPathContext
+import org.orbeon.darius.xpath.js.JSObjectType
+import org.orbeon.darius.xpath.js.JSObjectValue
+import org.orbeon.darius.xpath.om._
+import org.orbeon.darius.xpath.pattern._
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.UnfailingIterator
+import org.orbeon.darius.xpath.`type`.AnyItemType
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.`type`.Type
 //remove if not needed
 import scala.collection.JavaConversions._
 

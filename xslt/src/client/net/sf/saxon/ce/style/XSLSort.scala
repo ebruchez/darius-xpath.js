@@ -1,20 +1,20 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.style
+package org.orbeon.darius.xpath.style
 
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.expr.instruct.Executable
-import client.net.sf.saxon.ce.expr.sort.CodepointCollator
-import client.net.sf.saxon.ce.expr.sort.SortKeyDefinition
-import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.lib.StringCollator
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.util.URI
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.value.EmptySequence
-import client.net.sf.saxon.ce.value.SequenceType
-import client.net.sf.saxon.ce.value.StringValue
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.expr.instruct.Executable
+import org.orbeon.darius.xpath.expr.sort.CodepointCollator
+import org.orbeon.darius.xpath.expr.sort.SortKeyDefinition
+import org.orbeon.darius.xpath.lib.NamespaceConstant
+import org.orbeon.darius.xpath.lib.StringCollator
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.util.URI
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.value.EmptySequence
+import org.orbeon.darius.xpath.value.SequenceType
+import org.orbeon.darius.xpath.value.StringValue
 import scala.reflect.{BeanProperty, BooleanBeanProperty}
 //remove if not needed
 import scala.collection.JavaConversions._

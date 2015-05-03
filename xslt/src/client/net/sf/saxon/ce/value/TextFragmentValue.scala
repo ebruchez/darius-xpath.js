@@ -1,21 +1,21 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.value
+package org.orbeon.darius.xpath.value
 
-import client.net.sf.saxon.ce.event.Receiver
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.orbeon.Configuration
-import client.net.sf.saxon.ce.pattern.NodeTest
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.ArrayIterator
-import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.tree.iter.SingletonIterator
-import client.net.sf.saxon.ce.tree.iter.UnfailingIterator
-import client.net.sf.saxon.ce.tree.util.FastStringBuffer
-import client.net.sf.saxon.ce.tree.util.Navigator
-import client.net.sf.saxon.ce.tree.util.Orphan
-import client.net.sf.saxon.ce.`type`.Type
+import org.orbeon.darius.xpath.event.Receiver
+import org.orbeon.darius.xpath.om._
+import org.orbeon.darius.xpath.orbeon.Configuration
+import org.orbeon.darius.xpath.pattern.NodeTest
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.ArrayIterator
+import org.orbeon.darius.xpath.tree.iter.EmptyIterator
+import org.orbeon.darius.xpath.tree.iter.SingletonIterator
+import org.orbeon.darius.xpath.tree.iter.UnfailingIterator
+import org.orbeon.darius.xpath.tree.util.FastStringBuffer
+import org.orbeon.darius.xpath.tree.util.Navigator
+import org.orbeon.darius.xpath.tree.util.Orphan
+import org.orbeon.darius.xpath.`type`.Type
 import java.util.HashMap
 import scala.reflect.{BeanProperty, BooleanBeanProperty}
 //remove if not needed

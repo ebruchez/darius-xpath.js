@@ -1,18 +1,18 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.style
+package org.orbeon.darius.xpath.style
 
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.ExpressionVisitor
-import client.net.sf.saxon.ce.expr.RoleLocator
-import client.net.sf.saxon.ce.expr.TypeChecker
-import client.net.sf.saxon.ce.expr.instruct.CallTemplate
-import client.net.sf.saxon.ce.expr.instruct.Executable
-import client.net.sf.saxon.ce.expr.instruct.ScheduleExecution
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.linked.NodeImpl
-import client.net.sf.saxon.ce.value.SequenceType
+import org.orbeon.darius.xpath.expr.Expression
+import org.orbeon.darius.xpath.expr.ExpressionVisitor
+import org.orbeon.darius.xpath.expr.RoleLocator
+import org.orbeon.darius.xpath.expr.TypeChecker
+import org.orbeon.darius.xpath.expr.instruct.CallTemplate
+import org.orbeon.darius.xpath.expr.instruct.Executable
+import org.orbeon.darius.xpath.expr.instruct.ScheduleExecution
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.linked.NodeImpl
+import org.orbeon.darius.xpath.value.SequenceType
 //remove if not needed
 import scala.collection.JavaConversions._
 

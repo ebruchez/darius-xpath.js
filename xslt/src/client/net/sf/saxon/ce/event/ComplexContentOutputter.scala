@@ -1,14 +1,14 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.event
+package org.orbeon.darius.xpath.event
 
-import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.pattern.AnyNodeTest
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.AtomicValue
+import org.orbeon.darius.xpath.lib.NamespaceConstant
+import org.orbeon.darius.xpath.om._
+import org.orbeon.darius.xpath.pattern.AnyNodeTest
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.`type`.Type
+import org.orbeon.darius.xpath.value.AtomicValue
 //remove if not needed
 import scala.collection.JavaConversions._
 
@@ -337,8 +337,8 @@ class ComplexContentOutputter extends SequenceReceiver {
    * Append an arbitrary item (node or atomic value) to the output
    * @param item the item to be appended
    * @param copyNamespaces if the item is an element node, this indicates whether its namespaces
-   * need to be copied. Values are [[client.net.sf.saxon.ce.om.NodeInfo#ALL_NAMESPACES]],
-   * [[client.net.sf.saxon.ce.om.NodeInfo#LOCAL_NAMESPACES]], [[client.net.sf.saxon.ce.om.NodeInfo#NO_NAMESPACES]]
+   * need to be copied. Values are [[org.orbeon.darius.xpath.om.NodeInfo#ALL_NAMESPACES]],
+   * [[org.orbeon.darius.xpath.om.NodeInfo#LOCAL_NAMESPACES]], [[org.orbeon.darius.xpath.om.NodeInfo#NO_NAMESPACES]]
    */
   def append(item: Item, copyNamespaces: Int): Unit = {
     if (item == null) {

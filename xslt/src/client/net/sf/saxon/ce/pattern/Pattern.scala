@@ -1,17 +1,17 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.pattern
+package org.orbeon.darius.xpath.pattern
 
 import java.util.{Collections, Iterator}
-import client.net.sf.saxon.ce.`type`.{ItemType, Type}
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.expr.sort.DocumentSorter
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.orbeon.Configuration
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.{EmptyIterator, PrependIterator, SingletonIterator}
-import client.net.sf.saxon.ce.tree.util.SourceLocator
+import org.orbeon.darius.xpath.`type`.{ItemType, Type}
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.expr.sort.DocumentSorter
+import org.orbeon.darius.xpath.om._
+import org.orbeon.darius.xpath.orbeon.Configuration
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.{EmptyIterator, PrependIterator, SingletonIterator}
+import org.orbeon.darius.xpath.tree.util.SourceLocator
 
 import scala.beans.BeanProperty
 
@@ -292,7 +292,7 @@ abstract class Pattern extends Container with SourceLocator {
    *               expressions that don't depend on the context to an outer level in
    *               the containing expression
    * @param parent
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if any error is detected
    */
   def promote(offer: PromotionOffer, parent: Expression): Unit = {

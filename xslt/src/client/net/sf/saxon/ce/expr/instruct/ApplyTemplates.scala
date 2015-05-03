@@ -1,20 +1,20 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.js.IXSLFunction
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.pattern.AnyNodeTest
-import client.net.sf.saxon.ce.trans.Mode
-import client.net.sf.saxon.ce.trans.Rule
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.tree.iter.FocusIterator
-import client.net.sf.saxon.ce.tree.util.SourceLocator
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.js.IXSLFunction
+import org.orbeon.darius.xpath.om._
+import org.orbeon.darius.xpath.pattern.AnyNodeTest
+import org.orbeon.darius.xpath.trans.Mode
+import org.orbeon.darius.xpath.trans.Rule
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.EmptyIterator
+import org.orbeon.darius.xpath.tree.iter.FocusIterator
+import org.orbeon.darius.xpath.tree.util.SourceLocator
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.`type`.Type
 import java.util.ArrayList
 import java.util.Iterator
 import ApplyTemplates._
@@ -31,7 +31,7 @@ object ApplyTemplates {
    * @param context      the dynamic evaluation context
    * @param sourceLocator   location of the instruction (apply-templates, apply-imports etc) that caused
    *                     the built-in template to be invoked
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if any dynamic error occurs
    */
   def defaultAction(node: NodeInfo, 

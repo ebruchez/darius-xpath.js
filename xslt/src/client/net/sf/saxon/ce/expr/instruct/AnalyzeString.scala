@@ -1,21 +1,21 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.om.Item
-import client.net.sf.saxon.ce.om.SequenceIterator
-import client.net.sf.saxon.ce.pattern.EmptySequenceTest
-import client.net.sf.saxon.ce.regex.ARegexIterator
-import client.net.sf.saxon.ce.regex.ARegularExpression
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.tree.iter.FocusIterator
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.ItemType
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.SequenceType
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.om.Item
+import org.orbeon.darius.xpath.om.SequenceIterator
+import org.orbeon.darius.xpath.pattern.EmptySequenceTest
+import org.orbeon.darius.xpath.regex.ARegexIterator
+import org.orbeon.darius.xpath.regex.ARegularExpression
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.tree.iter.EmptyIterator
+import org.orbeon.darius.xpath.tree.iter.FocusIterator
+import org.orbeon.darius.xpath.`type`.AtomicType
+import org.orbeon.darius.xpath.`type`.ItemType
+import org.orbeon.darius.xpath.`type`.Type
+import org.orbeon.darius.xpath.value.SequenceType
 import java.util.Iterator
 //remove if not needed
 import scala.collection.JavaConversions._
@@ -265,7 +265,7 @@ class AnalyzeString(var select: Expression,
    * @param context supplies the context for evaluation
    * @return a SequenceIterator that can be used to iterate over the result
    *         of the expression
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if any dynamic error occurs evaluating the
    *          expression
    */

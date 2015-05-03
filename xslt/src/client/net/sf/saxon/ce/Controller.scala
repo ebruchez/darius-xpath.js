@@ -1,27 +1,27 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce
+package org.orbeon.darius.xpath
 
-import client.net.sf.saxon.ce.dom.HTMLWriter
-import client.net.sf.saxon.ce.event._
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.expr.instruct._
-import client.net.sf.saxon.ce.functions.Component
-import client.net.sf.saxon.ce.js.IXSLFunction
-import client.net.sf.saxon.ce.lib.ErrorListener
-import client.net.sf.saxon.ce.lib.NamespaceConstant
-import client.net.sf.saxon.ce.lib.StandardErrorListener
-import client.net.sf.saxon.ce.lib.TraceListener
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.orbeon.Configuration
-import client.net.sf.saxon.ce.trans.Mode
-import client.net.sf.saxon.ce.trans.RuleManager
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.trans.update.PendingUpdateList
-import client.net.sf.saxon.ce.tree.iter.SingletonIterator
-import client.net.sf.saxon.ce.tree.linked.LinkedTreeBuilder
-import client.net.sf.saxon.ce.value.DateTimeValue
+import org.orbeon.darius.xpath.dom.HTMLWriter
+import org.orbeon.darius.xpath.event._
+import org.orbeon.darius.xpath.expr.XPathContext
+import org.orbeon.darius.xpath.expr.instruct._
+import org.orbeon.darius.xpath.functions.Component
+import org.orbeon.darius.xpath.js.IXSLFunction
+import org.orbeon.darius.xpath.lib.ErrorListener
+import org.orbeon.darius.xpath.lib.NamespaceConstant
+import org.orbeon.darius.xpath.lib.StandardErrorListener
+import org.orbeon.darius.xpath.lib.TraceListener
+import org.orbeon.darius.xpath.om._
+import org.orbeon.darius.xpath.orbeon.Configuration
+import org.orbeon.darius.xpath.trans.Mode
+import org.orbeon.darius.xpath.trans.RuleManager
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.trans.update.PendingUpdateList
+import org.orbeon.darius.xpath.tree.iter.SingletonIterator
+import org.orbeon.darius.xpath.tree.linked.LinkedTreeBuilder
+import org.orbeon.darius.xpath.value.DateTimeValue
 import com.google.gwt.core.client.JavaScriptObject
 import com.google.gwt.dom.client.Node
 import com.google.gwt.logging.client.LogConfiguration

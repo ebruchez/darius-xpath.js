@@ -1,15 +1,15 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.trace
+package org.orbeon.darius.xpath.trace
 
 import java.util.ArrayList
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.Literal
-import client.net.sf.saxon.ce.expr.StaticContext
-import client.net.sf.saxon.ce.expr.TraceExpression
-import client.net.sf.saxon.ce.expr.parser.CodeInjector
-import client.net.sf.saxon.ce.om.StructuredQName
+import org.orbeon.darius.xpath.expr.Expression
+import org.orbeon.darius.xpath.expr.Literal
+import org.orbeon.darius.xpath.expr.StaticContext
+import org.orbeon.darius.xpath.expr.TraceExpression
+import org.orbeon.darius.xpath.expr.parser.CodeInjector
+import org.orbeon.darius.xpath.om.StructuredQName
 //remove if not needed
 import scala.collection.JavaConversions._
 

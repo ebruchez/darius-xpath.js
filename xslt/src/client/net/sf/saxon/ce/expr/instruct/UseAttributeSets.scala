@@ -1,14 +1,14 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.expr.instruct
+package org.orbeon.darius.xpath.expr.instruct
 
-import client.net.sf.saxon.ce.expr.Expression
-import client.net.sf.saxon.ce.expr.ExpressionVisitor
-import client.net.sf.saxon.ce.expr.XPathContext
-import client.net.sf.saxon.ce.pattern.NodeKindTest
-import client.net.sf.saxon.ce.trans.XPathException
-import client.net.sf.saxon.ce.`type`.ItemType
+import org.orbeon.darius.xpath.expr.Expression
+import org.orbeon.darius.xpath.expr.ExpressionVisitor
+import org.orbeon.darius.xpath.expr.XPathContext
+import org.orbeon.darius.xpath.pattern.NodeKindTest
+import org.orbeon.darius.xpath.trans.XPathException
+import org.orbeon.darius.xpath.`type`.ItemType
 //remove if not needed
 import scala.collection.JavaConversions._
 
@@ -23,7 +23,7 @@ class UseAttributeSets(var attributeSets: Array[AttributeSet]) extends Instructi
    * as a different expression). The default implementation does nothing.
    *
    * @return the simplified expression
-   * @throws client.net.sf.saxon.ce.trans.XPathException
+   * @throws org.orbeon.darius.xpath.trans.XPathException
    *          if an error is discovered during expression
    *          rewriting
    * @param visitor an expression visitor
@@ -40,7 +40,7 @@ class UseAttributeSets(var attributeSets: Array[AttributeSet]) extends Instructi
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        [[client.net.sf.saxon.ce.type.Type#ITEM_TYPE]]
+   *                        [[org.orbeon.darius.xpath.type.Type#ITEM_TYPE]]
    * @return the original expression, rewritten if appropriate to optimize execution
    * @throws XPathException if an error is discovered during this phase
    *                                        (typically a type error)
@@ -72,7 +72,7 @@ class UseAttributeSets(var attributeSets: Array[AttributeSet]) extends Instructi
    * @param contextItemType the static type of "." at the point where this expression is invoked.
    *                        The parameter is set to null if it is known statically that the context item will be undefined.
    *                        If the type of the context item is not known statically, the argument is set to
-   *                        [[client.net.sf.saxon.ce.type.Type#ITEM_TYPE]]
+   *                        [[org.orbeon.darius.xpath.type.Type#ITEM_TYPE]]
    * @return the original expression, rewritten to perform necessary
    *         run-time type checks, and to perform other type-related
    *         optimizations

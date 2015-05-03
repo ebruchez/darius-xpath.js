@@ -1,22 +1,22 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-package client.net.sf.saxon.ce.trans
+package org.orbeon.darius.xpath.trans
 
-import client.net.sf.saxon.ce.Controller
-import client.net.sf.saxon.ce.expr._
-import client.net.sf.saxon.ce.expr.sort.LocalOrderComparer
-import client.net.sf.saxon.ce.lib.StringCollator
-import client.net.sf.saxon.ce.om._
-import client.net.sf.saxon.ce.orbeon.Configuration
-import client.net.sf.saxon.ce.pattern.Pattern
-import client.net.sf.saxon.ce.tree.iter.EmptyIterator
-import client.net.sf.saxon.ce.tree.iter.ListIterator
-import client.net.sf.saxon.ce.`type`.AtomicType
-import client.net.sf.saxon.ce.`type`.Type
-import client.net.sf.saxon.ce.value.AtomicValue
-import client.net.sf.saxon.ce.value.DoubleValue
-import client.net.sf.saxon.ce.value.NumericValue
+import org.orbeon.darius.xpath.Controller
+import org.orbeon.darius.xpath.expr._
+import org.orbeon.darius.xpath.expr.sort.LocalOrderComparer
+import org.orbeon.darius.xpath.lib.StringCollator
+import org.orbeon.darius.xpath.om._
+import org.orbeon.darius.xpath.orbeon.Configuration
+import org.orbeon.darius.xpath.pattern.Pattern
+import org.orbeon.darius.xpath.tree.iter.EmptyIterator
+import org.orbeon.darius.xpath.tree.iter.ListIterator
+import org.orbeon.darius.xpath.`type`.AtomicType
+import org.orbeon.darius.xpath.`type`.Type
+import org.orbeon.darius.xpath.value.AtomicValue
+import org.orbeon.darius.xpath.value.DoubleValue
+import org.orbeon.darius.xpath.value.NumericValue
 import java.util._
 import KeyManager._
 //remove if not needed
@@ -353,7 +353,7 @@ class KeyManager {
       if (nodes == null) {
         EmptyIterator.getInstance
       } else {
-        new client.net.sf.saxon.ce.tree.iter.ListIterator(nodes)
+        new org.orbeon.darius.xpath.tree.iter.ListIterator(nodes)
       }
     } else {
       var result: SequenceIterator = null
