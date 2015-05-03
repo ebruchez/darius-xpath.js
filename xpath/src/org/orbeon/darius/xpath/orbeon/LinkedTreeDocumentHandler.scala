@@ -19,16 +19,16 @@ import org.orbeon.darius.xpath.event.PipelineConfiguration
 import org.orbeon.darius.xpath.om.NamespaceBinding
 import org.orbeon.darius.xpath.om.StructuredQName
 import org.orbeon.darius.xpath.tree.linked.LinkedTreeBuilder
-import org.orbeon.darius.util.XMLSymbols
-import org.orbeon.darius.xni.Augmentations
-import org.orbeon.darius.xni.NamespaceContext
-import org.orbeon.darius.xni.QName
-import org.orbeon.darius.xni.XMLAttributes
-import org.orbeon.darius.xni.XMLDocumentHandler
-import org.orbeon.darius.xni.XMLLocator
-import org.orbeon.darius.xni.XMLResourceIdentifier
-import org.orbeon.darius.xni.XMLString
-import org.orbeon.darius.xni.parser.XMLDocumentSource
+import org.orbeon.darius.xml.util.XMLSymbols
+import org.orbeon.darius.xml.xni.Augmentations
+import org.orbeon.darius.xml.xni.NamespaceContext
+import org.orbeon.darius.xml.xni.QName
+import org.orbeon.darius.xml.xni.XMLAttributes
+import org.orbeon.darius.xml.xni.XMLDocumentHandler
+import org.orbeon.darius.xml.xni.XMLLocator
+import org.orbeon.darius.xml.xni.XMLResourceIdentifier
+import org.orbeon.darius.xml.xni.XMLString
+import org.orbeon.darius.xml.xni.parser.XMLDocumentSource
 
 // Build a LinkedTree from Darius XMLContentHandler events
 class LinkedTreeDocumentHandler(config: PipelineConfiguration) extends XMLDocumentHandler {

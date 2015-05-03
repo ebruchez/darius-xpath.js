@@ -29,7 +29,7 @@ import org.orbeon.darius.xpath.orbeon.LinkedTreeDocumentHandler
 import org.orbeon.darius.xpath.orbeon.ShareableXPathStaticContext
 import org.orbeon.darius.xpath.sxpath.SimpleContainer
 import org.orbeon.darius.xpath.{value ⇒ svalue}
-import org.orbeon.darius.api.API
+import org.orbeon.darius.xml.api.API
 import org.scalajs.dom.raw
 import org.scalajs.dom.raw.HTMLScriptElement
 import org.scalajs.jquery.JQuery
