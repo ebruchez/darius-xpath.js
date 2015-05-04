@@ -262,13 +262,13 @@ class Literal(@BeanProperty var value: Sequence) extends Expression {
         m0 match {
           case stringValue: StringValue if m1.isInstanceOf[StringValue] ⇒
             if (!(stringValue.getStringValue == m1.asInstanceOf[StringValue].getStringValue)) {
-              false
+              return false
             }
           case atomicValue: AtomicValue if m1.isInstanceOf[AtomicValue] ⇒
             if (!n0 && !n1 &&
               (atomicValue != m1.asInstanceOf[AtomicValue]) ||
               atomicValue.getItemType != m1.asInstanceOf[AtomicValue].getItemType) {
-              false
+              return false
             }
           case _ ⇒
         }
