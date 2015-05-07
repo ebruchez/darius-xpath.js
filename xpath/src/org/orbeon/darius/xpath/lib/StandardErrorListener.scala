@@ -12,6 +12,8 @@ import org.orbeon.darius.xpath.om.StructuredQName
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.util.SourceLocator
 
+import scala.util.control.Breaks
+
 object StandardErrorListener {
 
   private val logger: Logger = Logger.getLogger("StandardErrorListener")
@@ -90,27 +92,30 @@ object StandardErrorListener {
     }
     var e: Throwable = err
     val msgLen = message.length
-    while (true) {
-      if (e == null) {
-        //break
-      }
-      var next = e.getMessage
-      if (next == null) {
-        next = ""
-      }
-      if (next.startsWith("client.net.sf.saxon.ce.trans.XPathException: ")) {
-        next = next.substring(next.indexOf(": ") + 2)
-      }
-      if (!message.endsWith(next)) {
-        if ("" != message && !message.trim().endsWith(":")) {
-          message += ": "
+    import Breaks._
+    breakable {
+      while (true) {
+        if (e == null) {
+          break()
         }
-        message += next
-      }
-      if (e.isInstanceOf[XPathException]) {
-        e = e.getCause
-      } else {
-        //break
+        var next = e.getMessage
+        if (next == null) {
+          next = ""
+        }
+        if (next.startsWith("client.net.sf.saxon.ce.trans.XPathException: ")) {
+          next = next.substring(next.indexOf(": ") + 2)
+        }
+        if (!message.endsWith(next)) {
+          if ("" != message && !message.trim().endsWith(":")) {
+            message += ": "
+          }
+          message += next
+        }
+        if (e.isInstanceOf[XPathException]) {
+          e = e.getCause
+        } else {
+          break()
+        }
       }
     }
     if (LogConfiguration.loggingIsEnabled()) {

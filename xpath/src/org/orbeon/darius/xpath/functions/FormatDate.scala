@@ -15,6 +15,8 @@ import org.orbeon.darius.xpath.trans.{Err, XPathException}
 import org.orbeon.darius.xpath.tree.util.FastStringBuffer
 import org.orbeon.darius.xpath.value.{StringValue, _}
 
+import scala.util.control.Breaks
+
 object FormatDate {
 
   /**
@@ -38,33 +40,36 @@ object FormatDate {
       sb.append("[Language: en]")
     }
     var i = 0
-    while (true) {
-      while (i < format.length && format.charAt(i) != '[') {
-        val c = format.charAt(i)
-        sb.append(c)
-        if (c == ']') {
-          i += 1
-          if (i == format.length || format.charAt(i) != ']') {
-            throw new XPathException("Closing ']' in date picture must be written as ']]'", "XTDE1340")
+    import Breaks._
+    breakable {
+      while (true) {
+        while (i < format.length && format.charAt(i) != '[') {
+          val c = format.charAt(i)
+          sb.append(c)
+          if (c == ']') {
+            i += 1
+            if (i == format.length || format.charAt(i) != ']') {
+              throw new XPathException("Closing ']' in date picture must be written as ']]'", "XTDE1340")
+            }
           }
+          i += 1
+        }
+        if (i == format.length) {
+          break()
         }
         i += 1
-      }
-      if (i == format.length) {
-        //break
-      }
-      i += 1
-      if (i < format.length && format.charAt(i) == '[') {
-        sb.append('[')
-        i += 1
-      } else {
-        val close = if (i < format.length) format.indexOf("]", i) else -1
-        if (close == -1) {
-          throw new XPathException("Date format contains a '[' with no matching ']'", "XTDE1340")
+        if (i < format.length && format.charAt(i) == '[') {
+          sb.append('[')
+          i += 1
+        } else {
+          val close = if (i < format.length) format.indexOf("]", i) else -1
+          if (close == -1) {
+            throw new XPathException("Date format contains a '[' with no matching ']'", "XTDE1340")
+          }
+          val componentFormat = format.substring(i, close)
+          sb.append(formatComponent(value, Whitespace.removeAllWhitespace(componentFormat), numberer))
+          i = close + 1
         }
-        val componentFormat = format.substring(i, close)
-        sb.append(formatComponent(value, Whitespace.removeAllWhitespace(componentFormat), numberer))
-        i = close + 1
       }
     }
     sb

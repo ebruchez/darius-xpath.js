@@ -10,6 +10,8 @@ import org.orbeon.darius.xpath.orbeon.Iterator
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.{LogConfiguration, LogController}
 
+import scala.util.control.Breaks
+
 /**
  * Handler for xsl:for-each elements in a stylesheet.
  */
@@ -198,22 +200,28 @@ class ForEach extends Instruction with ContextMappingFunction {
     } else {
       if (LogConfiguration.loggingIsEnabled() && LogController.traceIsEnabled()) {
         val listener = LogController.getTraceListener
-        while (true) {
-          val item = focus.next()
-          if (item == null) {
-            //break
+        import Breaks._
+        breakable {
+          while (true) {
+            val item = focus.next()
+            if (item == null) {
+              break()
+            }
+            listener.startCurrentItem(item)
+            action.process(c2)
+            listener.endCurrentItem(item)
           }
-          listener.startCurrentItem(item)
-          action.process(c2)
-          listener.endCurrentItem(item)
         }
       } else {
-        while (true) {
-          val item = focus.next()
-          if (item == null) {
-            //break
+        import Breaks._
+        breakable {
+          while (true) {
+            val item = focus.next()
+            if (item == null) {
+              break()
+            }
+            action.process(c2)
           }
-          action.process(c2)
         }
       }
     }

@@ -13,6 +13,8 @@ import org.orbeon.darius.xpath.trans.{DecimalSymbols, XPathException}
 import org.orbeon.darius.xpath.tree.util.FastStringBuffer
 import org.orbeon.darius.xpath.value.{StringValue, _}
 
+import scala.util.control.Breaks
+
 object FormatNumber {
 
   /**
@@ -437,12 +439,15 @@ object FormatNumber {
       var intDigits: Int = 0
       if (point >= 0) {
         var zz = maxFractionPartSize - minFractionPartSize
-        while (zz > 0) {
-          if (fsb.charAt(fsb.length - 1) == '0') {
-            fsb.setLength(fsb.length - 1)
-            zz -= 1
-          } else {
-            //break
+        import Breaks._
+        breakable {
+          while (zz > 0) {
+            if (fsb.charAt(fsb.length - 1) == '0') {
+              fsb.setLength(fsb.length - 1)
+              zz -= 1
+            } else {
+              break()
+            }
           }
         }
         intDigits = point

@@ -11,6 +11,8 @@ import org.orbeon.darius.xpath.om.{Item, NodeInfo}
 import org.orbeon.darius.xpath.tree.util.Navigator
 import org.orbeon.darius.xpath.value.BooleanValue
 
+import scala.util.control.Breaks
+
 object Lang {
 
   /**
@@ -21,14 +23,17 @@ object Lang {
   def isLang(arglang: String, target: NodeInfo): Boolean = {
     var doclang: String = null
     var node = target
-    while (node != null) {
-      doclang = Navigator.getAttributeValue(node, NamespaceConstant.XML, "lang")
-      if (doclang != null) {
-        //break
-      }
-      node = node.getParent
-      if (node == null) {
-        return false
+    import Breaks._
+    breakable {
+      while (node != null) {
+        doclang = Navigator.getAttributeValue(node, NamespaceConstant.XML, "lang")
+        if (doclang != null) {
+          break()
+        }
+        node = node.getParent
+        if (node == null) {
+          return false
+        }
       }
     }
     if (doclang == null) {
