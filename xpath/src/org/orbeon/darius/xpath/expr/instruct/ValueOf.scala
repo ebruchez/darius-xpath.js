@@ -26,12 +26,10 @@ class ValueOf(select: Expression, var noNodeIfEmpty: Boolean) extends SimpleNode
 
   var isNumberingInstruction: Boolean = false
 
-  setSelect(select, null)//ORBEON could write this way
-//  super.select = select
-//  adoptChildExpression(select)
+  setSelect(select, null)
 
   /**
-   * Indicate that this is really an xsl:nunber instruction
+   * Indicate that this is really an xsl:number instruction
    */
   def setIsNumberingInstruction(): Unit = {
     isNumberingInstruction = true

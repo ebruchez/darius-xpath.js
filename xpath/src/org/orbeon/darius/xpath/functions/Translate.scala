@@ -45,7 +45,7 @@ class Translate extends SystemFunction {
             } else {
               // do nothing, delete the character
             }
-            break()//ORBEON: check if we break to the right spot!
+            break()// after sb.appendWideChar(ch) below
           }
         }
         sb.appendWideChar(ch)
