@@ -301,7 +301,6 @@ class ExpressionParser {
           if (getCurrentOperatorPrecedence >= prec) {
             grumble("Left operand of '" + Token.tokens(t.currentToken) + "' needs parentheses")
           }
-
         case Token.CAST_AS | Token.CASTABLE_AS ⇒
           nextToken()
           expect(Token.NAME)
@@ -319,7 +318,6 @@ class ExpressionParser {
           if (getCurrentOperatorPrecedence >= prec) {
             grumble("Left operand of '" + Token.tokens(t.currentToken) + "' needs parentheses")
           }
-
         case _ ⇒
           nextToken()
           var rhs = parseUnaryExpression()
@@ -328,7 +326,6 @@ class ExpressionParser {
           }
           lhs = makeBinaryExpression(lhs, operator, rhs)
           setLocation(lhs)
-
       }
     }
     lhs

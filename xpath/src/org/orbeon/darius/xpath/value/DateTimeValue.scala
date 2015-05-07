@@ -436,14 +436,12 @@ class DateTimeValue private () extends CalendarValue with Comparable[AnyRef] {
     while (h < 0) {
       h += 24
       val t = DateValue.yesterday(dt.getYear, dt.getMonth, dt.getDay)
-      dt = new DateTimeValue(t.getYear, t.getMonth, t.getDay, h.toByte, mi.toByte, second, microsecond, 
-        timezone)
+      dt = new DateTimeValue(t.getYear, t.getMonth, t.getDay, h.toByte, mi.toByte, second, microsecond, timezone)
     }
     if (h > 23) {
       h -= 24
       val t = DateValue.tomorrow(year, month, day)
-      return new DateTimeValue(t.getYear, t.getMonth, t.getDay, h.toByte, mi.toByte, second, microsecond, 
-        timezone)
+      return new DateTimeValue(t.getYear, t.getMonth, t.getDay, h.toByte, mi.toByte, second, microsecond, timezone)
     }
     dt
   }
