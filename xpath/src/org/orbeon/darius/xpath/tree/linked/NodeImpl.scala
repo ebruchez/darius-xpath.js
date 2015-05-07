@@ -329,23 +329,24 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
     case Axis.ATTRIBUTE ⇒
       if (getNodeKind != Type.ELEMENT) {
         EmptyIterator.getInstance
-      }
-      val atts = this.asInstanceOf[ElementImpl].getAttributeList
-      nodeTest match {
-        case nameTest: NameTest ⇒
-          val index = atts.findByStructuredQName(nameTest.getRequiredNodeName)
-          if (index < 0) {
-            EmptyIterator.getInstance
-          } else {
-            val a = new AttributeImpl(this.asInstanceOf[ElementImpl], index)
-            SingletonIterator.makeIterator(a)
-          }
-        case _ ⇒
-          val nodes = new Array[AttributeImpl](atts.getLength)
-          for (i ← 0 until atts.getLength) {
-            nodes(i) = new AttributeImpl(this.asInstanceOf[ElementImpl], i)
-          }
-          Navigator.newAxisFilter(new ArrayIterator(nodes), nodeTest)
+      } else {
+        val atts = this.asInstanceOf[ElementImpl].getAttributeList
+        nodeTest match {
+          case nameTest: NameTest ⇒
+            val index = atts.findByStructuredQName(nameTest.getRequiredNodeName)
+            if (index < 0) {
+              EmptyIterator.getInstance
+            } else {
+              val a = new AttributeImpl(this.asInstanceOf[ElementImpl], index)
+              SingletonIterator.makeIterator(a)
+            }
+          case _ ⇒
+            val nodes = new Array[AttributeImpl](atts.getLength)
+            for (i ← 0 until atts.getLength) {
+              nodes(i) = new AttributeImpl(this.asInstanceOf[ElementImpl], i)
+            }
+            Navigator.newAxisFilter(new ArrayIterator(nodes), nodeTest)
+        }
       }
     case Axis.CHILD ⇒
       this match {
@@ -377,15 +378,16 @@ abstract class NodeImpl extends AbstractNode with NodeInfo {
     case Axis.NAMESPACE ⇒
       if (getNodeKind != Type.ELEMENT) {
         EmptyIterator.getInstance
+      } else {
+        NamespaceNode.makeIterator(this, nodeTest)
       }
-      NamespaceNode.makeIterator(this, nodeTest)
-
     case Axis.PARENT ⇒
       val parent = getParent
       if (parent eq null) {
         EmptyIterator.getInstance
+      } else {
+        Navigator.filteredSingleton(parent, nodeTest)
       }
-      Navigator.filteredSingleton(parent, nodeTest)
     case Axis.PRECEDING ⇒ 
       Navigator.newAxisFilter(new Navigator.PrecedingEnumeration(this, false), nodeTest)
     case Axis.PRECEDING_SIBLING ⇒ 
