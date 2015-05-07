@@ -131,7 +131,7 @@ object DeepEqual {
               return d1 == d2
             }
             if (!deepEquals(d1, d2, comparer)) {
-              false
+              return false
             }
           }
           throw new IllegalStateException
