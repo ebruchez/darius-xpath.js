@@ -37,7 +37,7 @@ object NamespaceIterator {
   def sendNamespaces(element: NodeInfo, receiver: Receiver): Unit = {
     if (element.getNodeKind == Type.ELEMENT) {
       var foundDefault = false
-      var iter = iterateNamespaces(element)
+      val iter = iterateNamespaces(element)
       while (iter.hasNext) {
         val nb = iter.next()
         if (nb.getPrefix.isEmpty) {

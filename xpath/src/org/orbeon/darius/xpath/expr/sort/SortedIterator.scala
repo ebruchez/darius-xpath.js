@@ -135,7 +135,7 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
       }
       val k = count * recordSize
       nodeKeys(k) = item
-      for (n ← 0 until comparators.length) {
+      for (n ← comparators.indices) {
         nodeKeys(k + n + 1) = sortKeyEvaluator.evaluateSortKey(n, context)
       }
       nodeKeys(k + comparators.length + 1) = count
@@ -165,7 +165,7 @@ class SortedIterator private () extends SequenceIterator with LastPositionFinder
   def compare(a: Int, b: Int): Int = {
     val a1 = a * recordSize + 1
     val b1 = b * recordSize + 1
-    for (i ← 0 until comparators.length) {
+    for (i ← comparators.indices) {
       val comp = comparators(i).compareAtomicValues(nodeKeys(a1 + i).asInstanceOf[AtomicValue], nodeKeys(b1 + i).asInstanceOf[AtomicValue])
       if (comp != 0) {
         return comp
