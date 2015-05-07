@@ -4,10 +4,7 @@
 package org.orbeon.darius.xpath.expr.z
 
 object IntUniversalSet {
-
-  private var THE_INSTANCE: IntUniversalSet = new IntUniversalSet()
-
-  def getInstance: IntUniversalSet = THE_INSTANCE
+  val getInstance = new IntUniversalSet()
 }
 
 /**

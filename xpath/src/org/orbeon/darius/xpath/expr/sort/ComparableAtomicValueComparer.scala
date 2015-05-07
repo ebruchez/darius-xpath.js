@@ -7,14 +7,7 @@ import org.orbeon.darius.xpath.lib.StringCollator
 import org.orbeon.darius.xpath.value.AtomicValue
 
 object ComparableAtomicValueComparer {
-
-  private val THE_INSTANCE: ComparableAtomicValueComparer = new ComparableAtomicValueComparer()
-
-  /**
-   * Get the singleton instance of this class
-   * @return  the singleton instance of this class
-   */
-  def getInstance: ComparableAtomicValueComparer = THE_INSTANCE
+  val getInstance = new ComparableAtomicValueComparer()
 }
 
 /**

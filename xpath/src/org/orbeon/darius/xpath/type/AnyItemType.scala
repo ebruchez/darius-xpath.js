@@ -6,13 +6,7 @@ package org.orbeon.darius.xpath.`type`
 import org.orbeon.darius.xpath.om.Item
 
 object AnyItemType {
-
-  private val theInstance: AnyItemType = new AnyItemType()
-
-  /**
-   * Factory method to get the singleton instance
-   */
-  def getInstance: AnyItemType = theInstance
+  val getInstance = new AnyItemType
 }
 
 /**

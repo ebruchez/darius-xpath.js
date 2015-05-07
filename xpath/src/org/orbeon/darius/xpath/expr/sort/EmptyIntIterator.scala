@@ -6,14 +6,7 @@ package org.orbeon.darius.xpath.expr.sort
 import org.orbeon.darius.xpath.expr.z.IntIterator
 
 object EmptyIntIterator {
-
-  private val THE_INSTANCE: EmptyIntIterator = new EmptyIntIterator()
-
-  /**
-   * Get the singular instance of this class
-   * @return the singular instance
-   */
-  def getInstance: EmptyIntIterator = THE_INSTANCE
+  val getInstance = new EmptyIntIterator()
 }
 
 /**

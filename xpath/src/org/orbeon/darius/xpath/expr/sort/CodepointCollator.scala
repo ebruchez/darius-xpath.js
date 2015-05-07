@@ -6,10 +6,7 @@ package org.orbeon.darius.xpath.expr.sort
 import org.orbeon.darius.xpath.lib.StringCollator
 
 object CodepointCollator {
-
-  private val theInstance: CodepointCollator = new CodepointCollator()
-
-  def getInstance: CodepointCollator = theInstance
+  val getInstance = new CodepointCollator
 }
 
 /**

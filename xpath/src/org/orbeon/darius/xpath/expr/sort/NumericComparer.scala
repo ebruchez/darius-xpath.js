@@ -8,10 +8,7 @@ import org.orbeon.darius.xpath.lib.StringCollator
 import org.orbeon.darius.xpath.value._
 
 object NumericComparer {
-
-  private val THE_INSTANCE: NumericComparer = new NumericComparer()
-
-  def getInstance: NumericComparer = THE_INSTANCE
+  val getInstance = new NumericComparer()
 }
 
 /**

@@ -13,7 +13,7 @@ import org.orbeon.darius.xpath.value.{AnyURIValue, BooleanValue, EmptySequence}
 
 object SystemFunctionLibrary {
 
-  private val THE_INSTANCES: HashMap[Int, SystemFunctionLibrary] = new HashMap[Int, SystemFunctionLibrary](3)
+  private val instances = new HashMap[Int, SystemFunctionLibrary](3)
 
   /**
    * Factory method to create or get a SystemFunctionLibrary
@@ -22,10 +22,10 @@ object SystemFunctionLibrary {
    * @return the appropriate SystemFunctionLibrary
    */
   def getSystemFunctionLibrary(functionSet: Int): SystemFunctionLibrary = {
-    if (THE_INSTANCES.get(functionSet) == null) {
-      THE_INSTANCES.put(functionSet, new SystemFunctionLibrary(functionSet))
+    if (instances.get(functionSet) eq null) {
+      instances.put(functionSet, new SystemFunctionLibrary(functionSet))
     }
-    THE_INSTANCES.get(functionSet)
+    instances.get(functionSet)
   }
 
   /**
@@ -51,9 +51,10 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
    * This supports the function-available() function in XSLT; it is also used to support
    * higher-order functions introduced in XQuery 1.1.
    *
-   * <p>This method may be called either at compile time
+   * This method may be called either at compile time
    * or at run time. If the function library is to be used only in an XQuery or free-standing XPath
-   * environment, this method may throw an UnsupportedOperationException.</p>
+   * environment, this method may throw an UnsupportedOperationException.
+   * 
    * @param functionName the qualified name of the function being called
    * @param arity        The number of arguments. This is set to -1 in the case of the single-argument
    *                     function-available() function; in this case the method should return a zero-length array
@@ -84,8 +85,6 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
    * @param staticArgs  The expressions supplied statically in the function call. The intention is
    * that the static type of the arguments (obtainable via getItemType() and getCardinality() may
    * be used as part of the binding algorithm.
-   * @param env
-   * @param container
    * @return An object representing the extension function to be called, if one is found;
    * null if no extension function was found matching the required name and arity.
    * @throws org.orbeon.darius.xpath.trans.XPathException if a function is found with the required name and arity, but
@@ -114,8 +113,7 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
           if (staticArgs.length == 0) {
             return new Literal(EmptySequence.getInstance)
           } else {
-            return new ErrorExpression(new XPathException("No collection URIs are recognized by Saxon-CE", 
-              "FODC0002"))
+            return new ErrorExpression(new XPathException("No collection URIs are recognized by Saxon-CE", "FODC0002"))
           }
         } else if ("data" == local && staticArgs.length == 1) {
           return new Atomizer(staticArgs(0))
@@ -124,8 +122,7 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
         } else if ("exactly-one" == local && staticArgs.length == 1) {
           val role = new RoleLocator(RoleLocator.FUNCTION, "one-or-more", 1)
           role.setErrorCode("FORG0005")
-          return CardinalityChecker.makeCardinalityChecker(staticArgs(0), StaticProperty.EXACTLY_ONE, 
-            role)
+          return CardinalityChecker.makeCardinalityChecker(staticArgs(0), StaticProperty.EXACTLY_ONE, role)
         } else if ("idref" == local && (staticArgs.length == 1 || staticArgs.length == 2)) {
           return new Literal(EmptySequence.getInstance)
         } else if ("nilled" == local && staticArgs.length == 1) {
@@ -133,8 +130,7 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
         } else if ("one-or-more" == local && staticArgs.length == 1) {
           val role = new RoleLocator(RoleLocator.FUNCTION, "one-or-more", 1)
           role.setErrorCode("FORG0004")
-          return CardinalityChecker.makeCardinalityChecker(staticArgs(0), StaticProperty.ALLOWS_ONE_OR_MORE, 
-            role)
+          return CardinalityChecker.makeCardinalityChecker(staticArgs(0), StaticProperty.ALLOWS_ONE_OR_MORE, role)
         } else if ("static-base-uri" == local && staticArgs.length == 0) {
           val baseURI = env.getBaseURI
           return if (baseURI == null) Literal.makeEmptySequence() else new Literal(new AnyURIValue(baseURI))
@@ -149,8 +145,7 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
         } else if ("zero-or-one" == local && staticArgs.length == 1) {
           val role = new RoleLocator(RoleLocator.FUNCTION, "zero-or-one", 1)
           role.setErrorCode("FORG0003")
-          return CardinalityChecker.makeCardinalityChecker(staticArgs(0), StaticProperty.ALLOWS_ZERO_OR_ONE, 
-            role)
+          return CardinalityChecker.makeCardinalityChecker(staticArgs(0), StaticProperty.ALLOWS_ZERO_OR_ONE, role)
         } else if (StandardFunction.getFunction(local, -1) == null) {
           val err = new XPathException("Unknown system function " + local + "()")
           err.setErrorCode("XPST0017")
@@ -185,7 +180,7 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
   }
 
   /**
-   * Check number of arguments. <BR>
+   * Check number of arguments.
    * A convenience routine for use in subclasses.
    * @param numArgs the actual number of arguments (arity)
    * @param min the minimum number of arguments allowed

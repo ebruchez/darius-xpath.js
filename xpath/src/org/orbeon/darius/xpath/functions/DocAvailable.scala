@@ -9,10 +9,8 @@ import org.orbeon.darius.xpath.om.Item
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.value.{AtomicValue, BooleanValue}
 
-object ErrorDiscarder {
-  val THE_INSTANCE = new ErrorListener {
-    def error(exception: XPathException) = ()
-  }
+private object ErrorDiscarder extends ErrorListener {
+  def error(exception: XPathException) = ()
 }
 
 /**
@@ -44,7 +42,6 @@ class DocAvailable extends SystemFunction {
 
   /**
    * Evaluate the expression
-   * @param context
    * @return the result of evaluating the expression (a BooleanValue)
    * @throws org.orbeon.darius.xpath.trans.XPathException
    */
@@ -56,7 +53,7 @@ class DocAvailable extends SystemFunction {
     val href = hrefVal.getStringValue
     val controller = context.getController
     val old = controller.getErrorListener
-    controller.setErrorListener(ErrorDiscarder.THE_INSTANCE)
+    controller.setErrorListener(ErrorDiscarder)
     val b = docAvailable(href, context)
     controller.setErrorListener(old)
     BooleanValue.get(b)

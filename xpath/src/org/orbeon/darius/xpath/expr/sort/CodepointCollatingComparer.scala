@@ -8,16 +8,8 @@ import org.orbeon.darius.xpath.lib.StringCollator
 import org.orbeon.darius.xpath.value.{AtomicValue, StringValue}
 
 object CodepointCollatingComparer {
-
-  private val collator: CodepointCollator = CodepointCollator.getInstance
-
-  private val THE_INSTANCE: CodepointCollatingComparer = new CodepointCollatingComparer()
-
-  /**
-   * Get the singular instance of this class
-   * @return the singleton instance
-   */
-  def getInstance: CodepointCollatingComparer = THE_INSTANCE
+  private val collator = CodepointCollator.getInstance
+  val getInstance = new CodepointCollatingComparer()
 }
 
 /**

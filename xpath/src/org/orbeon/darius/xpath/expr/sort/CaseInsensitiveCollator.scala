@@ -7,10 +7,7 @@ import org.orbeon.darius.xpath.lib.StringCollator
 import org.orbeon.darius.xpath.orbeon.Util
 
 object CaseInsensitiveCollator {
-
-  private val theInstance: CaseInsensitiveCollator = new CaseInsensitiveCollator()
-
-  def getInstance: CaseInsensitiveCollator = theInstance
+  val getInstance = new CaseInsensitiveCollator
 }
 
 /**

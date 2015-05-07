@@ -8,10 +8,8 @@ import org.orbeon.darius.xpath.orbeon.{HashMap, Map}
 import org.orbeon.darius.xpath.pattern.{AnyNodeTest, EmptySequenceTest, NameTest, NodeTest}
 
 object TypeHierarchy {
-
-  private val THE_INSTANCE: TypeHierarchy = new TypeHierarchy()
-
-  def getInstance: TypeHierarchy = THE_INSTANCE
+  
+  val  getInstance = new TypeHierarchy
 
   /**
    * Constant denoting relationship between two types: A is the same type as B

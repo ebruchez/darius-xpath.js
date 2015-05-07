@@ -7,14 +7,7 @@ import org.orbeon.darius.xpath.`type`.Type
 import org.orbeon.darius.xpath.om.{NodeInfo, StructuredQName}
 
 object AnyChildNodeTest {
-
-  private val THE_INSTANCE = new AnyChildNodeTest()
-
-  /**
-   * Get the singular instance of this class
-   * @return the singular instance
-   */
-  def getInstance: AnyChildNodeTest = THE_INSTANCE
+  val  getInstance = new AnyChildNodeTest
 }
 
 /**

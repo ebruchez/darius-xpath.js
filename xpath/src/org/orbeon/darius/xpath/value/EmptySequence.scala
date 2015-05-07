@@ -9,13 +9,7 @@ import org.orbeon.darius.xpath.pattern.EmptySequenceTest
 import org.orbeon.darius.xpath.tree.iter.{EmptyIterator, UnfailingIterator}
 
 object EmptySequence {
-
-  private val THE_INSTANCE: EmptySequence = new EmptySequence()
-
-  /**
-   * Get the implicit instance of this class
-   */
-  def getInstance: EmptySequence = THE_INSTANCE
+  val getInstance = new EmptySequence
 }
 
 /**

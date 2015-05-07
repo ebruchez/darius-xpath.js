@@ -7,13 +7,7 @@ import org.orbeon.darius.xpath.`type`.{AnyItemType, ItemType, Type}
 import org.orbeon.darius.xpath.om.{NodeInfo, StructuredQName}
 
 object AnyNodeTest {
-
-  private var THE_INSTANCE: AnyNodeTest = new AnyNodeTest()
-
-  /**
-   * Get an instance of AnyNodeTest
-   */
-  def getInstance: AnyNodeTest = THE_INSTANCE
+  val getInstance = new AnyNodeTest
 }
 
 /**

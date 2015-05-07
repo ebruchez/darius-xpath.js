@@ -10,10 +10,7 @@ import org.orbeon.darius.xpath.om.StructuredQName
 import org.orbeon.darius.xpath.trans.XPathException
 
 object ConstructorFunctionLibrary {
-
-  val THE_INSTANCE: ConstructorFunctionLibrary = new ConstructorFunctionLibrary()
-
-  def getInstance: ConstructorFunctionLibrary = THE_INSTANCE
+  val getInstance = new ConstructorFunctionLibrary()
 }
 
 /**

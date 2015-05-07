@@ -7,13 +7,7 @@ import org.orbeon.darius.xpath.`type`.Type
 import org.orbeon.darius.xpath.om.{NodeInfo, StructuredQName}
 
 object EmptySequenceTest {
-
-  private val THE_INSTANCE: EmptySequenceTest = new EmptySequenceTest()
-
-  /**
-   * Get a NoNodeTest instance
-   */
-  def getInstance: EmptySequenceTest = THE_INSTANCE
+  val getInstance = new EmptySequenceTest
 }
 
 /**

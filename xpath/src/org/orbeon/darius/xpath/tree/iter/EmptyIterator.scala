@@ -9,15 +9,7 @@ import org.orbeon.darius.xpath.tree.iter.EmptyIterator._
 import org.orbeon.darius.xpath.value.EmptySequence
 
 object EmptyIterator {
-
-  private val theInstance: EmptyIterator = new EmptyIterator()
-
-  /**
-   * Get an EmptyIterator, an iterator over an empty sequence.
-   * @return an EmptyIterator (in practice, this always returns the same
-   *     one)
-   */
-  def getInstance: EmptyIterator = theInstance
+  val getInstance = new EmptyIterator
 }
 
 /**
@@ -45,7 +37,7 @@ class EmptyIterator private () extends UnfailingIterator with LastPositionFinder
    * @return another iterator over an empty sequence (in practice, it
    *     returns the same iterator each time)
    */
-  def getAnother: UnfailingIterator = theInstance
+  def getAnother: UnfailingIterator = getInstance
 
   /**
    * Return a Value containing all the items in the sequence returned by this
