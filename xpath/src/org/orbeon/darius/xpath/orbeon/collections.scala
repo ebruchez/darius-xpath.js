@@ -194,9 +194,6 @@ object Util {
   def isLetterOrDigit(c: Int): Boolean =
     isLetter(c) || (c >= '0' && c <= '9')
 
-  def signum(i: Long): Int = //ORBEON will be in Scala.js after 0.6.2
-    if (i < 0L) -1 else if (i == 0L) 0 else 1
-
   // TODO: check from Harmony?
   def compareStringsCaseInsensitive(a: String, b: String): Int = {
     val aLen = a.length

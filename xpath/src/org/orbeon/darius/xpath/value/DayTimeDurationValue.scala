@@ -7,13 +7,10 @@ import java.math.{BigDecimal, BigInteger}
 
 import org.orbeon.darius.xpath.`type`._
 import org.orbeon.darius.xpath.lib.StringCollator
-import org.orbeon.darius.xpath.orbeon.Util
 import org.orbeon.darius.xpath.regex.ARegularExpression
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.util.FastStringBuffer
 import org.orbeon.darius.xpath.value.DayTimeDurationValue._
-
-import scala.ClassCastException
 
 object DayTimeDurationValue {
 
@@ -70,7 +67,7 @@ object DayTimeDurationValue {
    */
   def fromMilliseconds(_milliseconds: Long): DayTimeDurationValue = {
     var milliseconds = _milliseconds
-    val sign = Util.signum(milliseconds)
+    val sign = milliseconds.signum
     if (sign < 0) {
       milliseconds = -milliseconds
     }
@@ -87,7 +84,7 @@ object DayTimeDurationValue {
    */
   def fromMicroseconds(_microseconds: Long): DayTimeDurationValue = {
     var microseconds = _microseconds
-    val sign = Util.signum(microseconds)
+    val sign = microseconds.signum
     if (sign < 0) {
       microseconds = -microseconds
     }

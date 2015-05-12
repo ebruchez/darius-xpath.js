@@ -33,6 +33,6 @@ class GlobalOrderComparer extends NodeOrderComparer {
     if (d1 == d2) {
       return a.compareOrder(b)
     }
-    Util.signum(d1 - d2)
+    (d1 - d2).signum
   }
 }
