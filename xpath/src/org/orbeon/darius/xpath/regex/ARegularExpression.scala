@@ -6,7 +6,6 @@ package org.orbeon.darius.xpath.regex
 import org.orbeon.darius.xpath.om.SequenceIterator
 import org.orbeon.darius.xpath.orbeon.List
 
-//ORBEON placeholder
 class ARegularExpression(
   pattern      : CharSequence,
   rawFlags     : String,
@@ -14,14 +13,24 @@ class ARegularExpression(
   warnings     : List[String]
 ) extends RegularExpression {
 
-//  private val r = pattern.toString.r
+  private val regex = pattern.toString.r
 
-  def containsMatch(input: CharSequence): Boolean = ???
-  def matches(input: CharSequence): Boolean = ???
+  // Used by the matches() function and DurationValue
+  def containsMatch(input: CharSequence): Boolean =
+    regex.findFirstMatchIn(input).isDefined
+
+  // Used by replace(), tokenize(), and DurationValue
+  def matches(input: CharSequence): Boolean =
+    regex.pattern.matcher(input).matches
+
+  // Used only by the replace() function
   def replace(input: CharSequence, replacement: CharSequence): CharSequence = ???
+
+  // Used only by the tokenize() function
   def tokenize(input: CharSequence): SequenceIterator = ???
 }
 
 object ARegularExpression {
-  def make(pattern: String): ARegularExpression = new ARegularExpression(pattern, "", "XP20", null)
+  def make(pattern: String): ARegularExpression =
+    new ARegularExpression(pattern, "", "XP20", null)
 }
