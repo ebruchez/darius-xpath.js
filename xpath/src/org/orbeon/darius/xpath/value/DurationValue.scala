@@ -30,7 +30,7 @@ object DurationValue {
 
   def makeDuration(_s: CharSequence, constrainingPattern: ARegularExpression): ConversionResult = {
     val s = Whitespace.trimWhitespace(_s)
-    if (!constrainingPattern.matches(s)) {
+    if (! constrainingPattern.matches(s)) {
       badDuration("Incorrect format", s)
     }
     if (!durationPattern2.containsMatch(s)) {
@@ -53,12 +53,13 @@ object DurationValue {
     for (i ← 0 until s.length) {
       val c = s.charAt(i)
       c match {
-        case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ⇒ part = part * 10 + (c - '0')
-        case 'T' ⇒ inTimePart = true
+        case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ⇒
+          part = part * 10 + (c - '0')
+        case 'T' ⇒
+          inTimePart = true
         case 'Y' ⇒
           year = part
           part = 0
-
         case 'M' ⇒
           if (inTimePart) {
             minute = part
@@ -66,30 +67,24 @@ object DurationValue {
             month = part
           }
           part = 0
-
         case 'D' ⇒
           day = part
           part = 0
-
         case 'H' ⇒
           hour = part
           part = 0
-
         case 'S' ⇒
           if (positionOfDot >= 0) {
-            val fraction = (s.subSequence(positionOfDot + 1, i).toString + "000000")
-              .substring(0, 6)
+            val fraction = (s.subSequence(positionOfDot + 1, i).toString + "000000").substring(0, 6)
             micro = Integer.parseInt(fraction)
           } else {
             second = part
           }
           part = 0
-
         case '.' ⇒
           second = part
           part = 0
           positionOfDot = i
-
         case _ ⇒
       }
     }
@@ -165,27 +160,27 @@ class DurationValue protected () extends AtomicValue {
    * limits: specifically, if the total number of months exceeds 2^31, or if the total number
    * of seconds exceeds 2^63.
    */
-  def this(positive: Boolean, 
-      years: Int, 
-      months: Int, 
-      days: Int, 
-      hours: Int, 
-      minutes: Int, 
-      seconds: Long, 
-      microseconds: Int) {
+  def this(
+    positive     : Boolean,
+    years        : Int,
+    months       : Int,
+    days         : Int,
+    hours        : Int,
+    minutes      : Int,
+    seconds      : Long,
+    microseconds : Int
+  ) = {
     this()
     negative = !positive
-    if (years < 0 || months < 0 || days < 0 || hours < 0 || minutes < 0 || 
-      seconds < 0 || 
-      microseconds < 0) {
+    if (years < 0 || months < 0 || days < 0 || hours < 0 || minutes < 0 || seconds < 0 || microseconds < 0) {
       throw new IllegalArgumentException("Negative component value")
     }
     if (years.toDouble * 12 + months.toDouble > Integer.MAX_VALUE) {
       throw new IllegalArgumentException("Duration months limit exceeded")
     }
-    if (days.toDouble * (24 * 60 * 60) + hours.toDouble * (60 * 60) + 
-      minutes.toDouble * 60 + 
-      seconds.toDouble > 
+    if (days.toDouble * (24 * 60 * 60) + hours.toDouble * (60 * 60) +
+      minutes.toDouble * 60 +
+      seconds.toDouble >
       Long.MaxValue) {
       throw new IllegalArgumentException("Duration seconds limit exceeded")
     }
@@ -365,7 +360,7 @@ class DurationValue protected () extends AtomicValue {
    * @return the duration in seconds, as a double
    */
   def getLengthInSeconds: Double = {
-    val a = months * (365.242199 / 12.0) * 24 * 60 * 60 + seconds + 
+    val a = months * (365.242199 / 12.0) * 24 * 60 * 60 + seconds +
       (microseconds.toDouble / 1000000)
     if (negative) -a else a
   }
@@ -375,38 +370,27 @@ class DurationValue protected () extends AtomicValue {
    */
   override def getComponent(component: Int): AtomicValue = component match {
     case Component.YEAR ⇒
-      var value5 = if (negative) -getYears else getYears
-      new IntegerValue(value5)
-
+      new IntegerValue(if (negative) -getYears else getYears)
     case Component.MONTH ⇒
-      var value4 = if (negative) -getMonths else getMonths
-      new IntegerValue(value4)
-
+      new IntegerValue(if (negative) -getMonths else getMonths)
     case Component.DAY ⇒
-      var value3 = if (negative) -getDays else getDays
-      new IntegerValue(value3)
-
+      new IntegerValue(if (negative) -getDays else getDays)
     case Component.HOURS ⇒
-      var value2 = if (negative) -getHours else getHours
-      new IntegerValue(value2)
-
+      new IntegerValue(if (negative) -getHours else getHours)
     case Component.MINUTES ⇒
-      var value1 = if (negative) -getMinutes else getMinutes
-      new IntegerValue(value1)
-
+      new IntegerValue(if (negative) -getMinutes else getMinutes)
     case Component.SECONDS ⇒
-      var sb = new FastStringBuffer(FastStringBuffer.TINY)
+      val sb = new FastStringBuffer(FastStringBuffer.TINY)
       var ms = "000000" + microseconds
       ms = ms.substring(ms.length - 6)
       sb.append((if (negative) "-" else "") + getSeconds + '.' + ms)
       DecimalValue.makeDecimalValue(sb).asInstanceOf[AtomicValue]
-
-    case Component.WHOLE_SECONDS ⇒ new IntegerValue(new BigDecimal(if (negative) -seconds else seconds))
+    case Component.WHOLE_SECONDS ⇒
+      new IntegerValue(new BigDecimal(if (negative) -seconds else seconds))
     case Component.MICROSECONDS ⇒
-      var value = if (negative) -microseconds else microseconds
-      new IntegerValue(value)
-
-    case _ ⇒ throw new IllegalArgumentException("Unknown component for duration: " + component)
+      new IntegerValue(if (negative) -microseconds else microseconds)
+    case _ ⇒
+      throw new IllegalArgumentException("Unknown component for duration: " + component)
   }
 
   /**

@@ -375,7 +375,7 @@ class CastExpression(source: Expression, @BeanProperty var targetType: AtomicTyp
    */
   override def equals(other: Any): Boolean = {
     super.equals(other) &&
-      targetType == other.asInstanceOf[CastExpression].targetType && 
+      targetType == other.asInstanceOf[CastExpression].targetType &&
       allowEmpty == other.asInstanceOf[CastExpression].allowEmpty
   }
 

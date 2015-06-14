@@ -49,8 +49,8 @@ object DateValue {
    * http://vsg.cape.com/~pbaum/date/jdalg.htm and
    * http://vsg.cape.com/~pbaum/date/jdalg2.htm
    * (adjusted to handle BC dates correctly)
-   * <p/>
-   * <p>Note that this assumes dates in the proleptic Gregorian calendar</p>
+   *
+   * Note that this assumes dates in the proleptic Gregorian calendar
    *
    * @param year  the year
    * @param month the month (1-12)
@@ -90,7 +90,7 @@ object DateValue {
       val y = 100 * (n - 49) + i + L
       new DateValue(y, m.toByte, d.toByte)
     } else {
-      val dt = dateFromJulianDayNumber(julianDayNumber + 
+      val dt = dateFromJulianDayNumber(julianDayNumber +
         (365 * 12000 + 12000 / 4 - 12000 / 100 + 12000 / 400))
       dt.year -= 12000
       dt
@@ -197,10 +197,7 @@ class DateValue private () extends GDateValue with Comparable[AnyRef] {
    * @param tz    the timezone displacement in minutes from UTC. Supply the value
    *              [[CalendarValue.NO_TIMEZONE]] if there is no timezone component.
    */
-  def this(year: Int, 
-      month: Int, 
-      day: Int, 
-      tz: Int) {
+  def this(year: Int, month: Int, day: Int, tz: Int) {
     this()
     this.year = year
     this.month = month
