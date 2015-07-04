@@ -13,7 +13,7 @@ object NormalizerData {
   /**
    * Constant for use in getPairwiseComposition
    */
-  val NOT_COMPOSITE = '￿'
+  val NOT_COMPOSITE = '\uFFFF'
 }
 
 class NormalizerData(var canonicalClass: ju.Map[Int, Integer],

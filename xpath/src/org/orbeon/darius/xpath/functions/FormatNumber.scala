@@ -34,7 +34,7 @@ object FormatNumber {
       throw err
     }
     var sep = -1
-    for (c ← 0 until picture4.length if picture4(c) == dfs.patternSeparator) {
+    for (c ← picture4.indices if picture4(c) == dfs.patternSeparator) {
       if (c == 0) {
         grumble("first subpicture is zero-length")
       } else if (sep >= 0) {
@@ -408,7 +408,7 @@ object FormatNumber {
         }
       }
       if (fractionalPartGroupingPositions != null) {
-        for (i ← 0 until fractionalPartGroupingPositions.length) {
+        for (i ← fractionalPartGroupingPositions.indices) {
           val p = point + 1 + fractionalPartGroupingPositions(i) + i
           if (p < ibused - 1) {
             ib = insert(ib, ibused, dfs.groupingSeparator, p)

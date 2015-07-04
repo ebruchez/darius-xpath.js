@@ -252,7 +252,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
   def diagnosticDump(): Unit = {
     System.err.println("Contents of IntHashSet")
     val sb = new FastStringBuffer(100)
-    for (i ← 0 until _values.length) {
+    for (i ← _values.indices) {
       if (i % 10 == 0) {
         System.err.println(sb.toString)
         sb.setLength(0)

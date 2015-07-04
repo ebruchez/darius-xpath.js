@@ -102,7 +102,7 @@ class Block extends Instruction {
    */
   def setChildren(children: Array[Expression]): Unit = {
     _children = children
-    for (c ← 0 until children.length) {
+    for (c ← children.indices) {
       adoptChildExpression(children(c))
     }
   }
@@ -121,7 +121,7 @@ class Block extends Instruction {
     var allSubtreeAxis = true
     import Breaks._
       breakable {
-      for (i ← 0 until _children.length) {
+      for (i ← _children.indices) {
         if (! _children(i).isInstanceOf[AxisExpression]) {
           allAxisExpressions = false
           allChildAxis = false
@@ -162,7 +162,7 @@ class Block extends Instruction {
   def mergeAdjacentTextInstructions(): Expression = {
     val isLiteralText = new Array[Boolean](_children.length)
     var hasAdjacentTextNodes = false
-    for (i ← 0 until _children.length) {
+    for (i ← _children.indices) {
       isLiteralText(i) = _children(i).isInstanceOf[ValueOf] &&
         _children(i).asInstanceOf[ValueOf].getContentExpression.isInstanceOf[StringLiteral]
       if (i > 0 && isLiteralText(i) && isLiteralText(i - 1)) {
@@ -172,7 +172,7 @@ class Block extends Instruction {
     if (hasAdjacentTextNodes) {
       val content = new ju.ArrayList[Expression](_children.length)
       var pendingText: String = null
-      for (i ← 0 until _children.length) {
+      for (i ← _children.indices) {
         if (isLiteralText(i)) {
           pendingText = (if (pendingText == null) "" else pendingText) +
             _children(i).asInstanceOf[ValueOf].getContentExpression.asInstanceOf[StringLiteral]
@@ -249,7 +249,7 @@ class Block extends Instruction {
    * returns true.
    */
   override def createsNewNodes(): Boolean = {
-    for (i ← 0 until _children.length) {
+    for (i ← _children.indices) {
       val props = _children(i).getSpecialProperties
       if ((props & StaticProperty.NON_CREATIVE) == 0) {
         return true
@@ -270,7 +270,7 @@ class Block extends Instruction {
   override def simplify(visitor: ExpressionVisitor): Expression = {
     var allAtomic = true
     var nested = false
-    for (c ← 0 until _children.length) {
+    for (c ← _children.indices) {
       _children(c) = visitor.simplify(_children(c))
       if (!Literal.isAtomic(_children(c))) {
         allAtomic = false
@@ -293,14 +293,14 @@ class Block extends Instruction {
       val list = new ju.ArrayList[Expression](_children.length * 2)
       flatten(list)
       _children = new Array[Expression](list.size)
-      for (i ← 0 until _children.length) {
+      for (i ← _children.indices) {
         _children(i) = list.get(i)
         adoptChildExpression(_children(i))
       }
     }
     if (allAtomic) {
       val values = new Array[Item](_children.length)
-      for (c ← 0 until _children.length) {
+      for (c ← _children.indices) {
         values(c) = _children(c).asInstanceOf[Literal].getValue.asInstanceOf[AtomicValue]
       }
       val result = Literal.makeLiteral(new SequenceExtent(values))
@@ -317,9 +317,9 @@ class Block extends Instruction {
    * after simplification
    * @throws XPathException should not happen
    */
-    for (i ← 0 until _children.length) {
   private def flatten(targetList: ju.List[Expression]): Unit = {
     var currentLiteralList: ju.List[Item] = null
+    for (i ← _children.indices) {
       if (Literal.isEmptySequence(_children(i))) {
       } else _children(i) match {
         case block: Block ⇒
@@ -358,7 +358,7 @@ class Block extends Instruction {
   }
 
   override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
-    for (c ← 0 until _children.length) {
+    for (c ← _children.indices) {
       _children(c) = visitor.typeCheck(_children(c), contextItemType)
       adoptChildExpression(_children(c))
     }
@@ -366,7 +366,7 @@ class Block extends Instruction {
   }
 
   override def optimize(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
-    for (c ← 0 until _children.length) {
+    for (c ← _children.indices) {
       _children(c) = visitor.optimize(_children(c), contextItemType)
       adoptChildExpression(_children(c))
     }
@@ -374,7 +374,7 @@ class Block extends Instruction {
     var prevLiteral = false
     import Breaks._
     breakable {
-      for (c ← 0 until _children.length) {
+      for (c ← _children.indices) {
         if (_children(c).isInstanceOf[Block]) {
           canSimplify = true
           break()
@@ -394,7 +394,7 @@ class Block extends Instruction {
       val list = new ju.ArrayList[Expression](_children.length * 2)
       flatten(list)
       _children = new Array[Expression](list.size)
-      for (i ← 0 until _children.length) {
+      for (i ← _children.indices) {
         _children(i) = list.get(i)
         adoptChildExpression(_children(i))
       }
@@ -414,14 +414,14 @@ class Block extends Instruction {
    * @throws XPathException
    */
   override protected def promoteInst(offer: PromotionOffer): Unit = {
-    for (c ← 0 until _children.length) {
+    for (c ← _children.indices) {
       _children(c) = doPromotion(_children(c), offer)
     }
   }
 
   def processLeavingTail(context: XPathContext): TailCall = {
     var tc: TailCall = null
-    for (i ← 0 until _children.length) {
+    for (i ← _children.indices) {
       try {
         if (_children(i).isInstanceOf[TailCallReturner]) {
           tc = _children(i).asInstanceOf[TailCallReturner].processLeavingTail(context)

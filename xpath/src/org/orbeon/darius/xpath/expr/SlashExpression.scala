@@ -265,7 +265,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
 
         def mapItem(item: Item): Item = {
           if (item.isInstanceOf[AtomicValue]) {
-            return item
+            item
           } else {
             throw reportMixedItems(loc)
           }
@@ -277,19 +277,19 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
 
         def mapItem(item: Item): Item = {
           if (item.isInstanceOf[NodeInfo]) {
-            return item
+            item
           } else {
             throw reportMixedItems(loc)
           }
         }
       }
-      new DocumentOrderIterator(new ItemMappingIterator(new OneItemGoneIterator(first, result), nodeChecker, 
+      new DocumentOrderIterator(new ItemMappingIterator(new OneItemGoneIterator(first, result), nodeChecker,
         true), GlobalOrderComparer.getInstance)
     }
   }
 
   private def reportMixedItems(loc: SourceLocator): XPathException = {
-    new XPathException("Cannot mix nodes and atomic values in the result of a path expression", "XPTY0018", 
+    new XPathException("Cannot mix nodes and atomic values in the result of a path expression", "XPTY0018",
       loc)
   }
 
