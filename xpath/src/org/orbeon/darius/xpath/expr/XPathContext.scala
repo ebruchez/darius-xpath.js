@@ -3,7 +3,7 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
-import java.util.Arrays
+import java.{util ⇒ ju}
 
 import org.orbeon.darius.xpath.event.SequenceReceiver
 import org.orbeon.darius.xpath.expr.XPathContext._
@@ -116,9 +116,9 @@ class XPathContext(var controller: Controller) {
     stackFrame = variables
     if (variables.length != size) {
       if (variables.length > size) {
-        throw new IllegalStateException("Attempting to set more local variables (" + variables.length + 
-          ") than the stackframe can accommodate (" + 
-          size + 
+        throw new IllegalStateException("Attempting to set more local variables (" + variables.length +
+          ") than the stackframe can accommodate (" +
+          size +
           ")")
       }
       stackFrame = new Array[Sequence](size)
@@ -140,7 +140,7 @@ class XPathContext(var controller: Controller) {
     } else {
       // not strictly necessary
       //ORBEON cast to Array[AnyRef]
-      Arrays.fill(stackFrame.asInstanceOf[Array[AnyRef]], numberOfParams, stackFrame.length, null)
+      ju.Arrays.fill(stackFrame.asInstanceOf[Array[AnyRef]], numberOfParams, stackFrame.length, null)
     }
   }
 

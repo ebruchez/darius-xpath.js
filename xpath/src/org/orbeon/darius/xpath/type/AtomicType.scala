@@ -3,14 +3,15 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.`type`
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.AtomicType._
 import org.orbeon.darius.xpath.om._
-import org.orbeon.darius.xpath.orbeon.HashMap
 import org.orbeon.darius.xpath.value._
 
 object AtomicType {
 
-  private val lookup: HashMap[String, AtomicType] = new HashMap[String, AtomicType](20)
+  private val lookup: ju.HashMap[String, AtomicType] = new ju.HashMap[String, AtomicType](20)
 
   /**
    * Internal factory method to create a BuiltInAtomicType. There is one instance for each of the
@@ -30,8 +31,8 @@ object AtomicType {
   }
 
   def isRecognizedName(localName: String): Boolean = {
-    getSchemaType(localName) != null || "anyType" == localName || 
-      "untyped" == localName || 
+    getSchemaType(localName) != null || "anyType" == localName ||
+      "untyped" == localName ||
       "anySimpleType" == localName
   }
 

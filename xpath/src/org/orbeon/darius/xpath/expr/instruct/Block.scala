@@ -3,16 +3,18 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr.instruct
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`._
 import org.orbeon.darius.xpath.expr._
 import org.orbeon.darius.xpath.expr.instruct.Block._
 import org.orbeon.darius.xpath.om.{Axis, Item, SequenceIterator}
-import org.orbeon.darius.xpath.orbeon._
 import org.orbeon.darius.xpath.pattern.EmptySequenceTest
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.iter._
 import org.orbeon.darius.xpath.value._
 
+import scala.collection.JavaConverters._
 import scala.util.control.Breaks
 
 
@@ -34,7 +36,7 @@ object Block {
       return e1
     }
     if (e1.isInstanceOf[Block] || e2.isInstanceOf[Block]) {
-      val list = new ArrayList[Expression](10)
+      val list = new ju.ArrayList[Expression](10)
       if (e1.isInstanceOf[Block]) {
         val it1 = e1.iterateSubExpressions()
         while (it1.hasNext) {
@@ -71,7 +73,7 @@ object Block {
    * @return a Block containing the two subexpressions, and if either of them is a block, it will
    * have been collapsed to create a flattened sequence
    */
-  def makeBlock(list: List[Expression]): Expression = {
+  def makeBlock(list: ju.List[Expression]): Expression = {
     if (list.size == 0) {
       Literal.makeEmptySequence()
     } else if (list.size == 1) {
@@ -136,7 +138,7 @@ class Block extends Instruction {
       }
       }
     if (allAxisExpressions) {
-      p |= StaticProperty.CONTEXT_DOCUMENT_NODESET | StaticProperty.SINGLE_DOCUMENT_NODESET | 
+      p |= StaticProperty.CONTEXT_DOCUMENT_NODESET | StaticProperty.SINGLE_DOCUMENT_NODESET |
         StaticProperty.NON_CREATIVE
       if (allChildAxis) {
         p |= StaticProperty.PEER_NODESET
@@ -168,11 +170,11 @@ class Block extends Instruction {
       }
     }
     if (hasAdjacentTextNodes) {
-      val content = new ArrayList[Expression](_children.length)
+      val content = new ju.ArrayList[Expression](_children.length)
       var pendingText: String = null
       for (i ← 0 until _children.length) {
         if (isLiteralText(i)) {
-          pendingText = (if (pendingText == null) "" else pendingText) + 
+          pendingText = (if (pendingText == null) "" else pendingText) +
             _children(i).asInstanceOf[ValueOf].getContentExpression.asInstanceOf[StringLiteral]
             .getStringValue
         } else {
@@ -194,7 +196,7 @@ class Block extends Instruction {
     }
   }
 
-  override def iterateSubExpressions(): Iterator[Expression] = Iterator(_children.iterator)
+  override def iterateSubExpressions(): ju.Iterator[Expression] = _children.iterator.asJava
 
 //ORBEON unused
 //  /**
@@ -288,7 +290,7 @@ class Block extends Instruction {
       return result
     }
     if (nested) {
-      val list = new ArrayList[Expression](_children.length * 2)
+      val list = new ju.ArrayList[Expression](_children.length * 2)
       flatten(list)
       _children = new Array[Expression](list.size)
       for (i ← 0 until _children.length) {
@@ -315,9 +317,9 @@ class Block extends Instruction {
    * after simplification
    * @throws XPathException should not happen
    */
-  private def flatten(targetList: List[Expression]): Unit = {
-    var currentLiteralList: List[Item] = null
     for (i ← 0 until _children.length) {
+  private def flatten(targetList: ju.List[Expression]): Unit = {
+    var currentLiteralList: ju.List[Item] = null
       if (Literal.isEmptySequence(_children(i))) {
       } else _children(i) match {
         case block: Block ⇒
@@ -327,7 +329,7 @@ class Block extends Instruction {
         case literal: Literal ⇒
           val iterator = literal.getValue.iterate()
           if (currentLiteralList == null) {
-            currentLiteralList = new ArrayList[Item](10)
+            currentLiteralList = new ju.ArrayList[Item](10)
           }
           import Breaks._
           breakable {
@@ -348,7 +350,7 @@ class Block extends Instruction {
     flushCurrentLiteralList(currentLiteralList, targetList)
   }
 
-  private def flushCurrentLiteralList(currentLiteralList: List[Item], list: List[Expression]): Unit = {
+  private def flushCurrentLiteralList(currentLiteralList: ju.List[Item], list: ju.List[Expression]): Unit = {
     if (currentLiteralList != null) {
       val iter = new org.orbeon.darius.xpath.tree.iter.ListIterator(currentLiteralList)
       list.add(Literal.makeLiteral(SequenceExtent.makeSequenceExtent(iter)))
@@ -389,7 +391,7 @@ class Block extends Instruction {
       }
     }
     if (canSimplify) {
-      val list = new ArrayList[Expression](_children.length * 2)
+      val list = new ju.ArrayList[Expression](_children.length * 2)
       flatten(list)
       _children = new Array[Expression](list.size)
       for (i ← 0 until _children.length) {

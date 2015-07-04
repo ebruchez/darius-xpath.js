@@ -3,15 +3,16 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.tree.iter
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.expr.LastPositionFinder
 import org.orbeon.darius.xpath.om.{Item, Sequence}
-import org.orbeon.darius.xpath.orbeon.List
 import org.orbeon.darius.xpath.value.{EmptySequence, SequenceExtent}
 
 /**
  * Class ListIterator, iterates over a sequence of items held in a Java List
  */
-class ListIterator(var list: List[_ <: Item]) extends UnfailingIterator with LastPositionFinder with GroundedIterator {
+class ListIterator(var list: ju.List[_ <: Item]) extends UnfailingIterator with LastPositionFinder with GroundedIterator {
 
   var index: Int = 0
 

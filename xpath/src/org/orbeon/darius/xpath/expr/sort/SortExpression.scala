@@ -3,10 +3,11 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr.sort
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.ItemType
 import org.orbeon.darius.xpath.expr._
 import org.orbeon.darius.xpath.om.{Item, SequenceIterator}
-import org.orbeon.darius.xpath.orbeon.{ArrayList, Iterator}
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.iter.EmptyIterator
 import org.orbeon.darius.xpath.value.Cardinality
@@ -40,10 +41,10 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
    *
    * @return an iterator containing the sub-expressions of this expression
    */
-  override def iterateSubExpressions(): Iterator[Expression] = iterateSubExpressions(includeSortKey = true)
+  override def iterateSubExpressions(): ju.Iterator[Expression] = iterateSubExpressions(includeSortKey = true)
 
-  private def iterateSubExpressions(includeSortKey: Boolean): Iterator[Expression] = {
-    val list = new ArrayList[Expression](8)
+  private def iterateSubExpressions(includeSortKey: Boolean): ju.Iterator[Expression] = {
+    val list = new ju.ArrayList[Expression](8)
     list.add(select)
     for (skd ← sortKeyDefinitions) {
       if (includeSortKey) {
@@ -103,7 +104,7 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
       } else {
         val role = new RoleLocator(RoleLocator.INSTRUCTION, "xsl:sort/select", 0)
         role.setErrorCode("XTTE1020")
-        sortKey = CardinalityChecker.makeCardinalityChecker(sortKey, StaticProperty.ALLOWS_ZERO_OR_ONE, 
+        sortKey = CardinalityChecker.makeCardinalityChecker(sortKey, StaticProperty.ALLOWS_ZERO_OR_ONE,
           role)
       }
       sortKeyDefinitions(i).setSortKey(sortKey)
@@ -225,15 +226,15 @@ class SortExpression(var select: Expression, var sortKeyDefinitions: Array[SortK
    */
   override def computeSpecialProperties(): Int = {
     var props = 0
-    if ((select.getSpecialProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 
+    if ((select.getSpecialProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) !=
       0) {
       props |= StaticProperty.CONTEXT_DOCUMENT_NODESET
     }
-    if ((select.getSpecialProperties & StaticProperty.SINGLE_DOCUMENT_NODESET) != 
+    if ((select.getSpecialProperties & StaticProperty.SINGLE_DOCUMENT_NODESET) !=
       0) {
       props |= StaticProperty.SINGLE_DOCUMENT_NODESET
     }
-    if ((select.getSpecialProperties & StaticProperty.NON_CREATIVE) != 
+    if ((select.getSpecialProperties & StaticProperty.NON_CREATIVE) !=
       0) {
       props |= StaticProperty.NON_CREATIVE
     }

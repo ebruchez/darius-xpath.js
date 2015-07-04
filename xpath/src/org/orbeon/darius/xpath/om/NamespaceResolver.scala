@@ -3,7 +3,7 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.om
 
-import org.orbeon.darius.xpath.orbeon.Iterator
+import java.{util ⇒ ju}
 
 /**
  * Abstract class that supports lookup of a lexical QName to get the expanded QName.
@@ -27,5 +27,5 @@ trait NamespaceResolver {
    * Get an iterator over all the prefixes declared in this namespace context. This will include
    * the default namespace (prefix="") and the XML namespace where appropriate
    */
-  def iteratePrefixes(): Iterator[String]
+  def iteratePrefixes(): ju.Iterator[String]
 }

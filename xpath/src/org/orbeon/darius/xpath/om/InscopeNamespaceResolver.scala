@@ -3,8 +3,9 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.om
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.Type
-import org.orbeon.darius.xpath.orbeon.Iterator
 import org.orbeon.darius.xpath.pattern.AnyNodeTest
 import org.orbeon.darius.xpath.tree.util.NamespaceIterator
 
@@ -58,12 +59,12 @@ class InscopeNamespaceResolver(_node: NodeInfo) extends NamespaceResolver {
    * Get an iterator over all the prefixes declared in this namespace context. This will include
    * the default namespace (prefix="") and the XML namespace where appropriate
    */
-  def iteratePrefixes(): Iterator[String] = {
-    new Iterator[String]() {
+  def iteratePrefixes(): ju.Iterator[String] = {
+    new ju.Iterator[String]() {
 
       var phase: Int = 0
 
-      var iter: Iterator[NamespaceBinding] = NamespaceIterator.iterateNamespaces(node)
+      var iter: ju.Iterator[NamespaceBinding] = NamespaceIterator.iterateNamespaces(node)
 
       def hasNext: Boolean = {
         if (iter.hasNext) {

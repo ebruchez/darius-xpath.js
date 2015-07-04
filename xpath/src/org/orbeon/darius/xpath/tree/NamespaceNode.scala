@@ -3,10 +3,11 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.tree
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.Type
 import org.orbeon.darius.xpath.event.{Receiver, ReceiverOptions}
 import org.orbeon.darius.xpath.om._
-import org.orbeon.darius.xpath.orbeon.ArrayList
 import org.orbeon.darius.xpath.pattern.NodeTest
 import org.orbeon.darius.xpath.tree.iter._
 import org.orbeon.darius.xpath.tree.util.{FastStringBuffer, NamespaceIterator, Navigator}
@@ -22,7 +23,7 @@ object NamespaceNode {
    * @return an iterator over the namespace nodes that satisfy the test
    */
   def makeIterator(element: NodeInfo, test: NodeTest): UnfailingIterator = {
-    val nodes = new ArrayList[NamespaceNode]()
+    val nodes = new ju.ArrayList[NamespaceNode]()
     val bindings = NamespaceIterator.iterateNamespaces(element)
     var position = 0
     while (bindings.hasNext) {
@@ -66,8 +67,8 @@ class NamespaceNode(var element: NodeInfo, nscode: NamespaceBinding, var positio
    *         the same node in the tree.
    */
   def isSameNodeInfo(other: NodeInfo): Boolean = {
-    other.isInstanceOf[NamespaceNode] && 
-      element.isSameNodeInfo(other.asInstanceOf[NamespaceNode].element) && 
+    other.isInstanceOf[NamespaceNode] &&
+      element.isSameNodeInfo(other.asInstanceOf[NamespaceNode].element) &&
       nsBinding == other.asInstanceOf[NamespaceNode].nsBinding
   }
 

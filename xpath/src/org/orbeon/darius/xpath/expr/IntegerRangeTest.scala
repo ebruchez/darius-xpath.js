@@ -3,9 +3,10 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.{AtomicType, ItemType}
 import org.orbeon.darius.xpath.om.Item
-import org.orbeon.darius.xpath.orbeon.Iterator
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.value.{AtomicValue, BooleanValue, NumericValue}
 
@@ -74,7 +75,7 @@ class IntegerRangeTest(var value: Expression, var min: Expression, var max: Expr
    *
    * @return an iterator containing the sub-expressions of this expression
    */
-  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(value, min, max)
+  override def iterateSubExpressions(): ju.Iterator[Expression] = nonNullChildren(value, min, max)
 
   /**
    * Promote this expression if possible

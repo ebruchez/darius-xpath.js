@@ -3,10 +3,11 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.tree.util
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.Type
 import org.orbeon.darius.xpath.event.Receiver
 import org.orbeon.darius.xpath.om.{NamespaceBinding, NodeInfo}
-import org.orbeon.darius.xpath.orbeon.{Collections, HashSet, Iterator}
 
 import scala.util.control.Breaks
 
@@ -21,11 +22,11 @@ object NamespaceIterator {
    * iterator will represent all the in-scope namespaces, without duplicates, and respecting namespace
    * undeclarations. It does not include the XML namespace.
    */
-  def iterateNamespaces(element: NodeInfo): Iterator[NamespaceBinding] = {
+  def iterateNamespaces(element: NodeInfo): ju.Iterator[NamespaceBinding] = {
     if (element.getNodeKind == Type.ELEMENT) {
       new NamespaceIterator(element)
     } else {
-      Collections.emptyList().iterator()
+      ju.Collections.emptyList().iterator()
     }
   }
 
@@ -59,7 +60,7 @@ object NamespaceIterator {
  *
  * <p>The result does not include the XML namespace.</p>
  */
-class NamespaceIterator private (var element: NodeInfo) extends Iterator[NamespaceBinding] {
+class NamespaceIterator private (var element: NodeInfo) extends ju.Iterator[NamespaceBinding] {
 
   private var index: Int = 0
 
@@ -67,7 +68,7 @@ class NamespaceIterator private (var element: NodeInfo) extends Iterator[Namespa
 
   private var localDeclarations: Array[NamespaceBinding] = element.getDeclaredNamespaces(null)
 
-  var undeclaredPrefixes: HashSet[String] = new HashSet(8)
+  var undeclaredPrefixes: ju.HashSet[String] = new ju.HashSet(8)
 
   def hasNext: Boolean = {
     if (next == null && index != 0) {

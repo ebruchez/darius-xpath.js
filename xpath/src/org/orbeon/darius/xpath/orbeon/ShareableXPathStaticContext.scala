@@ -18,11 +18,11 @@ package org.orbeon.darius.xpath.orbeon
 import org.orbeon.darius.xpath.expr.{Binding, VariableReference, XPathContext}
 import org.orbeon.darius.xpath.functions.{ConstructorFunctionLibrary, FunctionLibrary, FunctionLibraryList}
 import org.orbeon.darius.xpath.om.{NamespaceResolver, StructuredQName}
-import org.orbeon.darius.xpath.orbeon
 import org.orbeon.darius.xpath.sxpath.AbstractStaticContext
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.value.{QNameValue, SequenceType}
 
+import scala.collection.JavaConverters._
 import scala.collection.immutable
 
 // Similar to Saxon JAXPXPathStaticContext. JAXPXPathStaticContext holds a reference to an XPathVariableResolver, which
@@ -85,7 +85,7 @@ class ShareableXPathStaticContext(
 
 
         def iteratePrefixes =
-            orbeon.Iterator(namespaceMapping.keys.iterator)
+            namespaceMapping.keys.iterator.asJava
     }
 
     def getURIForPrefix(prefix: String): String = {

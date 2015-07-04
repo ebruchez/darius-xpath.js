@@ -4,6 +4,7 @@
 package org.orbeon.darius.xpath.expr.z
 
 import java.io.Serializable
+import java.{util ⇒ ju}
 
 import org.orbeon.darius.xpath.expr.z.IntHashSet._
 import org.orbeon.darius.xpath.tree.util.FastStringBuffer
@@ -206,7 +207,7 @@ class IntHashSet(capacity: Int, val ndv: Int) extends AbstractIntSet with IntSet
     _size = 0
     val values = _values
     _values = new Array[Int](nmax)
-    java.util.Arrays.fill(_values, ndv)
+    ju.Arrays.fill(_values, ndv)
     if (values != null) {
       for (i ← 0 until nold) {
         val value = values(i)

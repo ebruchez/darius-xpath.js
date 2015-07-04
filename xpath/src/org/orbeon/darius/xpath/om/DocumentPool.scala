@@ -3,8 +3,9 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.om
 
-import org.orbeon.darius.xpath.orbeon._
+import java.{util ⇒ ju}
 
+import scala.collection.JavaConverters._
 /**
  * An object representing the collection of documents handled during
  * a single transformation.
@@ -17,9 +18,9 @@ import org.orbeon.darius.xpath.orbeon._
  */
 class DocumentPool {
 
-  private val documentNameMap: Map[DocumentURI, DocumentInfo] = new HashMap[DocumentURI, DocumentInfo](10)
+  private val documentNameMap: ju.Map[DocumentURI, DocumentInfo] = new ju.HashMap[DocumentURI, DocumentInfo](10)
 
-  private val unavailableDocuments: Set[DocumentURI] = new HashSet[DocumentURI](10)
+  private val unavailableDocuments: ju.Set[DocumentURI] = new ju.HashSet[DocumentURI](10)
 
   /**
    * Add a document to the pool
@@ -68,7 +69,7 @@ class DocumentPool {
    * @return The uri of the document node, if present in the pool, or the systemId of the document node otherwise
    */
   def getDocumentURI(doc: NodeInfo): String = {
-    val iter = documentNameMap.keysIterator()
+    val iter = documentNameMap.keySet().iterator()
     while (iter.hasNext) {
       val uri = iter.next()
       if (find(uri).isSameNodeInfo(doc)) {
@@ -92,7 +93,7 @@ class DocumentPool {
    * @return the document supplied in the doc parameter
    */
   def discard(doc: DocumentInfo): DocumentInfo = {
-    for ((name, entry) ← documentNameMap) {
+    for ((name, entry) ← documentNameMap.asScala) {
       if (entry.isSameNodeInfo(doc)) {
         documentNameMap.remove(name)
         return doc

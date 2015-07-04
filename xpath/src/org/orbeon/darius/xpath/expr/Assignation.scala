@@ -3,10 +3,13 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.ItemType
 import org.orbeon.darius.xpath.om.{Sequence, StructuredQName}
-import org.orbeon.darius.xpath.orbeon.{ArrayList, Iterator}
 import org.orbeon.darius.xpath.value.SequenceType
+
+import scala.collection.JavaConverters._
 
 /**
  * Assignation is an abstract superclass for the kinds of expression
@@ -168,7 +171,7 @@ abstract class Assignation extends Expression with Binding {
   /**
    * Get the immediate subexpressions of this expression
    */
-  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(sequence, action)
+  override def iterateSubExpressions(): ju.Iterator[Expression] = nonNullChildren(sequence, action)
 
   /**
    * Get the display name of the range variable, for diagnostics only
@@ -194,15 +197,15 @@ abstract class Assignation extends Expression with Binding {
    * @param visitor an expression visitor to provide context information
    * @param currentExpression the expression that binds the variable
    */
-  def refineTypeInformation(`type`: ItemType, 
-      cardinality: Int, 
-      constantValue: Sequence, 
-      properties: Int, 
-      visitor: ExpressionVisitor, 
+  def refineTypeInformation(`type`: ItemType,
+      cardinality: Int,
+      constantValue: Sequence,
+      properties: Int,
+      visitor: ExpressionVisitor,
       currentExpression: Assignation): Unit = {
-    val references = new ArrayList[VariableReference]()
+    val references = new ju.ArrayList[VariableReference]()
     ExpressionTool.gatherVariableReferences(currentExpression.getAction, this, references)
-    for (ref ← references) {
+    for (ref ← references.asScala) {
       ref.refineVariableType(`type`, cardinality, constantValue, properties, visitor)
       visitor.resetStaticProperties()
     }

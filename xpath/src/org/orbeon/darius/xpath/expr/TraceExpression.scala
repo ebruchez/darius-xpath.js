@@ -3,10 +3,11 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.ItemType
 import org.orbeon.darius.xpath.expr.instruct.{Instruction, TailCall}
 import org.orbeon.darius.xpath.om.{Item, NamespaceResolver, SequenceIterator, StructuredQName}
-import org.orbeon.darius.xpath.orbeon.{HashMap, Iterator}
 import org.orbeon.darius.xpath.trace.InstructionInfo
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.{LogConfiguration, LogController}
@@ -27,7 +28,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
   @BeanProperty
   var namespaceResolver: NamespaceResolver = null
 
-  private val properties: HashMap[String, AnyRef] = new HashMap[String, AnyRef](10)
+  private val properties: ju.HashMap[String, AnyRef] = new ju.HashMap[String, AnyRef](10)
 
   adoptChildExpression(child)
 
@@ -54,7 +55,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    * will be of type String, and each string can be supplied as input to the getProperty()
    * method to retrieve the value of the property.
    */
-  def getProperties: Iterator[String] = properties.keysIterator()
+  def getProperties: ju.Iterator[String] = properties.keySet().iterator()
 
   /**
    * Get the InstructionInfo details about the construct. This is to satisfy the InstructionInfoProvider
@@ -167,7 +168,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
    *
    */
   override def createsNewNodes(): Boolean = {
-    (child.getSpecialProperties & StaticProperty.NON_CREATIVE) == 
+    (child.getSpecialProperties & StaticProperty.NON_CREATIVE) ==
       0
   }
 
@@ -218,7 +219,7 @@ class TraceExpression(var child: Expression) extends Instruction with Instructio
     result
   }
 
-  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(child)
+  override def iterateSubExpressions(): ju.Iterator[Expression] = nonNullChildren(child)
 
 //ORBEON XSLT
 //  /**

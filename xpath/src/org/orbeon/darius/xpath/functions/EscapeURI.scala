@@ -3,7 +3,7 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.functions
 
-import java.util.Arrays
+import java.{util ⇒ ju}
 
 import org.orbeon.darius.xpath.expr.XPathContext
 import org.orbeon.darius.xpath.functions.EscapeURI._
@@ -21,9 +21,9 @@ object EscapeURI {
 
   var allowedASCII: Array[Boolean] = new Array[Boolean](128)
 
-  Arrays.fill(allowedASCII, 0, 32, false)
+  ju.Arrays.fill(allowedASCII, 0, 32, false)
 
-  Arrays.fill(allowedASCII, 33, 127, true)
+  ju.Arrays.fill(allowedASCII, 33, 127, true)
 
   for (c ← Array('"', '<', '>', '\\', '^', '`', '{', '|', '}')) {
     allowedASCII(c) = false

@@ -3,11 +3,14 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.functions.codenorm
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.om.{Axis, NodeInfo}
-import org.orbeon.darius.xpath.orbeon.{ArrayList, Configuration, HashMap, Map}
+import org.orbeon.darius.xpath.orbeon.Configuration
 import org.orbeon.darius.xpath.pattern.NodeKindTest
 import org.orbeon.darius.xpath.value.Whitespace
 
+import scala.collection.JavaConverters._
 import scala.util.control.Breaks
 
 object UnicodeDataParserFromXML {
@@ -47,11 +50,11 @@ object UnicodeDataParserFromXML {
         }
       }
   }
-    val canonicalClass = new HashMap[Int, Integer](400)
+    val canonicalClass = new ju.HashMap[Int, Integer](400)
     readCanonicalClassTable(canonicalClassKeys.getStringValue, canonicalClassValues.getStringValue, canonicalClass)
-    val decompose = new HashMap[Int, String](18000)
-    val compose = new HashMap[Int, Integer](15000)
-    readDecompositionTable(decompositionKeys.getStringValue, decompositionValues.getStringValue, decompose, 
+    val decompose = new ju.HashMap[Int, String](18000)
+    val compose = new ju.HashMap[Int, Integer](15000)
+    readDecompositionTable(decompositionKeys.getStringValue, decompositionValues.getStringValue, decompose,
       compose, isExcluded, isCompatibility)
     new NormalizerData(canonicalClass, decompose, compose, isCompatibility, isExcluded)
   }
@@ -60,7 +63,7 @@ object UnicodeDataParserFromXML {
    * Reads exclusion list and stores the data
    */
   private def readExclusionList(s: String, isExcluded: BitSet): Unit = {
-    for (tok ← Whitespace.tokenize(s)) {
+    for (tok ← Whitespace.tokenize(s).asScala) {
       val value = Integer.parseInt(tok, 32)
       isExcluded.set(value)
     }
@@ -70,7 +73,7 @@ object UnicodeDataParserFromXML {
    * Reads compatibility list and stores the data
    */
   private def readCompatibilityList(s: String, isCompatible: BitSet): Unit = {
-    for (tok ← Whitespace.tokenize(s)) {
+    for (tok ← Whitespace.tokenize(s).asScala) {
       val value = Integer.parseInt(tok, 32)
       isCompatible.set(value)
     }
@@ -79,14 +82,14 @@ object UnicodeDataParserFromXML {
   /**
    * Read canonical class table (mapping from character codes to their canonical class)
    */
-  private def readCanonicalClassTable(keyString: String, valueString: String, canonicalClasses: Map[Int, Integer]): Unit = {
-    val keys = new ArrayList[Int](5000)
-    for (tok ← Whitespace.tokenize(keyString)) {
+  private def readCanonicalClassTable(keyString: String, valueString: String, canonicalClasses: ju.Map[Int, Integer]): Unit = {
+    val keys = new ju.ArrayList[Int](5000)
+    for (tok ← Whitespace.tokenize(keyString).asScala) {
       val value = Integer.parseInt(tok, 32)
       keys.add(value)//ORBEON was Integer.valueOf
     }
     var k = 0
-    for (tok ← Whitespace.tokenize(valueString)) {
+    for (tok ← Whitespace.tokenize(valueString).asScala) {
       var clss: Int = 0
       var repeat = 1
       val star = tok.indexOf('*')
@@ -106,15 +109,15 @@ object UnicodeDataParserFromXML {
   /**
    * Read canonical class table (mapping from character codes to their canonical class)
    */
-  private def readDecompositionTable(decompositionKeyString: String, 
-      decompositionValuesString: String, 
-      decompose: Map[Int, String],
-      compose: Map[Int, Integer],
-      isExcluded: BitSet, 
+  private def readDecompositionTable(decompositionKeyString: String,
+      decompositionValuesString: String,
+      decompose: ju.Map[Int, String],
+      compose: ju.Map[Int, Integer],
+      isExcluded: BitSet,
       isCompatibility: BitSet): Unit = {
     var k = 0
-    val values = new ArrayList[String](1000)
-    for (tok ← Whitespace.tokenize(decompositionValuesString)) {
+    val values = new ju.ArrayList[String](1000)
+    for (tok ← Whitespace.tokenize(decompositionValuesString).asScala) {
       var value = ""
       var c = 0
       while (c < tok.length) {
@@ -126,14 +129,14 @@ object UnicodeDataParserFromXML {
         c += 1
         val h3 = tok.charAt(c)
         c += 1
-        val code = ("0123456789abcdef".indexOf(h0) << 12) + ("0123456789abcdef".indexOf(h1) << 8) + 
-          ("0123456789abcdef".indexOf(h2) << 4) + 
+        val code = ("0123456789abcdef".indexOf(h0) << 12) + ("0123456789abcdef".indexOf(h1) << 8) +
+          ("0123456789abcdef".indexOf(h2) << 4) +
           "0123456789abcdef".indexOf(h3)
         value += code.toChar
       }
       values.add(value)
     }
-    for (tok ← Whitespace.tokenize(decompositionKeyString)) {
+    for (tok ← Whitespace.tokenize(decompositionKeyString).asScala) {
       val key = Integer.parseInt(tok, 32)
       val value = values.get(k)
       k += 1

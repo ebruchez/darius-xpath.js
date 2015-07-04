@@ -4,11 +4,11 @@
 package org.orbeon.darius.xpath.functions
 
 import java.math.BigDecimal
+import java.{util ⇒ ju}
 
 import org.orbeon.darius.xpath.expr._
 import org.orbeon.darius.xpath.functions.FormatNumber._
 import org.orbeon.darius.xpath.om.{Item, StructuredQName}
-import org.orbeon.darius.xpath.orbeon.ArrayList
 import org.orbeon.darius.xpath.trans.{DecimalSymbols, XPathException}
 import org.orbeon.darius.xpath.tree.util.FastStringBuffer
 import org.orbeon.darius.xpath.value.{StringValue, _}
@@ -200,9 +200,9 @@ object FormatNumber {
 
     val zeroDigit = dfs.zeroDigit
 
-    var wholePartPositions: ArrayList[Int] = null
+    var wholePartPositions: ju.ArrayList[Int] = null
 
-    var fractionalPartPositions: ArrayList[Int] = null
+    var fractionalPartPositions: ju.ArrayList[Int] = null
 
     var foundDigit = false
 
@@ -269,7 +269,7 @@ object FormatNumber {
       } else if (c == groupingSeparator) phase match {
         case 0 | 1 | 2 ⇒
           if (wholePartPositions == null) {
-            wholePartPositions = new ArrayList[Int](3)
+            wholePartPositions = new ju.ArrayList[Int](3)
           }
           wholePartPositions.add(maxWholePartSize)
 
@@ -278,7 +278,7 @@ object FormatNumber {
             grumble("Grouping separator cannot be adjacent to decimal separator")
           }
           if (fractionalPartPositions == null) {
-            fractionalPartPositions = new ArrayList[Int](3)
+            fractionalPartPositions = new ju.ArrayList[Int](3)
           }
           fractionalPartPositions.add(maxFractionPartSize)
 

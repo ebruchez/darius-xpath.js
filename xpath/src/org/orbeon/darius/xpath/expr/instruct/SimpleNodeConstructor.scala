@@ -7,12 +7,13 @@ import org.orbeon.darius.xpath.`type`.{AtomicType, ItemType, TypeHierarchy}
 import org.orbeon.darius.xpath.expr._
 import org.orbeon.darius.xpath.functions.StringFn
 import org.orbeon.darius.xpath.om.{Item, SequenceIterator, StructuredQName}
-import org.orbeon.darius.xpath.orbeon.{Configuration, Iterator}
+import org.orbeon.darius.xpath.orbeon.Configuration
 import org.orbeon.darius.xpath.pattern.NodeTest
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.iter.SingletonIterator
 import org.orbeon.darius.xpath.tree.util.Orphan
 import org.orbeon.darius.xpath.value.Cardinality
+import java.{util ⇒ ju}
 
 /**
  * Common superclass for XSLT instructions whose content template produces a text
@@ -124,7 +125,7 @@ abstract class SimpleNodeConstructor extends Instruction {
     this
   }
 
-  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(select)
+  override def iterateSubExpressions(): ju.Iterator[Expression] = nonNullChildren(select)
 
   /**
    * Process this instruction

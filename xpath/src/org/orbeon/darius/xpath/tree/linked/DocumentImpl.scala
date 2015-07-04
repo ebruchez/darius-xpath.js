@@ -3,21 +3,17 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.tree.linked
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.Type
-import org.orbeon.darius.xpath.event.Builder
-import org.orbeon.darius.xpath.event.Receiver
+import org.orbeon.darius.xpath.event.{Builder, Receiver}
 import org.orbeon.darius.xpath.om._
-import org.orbeon.darius.xpath.orbeon.ArrayList
 import org.orbeon.darius.xpath.orbeon.Configuration
-import org.orbeon.darius.xpath.orbeon.HashMap
-import org.orbeon.darius.xpath.orbeon.List
-import org.orbeon.darius.xpath.tree.iter.ListIterator
-import org.orbeon.darius.xpath.tree.iter.UnfailingIterator
+import org.orbeon.darius.xpath.tree.iter.{ListIterator, UnfailingIterator}
 import org.orbeon.darius.xpath.tree.util.FastStringBuffer
 import org.orbeon.darius.xpath.value.Whitespace
 
-import scala.beans.BeanProperty
-import scala.beans.BooleanBeanProperty
+import scala.beans.{BeanProperty, BooleanBeanProperty}
 
 /**
  * A node in the XML parse tree representing the Document itself (or equivalently, the root
@@ -32,16 +28,16 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
   @BeanProperty
   var documentElement: ElementImpl = _
 
-  private var idTable: HashMap[String, NodeInfo] = _
+  private var idTable: ju.HashMap[String, NodeInfo] = _
 
   private var _documentNumber: Int = _
   override def getDocumentNumber = _documentNumber
 
   private var baseURI: String = _
 
-  private var elementList: HashMap[StructuredQName, List[NodeImpl]] = _
+  private var elementList: ju.HashMap[StructuredQName, ju.List[NodeImpl]] = _
 
-  private var userData: HashMap[String, AnyRef] = _
+  private var userData: ju.HashMap[String, AnyRef] = _
 
   private var config: Configuration = _
 
@@ -180,11 +176,11 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    */
   def getAllElements(name: StructuredQName): UnfailingIterator = {
     if (elementList eq null) {
-      elementList = new HashMap[StructuredQName, List[NodeImpl]](100)
+      elementList = new ju.HashMap[StructuredQName, ju.List[NodeImpl]](100)
     }
     var list = elementList.get(name)
     if (list eq null) {
-      list = new ArrayList[NodeImpl](100)
+      list = new ju.ArrayList[NodeImpl](100)
       var next = getNextInDocument(this)
       while (next ne null) {
         if (next.getNodeKind == Type.ELEMENT && next.getNodeName == name) {
@@ -205,7 +201,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
     if (idTable ne null) {
       return
     }
-    idTable = new HashMap[String, NodeInfo](256)
+    idTable = new ju.HashMap[String, NodeInfo](256)
     var curr: NodeImpl = this
     val root = curr
     while (curr ne null) {
@@ -228,7 +224,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    */
   protected def registerID(e: NodeInfo, id: String): Unit = {
     if (idTable eq null) {
-      idTable = new HashMap[String, NodeInfo](256)
+      idTable = new ju.HashMap[String, NodeInfo](256)
     }
     val old = idTable.get(id)
     if (old eq null) {
@@ -271,7 +267,7 @@ class DocumentImpl extends ParentNodeImpl with DocumentInfo {
    */
   def setUserData(key: String, value: AnyRef): Unit = {
     if (userData eq null) {
-      userData = new HashMap(4)
+      userData = new ju.HashMap(4)
     }
     if (value eq null) {
       userData.remove(key)

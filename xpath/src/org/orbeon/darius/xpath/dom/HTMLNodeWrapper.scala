@@ -3,12 +3,13 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.dom
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.Type
 import org.orbeon.darius.xpath.dom.HTMLNodeWrapper._
 import org.orbeon.darius.xpath.event.Receiver
 import org.orbeon.darius.xpath.lib.NamespaceConstant
 import org.orbeon.darius.xpath.om._
-import org.orbeon.darius.xpath.orbeon.ArrayList
 import org.orbeon.darius.xpath.pattern.{AnyNodeTest, NameTest, NodeTest}
 import org.orbeon.darius.xpath.tree.NamespaceNode
 import org.orbeon.darius.xpath.tree.iter.{ArrayIterator, EmptyIterator, SingletonIterator, UnfailingIterator}
@@ -433,10 +434,10 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
   }
 
   private var attributeList: Array[HTMLAttributeNode] = null
-  private var attributeNames: ArrayList[String] = null
-  private var namespaceBindings: ArrayList[NamespaceBinding] = null
+  private var attributeNames: ju.ArrayList[String] = null
+  private var namespaceBindings: ju.ArrayList[NamespaceBinding] = null
 
-  private def getAttributeNames: ArrayList[String] = {
+  private def getAttributeNames: ju.ArrayList[String] = {
     if (attributeNames != null) {
       attributeNames
     } else {
@@ -454,10 +455,10 @@ class HTMLNodeWrapper protected (protected var node: dom.Node, var parent: HTMLN
 
   private def getMainAttributes(elem: dom.Element): Array[HTMLAttributeNode] = {
     val attributes = node.attributes
-    val nodeNames = new ArrayList[String]()
+    val nodeNames = new ju.ArrayList[String]()
     val len = attributes.length
-    val nodeAtts = new ArrayList[HTMLAttributeNode]()
-    namespaceBindings = new ArrayList[NamespaceBinding]()
+    val nodeAtts = new ju.ArrayList[HTMLAttributeNode]()
+    namespaceBindings = new ju.ArrayList[NamespaceBinding]()
     val getNamespaces = docWrapper.getDocType != DocTypeHTML
     for (i ← 0 until len) {
       val attNode = attributes(i)

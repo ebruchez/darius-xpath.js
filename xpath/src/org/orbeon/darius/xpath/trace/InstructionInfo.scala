@@ -3,8 +3,9 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.trace
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.om.StructuredQName
-import org.orbeon.darius.xpath.orbeon.Iterator
 
 /**
  * Information about an instruction in the stylesheet or a construct in a Query, made
@@ -40,5 +41,5 @@ trait InstructionInfo {
    * value is null.
    * @return an iterator over the properties.
    */
-  def getProperties: Iterator[String]
+  def getProperties: ju.Iterator[String]
 }

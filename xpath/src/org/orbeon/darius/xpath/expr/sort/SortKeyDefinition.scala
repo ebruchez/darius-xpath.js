@@ -4,12 +4,12 @@
 package org.orbeon.darius.xpath.expr.sort
 
 import java.net.URI
+import java.{util ⇒ ju}
 
 import org.orbeon.darius.xpath.`type`.{AtomicType, ItemType, TypeHierarchy}
 import org.orbeon.darius.xpath.expr._
 import org.orbeon.darius.xpath.expr.sort.SortKeyDefinition._
 import org.orbeon.darius.xpath.lib.StringCollator
-import org.orbeon.darius.xpath.orbeon.HashMap
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.value.{StringValue, Whitespace}
 
@@ -200,8 +200,8 @@ class SortKeyDefinition {
       val caseOrderX = sortProperties(CASE_ORDER).evaluateAsString(context)
         .toString
       val languageX = sortProperties(LANG).evaluateAsString(context).toString
-      val props = new HashMap[String, String]()
-      if (languageX.length != 0 && 
+      val props = new ju.HashMap[String, String]()
+      if (languageX.length != 0 &&
         !sortProperties(LANG).isInstanceOf[StringLiteral]) {
         if (!StringValue.isValidLanguageCode(sortProperties(LANG).asInstanceOf[StringLiteral].getStringValue)) {
           throw new XPathException("The lang attribute of xsl:sort must be a valid language code", "XTDE0030")
@@ -214,7 +214,7 @@ class SortKeyDefinition {
       stringCollator = null
     }
     if (sortProperties(DATA_TYPE) == null) {
-      atomicComparer = AtomicSortComparer.makeSortComparer(stringCollator, sortKey.getItemType.getAtomizedItemType, 
+      atomicComparer = AtomicSortComparer.makeSortComparer(stringCollator, sortKey.getItemType.getAtomizedItemType,
         context.getImplicitTimezone)
     } else {
       val dataType = sortProperties(DATA_TYPE).evaluateAsString(context)

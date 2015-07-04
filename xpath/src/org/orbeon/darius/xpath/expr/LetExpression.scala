@@ -3,10 +3,11 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.{ItemType, TypeHierarchy}
 import org.orbeon.darius.xpath.expr.instruct.{TailCall, TailCallReturner}
 import org.orbeon.darius.xpath.om.{Item, Sequence, SequenceIterator, StructuredQName}
-import org.orbeon.darius.xpath.orbeon.ArrayList
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.value.SequenceType
 
@@ -139,7 +140,7 @@ class LetExpression extends Assignation with TailCallReturner {
    * false otherwise. The value false may indicate "not known".
    */
   private def allReferencesAreFlattened(): Boolean = {
-    val references = new ArrayList[VariableReference]()
+    val references = new ju.ArrayList[VariableReference]()
     ExpressionTool.gatherVariableReferences(action, this, references)
     var i = references.size - 1
     while (i >= 0) {
@@ -325,8 +326,8 @@ class LetExpression extends Assignation with TailCallReturner {
    * @return a representation of the expression as a string
    */
   override def toString: String = {
-    "let $" + getVariableName + " := " + sequence.toString + 
-      " return " + 
+    "let $" + getVariableName + " := " + sequence.toString +
+      " return " +
       action.toString
   }
 }

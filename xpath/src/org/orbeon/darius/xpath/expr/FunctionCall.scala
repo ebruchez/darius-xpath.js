@@ -3,13 +3,16 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.ItemType
 import org.orbeon.darius.xpath.expr.FunctionCall._
 import org.orbeon.darius.xpath.om.StructuredQName
-import org.orbeon.darius.xpath.orbeon.Iterator
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.util.FastStringBuffer
 import org.orbeon.darius.xpath.value.SequenceExtent
+
+import scala.collection.JavaConverters._
 
 object FunctionCall {
 
@@ -213,17 +216,17 @@ abstract class FunctionCall extends Expression {
   protected def checkArgumentCount(min: Int, max: Int, visitor: ExpressionVisitor): Int = {
     val numArgs = argument.length
     if (min == max && numArgs != min) {
-      throw new XPathException("Function " + getDisplayName + " must have " + min + pluralArguments(min), 
+      throw new XPathException("Function " + getDisplayName + " must have " + min + pluralArguments(min),
         getSourceLocator)
     }
     if (numArgs < min) {
-      throw new XPathException("Function " + getDisplayName + " must have at least " + 
-        min + 
+      throw new XPathException("Function " + getDisplayName + " must have at least " +
+        min +
         pluralArguments(min), getSourceLocator)
     }
     if (numArgs > max) {
-      throw new XPathException("Function " + getDisplayName + " must have no more than " + 
-        max + 
+      throw new XPathException("Function " + getDisplayName + " must have no more than " +
+        max +
         pluralArguments(max), getSourceLocator)
     }
     numArgs
@@ -232,7 +235,7 @@ abstract class FunctionCall extends Expression {
   /**
    * Get the immediate subexpressions of this expression
    */
-  override def iterateSubExpressions(): Iterator[Expression] = Iterator(argument.iterator)
+  override def iterateSubExpressions(): ju.Iterator[Expression] = argument.iterator.asJava
 
   /**
    * Get the name of the function for display in messages
@@ -266,7 +269,7 @@ abstract class FunctionCall extends Expression {
    * Determine whether two expressions are equivalent
    */
   override def equals(o: Any): Boolean = {
-    if (!o.isInstanceOf[FunctionCall]) {
+    if (! o.isInstanceOf[FunctionCall]) {
       return false
     }
     val f = o.asInstanceOf[FunctionCall]

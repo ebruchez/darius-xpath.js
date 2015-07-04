@@ -3,10 +3,11 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.functions
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.{AnyItemType, AtomicType, ItemType}
 import org.orbeon.darius.xpath.expr.StaticProperty
 import org.orbeon.darius.xpath.om.Sequence
-import org.orbeon.darius.xpath.orbeon.HashMap
 import org.orbeon.darius.xpath.pattern.{AnyNodeTest, NodeKindTest}
 import org.orbeon.darius.xpath.value.{EmptySequence, SequenceType}
 
@@ -159,7 +160,7 @@ object StandardFunction {
     e
   }
 
-  private val functionTable: HashMap[String, Entry] = new HashMap[String, Entry](200)
+  private val functionTable: ju.HashMap[String, Entry] = new ju.HashMap[String, Entry](200)
 
   register("abs", new Rounding(Rounding.ABS), "n? n? $s")
 

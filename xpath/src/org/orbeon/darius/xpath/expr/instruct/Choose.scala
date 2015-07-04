@@ -3,11 +3,12 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr.instruct
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.{ItemType, Type}
 import org.orbeon.darius.xpath.expr._
 import org.orbeon.darius.xpath.functions.BooleanFn
 import org.orbeon.darius.xpath.om.{Item, SequenceIterator, StructuredQName}
-import org.orbeon.darius.xpath.orbeon.Iterator
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.iter.EmptyIterator
 import org.orbeon.darius.xpath.tree.util.FastStringBuffer
@@ -15,6 +16,7 @@ import org.orbeon.darius.xpath.value.{BooleanValue, Cardinality, SequenceType}
 import org.orbeon.darius.xpath.{LogConfiguration, LogController}
 
 import scala.beans.BeanProperty
+import scala.collection.JavaConverters._
 
 object Choose {
 
@@ -159,8 +161,8 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
     if (!Literal.isConstantBoolean(conditions(conditions.length - 1), value = true) &&
       !Cardinality.allowsZero(req.getCardinality)) {
       val cond = if (conditions.length == 1) "the condition is not" else "none of the conditions is"
-      val err = new XPathException("Conditional expression: If " + cond + " satisfied, an empty sequence will be returned, " + 
-        "but this is not allowed as the " + 
+      val err = new XPathException("Conditional expression: If " + cond + " satisfied, an empty sequence will be returned, " +
+        "but this is not allowed as the " +
         role.getMessage)
       err.setErrorCode(role.getErrorCode)
       err.setIsTypeError(true)
@@ -189,7 +191,7 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
         }
       }
     }
-    if (actions.length == 0) {
+    if (actions.isEmpty) {
       return Literal.makeEmptySequence()
     }
     this
@@ -283,11 +285,11 @@ class Choose(@BeanProperty var conditions: Array[Expression], @BeanProperty var 
    * (in XSLT terms, the expression present on attributes of the instruction,
    * as distinct from the child instructions in a sequence construction)
    */
-  override def iterateSubExpressions(): Iterator[Expression] = {
+  override def iterateSubExpressions(): ju.Iterator[Expression] = {
     val all = new Array[Expression](conditions.length * 2)
     System.arraycopy(conditions, 0, all, 0, conditions.length)
     System.arraycopy(actions, 0, all, conditions.length, conditions.length)
-    Iterator(all.iterator)
+    all.iterator.asJava
   }
 
   /**

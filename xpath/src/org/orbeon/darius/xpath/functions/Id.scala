@@ -3,15 +3,18 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.functions
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.{AtomicType, ItemType, Type}
 import org.orbeon.darius.xpath.expr._
 import org.orbeon.darius.xpath.expr.sort.{DocumentOrderIterator, LocalOrderComparer}
 import org.orbeon.darius.xpath.functions.Id._
 import org.orbeon.darius.xpath.om.{DocumentInfo, Item, NodeInfo, SequenceIterator}
-import org.orbeon.darius.xpath.orbeon.ArrayList
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.iter.{ListIterator, SingletonIterator}
 import org.orbeon.darius.xpath.value.{AtomicValue, StringValue, Whitespace}
+
+import scala.collection.JavaConverters._
 
 object Id {
 
@@ -27,8 +30,8 @@ object Id {
       val idrefs = Whitespace.trim(item.getStringValue)
       if (Whitespace.containsWhitespace(idrefs)) {
         val tokens = Whitespace.tokenize(idrefs)
-        val refs = new ArrayList[StringValue](tokens.size)
-        for (s ← tokens) {
+        val refs = new ju.ArrayList[StringValue](tokens.size)
+        for (s ← tokens.asScala) {
           refs.add(StringValue.makeStringValue(s))
         }
         val submap = new IdMappingFunction()
@@ -70,9 +73,9 @@ class Id extends SystemFunction {
    * can override the preEvaluate method.
    */
   override def typeCheck(visitor: ExpressionVisitor, contextItemType: ItemType): Expression = {
-    if (argument(1).isInstanceOf[RootExpression] && contextItemType != null && 
+    if (argument(1).isInstanceOf[RootExpression] && contextItemType != null &&
       contextItemType.isInstanceOf[AtomicType]) {
-      typeError(getFunctionName.getLocalName + 
+      typeError(getFunctionName.getLocalName +
         "() function called when the context item is not a node", "XPTY0004")
     }
     super.typeCheck(visitor, contextItemType)
@@ -98,10 +101,10 @@ class Id extends SystemFunction {
    * property bit is set, it is true, but if it is unset, the value is unknown.
    */
   override def computeSpecialProperties(): Int = {
-    var prop = StaticProperty.ORDERED_NODESET | StaticProperty.SINGLE_DOCUMENT_NODESET | 
+    var prop = StaticProperty.ORDERED_NODESET | StaticProperty.SINGLE_DOCUMENT_NODESET |
       StaticProperty.NON_CREATIVE
-    if ((getNumberOfArguments == 1) || 
-      (argument(1).getSpecialProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 
+    if ((getNumberOfArguments == 1) ||
+      (argument(1).getSpecialProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) !=
       0) {
       prop |= StaticProperty.CONTEXT_DOCUMENT_NODESET
     }
@@ -117,7 +120,7 @@ class Id extends SystemFunction {
       arg1 = argument(1).evaluateItem(context).asInstanceOf[NodeInfo]
     } catch {
       case e: XPathException ⇒ if (context.getContextItem.isInstanceOf[AtomicValue]) {
-        dynamicError("For the " + getFunctionName.getLocalName + "() function, the context item is not a node", 
+        dynamicError("For the " + getFunctionName.getLocalName + "() function, the context item is not a node",
           "XPTY0004")
         return null
       } else {
@@ -126,7 +129,7 @@ class Id extends SystemFunction {
     }
     arg1 = arg1.getRoot
     if (arg1.getNodeKind != Type.DOCUMENT) {
-      dynamicError("In the " + getFunctionName.getLocalName + "() function," + 
+      dynamicError("In the " + getFunctionName.getLocalName + "() function," +
         " the tree being searched must be one whose root is a document node", "FODC0001")
       return null
     }

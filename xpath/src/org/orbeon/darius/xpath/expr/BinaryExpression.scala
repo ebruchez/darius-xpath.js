@@ -3,9 +3,10 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.ItemType
 import org.orbeon.darius.xpath.expr.BinaryExpression._
-import org.orbeon.darius.xpath.orbeon.{ArrayList, Iterator, List}
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.value.Cardinality
 
@@ -145,7 +146,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
   /**
    * Get the immediate subexpressions of this expression
    */
-  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(operand0, operand1)
+  override def iterateSubExpressions(): ju.Iterator[Expression] = nonNullChildren(operand0, operand1)
 
   /**
    * Get the operator
@@ -195,7 +196,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
             return true
           }
           if (isAssociative(operator) &&
-            pairwiseEqual(flattenExpression(new ArrayList(4)), b.flattenExpression(new ArrayList(4)))) {
+            pairwiseEqual(flattenExpression(new ju.ArrayList(4)), b.flattenExpression(new ju.ArrayList(4)))) {
             return true
           }
         }
@@ -215,7 +216,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
    * @param list a list provided by the caller to contain the result
    * @return the list of expressions
    */
-  private def flattenExpression(list: List[Expression]): List[Expression] = {
+  private def flattenExpression(list: ju.List[Expression]): ju.List[Expression] = {
     operand0 match {
       case binaryExpression: BinaryExpression if binaryExpression.operator == operator ⇒
         binaryExpression.flattenExpression(list)
@@ -251,7 +252,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
    * @param b the second list of expressions
    * @return true if the two lists are equal
    */
-  private def pairwiseEqual(a: List[_], b: List[_]): Boolean = {
+  private def pairwiseEqual(a: ju.List[_], b: ju.List[_]): Boolean = {
     if (a.size != b.size) {
       return false
     }
@@ -267,7 +268,7 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
    */
   override def hashCode(): Int = {
     val op = Math.min(operator, Token.inverse(operator))
-    ("BinaryExpression " + op).hashCode ^ operand0.hashCode ^ 
+    ("BinaryExpression " + op).hashCode ^ operand0.hashCode ^
       operand1.hashCode
   }
 
@@ -277,8 +278,8 @@ abstract class BinaryExpression(protected var operand0: Expression, protected va
    * In the case of XSLT instructions, the toString() method gives an abstracted view of the syntax
    */
   override def toString: String = {
-    "(" + operand0.toString + " " + displayOperator() + " " + 
-      operand1.toString + 
+    "(" + operand0.toString + " " + displayOperator() + " " +
+      operand1.toString +
       ")"
   }
 

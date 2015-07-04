@@ -3,17 +3,18 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.functions
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.expr._
 import org.orbeon.darius.xpath.functions.SystemFunctionLibrary._
 import org.orbeon.darius.xpath.lib.NamespaceConstant
 import org.orbeon.darius.xpath.om.StructuredQName
-import org.orbeon.darius.xpath.orbeon.HashMap
 import org.orbeon.darius.xpath.trans.{Err, XPathException}
 import org.orbeon.darius.xpath.value.{AnyURIValue, BooleanValue, EmptySequence}
 
 object SystemFunctionLibrary {
 
-  private val instances = new HashMap[Int, SystemFunctionLibrary](3)
+  private val instances = new ju.HashMap[Int, SystemFunctionLibrary](3)
 
   /**
    * Factory method to create or get a SystemFunctionLibrary
@@ -54,7 +55,7 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
    * This method may be called either at compile time
    * or at run time. If the function library is to be used only in an XQuery or free-standing XPath
    * environment, this method may throw an UnsupportedOperationException.
-   * 
+   *
    * @param functionName the qualified name of the function being called
    * @param arity        The number of arguments. This is set to -1 in the case of the single-argument
    *                     function-available() function; in this case the method should return a zero-length array
@@ -69,8 +70,8 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
     val local = functionName.getLocalName
     if (uri == NamespaceConstant.FN) {
       val entry = StandardFunction.getFunction(local, arity)
-      entry != null && ((functionSet & entry.applicability) != 0) && 
-        (arity == -1 || 
+      entry != null && ((functionSet & entry.applicability) != 0) &&
+        (arity == -1 ||
         (arity >= entry.minArguments && arity <= entry.maxArguments))
     } else {
       false
@@ -92,9 +93,9 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
    * while searching for the function; or if this function library "owns" the namespace containing
    * the function call, but no function was found.
    */
-  def bind(functionName: StructuredQName, 
-      staticArgs: Array[Expression], 
-      env: StaticContext, 
+  def bind(functionName: StructuredQName,
+      staticArgs: Array[Expression],
+      env: StaticContext,
       container: Container): Expression = {
     val uri = functionName.getNamespaceURI
     if (uri == NamespaceConstant.FN) {
@@ -152,8 +153,8 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
           err.setIsStaticError(true)
           throw err
         } else {
-          val err = new XPathException("System function " + local + "#" + staticArgs.length + 
-            " cannot be called with " + 
+          val err = new XPathException("System function " + local + "#" + staticArgs.length +
+            " cannot be called with " +
             pluralArguments(staticArgs.length))
           err.setErrorCode("XPST0017")
           err.setIsStaticError(true)
@@ -161,7 +162,7 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
         }
       }
       if ((functionSet & entry.applicability) == 0) {
-        val err = new XPathException("System function " + local + "#" + staticArgs.length + 
+        val err = new XPathException("System function " + local + "#" + staticArgs.length +
           " is not available with this host language")
         err.setErrorCode("XPST0017")
         err.setIsStaticError(true)
@@ -189,23 +190,23 @@ class SystemFunctionLibrary private (var functionSet: Int) extends FunctionLibra
    * @return the actual number of arguments
    * @throws org.orbeon.darius.xpath.trans.XPathException if the number of arguments is out of range
    */
-  private def checkArgumentCount(numArgs: Int, 
-      min: Int, 
-      max: Int, 
+  private def checkArgumentCount(numArgs: Int,
+      min: Int,
+      max: Int,
       local: String): Int = {
     if (min == max && numArgs != min) {
-      throw new XPathException("Function " + Err.wrap(local, Err.FUNCTION) + " must have " + 
-        min + 
+      throw new XPathException("Function " + Err.wrap(local, Err.FUNCTION) + " must have " +
+        min +
         pluralArguments(min))
     }
     if (numArgs < min) {
-      throw new XPathException("Function " + Err.wrap(local, Err.FUNCTION) + " must have at least " + 
-        min + 
+      throw new XPathException("Function " + Err.wrap(local, Err.FUNCTION) + " must have at least " +
+        min +
         pluralArguments(min))
     }
     if (numArgs > max) {
-      throw new XPathException("Function " + Err.wrap(local, Err.FUNCTION) + " must have no more than " + 
-        max + 
+      throw new XPathException("Function " + Err.wrap(local, Err.FUNCTION) + " must have no more than " +
+        max +
         pluralArguments(max))
     }
     numArgs

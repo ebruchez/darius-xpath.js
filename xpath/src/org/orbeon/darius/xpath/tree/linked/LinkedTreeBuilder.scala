@@ -3,10 +3,10 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.tree.linked
 
-import org.orbeon.darius.xpath.event.Builder
-import org.orbeon.darius.xpath.event.PipelineConfiguration
+import java.{util ⇒ ju}
+
+import org.orbeon.darius.xpath.event.{Builder, PipelineConfiguration}
 import org.orbeon.darius.xpath.om._
-import org.orbeon.darius.xpath.orbeon.ArrayList
 import org.orbeon.darius.xpath.tree.linked.LinkedTreeBuilder._
 
 object LinkedTreeBuilder {
@@ -14,13 +14,13 @@ object LinkedTreeBuilder {
   private class DefaultNodeFactory extends NodeFactory {
 
     def makeElementNode(
-      parent         : NodeInfo, 
-      nameCode       : StructuredQName, 
-      attlist        : AttributeCollection, 
-      namespaces     : Array[NamespaceBinding], 
-      namespacesUsed : Int, 
-      pipe           : PipelineConfiguration, 
-      baseURI        : String, 
+      parent         : NodeInfo,
+      nameCode       : StructuredQName,
+      attlist        : AttributeCollection,
+      namespaces     : Array[NamespaceBinding],
+      namespacesUsed : Int,
+      pipe           : PipelineConfiguration,
+      baseURI        : String,
       sequenceNumber : Int
     ): ElementImpl = {
       val e = new ElementImpl
@@ -46,7 +46,7 @@ class LinkedTreeBuilder extends Builder {
   private var nodeFactory: NodeFactory = new DefaultNodeFactory
   private var size: Array[Int] = new Array[Int](100)
   private var depth: Int = 0
-  private var arrays: ArrayList[Array[NodeImpl]] = new ArrayList[Array[NodeImpl]](20)
+  private var arrays: ju.ArrayList[Array[NodeImpl]] = new ju.ArrayList[Array[NodeImpl]](20)
   private var elementNameCode: StructuredQName = _
   private var attributes: AttributeCollection = _
   private var namespaces: Array[NamespaceBinding] = _
@@ -197,11 +197,11 @@ class LinkedTreeBuilder extends Builder {
       nslist = NamespaceBinding.EMPTY_ARRAY
     }
     val elem = nodeFactory.makeElementNode(
-      currentNode, 
-      elementNameCode, 
-      attributes, 
-      nslist, 
-      namespacesUsed, 
+      currentNode,
+      elementNameCode,
+      attributes,
+      nslist,
+      namespacesUsed,
       pipe,
       getSystemId,
       if (allocateSequenceNumbers) {

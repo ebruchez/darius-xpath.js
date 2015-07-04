@@ -3,10 +3,11 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.value
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.{AnyItemType, ItemType, Type}
 import org.orbeon.darius.xpath.expr.LastPositionFinder
 import org.orbeon.darius.xpath.om.{Item, Sequence, SequenceIterator}
-import org.orbeon.darius.xpath.orbeon.{ArrayList, LinkedList, List}
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.iter.{ArrayIterator, GroundedIterator, UnfailingIterator}
 import org.orbeon.darius.xpath.tree.util.FastStringBuffer
@@ -52,7 +53,7 @@ object SequenceExtent {
    * @throws XPathException if an error occurs evaluating the sequence
    */
   def makeReversed(iter: SequenceIterator): SequenceExtent[Item] = {
-    val list = new LinkedList[Item]()
+    val list = new ju.LinkedList[Item]()
     import Breaks._
     breakable {
       while (true) {
@@ -74,7 +75,7 @@ object SequenceExtent {
    * one, the result will be an [[Item]]. In all other cases, it will be an instance of
    * [[SequenceExtent]].
    */
-  def makeSequenceExtent(input: List[Item]): Sequence = {
+  def makeSequenceExtent(input: ju.List[Item]): Sequence = {
     val len = input.size
     if (len == 0) {
       EmptySequence.getInstance
@@ -105,7 +106,7 @@ object SequenceExtent {
     import Breaks._
     val value =
       if (allocated == -1) {
-        val list = new ArrayList[Item](20)
+        val list = new ju.ArrayList[Item](20)
         breakable {
           while (true) {
             val it = iter.next()
@@ -132,11 +133,11 @@ object SequenceExtent {
         }
         result
       }
-    
+
     new SequenceExtent(value)
   }
 
-  def apply[T  <: Item](list: List[T]): SequenceExtent[Item] =
+  def apply[T  <: Item](list: ju.List[T]): SequenceExtent[Item] =
     new SequenceExtent(list.toArray(new Array[Item](list.size)))
 }
 

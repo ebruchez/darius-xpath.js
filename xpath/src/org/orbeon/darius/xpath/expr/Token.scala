@@ -3,7 +3,7 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
-import org.orbeon.darius.xpath.orbeon.HashMap
+import java.{util ⇒ ju}
 
 object Token {
 
@@ -494,7 +494,7 @@ object Token {
   /**
    * Lookup table for composite (two-keyword) tokens
    */
-  var doubleKeywords: HashMap[String, Integer] = new HashMap[String, Integer](30)
+  var doubleKeywords: ju.HashMap[String, Integer] = new ju.HashMap[String, Integer](30)
 
   /**
    * Pseudo-token representing the start of the expression

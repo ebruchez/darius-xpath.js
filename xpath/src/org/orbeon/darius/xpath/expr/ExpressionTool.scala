@@ -3,8 +3,10 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.om._
-import org.orbeon.darius.xpath.orbeon.{Configuration, List}
+import org.orbeon.darius.xpath.orbeon.Configuration
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.util.SourceLocator
 import org.orbeon.darius.xpath.value.{StringValue, _}
@@ -35,10 +37,10 @@ object ExpressionTool {
    * Token.EOF, but may for example be a right curly brace
    * @param locator the source location of the expression for use in diagnostics
    */
-  def make(expression: String, 
-      env: StaticContext, 
-      container: Container, 
-      start: Int, 
+  def make(expression: String,
+      env: StaticContext,
+      container: Container,
+      start: Int,
       _terminator: Int,
       locator: SourceLocator): Expression = {
     var terminator = _terminator
@@ -311,7 +313,7 @@ object ExpressionTool {
     }
     e match {
       case variableReference: VariableReference ⇒
-        (0 until bindingList.length).exists(variableReference.getBinding eq bindingList(_))
+        bindingList.indices.exists(variableReference.getBinding eq bindingList(_))
       case _ ⇒
         val children = e.iterateSubExpressions()
         while (children.hasNext) {
@@ -377,7 +379,7 @@ object ExpressionTool {
    * @param binding the variable binding whose references are sought
    * @param list a list to be populated with the references to this variable
    */
-  def gatherVariableReferences(exp: Expression, binding: Binding, list: List[VariableReference]): Unit = {
+  def gatherVariableReferences(exp: Expression, binding: Binding, list: ju.List[VariableReference]): Unit = {
     exp match {
       case variableRef: VariableReference if variableRef.getBinding eq binding ⇒
         list.add(variableRef)

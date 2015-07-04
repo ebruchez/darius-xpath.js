@@ -3,14 +3,15 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.regex
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.om.SequenceIterator
-import org.orbeon.darius.xpath.orbeon.List
 
 class ARegularExpression(
   pattern      : CharSequence,
   rawFlags     : String,
   hostLanguage : String,
-  warnings     : List[String]
+  warnings     : ju.List[String]
 ) extends RegularExpression {
 
   private val regex = pattern.toString.r

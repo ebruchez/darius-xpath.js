@@ -3,7 +3,8 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.value
 
-import org.orbeon.darius.xpath.orbeon.{ArrayList, List}
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.tree.util.FastStringBuffer
 
 import scala.util.control.Breaks
@@ -232,8 +233,8 @@ object Whitespace {
    * @param s the string to be tokenized
    * @return a list of tokens
    */
-  def tokenize(s: CharSequence): List[String] = {
-    val list = new ArrayList[String](8)
+  def tokenize(s: CharSequence): ju.List[String] = {
+    val list = new ju.ArrayList[String](8)
     val fsb = new FastStringBuffer(FastStringBuffer.TINY)
     var inTok = false
     for (i ← 0 until s.length) {

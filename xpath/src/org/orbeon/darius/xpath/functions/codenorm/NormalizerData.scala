@@ -3,8 +3,9 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.functions.codenorm
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.functions.codenorm.NormalizerData._
-import org.orbeon.darius.xpath.orbeon.Map
 import org.orbeon.darius.xpath.tree.util.UTF16CharacterSet
 
 object NormalizerData {
@@ -15,10 +16,10 @@ object NormalizerData {
   val NOT_COMPOSITE = '￿'
 }
 
-class NormalizerData(var canonicalClass: Map[Int, Integer],
-    var decompose: Map[Int, String],
-    var compose: Map[Int, Integer],
-    var isCompatibility: BitSet, 
+class NormalizerData(var canonicalClass: ju.Map[Int, Integer],
+    var decompose: ju.Map[Int, String],
+    var compose: ju.Map[Int, Integer],
+    var isCompatibility: BitSet,
     var isExcluded: BitSet) {
 
   /**

@@ -3,11 +3,12 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`._
 import org.orbeon.darius.xpath.expr.CastExpression._
 import org.orbeon.darius.xpath.functions.StringFn
 import org.orbeon.darius.xpath.om.{Item, StructuredQName}
-import org.orbeon.darius.xpath.orbeon.HashMap
 import org.orbeon.darius.xpath.pattern.EmptySequenceTest
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.value._
@@ -16,7 +17,7 @@ import scala.beans.BeanProperty
 
 object CastExpression {
 
-  var castingTable: HashMap[AtomicType, Array[AtomicType]] = new HashMap[AtomicType, Array[AtomicType]](25)
+  var castingTable: ju.HashMap[AtomicType, Array[AtomicType]] = new ju.HashMap[AtomicType, Array[AtomicType]](25)
 
   def addAllowedCasts(source: AtomicType, target: Array[AtomicType]): Unit = {
     castingTable.put(source, target)

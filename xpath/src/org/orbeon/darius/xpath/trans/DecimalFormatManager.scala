@@ -3,9 +3,10 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.trans
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.lib.NamespaceConstant
 import org.orbeon.darius.xpath.om.StructuredQName
-import org.orbeon.darius.xpath.orbeon.HashMap
 import org.orbeon.darius.xpath.trans.DecimalFormatManager._
 
 object DecimalFormatManager {
@@ -33,7 +34,7 @@ class DecimalFormatManager {
 
   private var defaultDFS: DecimalSymbols = new DecimalSymbols()
 
-  private val formatTable: HashMap[StructuredQName, DecimalFormatInfo] = new HashMap[StructuredQName, DecimalFormatInfo](10)
+  private val formatTable: ju.HashMap[StructuredQName, DecimalFormatInfo] = new ju.HashMap[StructuredQName, DecimalFormatInfo](10)
 
   private var usingOriginalDefault: Boolean = true
 

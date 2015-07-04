@@ -3,11 +3,12 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.functions
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.expr.{ItemMappingFunction, ItemMappingIterator, StatefulMappingFunction, XPathContext}
 import org.orbeon.darius.xpath.functions.DistinctValues._
 import org.orbeon.darius.xpath.lib.StringCollator
 import org.orbeon.darius.xpath.om.{Item, SequenceIterator}
-import org.orbeon.darius.xpath.orbeon.HashSet
 import org.orbeon.darius.xpath.value.AtomicValue
 
 object DistinctValues {
@@ -15,7 +16,7 @@ object DistinctValues {
   class DistinctItemsMappingFunction(var collator: StringCollator, var implicitTimezone: Int)
       extends ItemMappingFunction with StatefulMappingFunction {
 
-    private val lookup: HashSet[Any] = new HashSet[Any](40)
+    private val lookup: ju.HashSet[Any] = new ju.HashSet[Any](40)
 
     def mapItem(item: Item): Item = {
       val value = item.asInstanceOf[AtomicValue]

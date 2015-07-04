@@ -3,10 +3,11 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr.instruct
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.{ItemType, TypeHierarchy}
 import org.orbeon.darius.xpath.expr._
 import org.orbeon.darius.xpath.om.SequenceIterator
-import org.orbeon.darius.xpath.orbeon.Iterator
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.{LogConfiguration, LogController}
 
@@ -110,7 +111,7 @@ class ForEach extends Instruction with ContextMappingFunction {
     }
     val offer = new PromotionOffer()
     offer.action = PromotionOffer.FOCUS_INDEPENDENT
-    offer.promoteDocumentDependent = (select.getSpecialProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 
+    offer.promoteDocumentDependent = (select.getSpecialProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) !=
       0
     offer.promoteXSLTFunctions = false
     offer.containingExpression = this
@@ -156,7 +157,7 @@ class ForEach extends Instruction with ContextMappingFunction {
    * (in XSLT terms, the expression present on attributes of the instruction,
    * as distinct from the child instructions in a sequence construction)
    */
-  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(select, action)
+  override def iterateSubExpressions(): ju.Iterator[Expression] = nonNullChildren(select, action)
 
   /**
    * Given an expression that is an immediate child of this expression, test whether

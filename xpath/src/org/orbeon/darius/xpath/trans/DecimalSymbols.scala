@@ -3,9 +3,8 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.trans
 
-import java.util.Arrays
+import java.{util ⇒ ju}
 
-import org.orbeon.darius.xpath.orbeon.HashMap
 import org.orbeon.darius.xpath.trans.DecimalSymbols._
 
 object DecimalSymbols {
@@ -47,7 +46,7 @@ class DecimalSymbols {
    * @throws XPathException if a character is used in more than one role
    */
   def checkDistinctRoles(): Unit = {
-    val map = new HashMap[Int, String](20)
+    val map = new ju.HashMap[Int, String](20)
     map.put(decimalSeparator, "decimal-separator")
     if (map.get(groupingSeparator) != null) {
       duplicate("grouping-separator", map.get(groupingSeparator))
@@ -81,7 +80,7 @@ class DecimalSymbols {
    * @throws XPathException (always)
    */
   private def duplicate(role1: String, role2: String): Unit = {
-    throw new XPathException("The same character is used as the " + role1 + " and as the " + 
+    throw new XPathException("The same character is used as the " + role1 + " and as the " +
       role2)
   }
 
@@ -90,7 +89,7 @@ class DecimalSymbols {
    * @return false if it is not a valid zero-digit
    */
   def isValidZeroDigit: Boolean = {
-    Arrays.binarySearch(zeroDigits, zeroDigit) >= 0
+    ju.Arrays.binarySearch(zeroDigits, zeroDigit) >= 0
   }
 
   /**
@@ -99,18 +98,18 @@ class DecimalSymbols {
    * @return true if the same characters/strings are assigned to each role in both sets of symbols
    */
   override def equals(obj: Any): Boolean = {
-    if (!obj.isInstanceOf[DecimalSymbols]) {
+    if (! obj.isInstanceOf[DecimalSymbols]) {
       return false
     }
     val o = obj.asInstanceOf[DecimalSymbols]
-    decimalSeparator == o.decimalSeparator && groupingSeparator == o.groupingSeparator && 
-      digit == o.digit && 
-      minusSign == o.minusSign && 
-      percent == o.percent && 
-      permill == o.permill && 
-      zeroDigit == o.zeroDigit && 
-      patternSeparator == o.patternSeparator && 
-      infinity == o.infinity && 
+    decimalSeparator == o.decimalSeparator && groupingSeparator == o.groupingSeparator &&
+      digit == o.digit &&
+      minusSign == o.minusSign &&
+      percent == o.percent &&
+      permill == o.permill &&
+      zeroDigit == o.zeroDigit &&
+      patternSeparator == o.patternSeparator &&
+      infinity == o.infinity &&
       NaN == o.NaN
   }
 

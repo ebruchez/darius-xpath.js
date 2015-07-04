@@ -3,9 +3,10 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.functions
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.expr.XPathContext
 import org.orbeon.darius.xpath.om.{NodeInfo, SequenceIterator}
-import org.orbeon.darius.xpath.orbeon.ArrayList
 import org.orbeon.darius.xpath.tree.iter.ListIterator
 import org.orbeon.darius.xpath.tree.util.NamespaceIterator
 import org.orbeon.darius.xpath.value.StringValue
@@ -23,7 +24,7 @@ class InScopePrefixes extends SystemFunction {
   override def iterate(context: XPathContext): SequenceIterator = {
     val element = argument(0).evaluateItem(context).asInstanceOf[NodeInfo]
     val iter = NamespaceIterator.iterateNamespaces(element)
-    val prefixes = new ArrayList[StringValue]()
+    val prefixes = new ju.ArrayList[StringValue]()
     prefixes.add(new StringValue("xml"))
     while (iter.hasNext) {
       prefixes.add(new StringValue(iter.next().getPrefix))

@@ -3,12 +3,13 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.`type`
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.TypeHierarchy._
-import org.orbeon.darius.xpath.orbeon.{HashMap, Map}
 import org.orbeon.darius.xpath.pattern.{AnyNodeTest, EmptySequenceTest, NameTest, NodeTest}
 
 object TypeHierarchy {
-  
+
   val  getInstance = new TypeHierarchy
 
   /**
@@ -67,7 +68,7 @@ object TypeHierarchy {
  */
 class TypeHierarchy {
 
-  private val map: Map[ItemTypePair, Integer] = new HashMap[ItemTypePair, Integer]()
+  private val map: ju.Map[ItemTypePair, Integer] = new ju.HashMap[ItemTypePair, Integer]()
 
   /**
    * Determine whether type A is type B or one of its subtypes, recursively

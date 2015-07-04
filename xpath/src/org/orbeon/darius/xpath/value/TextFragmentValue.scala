@@ -3,10 +3,12 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.value
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.Type
 import org.orbeon.darius.xpath.event.Receiver
 import org.orbeon.darius.xpath.om._
-import org.orbeon.darius.xpath.orbeon.{Configuration, HashMap}
+import org.orbeon.darius.xpath.orbeon.Configuration
 import org.orbeon.darius.xpath.pattern.NodeTest
 import org.orbeon.darius.xpath.tree.iter.{ArrayIterator, EmptyIterator, SingletonIterator, UnfailingIterator}
 import org.orbeon.darius.xpath.tree.util.{FastStringBuffer, Navigator, Orphan}
@@ -22,7 +24,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
 
   private var documentNumber: Int = _
 
-  private var userData: HashMap[String, AnyRef] = _
+  private var userData: ju.HashMap[String, AnyRef] = _
 
   setNodeKind(Type.DOCUMENT)
 
@@ -89,9 +91,9 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
     case Axis.SELF | Axis.ANCESTOR_OR_SELF ⇒ Navigator.filteredSingleton(this, nodeTest)
     case Axis.CHILD | Axis.DESCENDANT ⇒ Navigator.filteredSingleton(textNode, nodeTest)
     case Axis.DESCENDANT_OR_SELF ⇒
-      var b1 = nodeTest.matchesItem(this)
-      var textNode2 = textNode
-      var b2 = nodeTest.matchesItem(textNode2)
+      val b1 = nodeTest.matchesItem(this)
+      val textNode2 = textNode
+      val b2 = nodeTest.matchesItem(textNode2)
       if (b1) {
         if (b2) {
           val pair = Array[Item](this, textNode2)
@@ -179,8 +181,8 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
     override def iterateAxis(axisNumber: Byte, nodeTest: NodeTest): UnfailingIterator = axisNumber match {
       case Axis.ANCESTOR | Axis.PARENT ⇒ Navigator.filteredSingleton(TextFragmentValue.this, nodeTest)
       case Axis.ANCESTOR_OR_SELF ⇒
-        var matchesDoc = nodeTest.matchesItem(TextFragmentValue.this)
-        var matchesText = nodeTest.matchesItem(this)
+        val matchesDoc = nodeTest.matchesItem(TextFragmentValue.this)
+        val matchesText = nodeTest.matchesItem(this)
         if (matchesDoc && matchesText) {
           val nodes = Array[Item](this, TextFragmentValue.this)
           new ArrayIterator(nodes)
@@ -233,7 +235,7 @@ class TextFragmentValue(value: CharSequence, baseURI: String) extends Orphan wit
    */
   def setUserData(key: String, value: AnyRef): Unit = {
     if (userData == null) {
-      userData = new HashMap(4)
+      userData = new ju.HashMap(4)
     }
     if (value == null) {
       userData.remove(key)

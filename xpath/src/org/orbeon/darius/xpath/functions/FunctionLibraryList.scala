@@ -3,9 +3,12 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.functions
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.expr.{Container, Expression, StaticContext}
 import org.orbeon.darius.xpath.om.StructuredQName
-import org.orbeon.darius.xpath.orbeon.{ArrayList, List}
+
+import scala.collection.JavaConverters._
 
 /**
  * A FunctionLibraryList is a list of FunctionLibraries. It is also a FunctionLibrary in its own right.
@@ -13,7 +16,7 @@ import org.orbeon.darius.xpath.orbeon.{ArrayList, List}
  */
 class FunctionLibraryList extends FunctionLibrary {
 
-  var libraryList: List[FunctionLibrary] = new ArrayList(8)
+  var libraryList: ju.List[FunctionLibrary] = new ju.ArrayList(8)
 
   /**
    * Add a new FunctionLibrary to the list of FunctionLibraries in this FunctionLibraryList. Note
@@ -70,11 +73,11 @@ class FunctionLibraryList extends FunctionLibrary {
    * the implementation of the function cannot be loaded or used; or if an error occurs
    * while searching for the function.
    */
-  def bind(functionName: StructuredQName, 
-      staticArgs: Array[Expression], 
-      env: StaticContext, 
+  def bind(functionName: StructuredQName,
+      staticArgs: Array[Expression],
+      env: StaticContext,
       container: Container): Expression = {
-    for (lib ← libraryList) {
+    for (lib ← libraryList.asScala) {
       val func = lib.bind(functionName, staticArgs, env, container)
       if (func != null) {
         return func

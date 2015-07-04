@@ -4,6 +4,7 @@
 package org.orbeon.darius.xpath.expr
 
 import java.math.BigDecimal
+import java.{util ⇒ ju}
 
 import org.orbeon.darius.xpath.`type`.{AnyItemType, AtomicType, ItemType, TypeHierarchy}
 import org.orbeon.darius.xpath.expr.FilterExpression._
@@ -11,7 +12,6 @@ import org.orbeon.darius.xpath.expr.instruct.Choose
 import org.orbeon.darius.xpath.functions._
 import org.orbeon.darius.xpath.lib.NamespaceConstant
 import org.orbeon.darius.xpath.om.{Sequence, SequenceIterator, StructuredQName}
-import org.orbeon.darius.xpath.orbeon.Iterator
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.iter.EmptyIterator
 import org.orbeon.darius.xpath.value._
@@ -20,9 +20,9 @@ import scala.beans.BeanProperty
 
 object FilterExpression {
 
-  private def tryToRewritePositionalFilterSupport(start: Expression, 
-      comparand: Expression, 
-      operator: Int, 
+  private def tryToRewritePositionalFilterSupport(start: Expression,
+      comparand: Expression,
+      operator: Int,
       th: TypeHierarchy): Expression = {
     if (th.isSubType(comparand.getItemType, AtomicType.INTEGER)) operator match {
       case Token.FEQ ⇒
@@ -99,7 +99,7 @@ object FilterExpression {
    *         position() or last()
    */
   private def isExplicitlyPositional(exp: Expression): Boolean = {
-    (exp.getDependencies & 
+    (exp.getDependencies &
       (StaticProperty.DEPENDS_ON_POSITION | StaticProperty.DEPENDS_ON_LAST)) != 0
   }
 }
@@ -191,8 +191,8 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
     if (filter.isInstanceOf[Last]) {
       return new LastItemExpression(start)
     }
-    filterIsIndependentNumeric = th.isSubType(filter.getItemType, AtomicType.NUMERIC) && 
-      (filter.getDependencies & 
+    filterIsIndependentNumeric = th.isSubType(filter.getItemType, AtomicType.NUMERIC) &&
+      (filter.getDependencies &
       (StaticProperty.DEPENDS_ON_CONTEXT_ITEM | StaticProperty.DEPENDS_ON_POSITION)) == 0 &&
       !Cardinality.allowsMany(filter.getCardinality)
     visitor.resetStaticProperties()
@@ -391,7 +391,7 @@ class FilterExpression(var start: Expression, @BeanProperty var filter: Expressi
    *
    * @return the subexpressions, as an array
    */
-  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(start, filter)
+  override def iterateSubExpressions(): ju.Iterator[Expression] = nonNullChildren(start, filter)
 
   /**
    * Given an expression that is an immediate child of this expression, test whether

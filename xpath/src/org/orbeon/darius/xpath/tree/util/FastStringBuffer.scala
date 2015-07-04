@@ -3,7 +3,7 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.tree.util
 
-import java.util.Arrays
+import java.{util ⇒ ju}
 
 object FastStringBuffer {
   val TINY = 16
@@ -223,9 +223,9 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    *            <li><code>dstBegin+(srcEnd-srcBegin)</code> is larger than
    *                <code>dst.length</code></ul>
    */
-  def getChars(srcBegin: Int, 
-      srcEnd: Int, 
-      dst: Array[Char], 
+  def getChars(srcBegin: Int,
+      srcEnd: Int,
+      dst: Array[Char],
       dstBegin: Int): Unit = {
     if (srcBegin < 0) {
       throw new StringIndexOutOfBoundsException(srcBegin)
@@ -382,7 +382,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
     if (repeat > 0) {
       val a2 = new Array[Char](array.length + repeat)
       System.arraycopy(array, 0, a2, repeat, used)
-      Arrays.fill(a2, 0, repeat, ch)
+      ju.Arrays.fill(a2, 0, repeat, ch)
       used += repeat
       array = a2
     }
@@ -425,7 +425,7 @@ class FastStringBuffer(initialSize: Int) extends CharSequence {
    * @return the buffer after removing unused space
    */
   def condense(): CharSequence = {
-    if (array.length - used > 256 || 
+    if (array.length - used > 256 ||
       (array.length > used * 2 && array.length - used > 20)) {
       val array2 = new Array[Char](used)
       System.arraycopy(array, 0, array2, 0, used)

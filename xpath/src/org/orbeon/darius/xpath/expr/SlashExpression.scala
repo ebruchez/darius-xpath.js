@@ -3,11 +3,12 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.{AtomicType, ItemType, Type, TypeHierarchy}
 import org.orbeon.darius.xpath.expr.instruct.ForEach
 import org.orbeon.darius.xpath.expr.sort.{DocumentOrderIterator, GlobalOrderComparer}
 import org.orbeon.darius.xpath.om.{Item, NodeInfo, SequenceIterator}
-import org.orbeon.darius.xpath.orbeon.Iterator
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.iter.{EmptyIterator, OneItemGoneIterator}
 import org.orbeon.darius.xpath.tree.util.SourceLocator
@@ -99,7 +100,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
     setStepExpression(visitor.typeCheck(step, start.getItemType))
     val stepType = step.getItemType
     if (th.isSubType(stepType, Type.NODE_TYPE)) {
-      if ((step.getSpecialProperties & StaticProperty.NON_CREATIVE) != 
+      if ((step.getSpecialProperties & StaticProperty.NON_CREATIVE) !=
         0) {
         val config = visitor.getConfiguration
         start2 = ExpressionTool.unsorted(config, start, retainAllNodes = false)
@@ -149,13 +150,13 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
     val config = visitor.getConfiguration
     val offer = new PromotionOffer()
     offer.action = PromotionOffer.FOCUS_INDEPENDENT
-    offer.promoteDocumentDependent = (start.getSpecialProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 
+    offer.promoteDocumentDependent = (start.getSpecialProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) !=
       0
     offer.containingExpression = this
     setStepExpression(doPromotion(step, offer))
     visitor.resetStaticProperties()
     if (offer.containingExpression != this) {
-      offer.containingExpression = visitor.optimize(visitor.typeCheck(offer.containingExpression, contextItemType), 
+      offer.containingExpression = visitor.optimize(visitor.typeCheck(offer.containingExpression, contextItemType),
         contextItemType)
       return offer.containingExpression
     }
@@ -181,7 +182,7 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
   /**
    * Get the immediate subexpressions of this expression
    */
-  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(start, step)
+  override def iterateSubExpressions(): ju.Iterator[Expression] = nonNullChildren(start, step)
 
   /**
    * Given an expression that is an immediate child of this expression, test whether
@@ -198,9 +199,9 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    * XPathContext.CURRENT_NODE
    */
   override def computeDependencies(): Int = {
-    start.getDependencies | 
-      (step.getDependencies & 
-      (StaticProperty.DEPENDS_ON_XSLT_CONTEXT | StaticProperty.DEPENDS_ON_LOCAL_VARIABLES | 
+    start.getDependencies |
+      (step.getDependencies &
+      (StaticProperty.DEPENDS_ON_XSLT_CONTEXT | StaticProperty.DEPENDS_ON_LOCAL_VARIABLES |
       StaticProperty.DEPENDS_ON_USER_FUNCTIONS))
   }
 
@@ -211,8 +212,8 @@ class SlashExpression(var start: Expression, var step: Expression) extends Expre
    */
   override def computeSpecialProperties(): Int = {
     var p = super.computeSpecialProperties()
-    if ((start.getSpecialProperties & step.getSpecialProperties & 
-      StaticProperty.NON_CREATIVE) != 
+    if ((start.getSpecialProperties & step.getSpecialProperties &
+      StaticProperty.NON_CREATIVE) !=
       0) {
       p |= StaticProperty.NON_CREATIVE
     }

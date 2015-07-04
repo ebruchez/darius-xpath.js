@@ -5,7 +5,7 @@ lazy val dariusXPath = (project in file(".")).
     organization := "org.orbeon",
     name         := "darius-xpath",
     version      := "1.0",
-    scalaVersion := "2.11.6",
+    scalaVersion := "2.11.7",
     version      := "SNAPSHOT",
 
     scalaSource in Compile := baseDirectory.value / "xpath" / "src",

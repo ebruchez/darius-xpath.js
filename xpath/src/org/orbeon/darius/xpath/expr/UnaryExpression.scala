@@ -3,8 +3,9 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.ItemType
-import org.orbeon.darius.xpath.orbeon.Iterator
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.value.SequenceExtent
 
@@ -86,7 +87,7 @@ abstract class UnaryExpression protected () extends Expression {
   /**
    * Get the immediate subexpressions of this expression
    */
-  override def iterateSubExpressions(): Iterator[Expression] = nonNullChildren(operand)
+  override def iterateSubExpressions(): ju.Iterator[Expression] = nonNullChildren(operand)
 
   /**
    * Get the static properties of this expression (other than its type). The result is
@@ -112,7 +113,7 @@ abstract class UnaryExpression protected () extends Expression {
    * Is this expression the same as another expression?
    */
   override def equals(other: Any): Boolean = {
-    other != null && this.getClass == other.getClass && 
+    other != null && this.getClass == other.getClass &&
       this.operand == other.asInstanceOf[UnaryExpression].operand
   }
 

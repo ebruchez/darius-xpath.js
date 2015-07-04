@@ -3,11 +3,13 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.dom
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.Type
 import org.orbeon.darius.xpath.dom.HTMLDocumentWrapper._
 import org.orbeon.darius.xpath.lib.NamespaceConstant
 import org.orbeon.darius.xpath.om.{Axis, DocumentInfo, NodeInfo}
-import org.orbeon.darius.xpath.orbeon.{Configuration, HashMap}
+import org.orbeon.darius.xpath.orbeon.Configuration
 import org.orbeon.darius.xpath.pattern.NodeKindTest
 import org.scalajs.dom.{raw ⇒ dom}
 
@@ -37,9 +39,9 @@ class HTMLDocumentWrapper(
 
   protected val documentNumber = config.allocateDocumentNumber()
 
-  private var userData: HashMap[String, AnyRef] = _ //ORBEON could be Any, in which case we should change DocumentInfo
+  private var userData: ju.HashMap[String, AnyRef] = _ //ORBEON could be Any, in which case we should change DocumentInfo
 
-  private var idIndex: HashMap[String, HTMLNodeWrapper] = _
+  private var idIndex: ju.HashMap[String, HTMLNodeWrapper] = _
 
   private val isHttpRequested = newDocType == DocTypeNONHTML
 
@@ -164,7 +166,7 @@ class HTMLDocumentWrapper(
       if (idIndex != null) {
         idIndex.get(id)
       } else {
-        idIndex = new HashMap[String, HTMLNodeWrapper]()
+        idIndex = new ju.HashMap[String, HTMLNodeWrapper]()
         val iter = iterateAxis(Axis.DESCENDANT, NodeKindTest.ELEMENT)
         val useNS = isNSok(node)
         import Breaks._
@@ -208,7 +210,7 @@ class HTMLDocumentWrapper(
    */
   def setUserData(key: String, value: AnyRef): Unit = {
     if (userData == null) {
-      userData = new HashMap(4)
+      userData = new ju.HashMap(4)
     }
     if (value == null) {
       userData.remove(key)

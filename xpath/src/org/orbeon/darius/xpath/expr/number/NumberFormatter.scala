@@ -5,10 +5,10 @@ package org.orbeon.darius.xpath.expr.number
 
 import java.lang.Long
 import java.math.BigDecimal
+import java.{util ⇒ ju}
 
 import org.orbeon.darius.xpath.expr.number.NumberFormatter._
 import org.orbeon.darius.xpath.lib.Numberer
-import org.orbeon.darius.xpath.orbeon.{ArrayList, List}
 import org.orbeon.darius.xpath.tree.util.{FastStringBuffer, UTF16CharacterSet}
 import org.orbeon.darius.xpath.value.IntegerValue
 
@@ -23,7 +23,7 @@ object NumberFormatter {
    */
   private def isLetterOrDigit(c: Int): Boolean = {
     if (c <= 0x7F) {
-      (c >= 0x30 && c <= 0x39) || (c >= 0x41 && c <= 0x5A) || 
+      (c >= 0x30 && c <= 0x39) || (c >= 0x41 && c <= 0x5A) ||
         (c >= 0x61 && c <= 0x7A)
     } else {
       Alphanumeric.isAlphanumeric(c)
@@ -38,9 +38,9 @@ object NumberFormatter {
  */
 class NumberFormatter {
 
-  private var formatTokens: ArrayList[String] = _
+  private var formatTokens: ju.ArrayList[String] = _
 
-  private var punctuationTokens: ArrayList[String] = _
+  private var punctuationTokens: ju.ArrayList[String] = _
 
   private var startsWithPunctuation: Boolean = _
 
@@ -61,8 +61,8 @@ class NumberFormatter {
     if (format.length == 0) {
       format = "1"
     }
-    formatTokens = new ArrayList[String](10)
-    punctuationTokens = new ArrayList(10)
+    formatTokens = new ju.ArrayList[String](10)
+    punctuationTokens = new ju.ArrayList(10)
     val len = format.length
     var i = 0
     var t: Int = 0
@@ -135,11 +135,11 @@ class NumberFormatter {
    * preformatted strings as part of the error recovery fallback)
    * @return the formatted output string.
    */
-  def format(numbers: List[_],
-      groupSize: Int, 
-      groupSeparator: String, 
-      letterValue: String, 
-      ordinal: String, 
+  def format(numbers: ju.List[_],
+      groupSize: Int,
+      groupSeparator: String,
+      letterValue: String,
+      ordinal: String,
       numberer: Numberer): CharSequence = {
     val sb = new FastStringBuffer(FastStringBuffer.TINY)
     var num = 0

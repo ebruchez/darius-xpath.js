@@ -3,11 +3,13 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.LogConfiguration
 import org.orbeon.darius.xpath.`type`.ItemType
 import org.orbeon.darius.xpath.expr.Expression._
 import org.orbeon.darius.xpath.om.{Item, NodeInfo, SequenceIterator, StructuredQName}
-import org.orbeon.darius.xpath.orbeon.{Executable, _}
+import org.orbeon.darius.xpath.orbeon.Executable
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.iter.SingletonIterator
 import org.orbeon.darius.xpath.tree.util.{FastStringBuffer, SourceLocator}
@@ -40,7 +42,7 @@ abstract class Expression {
   def getContainer = _container
 
   @BeanProperty
-  var traceProperties: ArrayList[Array[String]] = _
+  var traceProperties: ju.ArrayList[Array[String]] = _
 
   /**
    * An implementation of Expression must provide at least one of the methods evaluateItem(), iterate(), or process().
@@ -66,7 +68,7 @@ abstract class Expression {
 
   def AddTraceProperty(name: String, value: Expression): Unit = {
     if (traceProperties == null) {
-      traceProperties = new ArrayList[Array[String]]()
+      traceProperties = new ju.ArrayList[Array[String]]()
     }
     var strValue: String = null
     strValue = value match {
@@ -79,7 +81,7 @@ abstract class Expression {
 
   def AddTraceProperty(name: String, value: String): Unit = {
     if (traceProperties == null) {
-      traceProperties = new ArrayList[Array[String]]()
+      traceProperties = new ju.ArrayList[Array[String]]()
     }
     val entry = Array(name, value)
     traceProperties.add(entry)
@@ -249,13 +251,13 @@ abstract class Expression {
    * sub-expressions.
    * @return an iterator containing the sub-expressions of this expression
    */
-  def iterateSubExpressions(): Iterator[Expression] = Collections.emptyList().iterator()
+  def iterateSubExpressions(): ju.Iterator[Expression] = ju.Collections.emptyList().iterator()
 
   /**
    * Utility method to return an iterator over specific child expressions
    */
-  protected def nonNullChildren(children: Expression*): Iterator[Expression] = {
-    val list = new ArrayList[Expression](children.length)
+  protected def nonNullChildren(children: Expression*): ju.Iterator[Expression] = {
+    val list = new ju.ArrayList[Expression](children.length)
     for (child ← children if child != null) {
       list.add(child)
     }

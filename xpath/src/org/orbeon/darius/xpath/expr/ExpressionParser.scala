@@ -3,13 +3,15 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`._
 import org.orbeon.darius.xpath.expr.ExpressionParser._
 import org.orbeon.darius.xpath.expr.instruct.{Block, Choose}
 import org.orbeon.darius.xpath.functions.SystemFunction
 import org.orbeon.darius.xpath.lib.NamespaceConstant
 import org.orbeon.darius.xpath.om._
-import org.orbeon.darius.xpath.orbeon.{ArrayList, Stack}
+import org.orbeon.darius.xpath.orbeon.Stack
 import org.orbeon.darius.xpath.pattern._
 import org.orbeon.darius.xpath.trans.{Err, XPathException}
 import org.orbeon.darius.xpath.value._
@@ -134,9 +136,9 @@ class ExpressionParser {
       errorCode = new StructuredQName("err", NamespaceConstant.ERR, "XPST0003")
     }
     val s = t.recentText(-1)
-    val prefix = getLanguage + " syntax error " + (if (s.startsWith("...")) "near" else "in") + 
-      ' ' + 
-      Err.wrap(s) + 
+    val prefix = getLanguage + " syntax error " + (if (s.startsWith("...")) "near" else "in") +
+      ' ' +
+      Err.wrap(s) +
       ":\n    "
     val err = new XPathException(message)
     err.setAdditionalLocationText(prefix)
@@ -191,9 +193,9 @@ class ExpressionParser {
    * @param env the static context for the expression
    * @return an Expression object representing the result of parsing
    */
-  def parse(expression: String, 
-      start: Int, 
-      terminator: Int, 
+  def parse(expression: String,
+      start: Int,
+      terminator: Int,
       env: StaticContext): Expression = {
     this.env = env
     t = new Tokenizer()
@@ -248,10 +250,10 @@ class ExpressionParser {
    */
   def parseExpression(): Expression = {
     var exp = parseExprSingle()
-    var list: ArrayList[Expression] = null
+    var list: ju.ArrayList[Expression] = null
     while (t.currentToken == Token.COMMA) {
       if (list == null) {
-        list = new ArrayList[Expression](10)
+        list = new ju.ArrayList[Expression](10)
         list.add(exp)
       }
       nextToken()
@@ -376,9 +378,9 @@ class ExpressionParser {
     StructuredQName.fromLexicalQName(lexicalName, defaultURI, env.getNamespaceResolver)
   }
 
-  private def makeSingleTypeExpression(lhs: Expression, 
-      operator: Int, 
-      `type`: AtomicType, 
+  private def makeSingleTypeExpression(lhs: Expression,
+      operator: Int,
+      `type`: AtomicType,
       allowEmpty: Boolean): Expression = {
     if (`type` == AtomicType.QNAME && lhs.isInstanceOf[StringLiteral]) {
       try {
@@ -422,7 +424,7 @@ class ExpressionParser {
   private def parseMappingExpression(): Expression = {
     val offset = t.currentTokenStartOffset
     val operator = t.currentToken
-    val clauseList = new ArrayList[ForClause](3)
+    val clauseList = new ju.ArrayList[ForClause](3)
     do {
       val clause = new ForClause()
       clause.offset = offset
@@ -793,7 +795,7 @@ class ExpressionParser {
 
     case Token.NODEKIND | Token.NAME | Token.PREFIX | Token.SUFFIX | Token.STAR ⇒
       var defaultAxis = Axis.CHILD
-      if (t.currentToken == Token.NODEKIND && 
+      if (t.currentToken == Token.NODEKIND &&
         (t.currentTokenValue == "attribute" || t.currentTokenValue == "schema-attribute")) {
         defaultAxis = Axis.ATTRIBUTE
       } else if (firstInPattern && t.currentToken == Token.NODEKIND && t.currentTokenValue == "document-node") {
@@ -1015,7 +1017,7 @@ class ExpressionParser {
               if (primaryType == Type.ELEMENT && !(local == "anyType" || local == "untyped")) {
                 result = EmptySequenceTest.getInstance
               }
-              if (primaryType == Type.ATTRIBUTE && 
+              if (primaryType == Type.ATTRIBUTE &&
                 !(local == "anyAtomicType" || local == "untypedAtomic")) {
                 result = EmptySequenceTest.getInstance
               }
@@ -1078,7 +1080,7 @@ class ExpressionParser {
    */
   protected def parseFunctionCall(): Expression = {
     val fname = t.currentTokenValue
-    val args = new ArrayList[Expression](10)
+    val args = new ju.ArrayList[Expression](10)
     val functionName = makeStructuredQName(fname, env.getDefaultFunctionNamespace)
     nextToken()
     if (t.currentToken != Token.RPAR) {
@@ -1111,8 +1113,8 @@ class ExpressionParser {
         return null
     }
     if (fcall == null) {
-      val msg = "Cannot find a matching " + arguments.length + "-argument function named " + 
-        functionName.getClarkName + 
+      val msg = "Cannot find a matching " + arguments.length + "-argument function named " +
+        functionName.getClarkName +
         "()"
       if (env.isInBackwardsCompatibleMode) {
         val err = new XPathException(msg, "XTDE1425")
@@ -1123,10 +1125,10 @@ class ExpressionParser {
       grumble(msg, "XPST0017")
       return null
     }
-    if (fcall.isInstanceOf[CastExpression] && fcall.getItemType == AtomicType.QNAME && 
+    if (fcall.isInstanceOf[CastExpression] && fcall.getItemType == AtomicType.QNAME &&
       arguments(0).isInstanceOf[StringLiteral]) {
       try {
-        val av = CastExpression.castStringToQName(arguments(0).asInstanceOf[StringLiteral].getStringValue, 
+        val av = CastExpression.castStringToQName(arguments(0).asInstanceOf[StringLiteral].getStringValue,
           env)
         return new Literal(av)
       } catch {
