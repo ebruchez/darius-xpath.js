@@ -15,45 +15,15 @@
  */
 package org.orbeon.darius.xpath.orbeon
 
-import java.{util ⇒ ju}
-
-import scala.collection.JavaConverters._
-import scala.collection.{immutable ⇒ i}
-
-class Stack[T](var underlying: i.List[T]) {
-
-  def this() = this(Nil)
-
-  def push(t: T): Unit = underlying ::= t
-
-  def pop(): T = {
-    val result = underlying.head
-    underlying = underlying.tail
-    result
-  }
-
-  def size: Int = underlying.size
-
-  def get(i: Int): T = underlying(i)
-
-  def iterator(): ju.Iterator[T] = underlying.iterator.asJava
-
-  def toArray(a: Array[T]): Array[T] = {
-    require(a.length == underlying.size)
-    underlying.copyToArray(a)
-    a
-  }
-
-  def isEmpty: Boolean = underlying.isEmpty
-}
-
 object Util {
 
+  // NOTE: Will be in Scala.js 0.6.5
   // TODO: This only supports ASCII (see http://www.docjar.com/html/api/java/lang/Character$valueOfCache.java.html)
   // TODO: check from Harmony?
   def isLetter(c: Int): Boolean =
     ('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z')
 
+  // NOTE: Will be in Scala.js 0.6.5
   // TODO: This only supports ASCII (see http://www.docjar.com/html/api/java/lang/Character$valueOfCache.java.html)
   // TODO: check from Harmony?
   def isLetterOrDigit(c: Int): Boolean =

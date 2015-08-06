@@ -3,12 +3,13 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.{ItemType, TypeHierarchy}
 import org.orbeon.darius.xpath.expr.PathExpression._
 import org.orbeon.darius.xpath.expr.sort.DocumentSorter
 import org.orbeon.darius.xpath.functions.SystemFunction
 import org.orbeon.darius.xpath.om.{Axis, SequenceIterator}
-import org.orbeon.darius.xpath.orbeon.Stack
 import org.orbeon.darius.xpath.pattern.{AnyNodeTest, NodeKindTest}
 import org.orbeon.darius.xpath.value.{Cardinality, EmptySequence, SequenceType}
 
@@ -143,12 +144,12 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
       var newStep: Expression = new AxisExpression(Axis.DESCENDANT, underlyingStep.asInstanceOf[AxisExpression].getNodeTest)
       ExpressionTool.copyLocationInfo(this, newStep)
       underlyingStep = step
-      val filters = new Stack[Expression]()
+      val filters = new ju.LinkedList[Expression]()
       while (underlyingStep.isInstanceOf[FilterExpression]) {
-        filters.push(underlyingStep.asInstanceOf[FilterExpression].getFilter)
+        filters.addLast(underlyingStep.asInstanceOf[FilterExpression].getFilter)
         underlyingStep = underlyingStep.asInstanceOf[FilterExpression].getControllingExpression
       }
-      while (!filters.isEmpty) {
+      while (! filters.isEmpty) {
         newStep = new FilterExpression(newStep, filters.pop())
         ExpressionTool.copyLocationInfo(step, newStep)
       }
@@ -185,7 +186,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
     if (start.isInstanceOf[ContextItemExpression]) {
       return step
     }
-    if ((step.getSpecialProperties & StaticProperty.NON_CREATIVE) != 
+    if ((step.getSpecialProperties & StaticProperty.NON_CREATIVE) !=
       0) {
       val config = visitor.getConfiguration
       setStartExpression(ExpressionTool.unsorted(config, start, retainAllNodes = false))
@@ -257,28 +258,28 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
     var stepProperties = step.getSpecialProperties
     var p = 0
     if (!Cardinality.allowsMany(start.getCardinality)) {
-      startProperties |= StaticProperty.ORDERED_NODESET | StaticProperty.PEER_NODESET | 
+      startProperties |= StaticProperty.ORDERED_NODESET | StaticProperty.PEER_NODESET |
         StaticProperty.SINGLE_DOCUMENT_NODESET
     }
     if (!Cardinality.allowsMany(step.getCardinality)) {
-      stepProperties |= StaticProperty.ORDERED_NODESET | StaticProperty.PEER_NODESET | 
+      stepProperties |= StaticProperty.ORDERED_NODESET | StaticProperty.PEER_NODESET |
         StaticProperty.SINGLE_DOCUMENT_NODESET
     }
-    if ((startProperties & stepProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 
+    if ((startProperties & stepProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) !=
       0) {
       p |= StaticProperty.CONTEXT_DOCUMENT_NODESET
     }
-    if (((startProperties & StaticProperty.SINGLE_DOCUMENT_NODESET) != 
-      0) && 
-      ((stepProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) != 
+    if (((startProperties & StaticProperty.SINGLE_DOCUMENT_NODESET) !=
+      0) &&
+      ((stepProperties & StaticProperty.CONTEXT_DOCUMENT_NODESET) !=
       0)) {
       p |= StaticProperty.SINGLE_DOCUMENT_NODESET
     }
-    if ((startProperties & stepProperties & StaticProperty.PEER_NODESET) != 
+    if ((startProperties & stepProperties & StaticProperty.PEER_NODESET) !=
       0) {
       p |= StaticProperty.PEER_NODESET
     }
-    if ((startProperties & stepProperties & StaticProperty.SUBTREE_NODESET) != 
+    if ((startProperties & stepProperties & StaticProperty.SUBTREE_NODESET) !=
       0) {
       p |= StaticProperty.SUBTREE_NODESET
     }
@@ -288,7 +289,7 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
     if (testNaturallyReverseSorted()) {
       p |= StaticProperty.REVERSE_DOCUMENT_ORDER
     }
-    if ((startProperties & stepProperties & StaticProperty.NON_CREATIVE) != 
+    if ((startProperties & stepProperties & StaticProperty.NON_CREATIVE) !=
       0) {
       p |= StaticProperty.NON_CREATIVE
     }
@@ -317,11 +318,11 @@ class PathExpression(start: Expression, step: Expression) extends SlashExpressio
     } else {
       return true
     }
-    if ((stepProperties & StaticProperty.ATTRIBUTE_NS_NODESET) != 
+    if ((stepProperties & StaticProperty.ATTRIBUTE_NS_NODESET) !=
       0) {
       return true
     }
-    ((startProperties & StaticProperty.PEER_NODESET) != 0) && 
+    ((startProperties & StaticProperty.PEER_NODESET) != 0) &&
       ((stepProperties & StaticProperty.SUBTREE_NODESET) != 0)
   }
 

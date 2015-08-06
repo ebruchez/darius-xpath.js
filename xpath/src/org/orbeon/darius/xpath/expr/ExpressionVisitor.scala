@@ -3,8 +3,10 @@
 // This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
 package org.orbeon.darius.xpath.expr
 
+import java.{util ⇒ ju}
+
 import org.orbeon.darius.xpath.`type`.ItemType
-import org.orbeon.darius.xpath.orbeon.{Configuration, Executable, Stack}
+import org.orbeon.darius.xpath.orbeon.{Configuration, Executable}
 import org.orbeon.darius.xpath.trans.XPathException
 import org.orbeon.darius.xpath.tree.util.SourceLocator
 
@@ -33,7 +35,7 @@ object ExpressionVisitor {
  */
 class ExpressionVisitor {
 
-  private val stack: Stack[Expression] = new Stack[Expression]()
+  private val stack = new ju.LinkedList[Expression]()
 
   @BeanProperty
   var executable: Executable = _
@@ -80,12 +82,12 @@ class ExpressionVisitor {
    */
   def simplify(exp: Expression): Expression = {
     if (exp != null) {
-      stack.push(exp)
+      stack.addLast(exp)
       val exp2 = exp.simplify(this)
       if (exp2 != exp) {
         ExpressionTool.copyLocationInfo(exp, exp2)
       }
-      stack.pop()
+      stack.removeLast()
       exp2
     } else {
       null
@@ -104,12 +106,12 @@ class ExpressionVisitor {
    */
   def typeCheck(exp: Expression, contextItemType: ItemType): Expression = {
     if (exp != null) {
-      stack.push(exp)
+      stack.addLast(exp)
       val exp2 = exp.typeCheck(this, contextItemType)
       if (exp2 != exp) {
         ExpressionTool.copyLocationInfo(exp, exp2)
       }
-      stack.pop()
+      stack.removeLast()
       exp2
     } else {
       null
@@ -125,12 +127,12 @@ class ExpressionVisitor {
    */
   def optimize(exp: Expression, contextItemType: ItemType): Expression = {
     if (exp != null) {
-      stack.push(exp)
+      stack.addLast(exp)
       val exp2 = exp.optimize(this, contextItemType)
       if (exp2 != exp) {
         ExpressionTool.copyLocationInfo(exp, exp2)
       }
-      stack.pop()
+      stack.removeLast()
       exp2
     } else {
       null

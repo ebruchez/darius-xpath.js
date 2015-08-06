@@ -11,7 +11,6 @@ import org.orbeon.darius.xpath.expr.instruct.{Block, Choose}
 import org.orbeon.darius.xpath.functions.SystemFunction
 import org.orbeon.darius.xpath.lib.NamespaceConstant
 import org.orbeon.darius.xpath.om._
-import org.orbeon.darius.xpath.orbeon.Stack
 import org.orbeon.darius.xpath.pattern._
 import org.orbeon.darius.xpath.trans.{Err, XPathException}
 import org.orbeon.darius.xpath.value._
@@ -51,7 +50,7 @@ class ExpressionParser {
 
   protected var env: StaticContext = _
 
-  protected var rangeVariables = new Stack[Binding]()
+  protected var rangeVariables = new ju.LinkedList[Binding]()
 
   protected var defaultContainer: Container = _
 
@@ -1173,14 +1172,14 @@ class ExpressionParser {
    * @throws XPathException if any error is encountered
    */
   def declareRangeVariable(declaration: Binding): Unit = {
-    rangeVariables.push(declaration)
+    rangeVariables.addLast(declaration)
   }
 
   /**
    * Note when the most recently declared range variable has gone out of scope
    */
   def undeclareRangeVariable(): Unit = {
-    rangeVariables.pop()
+    rangeVariables.removeLast()
   }
 
   /**
