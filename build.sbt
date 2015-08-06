@@ -4,9 +4,9 @@ lazy val dariusXPath = (project in file(".")).
   settings(
     organization := "org.orbeon",
     name         := "darius-xpath",
-    version      := "1.0",
+    version      := "1.0-SNAPSHOT",
+
     scalaVersion := "2.11.7",
-    version      := "SNAPSHOT",
 
     scalaSource in Compile := baseDirectory.value / "xpath" / "src",
     scalaSource in Test    := baseDirectory.value / "xpath" / "test",
@@ -30,14 +30,14 @@ lazy val dariusXPath = (project in file(".")).
 val fastOptJSCombine = taskKey[File]("Combine -fastopt.js with -launcher.js.")
 val fullOptJSCombine = taskKey[File]("Combine -opt.js with -launcher.js.")
 
-def combine(optFile: File) = {
+def combine(optFile: File): File = {
 
   val outputDir = optFile.getParentFile
 
   val Format = "((.+)-(fastopt|opt)).js".r
 
-  val combinedName = optFile.getName match { case Format(name, _, _)   ⇒ s"$name-combined.js" }
-  val launcherName = optFile.getName match { case Format(_, prefix, _) ⇒ s"$prefix-launcher.js" }
+  val combinedName = optFile.name match { case Format(name, _, _)   ⇒ s"$name-combined.js" }
+  val launcherName = optFile.name match { case Format(_, prefix, _) ⇒ s"$prefix-launcher.js" }
 
   val combinedFile  = outputDir / combinedName
   val launcherFile  = outputDir / launcherName
@@ -45,6 +45,8 @@ def combine(optFile: File) = {
   IO.delete(combinedFile)
   IO.append(combinedFile, IO.readBytes(optFile))
   IO.append(combinedFile, IO.readBytes(launcherFile))
+  IO.append(combinedFile, "//# sourceMappingURL=darius-xpath-fastopt.js.map\n")
+
 
   combinedFile
 }
