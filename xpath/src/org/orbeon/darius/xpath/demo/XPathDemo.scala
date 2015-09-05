@@ -15,26 +15,18 @@
  */
 package org.orbeon.darius.xpath.demo
 
+import org.orbeon.darius.xml.api.API
 import org.orbeon.darius.xpath.`type`.Type
 import org.orbeon.darius.xpath.event.PipelineConfiguration
 import org.orbeon.darius.xpath.expr._
 import org.orbeon.darius.xpath.functions._
-import org.orbeon.darius.xpath.om.DocumentInfo
-import org.orbeon.darius.xpath.om.Item
-import org.orbeon.darius.xpath.om.Sequence
-import org.orbeon.darius.xpath.orbeon.Configuration
-import org.orbeon.darius.xpath.orbeon.Controller
-import org.orbeon.darius.xpath.orbeon.Executable
-import org.orbeon.darius.xpath.orbeon.LinkedTreeDocumentHandler
-import org.orbeon.darius.xpath.orbeon.ShareableXPathStaticContext
+import org.orbeon.darius.xpath.om.{DocumentInfo, Item, Sequence}
+import org.orbeon.darius.xpath.orbeon.{Configuration, Controller, Executable, LinkedTreeDocumentHandler, ShareableXPathStaticContext}
 import org.orbeon.darius.xpath.sxpath.SimpleContainer
 import org.orbeon.darius.xpath.{value ⇒ svalue}
-import org.orbeon.darius.xml.api.API
 import org.scalajs.dom.raw
 import org.scalajs.dom.raw.HTMLScriptElement
-import org.scalajs.jquery.JQuery
-import org.scalajs.jquery.JQueryEventObject
-import org.scalajs.jquery.jQuery
+import org.scalajs.jquery.{JQuery, JQueryEventObject, jQuery}
 import rx._
 import rx.ops._
 import upickle._
@@ -44,9 +36,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic.{global ⇒ g}
-import scala.util.Failure
-import scala.util.Success
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 sealed trait Message
 case class ExprReq  (expr: String)                          extends Message
@@ -64,27 +54,27 @@ object Launcher extends js.JSApp {
 }
 
 object XMLWorker {
-  
+
   import DariusXMLParsing._
   import XPathProcessor._
-  
+
   val GlobalConfiguration = new Configuration
-  
+
   def postResponse(m: Message) = g.postMessage(write(m))
-  
+
   // What we receive from the client (initially empty)
   val exprStringVar  = Var[Option[String]](None)
   val xmlStringVar   = Var[Option[String]](None)
 
   val compiledExprRx = Rx(exprStringVar() map (compileExpression(_, GlobalConfiguration)))
   val parsedXMLRx    = Rx(xmlStringVar()  map (parseString(_, GlobalConfiguration)))
-  
+
   compiledExprRx foreach {
     case Some(Success(_)) ⇒ postResponse(ExprRes(None))
     case Some(Failure(t)) ⇒ postResponse(ExprRes(Option(t.getMessage)))
     case None             ⇒
   }
-  
+
   parsedXMLRx foreach {
     case Some(Success(_)) ⇒ postResponse(XMLRes(None))
     case Some(Failure(t)) ⇒ postResponse(XMLRes(Option(t.getMessage)))
@@ -104,13 +94,13 @@ object XMLWorker {
         result
     }
   }
-  
+
   resultRx foreach {
     case Some(Success(items)) ⇒ postResponse(ResultRes(Right(items map (_.getStringValue))))
     case Some(Failure(t))     ⇒ postResponse(ResultRes(Left(t.getMessage)))
     case None                 ⇒
   }
-  
+
   def main(): Unit = {
     g.onmessage = (e: raw.MessageEvent) ⇒ read[Message](e.data.asInstanceOf[String]) match {
       case ExprReq(expr) ⇒ exprStringVar() = Option(expr)
@@ -120,7 +110,7 @@ object XMLWorker {
   }
 }
 
-object XPathDemo { 
+object XPathDemo {
 
   val DebounceDelay = 200.millis
 
@@ -147,11 +137,11 @@ object XPathDemo {
         rx() = newValue
     }
   }
-  
+
   def main(): Unit = {
-    
+
     val worker = new raw.Worker(jQuery("#scalajs-combined-script")(0).asInstanceOf[HTMLScriptElement].src)
-    
+
     def postRequest(m: Message) = worker.postMessage(write(m))
 
     // Model
@@ -160,17 +150,17 @@ object XPathDemo {
 
     val debouncedExprStringRx = exprStringVar.debounce(DebounceDelay)
     val debouncedXmlStringRx  = xmlStringVar.debounce(DebounceDelay)
-    
+
     debouncedExprStringRx foreach { value ⇒
       postRequest(ExprReq(value))
     }
-    
+
     debouncedXmlStringRx foreach { value ⇒
       postRequest(XMLReq(value))
     }
-    
+
     val resultVar = Var[Option[Either[String, i.List[String]]]](None)
-    
+
     // Result
     resultVar foreach { result ⇒
       result foreach {
@@ -188,12 +178,12 @@ object XPathDemo {
     // Events
     UI.exprInput.keyup(UI.keyChange(UI.exprInput.value.toString, exprStringVar) _)
     UI.xmlInput.keyup(UI.keyChange(UI.xmlInput.value.toString, xmlStringVar) _)
-    
+
     // Message handler
     worker.onmessage = (e: js.Any) ⇒ {
-      
+
       val serializedMessage = e.asInstanceOf[raw.MessageEvent].data.asInstanceOf[String]
-      
+
       read[Message](serializedMessage) match {
         case ExprRes(message) ⇒ UI.toggleAlert(UI.exprInput, message)
         case XMLRes(message)  ⇒ UI.toggleAlert(UI.xmlInput, message)
@@ -207,12 +197,14 @@ object XPathDemo {
 object XPathProcessor {
 
   case class CompiledExpression(config: Configuration, expr: Expression, slots: Int)
-  
+
   val DefaultNamespaces = Map(
     "xs" → "http://www.w3.org/2001/XMLSchema"
   )
 
   def compileExpression(expression: String, config: Configuration): Try[CompiledExpression] = Try {
+
+    println(s"compiling: `$expression`")
 
     val library = SystemFunctionLibrary.getSystemFunctionLibrary(StandardFunction.CORE)
 
@@ -224,8 +216,13 @@ object XPathProcessor {
 
     expr.setContainer(container)
     val visitor = ExpressionVisitor.make(staticContext, executable)
+
+    println(s"initial expression: `$expr`")
+
     expr = visitor.typeCheck(expr, Type.ITEM_TYPE)
     expr = visitor.optimize(expr, Type.ITEM_TYPE)
+
+    println(s"type-checked and optimized expression: `$expr`")
 
     CompiledExpression(config, expr, ExpressionTool.allocateSlots(expr, 0))
   }
@@ -242,8 +239,10 @@ object XPathProcessor {
     case s: svalue.StringValue ⇒ new StringValueWithEquals(s.getPrimitiveStringValue)
     case i ⇒ i
   }
-  
+
   def runExpression(compiledExpr: CompiledExpression, contextItem: Item): Try[i.List[Item]] = Try {
+
+    println(s"running expression: `${compiledExpr.expr}`")
 
     val CompiledExpression(config, expr, slots) = compiledExpr
 
@@ -252,20 +251,27 @@ object XPathProcessor {
     val xpc = new XPathContext(controller)
     xpc.setStackFrame(slots, new Array[Sequence](slots))
     xpc.setSingletonFocus(contextItem)
-    
+
     val seqIt = expr.iterate(xpc)
-    
-    scala.collection.Iterator.continually(seqIt.next()).takeWhile(_ ne null).map(convertItem).toList
+
+    val res = scala.collection.Iterator.continually(seqIt.next()).takeWhile(_ ne null).map(convertItem).toList
+    println(s"done running expression (${res.size} items)")
+    res
   }
 }
 
 object DariusXMLParsing {
-  
+
   def parseString(s: String, config: Configuration): Try[DocumentInfo] = Try {
+
+    println(s"parsing XML")
+
     val pipelineConfig = new PipelineConfiguration()
     pipelineConfig.setConfiguration(config)
     val builder = new LinkedTreeDocumentHandler(pipelineConfig)
     API.parseString(s, builder)
-    builder.result.asInstanceOf[DocumentInfo]
+    val res = builder.result.asInstanceOf[DocumentInfo]
+    println(s"done parsing XML")
+    res
   }
 }
