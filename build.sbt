@@ -18,7 +18,7 @@ lazy val dariusXPath = (project in file(".")).
     libraryDependencies += "com.lihaoyi"  %%% "utest"          % "0.3.0" % "test",
     libraryDependencies += "com.lihaoyi"  %%% "scalarx"        % "0.2.8",
     libraryDependencies += "com.lihaoyi"  %%% "upickle"        % "0.2.8",
-    libraryDependencies += "org.orbeon"   %%% "darius-xml"     % "SNAPSHOT",
+    libraryDependencies += "org.orbeon"   %%% "darius-xml"     % "1.0-SNAPSHOT",
 
     testFrameworks      += new TestFramework("utest.runner.Framework"),
 
