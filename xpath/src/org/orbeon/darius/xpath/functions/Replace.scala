@@ -19,10 +19,12 @@ object Replace {
    * @return null if the string is OK, or an error message if not
    */
   def checkReplacement(rep: CharSequence): String = {
-    for (i ← 0 until rep.length) {
+    var i = 0
+    while (i < rep.length) {
       val c = rep.charAt(i)
       if (c == '$') {
         if (i + 1 < rep.length) {
+          i += 1
           val next = rep.charAt(i)
           if (next < '0' || next > '9') {
             return "Invalid replacement string in replace(): $ sign must be followed by digit 0-9"
@@ -32,6 +34,7 @@ object Replace {
         }
       } else if (c == '\\') {
         if (i + 1 < rep.length) {
+          i += 1
           val next = rep.charAt(i)
           if (next != '\\' && next != '$') {
             return "Invalid replacement string in replace(): \\ character must be followed by \\ or $"
@@ -40,6 +43,7 @@ object Replace {
           return "Invalid replacement string in replace(): \\ character at end of string"
         }
       }
+      i += 1
     }
     null
   }
@@ -76,9 +80,9 @@ class Replace extends SystemFunction {
       flags = arg3.getStringValue
     }
     try {
-      val re = new ARegularExpression(arg1.getStringValue, flags.toString, "XP20", null)
+      val re = new ARegularExpression(arg1.getStringValue, flags.toString, "XP20")
       if (re.matches("")) {
-        dynamicError("The regular expression in replace() must not be one that matches a zero-length string", 
+        dynamicError("The regular expression in replace() must not be one that matches a zero-length string",
           "FORX0003")
       }
       val input = arg0.getStringValue

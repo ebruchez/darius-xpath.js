@@ -41,9 +41,9 @@ class Tokenize extends SystemFunction {
       flags = sv.getStringValue
     }
     try {
-      val re = new ARegularExpression(pattern, flags.toString, "XP20", null)
+      val re = new ARegularExpression(pattern, flags.toString, "XP20")
       if (re.matches("")) {
-        dynamicError("The regular expression in tokenize() must not be one that matches a zero-length string", 
+        dynamicError("The regular expression in tokenize() must not be one that matches a zero-length string",
           "FORX0003")
       }
       re.tokenize(input)
